@@ -1,4 +1,4 @@
-# eyeproc - eye processing package for R
+# eyeproc - eye data processing package for R
 
 Vague "roadmap" for functions:
 
