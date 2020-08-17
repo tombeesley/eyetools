@@ -1,5 +1,5 @@
-# library(tidyverse)
-# library(devtools)
+library(tidyverse)
+library(devtools)
 
 # # fixing up some example data from the saccades experiments
 
@@ -17,4 +17,16 @@ usethis::use_data(example_raw_1,example_raw_2,example_raw_3)
 # running the function
 load_all()
 
-eye_repair(d1)
+check()
+
+interpRes <- interpolate(example_raw_2, method = "approx", maxgap = 100, report = TRUE)
+interpolate(example_raw_3, method = "approx", maxgap = 25)
+interpolate(example_raw_3, method = "spline", maxgap = 5)
+interpolate(example_raw_3, method = "blah")
+
+example_raw_1 <- mutate(example_raw_1, across(c(x,y), na.approx, maxgap = 50, na.rm = TRUE))
+
+
+interpRes[2]
+
+tidyr

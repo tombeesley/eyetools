@@ -1,4 +1,4 @@
-eye_repair <- function(data, threshold) {
+fix_dispertion <- function(data, threshold) {
 
 
 
