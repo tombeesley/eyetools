@@ -21,10 +21,10 @@ interpolate(data, maxgap = 25, method = "approx", report = FALSE)
 \description{
 Extends the zoo::na.approx and zoo::na.spline functions to include a report which provides
 the proportion of missing data before and after the interpolation process. This is handy
-for evaluating the effectiveness of the different methods and parameters.
+for evaluating the effectiveness of the repair.
 }
 \examples{
-interpolate(example_raw_1, maxgap = 20)
-interpolate(example_raw_2, method = "approx", maxgap = 50, report = TRUE)
+interpolate(example_raw, maxgap = 20)
+interpolate(example_raw, method = "approx", maxgap = 50, report = TRUE)
 
 }

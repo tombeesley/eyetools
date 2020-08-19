@@ -1,10 +1,18 @@
-# eyetools - a set of tools for eye data processing, analysis and visualisation in R
+# **eyetools**
+
+### A set of tools for eye data processing, analysis and visualisation in R
+
+**eyetools** is a package that provides a set of simple tools that will facilitate common steps in the processing and analysis of eye data. It is intended for use with data from psychological experiments. The idea is to have a workflow which is aided by these functions, going from processing of the raw data, to extraction of event related data (i.e., fixations, saccades), to summarising those data at the trial level (e.g., time on areas of interest). 
+
+**It isn't really useful in any practical way yet.**
+
+It is free to use under the GNU General Public Licence. 
 
 Vague "roadmap" for functions:
 
 |order | process | implemented function(s) | comment
 |-|-|-|-|
-|1.| interpolation | interpolate | working and provides a summary report of repair |
+|1.| interpolation | `interpolate` | working and provides a summary report of repair |
 |2.| smoothing | | |
 |3.| dispertion-based fixations  | | |
 |4.| area of interest analysis   | | |
@@ -13,5 +21,8 @@ Vague "roadmap" for functions:
 |7.| velocity based fixation detection (from saccades)  | | |
 |8.| scan paths (OG to be prodded fiercely)  | | |
 
-19/08/2020 - interpolate seems to work. 
+*update notes:*
+
+19/08/2020 - `interpolate` seems to work. 
+
 17/08/2020 - it doesn't do ANYTHING at the moment. Don't even think about using it.

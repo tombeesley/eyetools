@@ -4,10 +4,14 @@ Title: Tools for eye data analysis
 Version: 0.1.0
 Author: Tom Beesley
 Maintainer: Tom Beesley <t.beesley@lancaster.ac.uk>
-Description: A set of tools for eye data processing
-License: What license is it under?
+Description: A set of tools for eye data processing. The intended flow is from data processing, to fixation analysis, to data visualisation and trial level summaries.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends: 
     R (>= 2.10)
 RoxygenNote: 7.1.1
+Imports: 
+    dplyr,
+    zoo,
+    magrittr
