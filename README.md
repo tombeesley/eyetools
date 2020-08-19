@@ -1,4 +1,4 @@
-# eyeproc - eye data processing package for R
+# eyetools - a set of tools for eye data processing and analysis in R
 
 Vague "roadmap" for functions:
 
