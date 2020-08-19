@@ -1,4 +1,4 @@
-# eyetools - a set of tools for eye data processing and analysis in R
+# eyetools - a set of tools for eye data processing, analysis and visualisation in R
 
 Vague "roadmap" for functions:
 
