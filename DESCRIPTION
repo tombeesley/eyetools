@@ -1,10 +1,10 @@
-Package: eyeproc
+Package: eyetools
 Type: Package
-Title: Eye data processing tools
+Title: Tools for eye data analysis
 Version: 0.1.0
 Author: Tom Beesley
-Maintainer: t.beesley@lancaster.ac.uk
-Description: A set of tools for working with eye data.
+Maintainer: Tom Beesley <t.beesley@lancaster.ac.uk>
+Description: A set of tools for eye data processing
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
