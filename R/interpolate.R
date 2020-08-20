@@ -19,6 +19,7 @@
 #' @import dplyr
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline
+#' @importFrom rlang .data
 #'
 interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE) {
 
@@ -30,12 +31,12 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE) {
   # interpolation process
   if (method %in% c("approx","spline")) {
     data <- data %>%
-      dplyr::group_by(trial) %>% # interpolation process acts upon the data from each trial independently
-      dplyr::mutate(dplyr::across(c(x,y), # for both x and y columns
+      group_by(.data$trial) %>% # interpolation process acts upon the data from each trial independently
+      mutate(across(c(.data$x,.data$y), # for both x and y columns
                     get(paste0("na.",method)), # turns method argument into function name
                     maxgap = 25,
                     na.rm = FALSE)) %>% # na.rm = FALSE ensures that leading and trailing NAs are not removed.
-      dplyr::ungroup()
+      ungroup()
   } else {
     return("Error: 'method' not recognised. Use 'approx' or 'spline'")
   }
@@ -47,8 +48,8 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE) {
 
   # return
   if (report) {
-    report_return <- data.frame(missing_perc_before = pre_missing,
-                                missing_perc_after = post_missing)
+    report_return <- tibble(missing_perc_before = pre_missing,
+                            missing_perc_after = post_missing)
     return(list(data, report_return))
   } else {
     return(data)

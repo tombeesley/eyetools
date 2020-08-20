@@ -17,6 +17,7 @@ library(devtools)
 use_package("magrittr")
 
 
+
 load_all()
 
 check()
