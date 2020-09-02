@@ -4,7 +4,7 @@
 \alias{fix_dispersion}
 \title{Fixation detection by dispersion method}
 \usage{
-fix_dispersion(data, min_dur = 150, disp_tol = 30, report = FALSE)
+fix_dispersion(data, min_dur = 50, disp_tol = 30, report = FALSE)
 }
 \arguments{
 \item{data}{dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)}
