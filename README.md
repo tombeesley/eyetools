@@ -6,7 +6,7 @@
 
 **It isn't really useful in any practical way yet.**
 
-It is free to use under the GNU General Public Licence. 
+It is free to use under the GNU General Public Licence..
 
 Vague "roadmap" for functions:
 
