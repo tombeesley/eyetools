@@ -17,6 +17,8 @@
 #' @importFrom zoo na.trim
 #' @importFrom RcppRoll roll_min roll_max
 #'
+#' @keywords internal
+#'
 fix_dispersion_SLOW <- function(data, min_dur = 150, disp_tol = 150) {
 
   data <- split(data,data$trial) # create list from data by trial

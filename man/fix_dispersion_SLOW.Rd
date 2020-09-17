@@ -18,3 +18,4 @@ Detects fixations according to the method proposed by S & G
 \examples{
 
 }
+\keyword{internal}

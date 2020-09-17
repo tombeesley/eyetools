@@ -13,9 +13,6 @@
 #' @export
 #'
 #' @examples
-# trial_raw <- dplyr::filter(example_raw_psy, trial == 5)
-# trial_fix <- eyetools::fix_dispersion(trial_raw)
-# spatial_plot(raw_data = trial_raw, fix_data = trial_fix, res = c(0,1920,0,1080), show_fix_order = TRUE, flip_y = TRUE)
 #'
 #'
 #' @importFrom magrittr %>%

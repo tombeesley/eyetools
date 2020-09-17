@@ -24,7 +24,7 @@ the proportion of missing data before and after the interpolation process. This 
 for evaluating the effectiveness of the repair.
 }
 \examples{
-interpolate(example_raw, maxgap = 20)
-interpolate(example_raw, method = "approx", maxgap = 50, report = TRUE)
+interpolate(example_raw_psy, maxgap = 20)
+interpolate(example_raw_psy, method = "approx", maxgap = 50, report = TRUE)
 
 }
