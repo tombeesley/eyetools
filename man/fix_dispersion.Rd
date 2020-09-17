@@ -4,17 +4,35 @@
 \alias{fix_dispersion}
 \title{Fixation detection by dispersion method}
 \usage{
-fix_dispersion(data, min_dur = 50, disp_tol = 30, report = FALSE)
+fix_dispersion(
+  data,
+  min_dur = 150,
+  disp_tol = 200,
+  run_interp = TRUE,
+  round = 0
+)
 }
 \arguments{
-\item{data}{dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)}
+\item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
+
+\item{min_dur}{Minimum duration (in milliseconds) of period over which fixations are assessed}
+
+\item{disp_tol}{Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period}
+
+\item{run_interp}{include a call to eyetools::interpolation on each trial}
+
+\item{round}{rounding digits of fixation coordinates in output}
 }
 \value{
 
 }
 \description{
-Detects fixations according to the method proposed by S & G
+Detects fixations according to a method similar to that proposed by Salvucci & Goldberg (1996).
+Evaluates the absolute range of values of both x and y coordinates. Looks for sufficient periods
+in which the ranges are both below the specified dispersion tolerance. NAs are considered breaks
+in the data and are not permitted within a valid fixation period.
 }
 \examples{
+fix_dispersion(example_raw_psy, min_dur = 200, disp_tol = 200)
 
 }

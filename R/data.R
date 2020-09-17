@@ -13,4 +13,4 @@
 #'   ...
 #' }
 #'
-"example_raw"
+"example_raw_psy"
