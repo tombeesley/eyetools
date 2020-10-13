@@ -26,7 +26,22 @@ profvis ({
 
 t1_raw <- filter(example_raw_psy, trial == 5)
 #t1_raw <- t1_raw[1:200,]
-t1_fix <- eyetools::fix_dispersion(example_raw_psy)
+t1_fix <- eyetools::fix_dispersion(t1_raw)
+
+
+
+AOIs <- matrix(nrow = 3, ncol = 4)
+
+AOIs[1,] <- c(960, 600, 700, 1200) # X, Y, W, H - square
+AOIs[2,] <- c(900, 300, 400, 400) # X, Y, W, H - square
+AOIs[3,] <- c(960, 560, 700, NA) # X, Y, D - circle
+
+# square AOI detect
+xy_hits <- (between(t1_fix$x, AOIs[1,1]-AOIs[1,3]/2, AOIs[1,1]+AOIs[1,3]/2) &
+              between(t1_fix$y, AOIs[1,2]-AOIs[1,4]/2, AOIs[1,2]+AOIs[1,4]/2))
+
+# circle AOI detect
+sqrt((AOIs[3,1]-t1_fix$x)^2+(AOIs[3,2]-t1_fix$y)^2) < AOIs[3,3]/2
 
 spatial_plot(raw_data = t1_raw,
              fix_data = t1_fix,
