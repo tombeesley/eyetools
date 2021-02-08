@@ -23,19 +23,36 @@
 
 spatial_plot <- function(raw_data = NULL,
                          fix_data = NULL,
+                         aoi = NULL,
                          res = NULL,
                          flip_y = FALSE,
                          show_fix_order = TRUE) {
 
 
   final_g <- ggplot()
+  # PLOT AOIs
+  if (is.null(aoi)==FALSE) {
+
+    # need to split the AOI array here and plot separately tiles (squares) and points (circles)
+    final_g <- final_g +
+      geom_tile(data = aoi,
+                aes(x = x, y = y, width = width, height = height),
+                colour = "dark blue",
+                fill = "blue",
+                alpha = .1)
+
+
+  }
+
+
 
   # PLOT RAW DATA
   if (is.null(raw_data)==FALSE) {
 
-    final_g <- final_g + geom_point(data = raw_data,
-                                    aes(x = x, y = y),
-                                    size = .5)
+    final_g <- final_g +
+      geom_point(data = raw_data,
+                 aes(x = x, y = y),
+                 size = .5)
 
   }
 
@@ -48,7 +65,7 @@ spatial_plot <- function(raw_data = NULL,
       geom_point(data = fix_data,
                  aes(x = x, y = y, size = dur),
                  colour = "red",
-                 alpha = .1)
+                 alpha = .2)
     if (show_fix_order == TRUE) {
 
       final_g <- final_g +
@@ -72,7 +89,7 @@ spatial_plot <- function(raw_data = NULL,
     scale_size_continuous(range = c(5,30)) +
     guides(size = FALSE) +
     labs(title = "eyetools::spatial_plot",
-         subtitle = "Points are raw data; Circles are fixations (size = duration)",
+         subtitle = "Points are raw data; Circles are fixations (size = duration); blue regions are AOIs",
          y = "Vertical coordinate (pixels)",
          x = "Horizontal coordinate (pixels)")
 
