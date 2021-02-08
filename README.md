@@ -15,13 +15,15 @@ Vague "roadmap" for functions:
 |1.| interpolation | `interpolate()` | working and provides a summary report of repair |
 |2.| smoothing | | |
 |3.| dispersion-based fixations  | `fix_dispersion()` | working and pretty fast - needs thorough checking |
-|4.| area of interest analysis   | | |
+|4.| area of interest analysis   | `AOI_time()` | working in basic form - needs thorough checking |
 |5.| Visualisations - heatmaps, fixation plots, etc  | `spatial_plot()` | provides a 2D plot of raw data and fixations |
 |6.| saccade detection (angle, speed, start/end, timing)  | | |
 |7.| velocity-based fixations (from saccades)  | | |
 |8.| scan paths (OG to be prodded fiercely)  | | |
 
 *update notes:*
+
+08/02/2021 - `AOI_time()` added. Provides basic results using fixation data as input.
 
 17/09/2020 - `fix_dispersion()` and `spatial_plot()` added. Almost useful...
 
