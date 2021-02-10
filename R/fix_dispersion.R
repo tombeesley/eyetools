@@ -64,40 +64,48 @@ trial_level_process <- function(data,
 
   within_disp_tol <- abs(min_max[,1]-min_max[,3])<disp_tol & abs(min_max[,2]-min_max[,4])<disp_tol
 
-  seg <- data.frame(seg,
-                    within_disp_tol)
+  if (sum(is.na(within_disp_tol)==FALSE) > 0) { # if there are valid periods
 
-  # this isn't going to be needed once part of trial_level_process proper
-  seg[is.na(seg$within_disp_tol),] <- FALSE # remove any NAs from the array
+    seg <- data.frame(seg, within_disp_tol)
 
-  # split dataframe into list by consecutive TRUE/FALSE on dispersion
-  seg <- split(seg,cumsum(c(0,as.numeric(diff(seg$within_disp_tol))!=0)))
+    # this isn't going to be needed once part of trial_level_process proper - check if can be removed
+    seg[is.na(seg$within_disp_tol),] <- FALSE # remove any NAs from the array
 
-  # keep only valid fixation periods (TRUE), within dispersion threshold
-  seg <- seg[sapply(seg, function(x) TRUE %in% x$within_disp_tol)]
+    # split dataframe into list by consecutive TRUE/FALSE on dispersion
+    seg <- split(seg,cumsum(c(0,as.numeric(diff(seg$within_disp_tol))!=0)))
 
-  # get timestamps of start and end points of possible fixations
-  seg_ind <- cbind(sapply(seg, function(x) x[1,1]),
-                   sapply(seg, function(x) x[nrow(x),1]) + min_dur - 1) # probably needs fix
+    # keep only valid fixation periods (TRUE), within dispersion threshold
+    seg <- seg[sapply(seg, function(x) TRUE %in% x$within_disp_tol)]
 
-  # remove indices that are too short (compared to min_dur)
-  #seg_ind <- seg_ind[seg_ind[,2]-seg_ind[,1] < min_dur,]
+    # get timestamps of start and end points of possible fixations
+    seg_ind <- cbind(sapply(seg, function(x) x[1,1]),
+                     sapply(seg, function(x) x[nrow(x),1]) + min_dur - 1) # probably needs fix/checking
 
-  # extract these fixation periods from the original data
-  fix_store <- NULL
-  if (nrow(seg_ind)>0) {
+    # remove indices that are too short (compared to min_dur)
+    #seg_ind <- seg_ind[seg_ind[,2]-seg_ind[,1] < min_dur,]
 
-    fix_store <- data.frame(matrix(NA, nrow = nrow(seg_ind), ncol = 6))
+    # extract these fixation periods from the original data
+    fix_store <- NULL
+    if (nrow(seg_ind)>0) {
 
-    for (f in 1:nrow(seg_ind)) {
+      fix_store <- data.frame(matrix(NA, nrow = nrow(seg_ind), ncol = 6))
 
-      d <- dplyr::filter(data, between(time,seg_ind[f,1],seg_ind[f,2]))
-      fix_store[f,1:2] <- c(seg_ind[f,1],seg_ind[f,2]) # first & last timestamps
-      fix_store[f,3:4] <- round(colMeans(d[,2:3]), digits = round) # mean x and y coordinates
-      fix_store[f,5] <- d[nrow(d),1] - d[1,1] # duration
-      fix_store[f,6] <- d[1,4] # trial number
+      for (f in 1:nrow(seg_ind)) {
+
+        d <- dplyr::filter(data, between(time,seg_ind[f,1],seg_ind[f,2]))
+        fix_store[f,1:2] <- c(seg_ind[f,1],seg_ind[f,2]) # first & last timestamps
+        fix_store[f,3:4] <- round(colMeans(d[,2:3]), digits = round) # mean x and y coordinates
+        fix_store[f,5] <- d[nrow(d),1] - d[1,1] # duration
+        fix_store[f,6] <- d[1,4] # trial number
+
+      }
 
     }
+
+  } else {
+    # if no valid periods, return NAs as fixations
+    fix_store <- data.frame(matrix(NA, nrow = 1, ncol = 6))
+    fix_store[1,6] <- data[1,4]
 
   }
 

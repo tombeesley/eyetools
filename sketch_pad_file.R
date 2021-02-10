@@ -20,10 +20,18 @@ profvis ({
   a <- eyetools::fix_dispersion(example_raw_psy)
 })
 
+d <-
+  read_csv("EAS01_P106_EG.csv",
+           col_names = c("time", "x", "y", "trial"),
+           cols(.default = col_double())) %>%
+  mutate(across(c(x,y), ~ifelse(is.nan(.), NA, .))) # convert NaN to NA
+
+d_test <- filter(d, trial == 158)
+
+fix <- fix_dispersion(d) # process fixations
 
 
-
-t1_raw <- filter(example_raw_psy, trial %in% 1:20)
+# t1_raw <- filter(example_raw_psy, trial %in% 1:20)
 #t1_raw <- t1_raw[1:200,]
 t1_fix <- eyetools::fix_dispersion(t1_raw)
 
