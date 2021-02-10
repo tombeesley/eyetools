@@ -1,10 +1,11 @@
 #' Plot raw data and fixations
 #'
-#' A tool for visualising raw eye-data and processed fixations. Fixations can be labelled
-#' in the order they were made.
+#' A tool for visualising raw eye-data and processed fixations. Can pass both raw data and fixation data. Fixations can be labeled
+#' in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 #'
 #' @param raw_data data in standard raw data form (time, x, y, trial)
 #' @param fix_data data output from fixation function (start, end, x, y, duration, trial)
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param show_fix_order label the fixations in the order they were made
@@ -14,7 +15,6 @@
 #'
 #' @examples
 #'
-#'
 #' @importFrom magrittr %>%
 #' @import ggplot2
 #' @import dplyr
@@ -23,7 +23,7 @@
 
 spatial_plot <- function(raw_data = NULL,
                          fix_data = NULL,
-                         aoi = NULL,
+                         AOIs = NULL,
                          res = NULL,
                          flip_y = FALSE,
                          show_fix_order = TRUE) {
@@ -31,11 +31,11 @@ spatial_plot <- function(raw_data = NULL,
 
   final_g <- ggplot()
   # PLOT AOIs
-  if (is.null(aoi)==FALSE) {
+  if (is.null(AOIs)==FALSE) {
 
     # need to split the AOI array here and plot separately tiles (squares) and points (circles)
     final_g <- final_g +
-      geom_tile(data = aoi,
+      geom_tile(data = AOIs,
                 aes(x = x, y = y, width = width, height = height),
                 colour = "dark blue",
                 fill = "blue",

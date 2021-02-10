@@ -4,16 +4,20 @@
 \alias{AOI_time}
 \title{Area of interest analysis at the trial level}
 \usage{
-AOI_time(data, AOIs)
+AOI_time(data, AOIs, AOI_names = NULL)
 }
 \arguments{
 \item{data}{A dataframe with fixation data (from fix_dispersion)}
+
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).}
+
+\item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 }
 \value{
 
 }
 \description{
-Analyses time on AOI regions
+Analyses total time on defined AOI regions across trials. Currently only works with fixation data as the input.
 }
 \examples{
 

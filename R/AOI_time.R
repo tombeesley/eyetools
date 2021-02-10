@@ -3,8 +3,8 @@
 #' Analyses total time on defined AOI regions across trials. Currently only works with fixation data as the input.
 #'
 #' @param data A dataframe with fixation data (from fix_dispersion)
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (column values: centre x; centre y; width; height).
-#' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2" etc.
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).
+#' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #'
 #' @return
 #' @export

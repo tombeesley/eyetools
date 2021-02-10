@@ -7,6 +7,7 @@
 spatial_plot(
   raw_data = NULL,
   fix_data = NULL,
+  AOIs = NULL,
   res = NULL,
   flip_y = FALSE,
   show_fix_order = TRUE
@@ -16,6 +17,8 @@ spatial_plot(
 \item{raw_data}{data in standard raw data form (time, x, y, trial)}
 
 \item{fix_data}{data output from fixation function (start, end, x, y, duration, trial)}
+
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).}
 
 \item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 
@@ -27,10 +30,9 @@ spatial_plot(
 
 }
 \description{
-A tool for visualising raw eye-data and processed fixations. Fixations can be labelled
-in the order they were made.
+A tool for visualising raw eye-data and processed fixations. Can pass both raw data and fixation data. Fixations can be labeled
+in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 }
 \examples{
-
 
 }
