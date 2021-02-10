@@ -6,6 +6,8 @@
 
 **Currently of limited use and very experimental!**
 
+to install: `devtools::install_github("tombeesley/eyetools")`
+
 It is free to use under the GNU General Public Licence..
 
 Vague "roadmap" for functions:
