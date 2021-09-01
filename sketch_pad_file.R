@@ -31,10 +31,23 @@ d_test <- filter(d, trial == 158)
 fix <- fix_dispersion(d) # process fixations
 
 
-# t1_raw <- filter(example_raw_psy, trial %in% 1:20)
+t1_raw <- filter(example_raw_psy, trial %in% 1:20)
 #t1_raw <- t1_raw[1:200,]
 t1_fix <- eyetools::fix_dispersion(t1_raw)
 
+t1_sac <- detect_saccades(t1_raw)
+
+t1_sac <-
+  t1_sac %>%
+  filter(trial == 1)
+
+rl <- rle(t1_sac$saccade)
+ends <- cumsum(rl$lengths)
+starts <- c(1,ends[1:length(ends)-1]+1)
+
+
+
+# AOI analysis
 
 AOIs <- data.frame(matrix(nrow = 3, ncol = 4))
 colnames(AOIs) <- c("x", "y", "width", "height")
@@ -59,4 +72,4 @@ spatial_plot(raw_data = t1_raw,
              show_fix_order = TRUE,
              flip_y = TRUE)
 
-# added for diff - test relocation of repo
+
