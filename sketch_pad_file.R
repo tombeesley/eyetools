@@ -30,20 +30,97 @@ d_test <- filter(d, trial == 158)
 
 fix <- fix_dispersion(d) # process fixations
 
+# get raw data
+t1_raw <- filter(example_raw_sac, trial == 1)
 
-t1_raw <- filter(example_raw_psy, trial %in% 1:20)
-#t1_raw <- t1_raw[1:200,]
+# process fixations
 t1_fix <- eyetools::fix_dispersion(t1_raw)
 
-t1_sac <- detect_saccades(t1_raw)
+# process saccades
+t1_sac <- detect_saccades(t1_raw, lambda = 15)
 
+# number the events
 t1_sac <-
-  t1_sac %>%
-  filter(trial == 1)
+  cbind(t1_sac,
+        event_n = c(1,cumsum(abs(diff(t1_sac$saccade)))+1))
 
+# plot a subset
+t1_g <-
+  t1_sac %>%
+  filter(between(event_n, 1, 10)) %>%
+  mutate(event_n = as.factor(event_n))
+
+t1_g %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point(aes(colour = event_n,
+                 shape = saccade),
+             size = 6) +
+  scale_color_discrete()
+
+# how many samples do saccades typically have
+t1_sac %>%
+  filter(saccade == TRUE) %>%
+  group_by(event_n) %>%
+  summarise(n_samples = n()) %>%
+  ggplot(aes(n_samples)) +
+  geom_histogram()
+
+
+# summarise saccade data
 rl <- rle(t1_sac$saccade)
 ends <- cumsum(rl$lengths)
 starts <- c(1,ends[1:length(ends)-1]+1)
+
+
+
+data.frame(saccade = rl$values,
+           ts_start = starts,
+           ts_end = ends)
+
+# temp VTI function
+
+VTI_saccade <- function(data){
+
+  x <- data$x
+  y <- data$y
+
+  d <- as.matrix(dist(cbind(x,y)))
+
+  d_diag <- diag(d[2:nrow(d),])
+
+  data_new <- cbind(data,
+                    distance = c(NA,d_diag))
+
+
+}
+
+
+
+
+
+pixels_to_visual_angle <- function(vector, view_dist_cm = 60, screen_width_cm = 51, screen_width_pixels = 1920) {
+
+  # works out pixels per cm (assumes width==height)
+  pix_per_cm  <- screen_width_pixels/screen_width_cm
+
+  # convert the input vector to cm units
+  vector <- vector/pix_per_cm
+
+
+  rad <- 2*atan(vector/(2*viewing_distance))
+  ang = rad*(180/pi)
+  return(ang)
+
+
+}
+
+t1_sac_new <- VTI_saccade(t1_raw)
+
+t1_sac_new <- pixels_to_visual_angle(t1_sac_new)
+
+t1_sac_new$distance*300
+
+
 
 
 
