@@ -31,7 +31,7 @@ d_test <- filter(d, trial == 158)
 fix <- fix_dispersion(d) # process fixations
 
 # get raw data
-t1_raw <- filter(example_raw_sac, trial == 1)
+t1_raw <- filter(example_raw_sac, trial == 2)
 
 # process fixations
 t1_fix <- eyetools::fix_dispersion(t1_raw)
@@ -98,28 +98,33 @@ VTI_saccade <- function(data){
 
 
 
-pixels_to_visual_angle <- function(vector, view_dist_cm = 60, screen_width_cm = 51, screen_width_pixels = 1920) {
+dist_to_visual_angle <- function(vector, dist_type = "cm", view_dist_cm = 60, screen_width_cm = 51, screen_width_pixels = 1920) {
 
-  # works out pixels per cm (assumes width==height)
-  pix_per_cm  <- screen_width_pixels/screen_width_cm
+  if (dist_type == "pixel") {
+    # works out pixels per cm (assumes width==height)
+    pix_per_cm  <- screen_width_pixels/screen_width_cm
 
-  # convert the input vector to cm units
-  vector <- vector/pix_per_cm
+    # convert the input vector to cm units
+    vector <- vector/pix_per_cm
+  }
 
-
-  rad <- 2*atan(vector/(2*viewing_distance))
+  rad <- 2*atan(vector/(2*view_dist_cm))
   ang = rad*(180/pi)
   return(ang)
 
-
 }
+
+t1_raw <- interpolate(t1_raw)
 
 t1_sac_new <- VTI_saccade(t1_raw)
 
-t1_sac_new <- pixels_to_visual_angle(t1_sac_new)
+t1_sac_new$distance <- pixels_to_visual_angle(t1_sac_new$distance)
 
-t1_sac_new$distance*300
+t1_sac_new$vel <- t1_sac_new$distance*300 # visual angle per second
 
+t1_sac_new[2:nrow(t1_sac_new),] %>%
+  ggplot(aes(x = time, y = smooth(vel))) +
+  geom_point()
 
 
 
