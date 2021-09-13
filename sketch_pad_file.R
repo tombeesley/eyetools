@@ -79,7 +79,20 @@ data.frame(saccade = rl$values,
 
 # temp VTI function
 
-VTI_saccade <- function(data){
+VTI_saccade <- function(data,
+                        dist_type = "cm",
+                        view_dist_cm = 60,
+                        screen_width_cm = 51,
+                        screen_width_pixels = 1920,
+                        sample_rate = NULL){
+
+  if (is.null(sample_rate)) {
+    # estimate sample rate
+    time <- data$time[nrow(data)] - data$time[1]
+
+
+  }
+
 
   x <- data$x
   y <- data$y
@@ -91,26 +104,8 @@ VTI_saccade <- function(data){
   data_new <- cbind(data,
                     distance = c(NA,d_diag))
 
+  data_new$distance <- distance_to_visual_angle(data_new$distance)
 
-}
-
-
-
-
-
-dist_to_visual_angle <- function(vector, dist_type = "cm", view_dist_cm = 60, screen_width_cm = 51, screen_width_pixels = 1920) {
-
-  if (dist_type == "pixel") {
-    # works out pixels per cm (assumes width==height)
-    pix_per_cm  <- screen_width_pixels/screen_width_cm
-
-    # convert the input vector to cm units
-    vector <- vector/pix_per_cm
-  }
-
-  rad <- 2*atan(vector/(2*view_dist_cm))
-  ang = rad*(180/pi)
-  return(ang)
 
 }
 
@@ -118,7 +113,7 @@ t1_raw <- interpolate(t1_raw)
 
 t1_sac_new <- VTI_saccade(t1_raw)
 
-t1_sac_new$distance <- pixels_to_visual_angle(t1_sac_new$distance)
+t1_sac_new$distance <- distance_to_visual_angle(t1_sac_new$distance)
 
 t1_sac_new$vel <- t1_sac_new$distance*300 # visual angle per second
 
