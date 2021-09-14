@@ -2,6 +2,7 @@
 
 export("%>%")
 export(AOI_time)
+export(VTI_saccade)
 export(dist_to_visual_angle)
 export(fix_dispersion)
 export(interpolate)
