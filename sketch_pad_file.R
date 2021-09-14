@@ -33,33 +33,33 @@ t_raw <- filter(example_raw_sac, trial == 6)
 # process fixations
 t_fix <- eyetools::fix_dispersion(t_raw)
 
-t_raw <- interpolate(t_raw)
+t_interpolate <- interpolate(t_raw)
 
-loess_x <- loess(x ~ time, data = t_raw, span = 0.1, na.action = na.exclude)
-loess_y <- loess(y ~ time, data = t_raw, span = 0.1, na.action = na.exclude)
+t_smoothed <- smoother(t_interpolate)
 
-t_raw$smooth_x <- predict(loess_x)
-t_raw$smooth_y <- predict(loess_y)
+# t_raw %>%
+#   ggplot() +
+#   geom_point(aes(data = t_raw, x = time, y = x), size = 3, alpha = .2) +
+#   geom_line(aes(data = t_smoothed, x = time, y = x), colour = "red", size = 1)
+#
+# t_raw %>%
+#   ggplot() +
+#   geom_point(aes(x = time, y = y), size = 3, alpha = .2) +
+#   geom_line(aes(x = time, y = smooth_y), colour = "blue", size = 1)
 
-t_raw %>%
-  ggplot() +
-  geom_point(aes(x = time, y = x), size = 3, alpha = .2) +
-  geom_line(aes(x = time, y = smooth_x), colour = "red", size = 1)
+t_sac_new <- VTI_saccade(t_smoothed, sample_rate = 300, dist_type = "pixel")
 
-t_raw %>%
-  ggplot() +
-  geom_point(aes(x = time, y = y), size = 3, alpha = .2) +
-  geom_line(aes(x = time, y = smooth_y), colour = "blue", size = 1)
+# prob use diff to segment saccades, then
+# summarise saccade info (start_pos, end_pos,
+# start_time, end_time, duration, peak vel, mean vel)
 
-t_sac_new <- VTI_saccade(t_raw, sample_rate = 300, dist_type = "pixel")
 
-t_sac_new$distance <- dist_to_visual_angle(t_sac_new$distance)
 
-t_sac_new$vel <- t_sac_new$distance*300 # visual angle per second
 
 t_sac_new[2:nrow(t_sac_new),] %>%
-  ggplot(aes(x = time, y = vel)) +
-  geom_point()
+  ggplot() +
+  geom_point(aes(x = time, y = x)) +
+  geom_line(aes(x = time, y = x, colour = saccade_detected), size = 3)
 
 
 

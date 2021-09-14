@@ -11,7 +11,7 @@
 #' @examples VTI_saccade()
 #'
 
-VTI_saccade <- function(data, sample_rate = NULL, ...){
+VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
 
   if (is.null(sample_rate)) {
     # estimate sample rate
@@ -20,7 +20,6 @@ VTI_saccade <- function(data, sample_rate = NULL, ...){
 
   }
 
-
   x <- data$x
   y <- data$y
 
@@ -28,14 +27,16 @@ VTI_saccade <- function(data, sample_rate = NULL, ...){
 
   d_diag <- diag(d[2:nrow(d),])
 
-  data_new <- cbind(data,
+  data <- cbind(data,
                     distance = c(NA,d_diag))
 
-  data_new$distance <- dist_to_visual_angle(data_new$distance, ...)
+  data$distance <- dist_to_visual_angle(data$distance, ...) # convert to VisAng
 
-  data_new$vel <- data_new$distance*sample_rate # visual angle per second
+  data$vel <- data$distance*sample_rate # visual angle per second
 
-  return(data_new)
+  data$saccade_detected <- data$vel > threshold
+
+  return(data)
 
 
 }
