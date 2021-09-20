@@ -53,8 +53,13 @@ t_sac_new <- VTI_saccade(t_smoothed, sample_rate = 300, dist_type = "pixel")
 # summarise saccade info (start_pos, end_pos,
 # start_time, end_time, duration, peak vel, mean vel)
 
+s <- t_sac_new
 
+d <- abs(diff(s$saccade_detected))
 
+cp <- s[d==1,] # changepoints
+
+s$event <- cumsum(d[!is.na(d)])
 
 t_sac_new[2:nrow(t_sac_new),] %>%
   ggplot() +
