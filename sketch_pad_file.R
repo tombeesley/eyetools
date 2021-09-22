@@ -55,16 +55,9 @@ t_sac_new <- VTI_saccade(t_smoothed, sample_rate = 300, dist_type = "pixel")
 
 s <- t_sac_new
 
-d <- abs(diff(s$saccade_detected))
+s_new <- s[s$saccade_detected==2,]
 
-cp <- s[d==1,] # changepoints
-
-s$event <- cumsum(d[!is.na(d)])
-
-t_sac_new[2:nrow(t_sac_new),] %>%
-  ggplot() +
-  geom_point(aes(x = time, y = x)) +
-  geom_line(aes(x = time, y = x, colour = saccade_detected), size = 3)
+s_s <- split(s,s$event_n)
 
 
 
