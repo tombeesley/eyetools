@@ -28,37 +28,20 @@ profvis ({
 
 
 # get raw data
-t_raw <- filter(example_raw_sac, trial == 6)
+t_raw <- filter(example_raw_sac, trial %in% c(11:15))
 
-# process fixations
+# # process fixations
 t_fix <- eyetools::fix_dispersion(t_raw)
 
 t_interpolate <- interpolate(t_raw)
 
 t_smoothed <- smoother(t_interpolate)
 
-# t_raw %>%
-#   ggplot() +
-#   geom_point(aes(data = t_raw, x = time, y = x), size = 3, alpha = .2) +
-#   geom_line(aes(data = t_smoothed, x = time, y = x), colour = "red", size = 1)
-#
-# t_raw %>%
-#   ggplot() +
-#   geom_point(aes(x = time, y = y), size = 3, alpha = .2) +
-#   geom_line(aes(x = time, y = smooth_y), colour = "blue", size = 1)
+t_sac_new <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 100)
 
-t_sac_new <- VTI_saccade(t_smoothed, sample_rate = 300, dist_type = "pixel")
+# flatten trial list
 
-# prob use diff to segment saccades, then
-# summarise saccade info (start_pos, end_pos,
-# start_time, end_time, duration, peak vel, mean vel)
-
-s <- t_sac_new
-
-s_new <- s[s$saccade_detected==2,]
-
-s_s <- split(s,s$event_n)
-
+t <- do.call(rbind.data.frame,t_sac_new)
 
 
 
