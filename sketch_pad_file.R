@@ -28,7 +28,7 @@ profvis ({
 
 
 # get raw data
-t_raw <- filter(example_raw_sac, trial %in% c(11:15))
+t_raw <- filter(example_raw_sac, trial %in% c(2))
 
 # # process fixations
 t_fix <- eyetools::fix_dispersion(t_raw)

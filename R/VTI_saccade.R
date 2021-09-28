@@ -13,14 +13,17 @@
 
 VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
 
-  VTI_saccade_trial <- function(data, ...){
+  # sample rate estimation if NULL
+  if (is.null(sample_rate)) {
+    ts <- aggregate(time~trial, data = data, range)
+    total_time <- sum(ts$time[,2]-ts$time[,1])
+    sample_rate <- 1000/(total_time/nrow(data)) # total time taken / samples
+  }
 
-    # sample rate estimation if NULL
-    if (is.null(sample_rate)) {
-      ts <- aggregate(time~trial, data = data, range)
-      total_time <- sum(ts$time[,2]-ts$time[,1])
-      sample_rate <- 1000/(total_time/nrow(data)) # total time taken / samples
-    }
+  message(sample_rate)
+
+
+  VTI_saccade_trial <- function(data, ...){
 
     x <- data$x
     y <- data$y
@@ -41,9 +44,9 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
     data$saccade_detected[is.na(data$saccade_detected)] <- 0 # convert NA to 0
 
     data$event_n <- c(NA,cumsum(abs(diff(data$saccade_detected)))) # get event numbers
-
+    message(dim(data))
     data <- data[data$saccade_detected == 2,] # get just the saccades
-
+    message(dim(data))
     # define function to pull out relevant data from saccades
     get_sac_info <- function(dataIn){
 
@@ -63,6 +66,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
 
     trial_data <- do.call(rbind.data.frame,trial_data)
 
+    #message(trial_data)
     colnames(trial_data) <- c("start_x", "start_y",
                               "end_x", "end_y", "n_samples",
                               "mean_velocity", "peak_velocity")
