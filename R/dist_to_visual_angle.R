@@ -16,7 +16,11 @@
 #' @examples dist_to_visual_angle(150, dist_type = "pixels") # calculate visual angle of 150 pixel wide
 #'
 
-dist_to_visual_angle <- function(vector, dist_type = "cm", view_dist_cm = 60, screen_width_cm = 51, screen_width_pixels = 1920) {
+dist_to_visual_angle <- function(vector,
+                                 dist_type = "cm",
+                                 view_dist_cm = 60,
+                                 screen_width_cm = 51,
+                                 screen_width_pixels = 1920) {
 
   if (dist_type == "pixel") {
     # works out pixels per cm (assumes width==height)
