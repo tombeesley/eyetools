@@ -1,8 +1,8 @@
 #' Velocity threshold identification of saccades
 #'
-#' Takes a
+#' Takes a...
 #'
-#' @param data
+#' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
 #'
 #' @return

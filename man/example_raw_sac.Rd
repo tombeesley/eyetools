@@ -8,8 +8,8 @@
 A data frame with 32608 rows and 4 variables:
 \describe{
   \item{time}{timestamp of the sample}
-  \item{x}{x coordinate of the eye position}
-  \item{y}{y coordinate of the eye position}
+  \item{x}{x coordinate of the eye}
+  \item{y}{y coordinate of the eye}
   \item{trial}{trial number}
   ...
 }

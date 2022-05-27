@@ -4,16 +4,18 @@
 \alias{VTI_saccade}
 \title{Velocity threshold identification of saccades}
 \usage{
-VTI_saccade(data, sample_rate = NULL, ...)
+VTI_saccade(data, sample_rate = NULL, threshold = 150, ...)
 }
 \arguments{
+\item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
+
 \item{sample_rate}{sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples}
 }
 \value{
 
 }
 \description{
-Takes a
+Takes a...
 }
 \examples{
 VTI_saccade()

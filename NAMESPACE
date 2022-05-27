@@ -3,6 +3,7 @@
 export("%>%")
 export(AOI_time)
 export(VTI_saccade)
+export(combine_eyes)
 export(dist_to_visual_angle)
 export(fix_dispersion)
 export(interpolate)
