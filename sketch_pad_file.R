@@ -45,50 +45,6 @@ t <- do.call(rbind.data.frame,t_sac_new)
 
 
 
-# # process saccades (old version - from "saccades" package)
-# t1_sac <- detect_saccades(t1_raw, lambda = 15)
-#
-# # number the events
-# t1_sac <-
-#   cbind(t1_sac,
-#         event_n = c(1,cumsum(abs(diff(t1_sac$saccade)))+1))
-#
-# # plot a subset
-# t1_g <-
-#   t1_sac %>%
-#   filter(between(event_n, 1, 10)) %>%
-#   mutate(event_n = as.factor(event_n))
-#
-# t1_g %>%
-#   ggplot(aes(x = x, y = y)) +
-#   geom_point(aes(colour = event_n,
-#                  shape = saccade),
-#              size = 6) +
-#   scale_color_discrete()
-#
-# # how many samples do saccades typically have
-# t1_sac %>%
-#   filter(saccade == TRUE) %>%
-#   group_by(event_n) %>%
-#   summarise(n_samples = n()) %>%
-#   ggplot(aes(n_samples)) +
-#   geom_histogram()
-#
-#
-# # summarise saccade data
-# rl <- rle(t1_sac$saccade)
-# ends <- cumsum(rl$lengths)
-# starts <- c(1,ends[1:length(ends)-1]+1)
-#
-# data.frame(saccade = rl$values,
-#            ts_start = starts,
-#            ts_end = ends)
-
-# temp VTI function
-
-
-
-
 
 # AOI analysis testing
 
@@ -110,7 +66,7 @@ sqrt((AOIs[3,1]-t1_fix$x)^2+(AOIs[3,2]-t1_fix$y)^2) < AOIs[3,3]/2
 
 spatial_plot(raw_data = NULL,
              fix_data = t_fix,
-             AOIs = AOIs,
+             #AOIs = AOIs,
              res = c(0,1920,0,1080),
              show_fix_order = FALSE,
              flip_y = TRUE)

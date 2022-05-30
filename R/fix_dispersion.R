@@ -38,7 +38,7 @@ fix_dispersion <- function(data,
                              round = round))
 
   data_fix <- do.call("rbind", data_fix)
-  colnames(data_fix) <- c("start", "end", "x", "y", "dur", "trial")
+  colnames(data_fix) <- c("start", "end", "x", "y", "dur", "disp_tol", "trial")
   return(data_fix)
 
 }
@@ -88,7 +88,7 @@ trial_level_process <- function(data,
     fix_store <- NULL
     if (nrow(seg_ind)>0) {
 
-      fix_store <- data.frame(matrix(NA, nrow = nrow(seg_ind), ncol = 6))
+      fix_store <- data.frame(matrix(NA, nrow = nrow(seg_ind), ncol = 7))
 
       for (f in 1:nrow(seg_ind)) {
 
@@ -96,7 +96,8 @@ trial_level_process <- function(data,
         fix_store[f,1:2] <- c(seg_ind[f,1],seg_ind[f,2]) # first & last timestamps
         fix_store[f,3:4] <- round(colMeans(d[,2:3]), digits = round) # mean x and y coordinates
         fix_store[f,5] <- d[nrow(d),1] - d[1,1] # duration
-        fix_store[f,6] <- d[1,4] # trial number
+        fix_store[f,6] <- disp_tol # dispersion
+        fix_store[f,7] <- d[1,4] # trial number
 
       }
 
@@ -104,8 +105,8 @@ trial_level_process <- function(data,
 
   } else {
     # if no valid periods, return NAs as fixations
-    fix_store <- data.frame(matrix(NA, nrow = 1, ncol = 6))
-    fix_store[1,6] <- data[1,4]
+    fix_store <- data.frame(matrix(NA, nrow = 1, ncol = 7))
+    fix_store[1,7] <- data[1,4] # add the trial number
 
   }
 

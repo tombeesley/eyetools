@@ -18,6 +18,7 @@
 #' @importFrom magrittr %>%
 #' @import ggplot2
 #' @import dplyr
+#' @import ggforce
 #'
 #'
 
@@ -52,7 +53,7 @@ spatial_plot <- function(raw_data = NULL,
     final_g <- final_g +
       geom_point(data = raw_data,
                  aes(x = x, y = y),
-                 size = .5)
+                 size = 1)
 
   }
 
@@ -62,9 +63,8 @@ spatial_plot <- function(raw_data = NULL,
     fix_data <- mutate(fix_data, fix_n = 1:n())
 
     final_g <- final_g +
-      geom_point(data = fix_data,
-                 aes(x = x, y = y, size = dur),
-                 colour = "red",
+      geom_circle(data = fix_data,
+                 aes(x0 = x, y0 = y, r = disp_tol/2, fill = dur),
                  alpha = .2)
     if (show_fix_order == TRUE) {
 
@@ -81,15 +81,16 @@ spatial_plot <- function(raw_data = NULL,
   }
 
   final_g <- final_g +
-    theme_classic(base_size = 18) +
+    theme_classic(base_size = 16) +
     theme(panel.background = element_rect(fill = "#E0E0E0"),
           panel.border = element_rect(colour = "black",
                                       fill = NA,
                                       size = 4)) +
-    scale_size_continuous(range = c(5,30)) +
-    guides(size = FALSE) +
-    labs(title = "eyetools::spatial_plot",
-         subtitle = "Points are raw data; Circles are fixations (size = duration); blue regions are AOIs",
+    scale_fill_continuous(low = "yellow", high = "red") +
+    coord_fixed() +
+    guides(size = "none") +
+    labs(title = "eyetools::spatial_plot()",
+         subtitle = "Raw data shown as dots; Fixations shown as circles (fill = duration); \nFixation size reflects dispersion of raw data; \nAOIs shown as blue regions",
          y = "Vertical coordinate (pixels)",
          x = "Horizontal coordinate (pixels)")
 
