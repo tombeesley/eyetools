@@ -2,15 +2,16 @@
 #'
 #' Combines the data from binocular samples into X/Y coordinate pairs. Two
 #' methods can be used: "average" or "best_eye". For "average", the result is based on the average of the two eyes for each sample,
-#' where the data from a single eye is taken is the other is missing (NA). For "best_eye", a summary of the proportion of missing samples
+#' or for samples where there is data from only a single eye, that eye is used. For "best_eye", a summary of the proportion of missing samples
 #' is computed, and the eye with the fewest missing samples is used.
 #'
-#' @param data
+#' @param data raw data with columns time, left_x, left_y, right_x, right_y, trial and trial_phase
+#' @param method either "average" or "best_eye" - see description.
 #'
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples combine_eyes(example_two_eyes_raw, method = "average")
 #'
 
 combine_eyes <- function(data, method = "average") {
@@ -22,7 +23,7 @@ combine_eyes <- function(data, method = "average") {
 
   } else if (method == "best_eye") {
 
-    if (mean(is.na(d$left_x)) < mean(is.na(d$right_x))){
+    if (mean(is.na(data$left_x)) < mean(is.na(data$right_x))){
       # left eye has fewer NAs
       x <- data$left_x
       y <- data$left_y
@@ -36,8 +37,11 @@ combine_eyes <- function(data, method = "average") {
 
   data <- cbind(data$time, x, y, data$trial, data$trial_phase)
 
-  # need to fix that this is returning NaN and not NA for the average method
+  data[data == 'NaN']=NA # convert any NaN (from mean()) to NA
 
+  colnames(data) <- c("time", "x", "y", "trial", "trial_phase")
+
+  data <- data.frame(data)
 
   return(data)
 

@@ -7,7 +7,9 @@
 combine_eyes(data, method = "average")
 }
 \arguments{
-\item{data}{}
+\item{data}{raw data with columns time, left_x, left_y, right_x, right_y, trial and trial_phase}
+
+\item{method}{either "average" or "best_eye" - see description.}
 }
 \value{
 
@@ -15,9 +17,10 @@ combine_eyes(data, method = "average")
 \description{
 Combines the data from binocular samples into X/Y coordinate pairs. Two
 methods can be used: "average" or "best_eye". For "average", the result is based on the average of the two eyes for each sample,
-where the data from a single eye is taken is the other is missing (NA). For "best_eye", a summary of the proportion of missing samples
+or for samples where there is data from only a single eye, that eye is used. For "best_eye", a summary of the proportion of missing samples
 is computed, and the eye with the fewest missing samples is used.
 }
 \examples{
+combine_eyes(example_two_eyes_raw, method = "average")
 
 }

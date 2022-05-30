@@ -116,7 +116,6 @@ spatial_plot(raw_data = NULL,
              flip_y = TRUE)
 
 
-<<<<<<< HEAD
 AOI_time(t_fix, AOIs)
 
 d <- readRDS("data/data_pilot.RDS")
@@ -130,23 +129,7 @@ usethis::use_data(example_two_eyes_raw, overwrite = TRUE)
 d <- example_two_eyes_raw[585:605,]
 
 example_two_eyes_raw
-d_best <- combine_eyes(example_two_eyes_raw, method = "best_eye")
+d <- combine_eyes(example_two_eyes_raw, method = "best_eye")
 
 
-example_raw_sac
-=======
-distances <- c(20,25,45)
-rad <- 2*atan(distances/(2*50)) # at viewing angle of 50 cm
-ang = rad*(180/pi)
-ang
-distances <- c(90,18,27)
-rad <- 2*atan(distances/(2*70)) # at viewing angle of 70 cm
-ang = rad*(180/pi)
-ang
 
-dist_to_visual_angle(c(20,25,45))
-distances <- c(20,25,45)
-dist_to_visual_angle(distances)
-dist_to_visual_angle(distances, view_dist_cm = 70, screen_width_cm = 40)
-dist_to_visual_angle(distances, ~, 70, 40)
->>>>>>> 6428d5723cc00e798d982dd635ee41b297c0a59a
