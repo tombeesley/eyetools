@@ -8,9 +8,10 @@ spatial_plot(
   raw_data = NULL,
   fix_data = NULL,
   AOIs = NULL,
-  res = NULL,
+  res = c(0, 1920, 0, 1080),
   flip_y = FALSE,
-  show_fix_order = TRUE
+  show_fix_order = TRUE,
+  plot_header = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ spatial_plot(
 \item{flip_y}{reverse the y axis coordinates (useful if origin is top of the screen)}
 
 \item{show_fix_order}{label the fixations in the order they were made}
+
+\item{plot_header}{display the header title text which explains graphical features of the plot.}
 }
 \value{
 

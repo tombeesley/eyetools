@@ -14,7 +14,7 @@
 #' @return
 #' @export
 #'
-#' @examples fix_dispersion(example_raw_psy, min_dur = 200, disp_tol = 200)
+#' @examples fix_dispersion(example_raw_psy, min_dur = 200, disp_tol = 50)
 #'
 #' @importFrom magrittr %>%
 #' @import dplyr
@@ -25,7 +25,7 @@
 
 fix_dispersion <- function(data,
                            min_dur = 150,
-                           disp_tol = 200,
+                           disp_tol = 100,
                            run_interp = TRUE,
                            round = 0) {
 

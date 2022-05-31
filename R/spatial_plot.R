@@ -9,6 +9,7 @@
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param show_fix_order label the fixations in the order they were made
+#' @param plot_header display the header title text which explains graphical features of the plot.
 #'
 #' @return
 #' @export
@@ -25,9 +26,10 @@
 spatial_plot <- function(raw_data = NULL,
                          fix_data = NULL,
                          AOIs = NULL,
-                         res = NULL,
+                         res = c(0,1920,0,1080),
                          flip_y = FALSE,
-                         show_fix_order = TRUE) {
+                         show_fix_order = TRUE,
+                         plot_header = FALSE) {
 
 
   final_g <- ggplot()
@@ -80,7 +82,8 @@ spatial_plot <- function(raw_data = NULL,
 
   }
 
-  final_g <- final_g +
+  final_g <-
+    final_g +
     theme_classic(base_size = 16) +
     theme(panel.background = element_rect(fill = "#E0E0E0"),
           panel.border = element_rect(colour = "black",
@@ -89,10 +92,16 @@ spatial_plot <- function(raw_data = NULL,
     scale_fill_continuous(low = "yellow", high = "red") +
     coord_fixed() +
     guides(size = "none") +
-    labs(title = "eyetools::spatial_plot()",
-         subtitle = "Raw data shown as dots; Fixations shown as circles (fill = duration); \nFixation size reflects dispersion of raw data; \nAOIs shown as blue regions",
-         y = "Vertical coordinate (pixels)",
+    labs(y = "Vertical coordinate (pixels)",
          x = "Horizontal coordinate (pixels)")
+
+  # add descriptive titles
+  if (plot_header==TRUE){
+    final_g <-
+      final_g +
+      labs(title = "eyetools::spatial_plot()",
+           subtitle = "Raw data shown as dots; Fixations shown as circles (fill = duration); \nFixation size reflects dispersion of raw data; \nAOIs shown as blue regions")
+  }
 
   # setting axes limits and reversing y
 

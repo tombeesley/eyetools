@@ -2,6 +2,7 @@ library(tidyverse)
 library(devtools)
 library(profvis)
 library(microbenchmark)
+library(patchwork)
 
 # What is this mess?
 # This script is where I stick bits of code or notes I need to keep when testing out the package
@@ -20,24 +21,23 @@ profvis ({
   a <- eyetools::fix_dispersion(example_raw_psy)
 })
 
-# d <-
-#   read_csv("EAS01_P106_EG.csv",
-#            col_names = c("time", "x", "y", "trial"),
-#            cols(.default = col_double())) %>%
-#   mutate(across(c(x,y), ~ifelse(is.nan(.), NA, .))) # convert NaN to NA
-
 
 # get raw data
-t_raw <- filter(example_raw_sac, trial %in% c(2,3,4,5))
+t_raw <- filter(example_raw_sac, trial %in% c(2))
 
 # # process fixations
-t_fix <- eyetools::fix_dispersion(t_raw)
+t_fix <- fix_dispersion(t_raw,disp_tol = 150, min_dur = 100)
+
+raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
+fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
+
+raw_plot/fix_plot
 
 t_interpolate <- interpolate(t_raw)
 
 t_smoothed <- smoother(t_interpolate)
 
-t_sac_new <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 100)
+VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
 
 # flatten trial list
 

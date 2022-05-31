@@ -44,9 +44,13 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
     data$saccade_detected[is.na(data$saccade_detected)] <- 0 # convert NA to 0
 
     data$event_n <- c(NA,cumsum(abs(diff(data$saccade_detected)))) # get event numbers
+
     message(dim(data))
+
     data <- data[data$saccade_detected == 2,] # get just the saccades
+
     message(dim(data))
+
     # define function to pull out relevant data from saccades
     get_sac_info <- function(dataIn){
 

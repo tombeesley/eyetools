@@ -7,7 +7,7 @@
 fix_dispersion(
   data,
   min_dur = 150,
-  disp_tol = 200,
+  disp_tol = 100,
   run_interp = TRUE,
   round = 0
 )
@@ -33,6 +33,6 @@ in which the ranges are both below the specified dispersion tolerance. NAs are c
 in the data and are not permitted within a valid fixation period.
 }
 \examples{
-fix_dispersion(example_raw_psy, min_dur = 200, disp_tol = 200)
+fix_dispersion(example_raw_psy, min_dur = 200, disp_tol = 50)
 
 }
