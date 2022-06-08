@@ -88,4 +88,11 @@ example_two_eyes_raw
 d <- combine_eyes(example_two_eyes_raw, method = "best_eye")
 
 
+angle <- function(a,b){
+
+
+
+
+}
+
 
