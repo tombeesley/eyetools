@@ -4,12 +4,16 @@
 \alias{VTI_saccade}
 \title{Velocity threshold identification of saccades}
 \usage{
-VTI_saccade(data, sample_rate = NULL, threshold = 150, ...)
+VTI_saccade(data, sample_rate = NULL, threshold = 150, minDur = 20, ...)
 }
 \arguments{
 \item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
 
 \item{sample_rate}{sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples}
+
+\item{threshold}{velocity threshold (degrees of VA / sec) to be used for identifying saccades}
+
+\item{minDur}{minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occuring at the boundary of velocity threshold}
 }
 \value{
 

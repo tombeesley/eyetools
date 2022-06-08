@@ -4,6 +4,8 @@
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
+#' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
+#' @param minDur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occuring at the boundary of velocity threshold
 #'
 #' @return
 #' @export
@@ -11,7 +13,7 @@
 #' @examples VTI_saccade()
 #'
 
-VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
+VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20, ...){
 
   # sample rate estimation if NULL
   if (is.null(sample_rate)) {
@@ -19,9 +21,6 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
     total_time <- sum(ts$time[,2]-ts$time[,1])
     sample_rate <- 1000/(total_time/nrow(data)) # total time taken / samples
   }
-
-  message(sample_rate)
-
 
   VTI_saccade_trial <- function(data, ...){
 
@@ -45,11 +44,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
 
     data$event_n <- c(NA,cumsum(abs(diff(data$saccade_detected)))) # get event numbers
 
-    message(dim(data))
-
     data <- data[data$saccade_detected == 2,] # get just the saccades
-
-    message(dim(data))
 
     # define function to pull out relevant data from saccades
     get_sac_info <- function(dataIn){
@@ -59,7 +54,8 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
       n_samples <- nrow(dataIn)
       meanVel <- mean(dataIn$vel) # mean velocity
       peakVel <- max(dataIn$vel) # peak velocity during saccade
-      outData <- c(fpos, lpos, n_samples, meanVel, peakVel)
+      duration <- dataIn[nrow(dataIn),1] - dataIn[1,1]
+      outData <- c(fpos, lpos, n_samples, meanVel, peakVel, duration)
       return(outData)
 
     }
@@ -71,11 +67,11 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
     trial_data <- do.call(rbind.data.frame,trial_data)
 
     #message(trial_data)
-    colnames(trial_data) <- c("start_x", "start_y",
-                              "end_x", "end_y", "n_samples",
-                              "mean_velocity", "peak_velocity")
+    colnames(trial_data) <- c("start_x", "start_y", "end_x", "end_y", "n_samples",
+                              "mean_velocity", "peak_velocity", "duration")
 
     trial_data$trial <- data$trial[1]
+    trial_data <- trial_data[trial_data$duration >= minDur,]
     trial_data$sac_n <- 1:nrow(trial_data)
 
     return(trial_data)
@@ -85,7 +81,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, ...){
   data_s <- split(data, data$trial)
   by_trial_sac <- lapply(data_s, VTI_saccade_trial, ...)
   flat_trials <- do.call(rbind.data.frame,by_trial_sac)
-  flat_trials <- flat_trials[,c(8,9,1:7)] # reorder cols
+  # flat_trials <- flat_trials[,c(8,9,1:7)] # reorder cols
   return(flat_trials)
 
 }

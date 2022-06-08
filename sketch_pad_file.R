@@ -37,7 +37,7 @@ t_interpolate <- interpolate(t_raw)
 
 t_smoothed <- smoother(t_interpolate)
 
-VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
+a <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
 
 # flatten trial list
 
