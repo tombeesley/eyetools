@@ -1,0 +1,99 @@
+---
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **eyetools**
+
+## A set of tools for eye data processing, analysis and visualisation in R
+
+**eyetools** is a package that provides a set of simple tools that will facilitate common steps in the processing and analysis of eye data. It is intended for use with data from psychological experiments. The idea is to have a workflow which is aided by these functions, going from processing of the raw data, to extraction of event related data (i.e., fixations, saccades), to summarising those data at the trial level (e.g., time on areas of interest). 
+
+**Currently of limited use and very experimental!**
+
+to install: `devtools::install_github("tombeesley/eyetools")`
+
+It is free to use under the GNU General Public Licence..
+
+Vague "roadmap" for functions:
+
+|order | process | implemented function(s) | comment
+|-|-|-|-|
+|1.| combine binocular data | `combine_eyes()` | works: either average or "best eye" |
+|2.| interpolation | `interpolate()` | working and provides a summary report of repair |
+|3.| smoothing | | |
+|4.| dispersion-based fixations  | `fix_dispersion()` | working and pretty fast - needs thorough checking |
+|5.| area of interest analysis   | `AOI_time()` | working in basic form - needs thorough checking |
+|6.| Visualisations - heatmaps, fixation plots, etc  | `spatial_plot()` | provides a 2D plot of raw data and fixations |
+|7.| saccade detection (angle, speed, start/end, timing)  | | |
+|8.| velocity-based fixations (from saccades)  | | |
+|9.| scan paths (OG to be prodded fiercely)  | | |
+
+*update notes:*
+
+30/05/2022 - `combine_eyes()` added. Saccade algorithm work has started and needs checking
+
+08/02/2021 - `AOI_time()` added. Provides basic results using fixation data as input.
+
+17/09/2020 - `fix_dispersion()` and `spatial_plot()` added. Almost useful...
+
+19/08/2020 - `interpolate()` seems to work. 
+
+17/08/2020 - it doesn't do ANYTHING at the moment. Don't even think about using it.
+
+
+### How to use eyetools (work in progress)
+
+You can install eyetools using the following code:
+```{r eval=FALSE}
+if (!require(devtools)) {
+  install.packages("devtools")
+  library(devtools)
+}
+install_github("tombeesley/eyetools")
+```
+and then load it:
+```{r}
+library(eyetools)
+```
+
+**The format of raw data**
+
+Data needs to be in a particular format to be compatible with the functions in eyetools. This format is 4 columns of data, with each row representing a sample. The four columns are: time, x, y, and trial. You can see an example with the built in data sets:
+```{r}
+example_raw_sac
+```
+
+**Repairing data**
+
+Raw data will often contain missing samples, which we can attempt to repair. eyetools has an `interpolation()` function you can use to do this. It will produce a report of how succesful the repair was in terms of the missing data before and after interpolation:
+
+```{r}
+eyetools::interpolate(example_raw_sac, report = TRUE)
+raw_data <- eyetools::interpolate(example_raw_sac) # store as new object
+```
+
+We can also apply a smoothing function over the data, which is particularly important for the analysis of saccadic velocities. 
+
+```{r}
+smooth_data <- eyetools::smoother(example_raw_sac) 
+```
+
+```{r}
+library(tidyverse)
+
+s <- filter(smooth_data, trial == 2)
+r <- filter(raw_data, trial == 2)
+
+ggplot() +
+  geom_line(data = r, aes(x = time, y = y),
+            colour = "red") +
+  geom_line(data = s, aes(x = time, y = y),
+            colour = "blue")
+
+
+```
+
