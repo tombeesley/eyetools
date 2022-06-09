@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -47,6 +49,16 @@ Vague "roadmap" for functions:
 
 ### How to use eyetools (work in progress)
 
+```{r include=FALSE}
+
+library(tidyverse)
+
+theme_set(theme_light())
+
+
+```
+
+
 You can install eyetools using the following code:
 ```{r eval=FALSE}
 if (!require(devtools)) {
@@ -85,8 +97,8 @@ smooth_data <- eyetools::smoother(example_raw_sac)
 ```{r}
 library(tidyverse)
 
-s <- filter(smooth_data, trial == 2)
 r <- filter(raw_data, trial == 2)
+s <- filter(smooth_data, trial == 2)
 
 ggplot() +
   geom_line(data = r, aes(x = time, y = y),

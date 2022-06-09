@@ -137,20 +137,7 @@ smooth_data <- eyetools::smoother(example_raw_sac)
 
 ``` r
 library(tidyverse)
-```
 
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-
-    ## v ggplot2 3.3.6     v purrr   0.3.4
-    ## v tibble  3.1.7     v dplyr   1.0.9
-    ## v tidyr   1.2.0     v stringr 1.4.0
-    ## v readr   2.1.2     v forcats 0.5.1
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 s <- filter(smooth_data, trial == 2)
 r <- filter(raw_data, trial == 2)
 
@@ -161,4 +148,4 @@ ggplot() +
             colour = "blue")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
