@@ -17,7 +17,7 @@ to install: `devtools::install_github("tombeesley/eyetools")`
 
 It is free to use under the GNU General Public Licence..
 
-Vague “roadmap” for functions:
+“Roadmap” for functions:
 
 | order | process                                        | implemented function(s) | comment                                                                        |
 |-------|------------------------------------------------|-------------------------|--------------------------------------------------------------------------------|
@@ -29,7 +29,7 @@ Vague “roadmap” for functions:
 | 6\.   | Visualisations - heatmaps, fixation plots, etc | `spatial_plot()`        | provides a 2D plot of raw data and fixations                                   |
 | 7\.   | Saccade detection                              | `VTI_saccade()`         | Working in basic form - provides summary of velocity, start/end, duration, etc |
 | 8\.   | velocity-based fixations                       |                         |                                                                                |
-| 9\.   | scan paths (OG to be prodded fiercely)         |                         |                                                                                |
+| 9\.   | scan paths?                                    |                         |                                                                                |
 
 ## How to use eyetools (work in progress)
 
@@ -138,26 +138,30 @@ ggplot() +
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-**Processing fixations** …
+**Processing fixations** The function `fix_dispersion` is a
+dispersion-based algorithm for identifying fixations, based on the
+algorithm described in Salvucci and Goldberg (2000). Passing raw data to
+this will return a tibble that contains the
+
+``` r
+raw_data_f <- filter(raw_data, trial <= 3) # sample of trials
+
+fix_dispersion(raw_data_f)
+```
+
+    ##     start  end    x   y dur disp_tol trial
+    ## 1.1     0  232  937 535 230      100     1
+    ## 1.2   273  462  170 500 187      100     1
+    ## 1.3   643 1182 1743 534 537      100     1
+    ## 1.4  1566 1819  134 532 250      100     1
+    ## 2.1     0  233  936 539 233      100     2
+    ## 2.2   280  769  158 520 487      100     2
+    ## 2.3   943 1249 1721 532 304      100     2
+    ## 3.1     0  169  941 543 167      100     3
+    ## 3.2   210  536  159 521 323      100     3
+    ## 3.3   653 1099 1719 542 444      100     3
+    ## 3.4  1217 1366  212 543 146      100     3
 
 **Assessing time on areas of interest** …
 
 **Plotting data** …
-
-*update notes:*
-
-09/06/2022 - `VTI_saccade()` algorithm is working in a basic form
-
-30/05/2022 - `combine_eyes()` added. Saccade algorithm work has started
-and needs checking
-
-08/02/2021 - `AOI_time()` added. Provides basic results using fixation
-data as input.
-
-17/09/2020 - `fix_dispersion()` and `spatial_plot()` added. Almost
-useful…
-
-19/08/2020 - `interpolate()` seems to work.
-
-17/08/2020 - it doesn’t do ANYTHING at the moment. Don’t even think
-about using it.

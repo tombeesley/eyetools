@@ -62,7 +62,9 @@ trial_level_process <- function(data,
   min_max <- data.frame(roll_min(seg[,2:3], n = min_rows, fill = NA, align = "left"),
                         roll_max(seg[,2:3], n = min_rows, fill = NA, align = "left"))
 
-  within_disp_tol <- abs(min_max[,1]-min_max[,3])<disp_tol & abs(min_max[,2]-min_max[,4])<disp_tol
+  within_disp_tol <-
+    abs(min_max[,1]-min_max[,3])<disp_tol &
+    abs(min_max[,2]-min_max[,4])<disp_tol
 
   if (sum(is.na(within_disp_tol)==FALSE) > 0) { # if there are valid periods
 
