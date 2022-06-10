@@ -23,7 +23,7 @@
 #' @importFrom RcppRoll roll_min roll_max
 #'
 
-fix_dispersion <- function(data,
+fix_dispersion_old <- function(data,
                            min_dur = 150,
                            disp_tol = 100,
                            run_interp = TRUE,
