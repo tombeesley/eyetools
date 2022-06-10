@@ -45,13 +45,13 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100) {
     new_Window <- FALSE
     fix_cnt <- 0
     dist_cnt <- 0
-    while (last_ts <= nrow(data)) {
+    while (last_ts <= nrow(data)) { # while not at the end of the data
 
       win <- data[first_ts:last_ts,]
 
       if (anyNA(win)==FALSE) {
 
-        disp <- max(dist(win[,2:3])) # compute distance on X and Y
+        disp <- max(dist(win[,2:3])) # compute euclidean distance between all rows on X and Y
 
         if (disp <= disp_tol) {
           # increase window size
