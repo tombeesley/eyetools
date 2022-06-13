@@ -9,11 +9,12 @@ fix_dispersion(
   min_dur = 150,
   disp_tol = 100,
   run_interp = TRUE,
-  round = 0
+  NA_tol = 0.25,
+  ...
 )
 }
 \arguments{
-\item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
+\item{data}{dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)}
 
 \item{min_dur}{Minimum duration (in milliseconds) of period over which fixations are assessed}
 
@@ -21,7 +22,7 @@ fix_dispersion(
 
 \item{run_interp}{include a call to eyetools::interpolation on each trial}
 
-\item{round}{rounding digits of fixation coordinates in output}
+\item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation}
 }
 \value{
 
@@ -33,6 +34,6 @@ in which the ranges are both below the specified dispersion tolerance. NAs are c
 in the data and are not permitted within a valid fixation period.
 }
 \examples{
-fix_dispersion(example_raw_psy, min_dur = 200, disp_tol = 50)
 
 }
+\keyword{internal}

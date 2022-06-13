@@ -1,119 +1,113 @@
-#' Fixation detection by dispersion method
+#' Fixation detection by dispersion method OLD - no longer in us
 #'
-#' Detects fixations according to a method similar to that proposed by Salvucci & Goldberg (1996).
-#' Evaluates the absolute range of values of both x and y coordinates. Looks for sufficient periods
-#' in which the ranges are both below the specified dispersion tolerance. NAs are considered breaks
-#' in the data and are not permitted within a valid fixation period.
+#' Detects fixations according to the method proposed by S & G
 #'
-#' @param data A dataframe with raw data (time, x, y, trial) for one participant
-#' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
-#' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-#' @param run_interp include a call to eyetools::interpolation on each trial
-#' @param round rounding digits of fixation coordinates in output
+#'
+#' @param data dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)
 #'
 #' @return
-#' @export
 #'
-#' @examples fix_dispersion(example_raw_psy, min_dur = 200, disp_tol = 50)
+#'
+#' @examples
 #'
 #' @importFrom magrittr %>%
 #' @import dplyr
+#' @import purrr
 #' @importFrom rlang .data
 #' @importFrom zoo na.trim
 #' @importFrom RcppRoll roll_min roll_max
 #'
+#' @keywords internal
+#'
+fix_dispersion_old <- function(data, min_dur = 150, disp_tol = 100) {
 
-fix_dispersion_old <- function(data,
-                           min_dur = 150,
-                           disp_tol = 100,
-                           run_interp = TRUE,
-                           round = 0) {
+  trial_level_process <- function(data, min_dur, disp_tol, round = 0) {
 
-  data <- split(data,data$trial) # create list from data by trial
-  data_fix <- data %>%
-    map(~trial_level_process(.,
-                             min_dur = min_dur,
-                             disp_tol = disp_tol,
-                             run_interp = run_interp,
-                             round = round))
+    # need to think about how I catch NAs in the raw data
+    # argument option to skip ahead to the next valid data, or average over NAs
 
-  data_fix <- do.call("rbind", data_fix)
-  colnames(data_fix) <- c("start", "end", "x", "y", "dur", "disp_tol", "trial")
-  return(data_fix)
+    data <- interpolate(data)
 
-}
+    data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
 
-trial_level_process <- function(data,
-                                min_dur,
-                                disp_tol,
-                                run_interp,
-                                round) {
+    sample_rate <- as.numeric(tail(data[,1],n=1)) / nrow(data)
+    #browser()
 
-  if (run_interp) data <- interpolate(data)
+    data <- na.trim(data) # remove leading and trailing NAs
+    first_ts <- 1 # first timestamp of window
+    last_ts <- min(which(data[,1] >= data[first_ts,1,drop=TRUE] + min_dur)) # last timestamp of window
 
-  data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
+    # preallocate a tibble to store fixations
+    n <- ceiling(nrow(data)/min_dur) # maximum possible fixations
+    fix_store <- data.frame(matrix(NA, nrow = n, ncol = 4))
 
-  sample_rate <- as.numeric(data[nrow(data),1]) / nrow(data)
+    new_fix <- FALSE
+    new_Window <- FALSE
+    fix_cnt <- 0
+    dist_cnt <- 0
+    while (last_ts <= nrow(data)) { # while not at the end of the data
 
-  min_rows = round(min_dur/sample_rate) # convert min_dur into number of samples to search ahead in min/max
+      win <- data[first_ts:last_ts,]
 
-  seg <- as.matrix(data)
+      if (anyNA(win)==FALSE) {
 
-  min_max <- data.frame(roll_min(seg[,2:3], n = min_rows, fill = NA, align = "left"),
-                        roll_max(seg[,2:3], n = min_rows, fill = NA, align = "left"))
+        disp <- max(dist(win[,2:3])) # compute euclidean distance between all rows on X and Y
 
-  within_disp_tol <-
-    abs(min_max[,1]-min_max[,3])<disp_tol &
-    abs(min_max[,2]-min_max[,4])<disp_tol
+        if (disp <= disp_tol) {
+          # increase window size
+          last_ts <- last_ts + 1
+          new_fix <- TRUE
+        } else {
+          # disp_tol has been exceeded
 
-  if (sum(is.na(within_disp_tol)==FALSE) > 0) { # if there are valid periods
+          if (new_fix == TRUE){ # record a new valid fixation
 
-    seg <- data.frame(seg, within_disp_tol)
+            fix_cnt <- fix_cnt + 1
+            fix_store[fix_cnt,1] <- win[1,1,drop=TRUE] # start timestamp of the fixation
+            fix_store[fix_cnt,2] <- tail(win[,1],n=1) - win[1,1] # subtract first from last timestamp for duration
+            fix_store[fix_cnt,3:4] <- round(colMeans(win[,2:3]), digits = round) # x/y coordinate means
+            new_Window <- FALSE
+            new_fix <- FALSE
 
-    # this isn't going to be needed once part of trial_level_process proper - check if can be removed
-    seg[is.na(seg$within_disp_tol),] <- FALSE # remove any NAs from the array
+          } else {
+            # move window by one timestamp
+            first_ts <- first_ts + 1
+            last_ts <- last_ts + 1
+          }
+        }
+      } else {
+        new_Window = TRUE
+      }    # window contains NAs, shift it on
 
-    # split dataframe into list by consecutive TRUE/FALSE on dispersion
-    seg <- split(seg,cumsum(c(0,as.numeric(diff(seg$within_disp_tol))!=0)))
-
-    # keep only valid fixation periods (TRUE), within dispersion threshold
-    seg <- seg[sapply(seg, function(x) TRUE %in% x$within_disp_tol)]
-
-    # get timestamps of start and end points of possible fixations
-    seg_ind <- cbind(sapply(seg, function(x) x[1,1]),
-                     sapply(seg, function(x) x[nrow(x),1]) + min_dur - 1) # probably needs fix/checking
-
-    # remove indices that are too short (compared to min_dur)
-    #seg_ind <- seg_ind[seg_ind[,2]-seg_ind[,1] < min_dur,]
-
-    # extract these fixation periods from the original data
-    fix_store <- NULL
-    if (nrow(seg_ind)>0) {
-
-      fix_store <- data.frame(matrix(NA, nrow = nrow(seg_ind), ncol = 7))
-
-      for (f in 1:nrow(seg_ind)) {
-
-        d <- dplyr::filter(data, between(time,seg_ind[f,1],seg_ind[f,2]))
-        fix_store[f,1:2] <- c(seg_ind[f,1],seg_ind[f,2]) # first & last timestamps
-        fix_store[f,3:4] <- round(colMeans(d[,2:3]), digits = round) # mean x and y coordinates
-        fix_store[f,5] <- d[nrow(d),1] - d[1,1] # duration
-        fix_store[f,6] <- disp_tol # dispersion
-        fix_store[f,7] <- d[1,4] # trial number
+      if (new_Window) {
+        new_Window <- FALSE
+        first_ts <- last_ts + 1
+        last_ts <- min(which(data[,1] >= data[first_ts,1,drop=TRUE] + min_dur)) # last timestamp of window
 
       }
 
+
     }
+    # tidy up fixation dataframe
+    fix_store <- na.trim(fix_store)
+    if (nrow(fix_store)>0) fix_store <- cbind(fix_store,data[1,4]) # gets the trial number from top row
 
-  } else {
-    # if no valid periods, return NAs as fixations
-    fix_store <- data.frame(matrix(NA, nrow = 1, ncol = 7))
-    fix_store[1,7] <- data[1,4] # add the trial number
-
+    return(fix_store)
   }
 
-  return(fix_store)
+
+
+  data <- split(data,data$trial) # create list from data by trial
+  data_fix <- data %>% map(~trial_level_process(., min_dur = min_dur, disp_tol = disp_tol))
+  data_fix <- do.call("rbind", data_fix)
+  colnames(data_fix) <- c("start", "dur", "x", "y", "trial")
+  return(data_fix)
+
+  # seems to be a problem with trial 8 in example_raw_psy
 
 }
+
+
+
 
 

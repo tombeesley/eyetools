@@ -3,6 +3,7 @@ library(devtools)
 library(profvis)
 library(microbenchmark)
 library(patchwork)
+library(rdist)
 
 # What is this mess?
 # This script is where I stick bits of code or notes I need to keep when testing out the package
@@ -24,84 +25,13 @@ profvis ({
 # Working out a new dispersion algorithm
 
 # get raw data for just one trial
-data <- filter(example_raw_sac, trial %in% c(2))
-
-disp_tol = 100
-min_dur = 150
-
-data <- interpolate(data)
-data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
-data <- na.trim(data) # remove leading and trailing NAs
-data$fix_num  <- NA # add a column that stores the fix number
-
-sample_rate <- as.numeric(tail(data[,1],n=1)) / nrow(data)
-first_ts <- 1 # first timestamp of window
-last_ts <- 1 # allows step into the loop
-
-# # preallocate a tibble to store fixations
-# n <- ceiling(nrow(data)/min_dur) # maximum possible fixations
-# fix_store <- data.frame(matrix(NA, nrow = n, ncol = 4))
-
-fix_cnt  <- 1
-new_window <- TRUE
-
-tictoc::tic()
-
-while (last_ts <= nrow(data)) { # while not at the end of the data
-
-  if (new_window == TRUE){
-
-    last_ts <- min(which(data[,1] >= data[first_ts,1,drop=TRUE] + min_dur)) # last timestamp of window
-    win <- data[first_ts:last_ts,]
-    max_d_win <- max(dist(win[,2:3])) # get max dispersion across this new window
-
-    if(max_d_win<= disp_tol){
-      # start of a fixation
-      data[first_ts:last_ts,"fix_num"] <- fix_cnt
-
-      new_window = FALSE # not a new window; look to extend fixation
-
-    } else {
-      # shift window along 1 timestamp
-      first_ts  <- first_ts + 1
-      last_ts  <- last_ts + 1
-    }
-  } else { # extend the window
-
-    last_ts  <- last_ts + 1
-    # compute the new distances from this new data point
-    max_d_new_data <- max(cdist(data[last_ts,2:3],win[,2:3]))
-
-    if (is.nan(max_d_new_data) | max_d_new_data >= disp_tol) {
-      # either NaN detected, or
-      # the addition of data point broke the dispersion threshold
-      # so make this last data point the first one and draw new window
-      new_window <- TRUE
-      first_ts <- last_ts
-      fix_cnt <- fix_cnt + 1 # next fixation
-
-    } else { # otherwise this can be included in last fixation
-      data[last_ts,"fix_num"] <- fix_cnt # add current fixation number to this timestamp
-      win <- data[first_ts:last_ts,] # update the window to include this data point
-    }
-  }
-}
-
-
-tictoc::toc()
-
-####
-
-
-
-# get raw data
-t_raw <- filter(example_raw_sac, trial %in% c(2))
+t_raw <- filter(example_raw_sac, trial %in% c(1:5))
 
 # # process fixations
 t_fix <- fix_dispersion(t_raw,disp_tol = 150, min_dur = 100)
 
 raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
-fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
+spatial_plot(raw_data = t_raw, fix_data = t_fix)
 
 raw_plot/fix_plot
 
