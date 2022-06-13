@@ -25,13 +25,13 @@ profvis ({
 # Working out a new dispersion algorithm
 
 # get raw data for just one trial
-t_raw <- filter(example_raw_sac, trial %in% c(1:5))
+t_raw <- filter(example_raw_sac, trial == 9)
 
 # # process fixations
-t_fix <- fix_dispersion(t_raw,disp_tol = 150, min_dur = 100)
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
 raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
-spatial_plot(raw_data = t_raw, fix_data = t_fix)
+fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
 
 raw_plot/fix_plot
 
@@ -39,7 +39,7 @@ t_interpolate <- interpolate(t_raw)
 
 t_smoothed <- smoother(t_interpolate)
 
-a <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
+t_sac <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
 
 # flatten trial list
 

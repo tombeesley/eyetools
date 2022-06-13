@@ -66,7 +66,7 @@ spatial_plot <- function(raw_data = NULL,
 
     final_g <- final_g +
       geom_circle(data = fix_data,
-                 aes(x0 = x, y0 = y, r = disp_tol/2, fill = dur),
+                 aes(x0 = x, y0 = y, r = disp_tol/2, fill = duration),
                  alpha = .2)
     if (show_fix_order == TRUE) {
 

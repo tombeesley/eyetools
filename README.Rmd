@@ -75,7 +75,7 @@ eyetools::interpolate(example_raw_sac, report = TRUE)
 raw_data <- eyetools::interpolate(example_raw_sac) # store as new object
 ```
 
-We can also apply a smoothing function over the data, which is particularly important for the analysis of saccadic velocities. 
+We can also apply a smoothing function (`smoother()`) over the data, which is particularly important for the analysis of saccadic velocities. 
 
 ```{r}
 smooth_data <- eyetools::smoother(example_raw_sac) 
@@ -99,20 +99,44 @@ ggplot() +
 ```
 
 **Processing fixations**
-The function `fix_dispersion` is a dispersion-based algorithm for identifying fixations, based on the algorithm described in Salvucci and Goldberg (2000). Passing raw data to this will return a tibble that contains the 
+
+The function `fix_dispersion()` is a dispersion-based algorithm for identifying fixations, based on the algorithm described in Salvucci and Goldberg (2000). Passing raw data to this will return a data frame with the fixations ordered by trial and by fixation sequence, with the averaged x and y coordinates, timestamps and duration. The "min_dur" parameter will restrict to fixations over a certain duration. The "disp_tol" parameter sets the tolerance for the dispersion of data within a fixation. Exploratory analysis of the data will be needed to find suitable values for these.
 
 ```{r}
 
 raw_data_f <- filter(raw_data, trial <= 3) # get a sample of trials
 
-fix_dispersion(raw_data_f)
+fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
 
 ```
 
+**Plotting data**
+
+The function `spatial_plot()` is a wrapper for a series of ggplot commands to plot both raw data and fixation summaries. 
+
+```{r fig.height=8, fig.width=8, warning=FALSE}
+library(patchwork)
+# patchwork is used here to plot adjacent figures
+
+t_raw <- filter(example_raw_sac, trial == 9)
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
+fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
+
+raw_plot/fix_plot # combined plot with patchwork
+
+```
 
 **Assessing time on areas of interest**
-...
 
-**Plotting data**
-...
+Example of `AOI_time()` ... 
+
+Show AOI regions on spatial plot...
+
+**Processing saccades**
+
+Example of `VTI_saccade()`
 

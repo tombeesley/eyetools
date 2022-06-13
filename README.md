@@ -114,8 +114,8 @@ eyetools::interpolate(example_raw_sac, report = TRUE)
 raw_data <- eyetools::interpolate(example_raw_sac) # store as new object
 ```
 
-We can also apply a smoothing function over the data, which is
-particularly important for the analysis of saccadic velocities.
+We can also apply a smoothing function (`smoother()`) over the data,
+which is particularly important for the analysis of saccadic velocities.
 
 ``` r
 smooth_data <- eyetools::smoother(example_raw_sac) 
@@ -138,30 +138,70 @@ ggplot() +
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-**Processing fixations** The function `fix_dispersion` is a
-dispersion-based algorithm for identifying fixations, based on the
-algorithm described in Salvucci and Goldberg (2000). Passing raw data to
-this will return a tibble that contains the
+**Processing fixations**
+
+The function `fix_dispersion()` is a dispersion-based algorithm for
+identifying fixations, based on the algorithm described in Salvucci and
+Goldberg (2000). Passing raw data to this will return a data frame with
+the fixations ordered by trial and by fixation sequence, with the
+averaged x and y coordinates, timestamps and duration. The “min_dur”
+parameter will restrict to fixations over a certain duration. The
+“disp_tol” parameter sets the tolerance for the dispersion of data
+within a fixation. Exploratory analysis of the data will be needed to
+find suitable values for these.
 
 ``` r
-raw_data_f <- filter(raw_data, trial <= 3) # sample of trials
+raw_data_f <- filter(raw_data, trial <= 3) # get a sample of trials
 
-fix_dispersion(raw_data_f)
+fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
 ```
 
-    ##     start  end    x   y dur disp_tol trial
-    ## 1.1     0  232  937 535 230      100     1
-    ## 1.2   273  462  170 500 187      100     1
-    ## 1.3   643 1182 1743 534 537      100     1
-    ## 1.4  1566 1819  134 532 250      100     1
-    ## 2.1     0  233  936 539 233      100     2
-    ## 2.2   280  769  158 520 487      100     2
-    ## 2.3   943 1249 1721 532 304      100     2
-    ## 3.1     0  169  941 543 167      100     3
-    ## 3.2   210  536  159 521 323      100     3
-    ## 3.3   653 1099 1719 542 444      100     3
-    ## 3.4  1217 1366  212 543 146      100     3
+    ##    trial fix_n start  end duration    x   y prop_NA min_dur disp_tol
+    ## 1      1     1     0  230      230  937 535   0.000     120      100
+    ## 2      1     2   273  460      187  170 500   0.000     120      100
+    ## 3      1     3   643 1180      537 1743 534   0.000     120      100
+    ## 4      1     4  1306 1426      120  252 503   0.243     120      100
+    ## 5      1     5  1536 1656      120  131 530   0.243     120      100
+    ## 6      1     6  1660 1816      156  135 533   0.000     120      100
+    ## 7      2     1     0  230      230  938 539   0.000     120      100
+    ## 8      2     2   273  407      134  201 515   0.000     120      100
+    ## 9      2     3   410  767      357  143 522   0.000     120      100
+    ## 10     2     4   940 1070      130 1696 527   0.000     120      100
+    ## 11     2     5  1073 1247      174 1739 535   0.000     120      100
+    ## 12     3     1     0  167      167  941 543   0.000     120      100
+    ## 13     3     2   210  533      323  159 521   0.000     120      100
+    ## 14     3     3   623  743      120 1673 519   0.243     120      100
+    ## 15     3     4   747 1097      350 1732 547   0.000     120      100
+    ## 16     3     5  1187 1307      120  211 543   0.243     120      100
 
-**Assessing time on areas of interest** …
+**Plotting data**
 
-**Plotting data** …
+The function `spatial_plot()` is a wrapper for a series of ggplot
+commands to plot both raw data and fixation summaries.
+
+``` r
+library(patchwork)
+# patchwork is used here to plot adjacent figures
+
+t_raw <- filter(example_raw_sac, trial == 9)
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
+fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
+
+raw_plot/fix_plot # combined plot with patchwork
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+**Assessing time on areas of interest**
+
+Example of `AOI_time()` …
+
+Show AOI regions on spatial plot…
+
+**Processing saccades**
+
+Example of `VTI_saccade()`

@@ -12,19 +12,13 @@
 #' @param run_interp include a call to eyetools::interpolation on each trial
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
 #' @return
-#'
-#'
+#' @export
 #' @examples
 #'
-#' @importFrom magrittr %>%
-#' @import dplyr
-#' @import purrr
 #' @importFrom rlang .data
 #' @importFrom zoo na.trim
-#' @importFrom RcppRoll roll_min roll_max
-#'
-#' @keywords internal
-#'
+#' @importFrom rdist cdist
+
 fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25,...) {
 
   trial_level_process <- function(data, ...) {
@@ -120,19 +114,21 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
     # get trial summary of fixations
     data_s <- split(data,data$fix_num) # create list from data by trial
     trial_fix_store <- t(sapply(data_s, summarise_fixations))
-    trial_fix_store <- cbind(trial_fix_store,min_dur) # add param setting
-    trial_fix_store <- cbind(trial_fix_store,disp_tol)  # add param setting
-    trial_fix_store <- cbind(trial_fix_store,data$trial[1]) # add trial number
+    trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
+    trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
+    trial_fix_store <- cbind(trial_fix_store, data$trial[1]) # add trial number
+    trial_fix_store <- cbind(trial_fix_store, 1:nrow(trial_fix_store)) #fixation number
     return(trial_fix_store)
 
   }
 
   data <- split(data,data$trial) # create list from data by trial
   data_fix <- lapply(data, trial_level_process, ...)
-  # data_fix <- rbind(data_fix)
-  #
   data_fix <- do.call("rbind", data_fix)
-  colnames(data_fix) <- c("start", "end", "dur", "x", "y", "prop_NA", "min_dur", "disp_tol", "trial")
+  colnames(data_fix) <- c("start", "end", "duration", "x", "y",
+                          "prop_NA", "min_dur", "disp_tol", "trial", "fix_n")
+  data_fix <- data_fix[,c(9,10,1:8)] # reorder cols
+  row.names(data_fix) <- NULL # remove the row names
   return(as.data.frame(data_fix))
 
 }

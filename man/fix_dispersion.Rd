@@ -36,4 +36,3 @@ in the data and are not permitted within a valid fixation period.
 \examples{
 
 }
-\keyword{internal}
