@@ -41,6 +41,8 @@ t_smoothed <- smoother(t_interpolate)
 
 t_sac <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
 
+spatial_plot(raw_data = t_raw, fix_data = t_fix,sac_data = t_sac)
+
 # flatten trial list
 
 t <- do.call(rbind.data.frame,t_sac_new)
@@ -96,5 +98,12 @@ angle <- function(a,b){
 
 
 }
+
+ggplot() +
+  geom_line(aes(x = 1:30,
+                y = seq(0.1,3,.1)),
+                     size = 2,
+                     linetype = "round") +
+  coord_cartesian(ylim = c(0,30))
 
 

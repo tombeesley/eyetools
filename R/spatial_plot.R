@@ -1,10 +1,11 @@
 #' Plot raw data and fixations
 #'
-#' A tool for visualising raw eye-data and processed fixations. Can pass both raw data and fixation data. Fixations can be labeled
+#' A tool for visualising raw eye-data, processed fixations, and saccades. Can all three data types. Fixations can be labeled
 #' in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 #'
 #' @param raw_data data in standard raw data form (time, x, y, trial)
-#' @param fix_data data output from fixation function (start, end, x, y, duration, trial)
+#' @param fix_data data output from fixation function
+#' @param sac_data data output from saccade function
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
@@ -25,6 +26,7 @@
 
 spatial_plot <- function(raw_data = NULL,
                          fix_data = NULL,
+                         sac_data = NULL,
                          AOIs = NULL,
                          res = c(0,1920,0,1080),
                          flip_y = FALSE,
@@ -52,10 +54,12 @@ spatial_plot <- function(raw_data = NULL,
   # PLOT RAW DATA
   if (is.null(raw_data)==FALSE) {
 
-    final_g <- final_g +
+    final_g <-
+      final_g +
       geom_point(data = raw_data,
                  aes(x = x, y = y),
-                 size = 1)
+                 size = 1,
+                 na.rm = TRUE)
 
   }
 
@@ -64,13 +68,15 @@ spatial_plot <- function(raw_data = NULL,
 
     fix_data <- mutate(fix_data, fix_n = 1:n())
 
-    final_g <- final_g +
+    final_g <-
+      final_g +
       geom_circle(data = fix_data,
                  aes(x0 = x, y0 = y, r = disp_tol/2, fill = duration),
                  alpha = .2)
     if (show_fix_order == TRUE) {
 
-      final_g <- final_g +
+      final_g <-
+        final_g +
         geom_label(data = fix_data,
                    aes(x = x, y = y, label = fix_n),
                    hjust = 1,
@@ -80,6 +86,20 @@ spatial_plot <- function(raw_data = NULL,
     }
 
 
+  }
+
+  # PLOT SACCADE DATA
+  if (is.null(sac_data)==FALSE){
+
+    final_g <-
+      final_g +
+      geom_segment(data = sac_data,
+                   aes(x = origin_x, y = origin_y, xend = terminal_x, yend = terminal_y),
+                   colour = "blue",
+                   arrow = arrow(length = unit(0.5, "cm")),
+                   lineend = "round",
+                   linejoin = "mitre",
+                   size = 1)
   }
 
   final_g <-

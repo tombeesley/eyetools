@@ -27,6 +27,8 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20, 
     x <- data$x
     y <- data$y
 
+    data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
+
     d <- as.matrix(dist(cbind(x,y)))
 
     d_diag <- diag(d[2:nrow(d),])
