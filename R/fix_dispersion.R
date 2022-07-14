@@ -112,12 +112,18 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
     # print(data[1,4])
 
     # get trial summary of fixations
-    data_s <- split(data,data$fix_num) # create list from data by trial
-    trial_fix_store <- t(sapply(data_s, summarise_fixations))
+    if ((sum(is.na(data$fix_num)) == nrow(data)) == FALSE){
+      data_s <- split(data,data$fix_num) # create list from data by trial
+      trial_fix_store <- t(sapply(data_s, summarise_fixations))
+    }
+    else {
+      trial_fix_store <- data.frame(matrix(NA,1,6))
+    }
     trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
     trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
     trial_fix_store <- cbind(trial_fix_store, data$trial[1]) # add trial number
     trial_fix_store <- cbind(trial_fix_store, 1:nrow(trial_fix_store)) #fixation number
+
     return(trial_fix_store)
 
   }

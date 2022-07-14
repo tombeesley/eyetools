@@ -22,10 +22,10 @@ profvis ({
   a <- eyetools::fix_dispersion(example_raw_psy)
 })
 
-# Working out a new dispersion algorithm
+
 
 # get raw data for just one trial
-t_raw <- filter(example_raw_sac, trial == 9)
+t_raw <- example_raw_psy
 
 # # process fixations
 t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
