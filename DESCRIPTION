@@ -19,7 +19,9 @@ Imports:
     purrr,
     tibble,
     ggplot2,
-    RcppRoll
+    RcppRoll,
+    rdist,
+    ggforce
 Suggests: 
     knitr,
     rmarkdown

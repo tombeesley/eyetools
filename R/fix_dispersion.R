@@ -23,6 +23,8 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
 
   trial_level_process <- function(data, ...) {
 
+    trialNumber <- data$trial[1]
+
     if (run_interp){data <- interpolate(data)}
     data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
     data <- na.trim(data) # remove leading and trailing NAs
@@ -115,14 +117,16 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
     if ((sum(is.na(data$fix_num)) == nrow(data)) == FALSE){
       data_s <- split(data,data$fix_num) # create list from data by trial
       trial_fix_store <- t(sapply(data_s, summarise_fixations))
+      trial_fix_store <- cbind(trial_fix_store, 1:nrow(trial_fix_store)) #fixation number
     }
     else {
-      trial_fix_store <- data.frame(matrix(NA,1,6))
+      trial_fix_store <- matrix(NA,1,7)
+      colnames(trial_fix_store) <- c("start", "end", "dur", "mean_x", "mean_y", "prop_NA", "fix_n")
     }
     trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
     trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
-    trial_fix_store <- cbind(trial_fix_store, data$trial[1]) # add trial number
-    trial_fix_store <- cbind(trial_fix_store, 1:nrow(trial_fix_store)) #fixation number
+    trial_fix_store <- cbind(trial_fix_store, trialNumber) # add trial number
+
 
     return(trial_fix_store)
 
@@ -132,8 +136,8 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
   data_fix <- lapply(data, trial_level_process, ...)
   data_fix <- do.call("rbind", data_fix)
   colnames(data_fix) <- c("start", "end", "duration", "x", "y",
-                          "prop_NA", "min_dur", "disp_tol", "trial", "fix_n")
-  data_fix <- data_fix[,c(9,10,1:8)] # reorder cols
+                          "prop_NA", "fix_n", "min_dur", "disp_tol", "trial")
+  data_fix <- data_fix[,c(10,7,1:6,8,9)] # reorder cols
   row.names(data_fix) <- NULL # remove the row names
   return(as.data.frame(data_fix))
 

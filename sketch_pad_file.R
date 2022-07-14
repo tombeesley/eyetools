@@ -23,9 +23,9 @@ profvis ({
 })
 
 
-
 # get raw data for just one trial
-t_raw <- example_raw_psy
+t_raw <- example_raw_wm5
+t_raw <- filter(example_raw_wm5, between(trial, 190, 200))
 
 # # process fixations
 t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
