@@ -38,13 +38,28 @@ spatial_plot <- function(raw_data = NULL,
   # PLOT AOIs
   if (is.null(AOIs)==FALSE) {
 
-    # need to split the AOI array here and plot separately tiles (squares) and points (circles)
-    final_g <- final_g +
-      geom_tile(data = AOIs,
-                aes(x = x, y = y, width = width, height = height),
-                colour = "dark blue",
-                fill = "blue",
-                alpha = .1)
+    rect_AOIs <- AOI_regions[!is.na(AOI_regions$height),]
+    circle_AOIs <- AOI_regions[is.na(AOI_regions$height),] # those with NAs in height column
+
+    # add any rectangle AOIs
+    if (is.null(rect_AOIs)==FALSE) {
+      final_g <- final_g +
+        geom_tile(data = AOIs,
+                  aes(x = x, y = y, width = width, height = height),
+                  colour = "dark blue",
+                  fill = "blue",
+                  alpha = .1)
+    }
+
+    # add any circle AOIs
+    if (is.null(circle_AOIs)==FALSE) {
+      final_g <- final_g +
+        geom_tile(data = AOIs,
+                  aes(x = x, y = y, width = width, height = height),
+                  colour = "dark blue",
+                  fill = "blue",
+                  alpha = .1)
+    }
 
 
   }

@@ -132,9 +132,67 @@ raw_plot/fix_plot # combined plot with patchwork
 
 **Assessing time on areas of interest**
 
-Example of `AOI_time()` ... 
+The function `AOI_time()` can be used to calculate the time spent on areas of interest. Areas of interest need to be defined by the x and y centre points, and the width and height in pixels: 
 
-Show AOI regions on spatial plot...
+```{r}
+
+AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width", "height")
+
+AOI_regions[1,] <- c(960, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
+
+```
+
+`AOI_time()` uses the fixation data as input to the function. In this example we are finding the time spent in 3 rectangular regions across the first 10 trials:
+
+```{r}
+
+t_raw <- filter(example_raw_sac, between(trial,1,10))
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+AOI_time(t_fix, AOIs = AOI_regions)
+
+```
+
+We can include the AOIs within our `spatial_plot()`:
+
+```{r}
+
+t_raw <- filter(example_raw_sac, trial == 9) # single trial for plotting purposes
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+
+```
+
+circle AOIs?
+
+```{r}
+
+AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width", "height")
+
+AOI_regions[1,] <- c(960, 540, 300, NA) # X, Y, W, H - square
+AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
+
+t_raw <- filter(example_raw_sac, between(trial,1,10))
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+AOI_time(t_fix, AOIs = AOI_regions)
+
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+
+```
+
 
 **Processing saccades**
 

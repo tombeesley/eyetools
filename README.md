@@ -198,9 +198,92 @@ raw_plot/fix_plot # combined plot with patchwork
 
 **Assessing time on areas of interest**
 
-Example of `AOI_time()` …
+The function `AOI_time()` can be used to calculate the time spent on
+areas of interest. Areas of interest need to be defined by the x and y
+centre points, and the width and height in pixels:
 
-Show AOI regions on spatial plot…
+``` r
+AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width", "height")
+
+AOI_regions[1,] <- c(960, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
+```
+
+`AOI_time()` uses the fixation data as input to the function. In this
+example we are finding the time spent in 3 rectangular regions across
+the first 10 trials:
+
+``` r
+t_raw <- filter(example_raw_sac, between(trial,1,10))
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+AOI_time(t_fix, AOIs = AOI_regions)
+```
+
+    ##    trial AOI_1 AOI_2 AOI_3
+    ## 1      1   230   337   537
+    ## 2      2   230   487   304
+    ## 3      3   167   473   477
+    ## 4      4   283   370   349
+    ## 5      5   246   360   363
+    ## 6      6   200   217     0
+    ## 7      7   150   337   797
+    ## 8      8   180   346   853
+    ## 9      9   174   260   496
+    ## 10    10   197   150   826
+
+We can include the AOIs within our `spatial_plot()`:
+
+``` r
+t_raw <- filter(example_raw_sac, trial == 9) # single trial for plotting purposes
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+circle AOIs?
+
+``` r
+AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width", "height")
+
+AOI_regions[1,] <- c(960, 540, 300, NA) # X, Y, W, H - square
+AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
+
+t_raw <- filter(example_raw_sac, between(trial,1,10))
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+AOI_time(t_fix, AOIs = AOI_regions)
+```
+
+    ##    trial AOI_1 AOI_2 AOI_3
+    ## 1      1   230   337   537
+    ## 2      2   230   487   304
+    ## 3      3   167   473   477
+    ## 4      4   283   370   349
+    ## 5      5   246   360   363
+    ## 6      6   200   217     0
+    ## 7      7     0   337   797
+    ## 8      8   180   346   853
+    ## 9      9   174   260   496
+    ## 10    10   197   150   826
+
+``` r
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 **Processing saccades**
 
