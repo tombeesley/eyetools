@@ -22,6 +22,5 @@ VTI_saccade(data, sample_rate = NULL, threshold = 150, minDur = 20, ...)
 Takes a...
 }
 \examples{
-VTI_saccade()
 
 }

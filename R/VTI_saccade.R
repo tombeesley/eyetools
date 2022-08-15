@@ -10,7 +10,7 @@
 #' @return
 #' @export
 #'
-#' @examples VTI_saccade()
+#' @examples
 #'
 
 VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20, ...){
