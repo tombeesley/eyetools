@@ -8,6 +8,8 @@ smoother(data, span = 0.1)
 }
 \arguments{
 \item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
+
+\item{span}{From stats::loess. The parameter α which controls the degree of smoothing.}
 }
 \value{
 

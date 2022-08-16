@@ -3,11 +3,13 @@
 #' A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
-#'
+#' @param span From stats::loess. The parameter α which controls the degree of smoothing.
 #' @return
 #' @export
 #'
 #' @examples
+#'
+#' @importFrom stats loess predict
 #'
 
 smoother <- function(data, span = 0.1) {

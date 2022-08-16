@@ -1,3 +1,7 @@
+# eyetools 0.4.2
+
+* tidying up the dependencies
+
 # eyetools 0.4.1
 
 * added a progress bar (pbapply) to `fix_dispersion()`.

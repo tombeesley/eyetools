@@ -18,7 +18,7 @@
 #' @importFrom rlang .data
 #' @importFrom zoo na.trim
 #' @importFrom rdist cdist
-#' @import pbapply
+#' @importFrom pbapply pblapply
 
 fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25,...) {
 
