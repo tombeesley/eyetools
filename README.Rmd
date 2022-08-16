@@ -28,8 +28,8 @@ It is free to use under the GNU General Public Licence..
 |2.| interpolation | `interpolate()` | working and provides a summary report of repair |
 |3.| smoothing | `smoother()` | working |
 |4.| dispersion-based fixations  | `fix_dispersion()` | working and pretty fast - needs thorough checking |
-|5.| area of interest analysis   | `AOI_time()` | working in basic form - needs thorough checking |
-|6.| Visualisations - heatmaps, fixation plots, etc  | `spatial_plot()` | provides a 2D plot of raw data and fixations |
+|5.| area of interest analysis   | `AOI_time()` | working with both rectangular and circular AOIs |
+|6.| Visualisations - heatmaps, fixation plots, etc  | `spatial_plot()` | provides a 2D plot of raw data, fixations and AOIs |
 |7.| Saccade detection  | `VTI_saccade()` | Working in basic form - provides summary of velocity, start/end, duration, etc |
 |8.| velocity-based fixations | | |
 |9.| scan paths?  | | |
@@ -44,7 +44,7 @@ theme_set(theme_light())
 
 
 ```
-**Installation**
+### Installation
 
 You can install eyetools using the following code:
 ```{r eval=FALSE}
@@ -59,14 +59,14 @@ and then load it:
 library(eyetools)
 ```
 
-**The format of raw data**
+### The format of raw data
 
 Data needs to be in a particular format to be compatible with the functions in eyetools. This format is 4 columns of data, with each row representing a sample. The four columns are: time, x, y, and trial. You can see an example with the built in data sets:
 ```{r}
 example_raw_sac
 ```
 
-**Repairing data**
+### Repairing data
 
 Raw data will often contain missing samples, which we can attempt to repair. eyetools has an `interpolation()` function you can use to do this. It will produce a report of how succesful the repair was in terms of the missing data before and after interpolation:
 
@@ -98,7 +98,7 @@ ggplot() +
 
 ```
 
-**Processing fixations**
+### Processing fixations
 
 The function `fix_dispersion()` is a dispersion-based algorithm for identifying fixations, based on the algorithm described in Salvucci and Goldberg (2000). Passing raw data to this will return a data frame with the fixations ordered by trial and by fixation sequence, with the averaged x and y coordinates, timestamps and duration. The "min_dur" parameter will restrict to fixations over a certain duration. The "disp_tol" parameter sets the tolerance for the dispersion of data within a fixation. Exploratory analysis of the data will be needed to find suitable values for these.
 
@@ -110,7 +110,7 @@ fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
 
 ```
 
-**Plotting data**
+### Plotting data
 
 The function `spatial_plot()` is a wrapper for a series of ggplot commands to plot both raw data and fixation summaries. 
 
@@ -130,7 +130,7 @@ raw_plot/fix_plot # combined plot with patchwork
 
 ```
 
-**Assessing time on areas of interest**
+### Assessing time on areas of interest
 
 The function `AOI_time()` can be used to calculate the time spent on areas of interest. Areas of interest need to be defined by the x and y centre points, and the width and height in pixels: 
 
@@ -213,9 +213,36 @@ AOI_time(t_fix, AOIs = AOI_regions)
 
 ```
 
+### Processing saccades
+
+The function `VTI_saccade()` provides a means of processing the data for saccades, based on a "velocity threshold identification" algorithm, as described in Salvucci and Goldberg (2000). As described above, it is wise to use the `smoother()` function on the data first. THe sample rate can be set if known, or can be approximated using the timestamps in the data. The threshold determines the degrees of visual angle per second needed to indicate the presence of a saccadic eye-movement. 
+
+```{r}
+
+t_raw <- filter(example_raw_sac, between(trial,1,10))
+
+t_smooth <- smoother(t_raw)
+
+VTI_saccade(t_smooth, sample_rate = 300)
 
 
-**Processing saccades**
 
-Example of `VTI_saccade()`
+```
+
+Saccadic eye movements can be plotted alongside other data using the `spatial_plot()` function:
+
+```{r}
+
+t_smooth <- filter(t_smooth, trial == 8)
+
+t_fix <- fix_dispersion(t_smooth, disp_tol = 100, min_dur = 150)
+
+t_sac <- VTI_saccade(t_smooth, sample_rate = 300, threshold = 100)
+
+spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
+
+```
+
+### Built in data sets
+
 
