@@ -7,7 +7,7 @@
 smoother(data, span = 0.1)
 }
 \arguments{
-\item{data}{}
+\item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
 }
 \value{
 

@@ -9,7 +9,7 @@ AOI_time(data, AOIs, AOI_names = NULL)
 \arguments{
 \item{data}{A dataframe with fixation data (from fix_dispersion)}
 
-\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).}
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 }

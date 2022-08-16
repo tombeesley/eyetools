@@ -14,7 +14,7 @@ fix_dispersion(
 )
 }
 \arguments{
-\item{data}{dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)}
+\item{data}{A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyeproc)}
 
 \item{min_dur}{Minimum duration (in milliseconds) of period over which fixations are assessed}
 

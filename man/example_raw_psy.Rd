@@ -7,11 +7,11 @@
 \format{
 A data frame with 77,669 rows and 4 variables:
 \describe{
-  \item{time}{timestamp of the sample}
-  \item{x}{x coordinate of the eye}
-  \item{y}{y coordinate of the eye}
-  \item{trial}{trial number}
-  ...
+\item{time}{timestamp of the sample}
+\item{x}{x coordinate of the eye}
+\item{y}{y coordinate of the eye}
+\item{trial}{trial number}
+...
 }
 }
 \usage{

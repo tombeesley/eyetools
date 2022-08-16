@@ -66,9 +66,11 @@ Data needs to be in a particular format to be compatible with the functions in e
 example_raw_sac
 ```
 
+**Importantly**, the data for each trial should be sequential and logical, that is, the timestamps should run continuously, without any gaps in the recording process. The eyetools package expects data to contain only data for a single participant; none of the functions handle the data for multiple participants in their present state. 
+
 ### Repairing data
 
-Raw data will often contain missing samples, which we can attempt to repair. eyetools has an `interpolation()` function you can use to do this. It will produce a report of how succesful the repair was in terms of the missing data before and after interpolation:
+Raw data will often contain missing samples, which we can attempt to repair. eyetools has an `interpolation()` function you can use to do this. It will produce a report of how successful the repair was in terms of the missing data before and after interpolation:
 
 ```{r}
 eyetools::interpolate(example_raw_sac, report = TRUE)
@@ -243,6 +245,6 @@ spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
 
 ```
 
-### Built in data sets
+### Built-in data sets
 
 

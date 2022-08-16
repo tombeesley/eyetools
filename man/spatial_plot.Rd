@@ -22,7 +22,7 @@ spatial_plot(
 
 \item{sac_data}{data output from saccade function}
 
-\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).}
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.}
 
 \item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 

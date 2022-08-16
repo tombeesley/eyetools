@@ -7,15 +7,15 @@
 \format{
 A data frame with X rows and 4 variables:
 \describe{
-  \item{time}{timestamp of the sample}
-  \item{x_left}{x coordinate of the left eye}
-  \item{y_left}{y coordinate of the left eye}
-  \item{val_left}{validity code of the left eye}
-  \item{x_right}{x coordinate of the right eye}
-  \item{y_right}{y coordinate of the right eye}
-  \item{val_right}{validity code of the right eye}
-  \item{trial}{trial number}
-  ...
+\item{time}{timestamp of the sample}
+\item{x_left}{x coordinate of the left eye}
+\item{y_left}{y coordinate of the left eye}
+\item{val_left}{validity code of the left eye}
+\item{x_right}{x coordinate of the right eye}
+\item{y_right}{y coordinate of the right eye}
+\item{val_right}{validity code of the right eye}
+\item{trial}{trial number}
+...
 }
 }
 \usage{

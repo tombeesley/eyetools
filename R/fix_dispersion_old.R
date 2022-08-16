@@ -12,7 +12,6 @@
 #'
 #' @importFrom magrittr %>%
 #' @import dplyr
-#' @import purrr
 #' @importFrom rlang .data
 #' @importFrom zoo na.trim
 #' @importFrom RcppRoll roll_min roll_max

@@ -2,7 +2,7 @@
 #'
 #' A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
 #'
-#' @param data
+#' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #'
 #' @return
 #' @export

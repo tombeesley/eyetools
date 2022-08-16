@@ -1,28 +1,35 @@
-Package: eyetools
 Type: Package
+Package: eyetools
 Title: Tools for eye data analysis
 Version: 0.4.0
 Author: Tom Beesley
 Maintainer: Tom Beesley <t.beesley@lancaster.ac.uk>
-Description: A set of tools for eye data processing. The intended flow is from data processing, to fixation analysis, to data visualisation and trial level summaries.
+Description: A set of tools for eye data processing. The intended flow is
+    from data processing, to fixation analysis, to data visualisation and
+    trial level summaries.
 License: GPL-3
-Encoding: UTF-8
-LazyData: true
 Depends: 
     R (>= 2.10)
-RoxygenNote: 7.1.2
 Imports: 
+    cli,
     dplyr,
-    zoo,
-    magrittr,
-    rlang,
-    purrr,
-    tibble,
+    ggforce,
     ggplot2,
+    glue,
+    lifecycle,
+    magrittr,
     RcppRoll,
     rdist,
-    ggforce
+    rlang,
+    tibble,
+    withr,
+    zoo
 Suggests: 
     knitr,
     rmarkdown
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2

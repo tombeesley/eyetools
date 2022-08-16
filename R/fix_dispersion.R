@@ -6,7 +6,7 @@
 #' in the data and are not permitted within a valid fixation period.
 #'
 #'
-#' @param data dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)
+#' @param data A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyeproc)
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param run_interp include a call to eyetools::interpolation on each trial
