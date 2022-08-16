@@ -11,7 +11,7 @@
 #'
 #' @examples
 #'
-#' @import dplyr
+#' @importFrom dplyr between
 #'
 
 AOI_time <- function(data, AOIs, AOI_names = NULL) {

@@ -11,7 +11,6 @@ License: GPL-3
 Depends: 
     R (>= 2.10)
 Imports: 
-    cli,
     dplyr,
     ggforce,
     ggplot2,
@@ -19,11 +18,8 @@ Imports:
     lifecycle,
     magrittr,
     pbapply,
-    RcppRoll,
     rdist,
     rlang,
-    tibble,
-    withr,
     zoo
 Suggests: 
     knitr,
