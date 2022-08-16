@@ -6,7 +6,7 @@
 #' @param raw_data data in standard raw data form (time, x, y, trial)
 #' @param fix_data data output from fixation function
 #' @param sac_data data output from saccade function
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param show_fix_order label the fixations in the order they were made
@@ -44,8 +44,8 @@ spatial_plot <- function(raw_data = NULL,
     # add any rectangle AOIs
     if (is.null(rect_AOIs)==FALSE) {
       final_g <- final_g +
-        geom_tile(data = AOIs,
-                  aes(x = x, y = y, width = width, height = height),
+        geom_tile(data = rect_AOIs,
+                  aes(x = x, y = y, width = width_radius, height = height),
                   colour = "dark blue",
                   fill = "blue",
                   alpha = .1)
@@ -54,8 +54,8 @@ spatial_plot <- function(raw_data = NULL,
     # add any circle AOIs
     if (is.null(circle_AOIs)==FALSE) {
       final_g <- final_g +
-        geom_tile(data = AOIs,
-                  aes(x = x, y = y, width = width, height = height),
+        geom_circle(data = circle_AOIs,
+                  aes(x0 = x, y0 = y, r = width_radius),
                   colour = "dark blue",
                   fill = "blue",
                   alpha = .1)

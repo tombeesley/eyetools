@@ -3,7 +3,7 @@
 #' Analyses total time on defined AOI regions across trials. Currently only works with fixation data as the input.
 #'
 #' @param data A dataframe with fixation data (from fix_dispersion)
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width/diameter, height/NA).
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #'
 #' @return
@@ -48,7 +48,7 @@ AOI_trial_process <- function(trial_data, AOIs) {
                       between(trial_data$y, AOIs[a,2]-AOIs[a,4]/2, AOIs[a,2]+AOIs[a,4]/2))
       } else if (sum(!is.na(AOIs[a,])) == 3) {
         # circle AOI
-        xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]/2
+        xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
       } else {
         # report error message of bad AOI definition
 

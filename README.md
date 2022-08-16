@@ -204,7 +204,7 @@ centre points, and the width and height in pixels:
 
 ``` r
 AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
-colnames(AOI_regions) <- c("x", "y", "width", "height")
+colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
 
 AOI_regions[1,] <- c(960, 540, 300, 300) # X, Y, W, H - square
 AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
@@ -249,13 +249,14 @@ spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
 
 ![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
-circle AOIs?
+We can also define AOIs as circles by specifying the radius in the 3rd
+column and setting the 4th column to NA:
 
 ``` r
 AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
-colnames(AOI_regions) <- c("x", "y", "width", "height")
+colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
 
-AOI_regions[1,] <- c(960, 540, 300, NA) # X, Y, W, H - square
+AOI_regions[1,] <- c(960, 540, 150, NA) # X, Y, R - circle
 AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
 AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
 
@@ -264,26 +265,38 @@ t_raw <- filter(example_raw_sac, between(trial,1,10))
 # process fixations
 t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-AOI_time(t_fix, AOIs = AOI_regions)
-```
-
-    ##    trial AOI_1 AOI_2 AOI_3
-    ## 1      1   230   337   537
-    ## 2      2   230   487   304
-    ## 3      3   167   473   477
-    ## 4      4   283   370   349
-    ## 5      5   246   360   363
-    ## 6      6   200   217     0
-    ## 7      7     0   337   797
-    ## 8      8   180   346   853
-    ## 9      9   174   260   496
-    ## 10    10   197   150   826
-
-``` r
 spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+Circular AOIs are also handled by AOI_time and will produce different
+results to comparable rectangular AOIs. Here fixation 5 falls outside of
+the circular AOI, but within the region of the rectangular AOI:
+
+``` r
+AOI_regions <- data.frame(matrix(nrow = 2, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
+
+AOI_regions[1,] <- c(960, 540, 150, NA) # X, Y, R - circle in centre
+AOI_regions[2,] <- c(960, 540, 300, 300) # X, Y, W, H - square in centre
+
+t_raw <- filter(example_raw_sac, trial == 13)
+
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+AOI_time(t_fix, AOIs = AOI_regions)
+```
+
+    ##    trial AOI_1 AOI_2
+    ## 13    13   180   330
 
 **Processing saccades**
 

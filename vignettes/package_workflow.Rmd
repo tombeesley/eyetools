@@ -1,0 +1,18 @@
+---
+title: "Package Workflow"
+output: html_document
+date: '2022-08-16'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Steps
+
+1.  Make changes to package components (scripts, data, etc)
+2.  Use **`load_all()`** to make the updates available for use.
+3.  Use **`document()`** to update the function documentation and NAMESPACE
+4.  Use `check()` to make sure there are no errors, correct any warnings, etc.
+5.  When happy the package is robust, use `install()` to provide access outside of development project.
+6. Commit to github. 
