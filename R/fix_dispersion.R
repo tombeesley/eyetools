@@ -18,6 +18,7 @@
 #' @importFrom rlang .data
 #' @importFrom zoo na.trim
 #' @importFrom rdist cdist
+#' @import pbapply
 
 fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25,...) {
 
@@ -121,7 +122,7 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
     }
     else {
       trial_fix_store <- matrix(NA,1,7)
-      colnames(trial_fix_store) <- c("start", "end", "dur", "mean_x", "mean_y", "prop_NA", "fix_n")
+      #colnames(trial_fix_store) <- c("start", "end", "dur", "mean_x", "mean_y", "prop_NA", "fix_n")
     }
     trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
     trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
@@ -133,7 +134,9 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
   }
 
   data <- split(data,data$trial) # create list from data by trial
-  data_fix <- lapply(data, trial_level_process, ...)
+  # try with progress bar
+  data_fix <- pbapply::pblapply(data, trial_level_process, ...)
+
   data_fix <- do.call("rbind", data_fix)
   colnames(data_fix) <- c("start", "end", "duration", "x", "y",
                           "prop_NA", "fix_n", "min_dur", "disp_tol", "trial")

@@ -24,6 +24,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20, 
 
   VTI_saccade_trial <- function(data, ...){
 
+    trialNumber <- data$trial[1]
     x <- data$x
     y <- data$y
 
@@ -49,7 +50,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20, 
     data <- data[data$saccade_detected == 2,] # get just the saccades
 
     # define function to pull out relevant data from saccades
-    get_sac_info <- function(dataIn){
+    summarise_saccades <- function(dataIn){
 
       first_ts <- dataIn[1,1]
       last_ts <- dataIn[nrow(dataIn),1]
@@ -62,23 +63,31 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20, 
 
     }
 
-    events <- split(data, data$event_n) # split into the different events
-    trial_data <- lapply(events, get_sac_info)
-    trial_data <- do.call(rbind.data.frame,trial_data)
-    trial_data$trial <- data$trial[1]
-    trial_data <- trial_data[trial_data[,9] >= minDur,]
-    trial_data$sac_n <- 1:nrow(trial_data)
-    colnames(trial_data) <- c("start", "end", "origin_x", "origin_y", "terminal_x", "terminal_y",
-                            "mean_velocity", "peak_velocity", "duration", "trial", "sac_n")
-    return(trial_data)
+    # get trial summary of saccades
+    if (nrow(data) > 0){
+
+      events <- split(data, data$event_n) # split into the different events
+      trial_sac_store <- lapply(events, summarise_saccades)
+      trial_sac_store <- do.call(rbind.data.frame,trial_sac_store)
+      trial_sac_store <- trial_sac_store[trial_sac_store[,9] >= minDur,]
+      trial_sac_store$sac_n <- 1:nrow(trial_sac_store)
+    } else {
+      trial_sac_store <- matrix(NA,1,10)
+
+    }
+    # add col headers, trial number and return
+    colnames(trial_sac_store) <- c("startBLAH", "end", "origin_x", "origin_y", "terminal_x", "terminal_y",
+                                   "mean_velocity", "peak_velocity", "duration", "sac_n")
+    trial_sac_store <- cbind(trial_sac_store, trialNumber) # add trial number
+    return(trial_sac_store)
 
   }
 
   data <- split(data, data$trial)
   data_sac <- lapply(data, VTI_saccade_trial, ...)
   data_sac <- do.call(rbind.data.frame,data_sac)
-  data_sac <- data_sac[,c(10,11,1,2,9,3:8)] # reorder cols
+  data_sac <- data_sac[,c(11,10,1,2,9,3:8)] # reorder cols
   row.names(data_sac) <- NULL # remove the row names
-  return(data_sac)
+  return(as.data.frame(data_sac))
 
 }

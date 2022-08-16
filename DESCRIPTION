@@ -18,6 +18,7 @@ Imports:
     glue,
     lifecycle,
     magrittr,
+    pbapply,
     RcppRoll,
     rdist,
     rlang,
