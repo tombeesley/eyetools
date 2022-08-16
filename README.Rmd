@@ -112,6 +112,8 @@ fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
 
 ```
 
+
+
 ### Plotting data
 
 The function `spatial_plot()` is a wrapper for a series of ggplot commands to plot both raw data and fixation summaries. 

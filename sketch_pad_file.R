@@ -25,16 +25,11 @@ profvis ({
 
 # get raw data for just one trial
 library(tidyverse)
-t_raw <- example_raw_wm5
-t_raw <- filter(example_raw_wm5, between(trial, 1, 5))
+t_raw <- example_raw_wm
+t_raw <- filter(example_raw_wm, between(trial, 1, 220))
 
 # # process fixations
-fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
-
-raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
-fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
-
-raw_plot/fix_plot
+#fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
 t_interpolate <- interpolate(t_raw)
 
