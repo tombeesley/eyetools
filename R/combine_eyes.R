@@ -5,7 +5,7 @@
 #' or for samples where there is data from only a single eye, that eye is used. For "best_eye", a summary of the proportion of missing samples
 #' is computed, and the eye with the fewest missing samples is used.
 #'
-#' @param data raw data with columns time, left_x, left_y, right_x, right_y, trial and trial_phase
+#' @param data raw data with columns time, left_x, left_y, right_x, right_y, and trial
 #' @param method either "average" or "best_eye" - see description.
 #'
 #' @return
@@ -33,13 +33,17 @@ combine_eyes <- function(data, method = "average") {
       y <- data$right_y
     }
 
+  } else {
+
+    stop("Unexpected input to parameter 'method'. Use 'avergage' or 'best_eye'.")
+
   }
 
-  data <- cbind(data$time, x, y, data$trial, data$trial_phase)
+  data <- cbind(data$time, x, y, data$trial)
 
   data[data == 'NaN']=NA # convert any NaN (from mean()) to NA
 
-  colnames(data) <- c("time", "x", "y", "trial", "trial_phase")
+  colnames(data) <- c("time", "x", "y", "trial")
 
   data <- data.frame(data)
 

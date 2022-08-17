@@ -1,0 +1,4 @@
+pkgurl: ~
+template:
+  bootstrap: 5
+

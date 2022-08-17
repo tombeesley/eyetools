@@ -3,7 +3,7 @@
 \docType{data}
 \name{example_raw_sac}
 \alias{example_raw_sac}
-\title{Example eye data}
+\title{Example eye data visual search}
 \format{
 A data frame with 32608 rows and 4 variables:
 \describe{
@@ -19,8 +19,8 @@ example_raw_sac
 }
 \description{
 A dataset containing raw data samples for 100 trials of a simple visual search task,
-in which saccades were made (left or right) from a central location on the screen each trial.
-This is the format raw data needs to be in in order to work with the functions
-within the "Processing" step of the workflow.
+in which saccades were made (left or right) from a central location on the screen each trial. Data were collected from a 300 Hz Tobii eye-tracker.
+This is an example of the format raw data needs to be in in order to work with the functions
+in eyetools.
 }
 \keyword{datasets}
