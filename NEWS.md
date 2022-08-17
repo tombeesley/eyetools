@@ -1,3 +1,9 @@
+# eyetools 0.4.3
+
+* updated data files and documentation
+* started process of using pkgdown
+* fixed `combine_eyes()` to remove the column 'trial_phase'
+
 # eyetools 0.4.2
 
 * tidying up the dependencies
