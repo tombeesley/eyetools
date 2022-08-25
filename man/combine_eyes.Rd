@@ -7,7 +7,7 @@
 combine_eyes(data, method = "average")
 }
 \arguments{
-\item{data}{raw data with columns time, left_x, left_y, right_x, right_y, trial and trial_phase}
+\item{data}{raw data with columns time, left_x, left_y, right_x, right_y, and trial}
 
 \item{method}{either "average" or "best_eye" - see description.}
 }
@@ -21,6 +21,6 @@ or for samples where there is data from only a single eye, that eye is used. For
 is computed, and the eye with the fewest missing samples is used.
 }
 \examples{
-combine_eyes(example_two_eyes_raw, method = "average")
+combine_eyes(example_raw_binocular, method = "average")
 
 }

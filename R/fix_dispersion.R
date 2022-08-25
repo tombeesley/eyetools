@@ -13,7 +13,7 @@
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
 #' @return
 #' @export
-#' @examples
+#' @examples fix_dispersion(example_raw_fix, disp_tol = 150)
 #'
 #' @importFrom rlang .data
 #' @importFrom zoo na.trim

@@ -12,8 +12,8 @@
 #' @return
 #' @export
 #'
-#' @examples interpolate(example_raw_psy, maxgap = 20)
-#' @examples interpolate(example_raw_psy, method = "approx", maxgap = 50, report = TRUE)
+#' @examples interpolate(example_raw_fix, maxgap = 20)
+#' @examples interpolate(example_raw_fix, method = "approx", maxgap = 50, report = TRUE)
 #'
 #' @importFrom magrittr %>%
 #' @import dplyr

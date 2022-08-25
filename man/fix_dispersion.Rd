@@ -34,5 +34,6 @@ in which the ranges are both below the specified dispersion tolerance. NAs are c
 in the data and are not permitted within a valid fixation period.
 }
 \examples{
+fix_dispersion(example_raw_fix, disp_tol = 150)
 
 }

@@ -11,7 +11,7 @@
 #' @return
 #' @export
 #'
-#' @examples combine_eyes(example_two_eyes_raw, method = "average")
+#' @examples combine_eyes(example_raw_binocular, method = "average")
 #'
 
 combine_eyes <- function(data, method = "average") {

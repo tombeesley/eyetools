@@ -8,4 +8,11 @@
 \description{
 A set of tools for eye data processing. The intended flow is from data processing, to fixation analysis, to data visualisation and trial level summaries.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://tombeesley.github.io/eyetools/}
+}
+
+}
 \keyword{internal}
