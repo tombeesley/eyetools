@@ -1,7 +1,7 @@
 Type: Package
 Package: eyetools
 Title: Tools for eye data analysis
-Version: 0.4.3
+Version: 0.4.4
 Author: Tom Beesley
 Maintainer: Tom Beesley <t.beesley@lancaster.ac.uk>
 Description: A set of tools for eye data processing. The intended flow is

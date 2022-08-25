@@ -1,3 +1,5 @@
+# eyetools 0.4.4
+
 # eyetools 0.4.3
 
 * updated data files and documentation
