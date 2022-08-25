@@ -25,6 +25,11 @@ profvis ({
 
 # get raw data for just one trial
 library(tidyverse)
+
+example_mac_error
+
+fix_dispersion(example_mac_error)
+
 t_raw <- example_raw_wm
 t_raw <- filter(example_raw_wm, between(trial, 1, 220))
 
