@@ -170,7 +170,7 @@
 <p>Data needs to be in a particular format to be compatible with the functions in eyetools. This format is 4 columns of data, with each row representing a sample. The four columns are: time, x, y, and trial. You can see an example with the built in data sets:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_raw_sac</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## # A tibble: 32,608 x 4</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## # A tibble: 32,608 × 4</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co">##     time     x     y trial</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co">##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="co">##  1     0  940.  535.     1</span></span>
@@ -183,16 +183,17 @@
 <span id="cb4-11"><a href="#cb4-11"></a><span class="co">##  8    23  939.  536.     1</span></span>
 <span id="cb4-12"><a href="#cb4-12"></a><span class="co">##  9    27  940.  534.     1</span></span>
 <span id="cb4-13"><a href="#cb4-13"></a><span class="co">## 10    30  942.  537.     1</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="co">## # ... with 32,598 more rows</span></span></code></pre></div>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">## # … with 32,598 more rows</span></span></code></pre></div>
+<p><strong>Importantly</strong>, the data for each trial should be sequential and logical, that is, the timestamps should run continuously, without any gaps in the recording process. The eyetools package expects data to contain only data for a single participant; none of the functions handle the data for multiple participants in their present state.</p>
 </div>
 <div class="section level3">
 <h3 id="repairing-data">Repairing data<a class="anchor" aria-label="anchor" href="#repairing-data"></a>
 </h3>
-<p>Raw data will often contain missing samples, which we can attempt to repair. eyetools has an <code>interpolation()</code> function you can use to do this. It will produce a report of how succesful the repair was in terms of the missing data before and after interpolation:</p>
+<p>Raw data will often contain missing samples, which we can attempt to repair. eyetools has an <code>interpolation()</code> function you can use to do this. It will produce a report of how successful the repair was in terms of the missing data before and after interpolation:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">eyetools</span><span class="fu">::</span><span class="fu"><a href="reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">example_raw_sac</span>, report <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">## [[1]]</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co">## # A tibble: 32,608 x 4</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">## # A tibble: 32,608 × 4</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="co">##     time     x     y trial</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="co">##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
 <span id="cb6-5"><a href="#cb6-5"></a><span class="co">##  1     0  940.  535.     1</span></span>
@@ -205,10 +206,10 @@
 <span id="cb6-12"><a href="#cb6-12"></a><span class="co">##  8    23  939.  536.     1</span></span>
 <span id="cb6-13"><a href="#cb6-13"></a><span class="co">##  9    27  940.  534.     1</span></span>
 <span id="cb6-14"><a href="#cb6-14"></a><span class="co">## 10    30  942.  537.     1</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a><span class="co">## # ... with 32,598 more rows</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">## # … with 32,598 more rows</span></span>
 <span id="cb6-16"><a href="#cb6-16"></a><span class="co">## </span></span>
 <span id="cb6-17"><a href="#cb6-17"></a><span class="co">## [[2]]</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a><span class="co">## # A tibble: 1 x 2</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">## # A tibble: 1 × 2</span></span>
 <span id="cb6-19"><a href="#cb6-19"></a><span class="co">##   missing_perc_before missing_perc_after</span></span>
 <span id="cb6-20"><a href="#cb6-20"></a><span class="co">##                 &lt;dbl&gt;              &lt;dbl&gt;</span></span>
 <span id="cb6-21"><a href="#cb6-21"></a><span class="co">## 1              0.0998             0.0952</span></span></code></pre></div>
@@ -362,48 +363,48 @@
 <span><span class="va">t_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">t_raw</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/VTI_saccade.html">VTI_saccade</a></span><span class="op">(</span><span class="va">t_smooth</span>, sample_rate <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co">##    trial sac_n start  end duration  origin_x origin_y terminal_x terminal_y</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="co">## 1      1     1   223  287       64  870.3588 527.6547   177.1630   494.6964</span></span>
-<span id="cb22-3"><a href="#cb22-3"></a><span class="co">## 2      1     2   447  530       83  209.4739 500.0963  1423.6778   481.3370</span></span>
-<span id="cb22-4"><a href="#cb22-4"></a><span class="co">## 3      2     1   230  280       50  843.5225 537.3153   258.2328   513.4092</span></span>
-<span id="cb22-5"><a href="#cb22-5"></a><span class="co">## 4      2     2   757  840       83  184.2432 518.7122  1513.4706   514.5291</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a><span class="co">## 5      3     1   163  217       54  864.0695 538.9868   188.6405   517.6894</span></span>
-<span id="cb22-7"><a href="#cb22-7"></a><span class="co">## 6      3     2   527  550       23  236.2502 533.8763   456.4131   571.9000</span></span>
-<span id="cb22-8"><a href="#cb22-8"></a><span class="co">## 7      3     3  1087 1120       33 1671.8701 542.0387  1278.9085   558.7318</span></span>
-<span id="cb22-9"><a href="#cb22-9"></a><span class="co">## 8      4     1   280  340       60  941.2610 525.2997   167.3127   517.7416</span></span>
-<span id="cb22-10"><a href="#cb22-10"></a><span class="co">## 9      4     2   696  730       34  193.3663 514.7454   638.2664   545.7368</span></span>
-<span id="cb22-11"><a href="#cb22-11"></a><span class="co">## 10     5     1   240  293       53  989.2586 539.9973  1655.2936   541.0273</span></span>
-<span id="cb22-12"><a href="#cb22-12"></a><span class="co">## 11     5     2   646  690       44 1688.9012 545.7763  1023.0553   527.7667</span></span>
-<span id="cb22-13"><a href="#cb22-13"></a><span class="co">## 12     6     1   197  247       50  828.6306 532.1597   194.2109   524.7652</span></span>
-<span id="cb22-14"><a href="#cb22-14"></a><span class="co">## 13     6     2   590  627       37  189.2387 524.2148   865.8235   511.5511</span></span>
-<span id="cb22-15"><a href="#cb22-15"></a><span class="co">## 14     7     1   174  224       50  746.4592 532.5643   238.6413   526.0246</span></span>
-<span id="cb22-16"><a href="#cb22-16"></a><span class="co">## 15     8     1   174  237       63  869.1958 545.3931   205.9854   520.0820</span></span>
-<span id="cb22-17"><a href="#cb22-17"></a><span class="co">## 16     8     2   564  664      100  162.7739 512.4705  1644.4917   553.6281</span></span>
-<span id="cb22-18"><a href="#cb22-18"></a><span class="co">## 17     9     1   170  227       57  880.2617 546.0806   205.5746   532.1546</span></span>
-<span id="cb22-19"><a href="#cb22-19"></a><span class="co">## 18     9     2   474  564       90  216.2176 517.2547  1621.2220   545.1010</span></span>
-<span id="cb22-20"><a href="#cb22-20"></a><span class="co">## 19    10     1   194  254       60  845.9267 539.5713   226.3948   524.6715</span></span>
-<span id="cb22-21"><a href="#cb22-21"></a><span class="co">## 20    10     2   530  624       94  180.4137 519.7535  1595.2826   557.3451</span></span>
-<span id="cb22-22"><a href="#cb22-22"></a><span class="co">##    mean_velocity peak_velocity</span></span>
-<span id="cb22-23"><a href="#cb22-23"></a><span class="co">## 1       272.5147      467.6514</span></span>
-<span id="cb22-24"><a href="#cb22-24"></a><span class="co">## 2       362.4432      625.5313</span></span>
-<span id="cb22-25"><a href="#cb22-25"></a><span class="co">## 3       288.7795      438.2568</span></span>
-<span id="cb22-26"><a href="#cb22-26"></a><span class="co">## 4       395.9804      681.8466</span></span>
-<span id="cb22-27"><a href="#cb22-27"></a><span class="co">## 5       311.9050      487.7608</span></span>
-<span id="cb22-28"><a href="#cb22-28"></a><span class="co">## 6       237.5178      343.4771</span></span>
-<span id="cb22-29"><a href="#cb22-29"></a><span class="co">## 7       289.8878      429.8076</span></span>
-<span id="cb22-30"><a href="#cb22-30"></a><span class="co">## 8       321.6201      504.1717</span></span>
-<span id="cb22-31"><a href="#cb22-31"></a><span class="co">## 9       322.5088      550.1424</span></span>
-<span id="cb22-32"><a href="#cb22-32"></a><span class="co">## 10      310.0758      476.9325</span></span>
-<span id="cb22-33"><a href="#cb22-33"></a><span class="co">## 11      373.8080      574.9975</span></span>
-<span id="cb22-34"><a href="#cb22-34"></a><span class="co">## 12      314.3620      462.7681</span></span>
-<span id="cb22-35"><a href="#cb22-35"></a><span class="co">## 13      446.6401      654.1694</span></span>
-<span id="cb22-36"><a href="#cb22-36"></a><span class="co">## 14      251.9393      359.9658</span></span>
-<span id="cb22-37"><a href="#cb22-37"></a><span class="co">## 15      263.1169      421.9078</span></span>
-<span id="cb22-38"><a href="#cb22-38"></a><span class="co">## 16      370.0669      675.9970</span></span>
-<span id="cb22-39"><a href="#cb22-39"></a><span class="co">## 17      294.4052      473.1296</span></span>
-<span id="cb22-40"><a href="#cb22-40"></a><span class="co">## 18      390.8524      664.2136</span></span>
-<span id="cb22-41"><a href="#cb22-41"></a><span class="co">## 19      258.9834      400.2764</span></span>
-<span id="cb22-42"><a href="#cb22-42"></a><span class="co">## 20      377.0585      673.8068</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co">##    trialNumber sac_n startBLAH  end duration  origin_x origin_y terminal_x</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">## 1            1     1       223  287       64  870.3588 527.6547   177.1630</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="co">## 2            1     2       447  530       83  209.4739 500.0963  1423.6778</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co">## 3            2     1       230  280       50  843.5225 537.3153   258.2328</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co">## 4            2     2       757  840       83  184.2432 518.7122  1513.4706</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="co">## 5            3     1       163  217       54  864.0695 538.9868   188.6405</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="co">## 6            3     2       527  550       23  236.2502 533.8763   456.4131</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="co">## 7            3     3      1087 1120       33 1671.8701 542.0387  1278.9085</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a><span class="co">## 8            4     1       280  340       60  941.2610 525.2997   167.3127</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a><span class="co">## 9            4     2       696  730       34  193.3663 514.7454   638.2664</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="co">## 10           5     1       240  293       53  989.2586 539.9973  1655.2936</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="co">## 11           5     2       646  690       44 1688.9012 545.7763  1023.0553</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a><span class="co">## 12           6     1       197  247       50  828.6306 532.1597   194.2109</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a><span class="co">## 13           6     2       590  627       37  189.2387 524.2148   865.8235</span></span>
+<span id="cb22-15"><a href="#cb22-15"></a><span class="co">## 14           7     1       174  224       50  746.4592 532.5643   238.6413</span></span>
+<span id="cb22-16"><a href="#cb22-16"></a><span class="co">## 15           8     1       174  237       63  869.1958 545.3931   205.9854</span></span>
+<span id="cb22-17"><a href="#cb22-17"></a><span class="co">## 16           8     2       564  664      100  162.7739 512.4705  1644.4917</span></span>
+<span id="cb22-18"><a href="#cb22-18"></a><span class="co">## 17           9     1       170  227       57  880.2617 546.0806   205.5746</span></span>
+<span id="cb22-19"><a href="#cb22-19"></a><span class="co">## 18           9     2       474  564       90  216.2176 517.2547  1621.2220</span></span>
+<span id="cb22-20"><a href="#cb22-20"></a><span class="co">## 19          10     1       194  254       60  845.9267 539.5713   226.3948</span></span>
+<span id="cb22-21"><a href="#cb22-21"></a><span class="co">## 20          10     2       530  624       94  180.4137 519.7535  1595.2826</span></span>
+<span id="cb22-22"><a href="#cb22-22"></a><span class="co">##    terminal_y mean_velocity peak_velocity</span></span>
+<span id="cb22-23"><a href="#cb22-23"></a><span class="co">## 1    494.6964      272.5147      467.6514</span></span>
+<span id="cb22-24"><a href="#cb22-24"></a><span class="co">## 2    481.3370      362.4432      625.5313</span></span>
+<span id="cb22-25"><a href="#cb22-25"></a><span class="co">## 3    513.4092      288.7795      438.2568</span></span>
+<span id="cb22-26"><a href="#cb22-26"></a><span class="co">## 4    514.5291      395.9804      681.8466</span></span>
+<span id="cb22-27"><a href="#cb22-27"></a><span class="co">## 5    517.6894      311.9050      487.7608</span></span>
+<span id="cb22-28"><a href="#cb22-28"></a><span class="co">## 6    571.9000      237.5178      343.4771</span></span>
+<span id="cb22-29"><a href="#cb22-29"></a><span class="co">## 7    558.7318      289.8878      429.8076</span></span>
+<span id="cb22-30"><a href="#cb22-30"></a><span class="co">## 8    517.7416      321.6201      504.1717</span></span>
+<span id="cb22-31"><a href="#cb22-31"></a><span class="co">## 9    545.7368      322.5088      550.1424</span></span>
+<span id="cb22-32"><a href="#cb22-32"></a><span class="co">## 10   541.0273      310.0758      476.9325</span></span>
+<span id="cb22-33"><a href="#cb22-33"></a><span class="co">## 11   527.7667      373.8080      574.9975</span></span>
+<span id="cb22-34"><a href="#cb22-34"></a><span class="co">## 12   524.7652      314.3620      462.7681</span></span>
+<span id="cb22-35"><a href="#cb22-35"></a><span class="co">## 13   511.5511      446.6401      654.1694</span></span>
+<span id="cb22-36"><a href="#cb22-36"></a><span class="co">## 14   526.0246      251.9393      359.9658</span></span>
+<span id="cb22-37"><a href="#cb22-37"></a><span class="co">## 15   520.0820      263.1169      421.9078</span></span>
+<span id="cb22-38"><a href="#cb22-38"></a><span class="co">## 16   553.6281      370.0669      675.9970</span></span>
+<span id="cb22-39"><a href="#cb22-39"></a><span class="co">## 17   532.1546      294.4052      473.1296</span></span>
+<span id="cb22-40"><a href="#cb22-40"></a><span class="co">## 18   545.1010      390.8524      664.2136</span></span>
+<span id="cb22-41"><a href="#cb22-41"></a><span class="co">## 19   524.6715      258.9834      400.2764</span></span>
+<span id="cb22-42"><a href="#cb22-42"></a><span class="co">## 20   557.3451      377.0585      673.8068</span></span></code></pre></div>
 <p>Saccadic eye movements can be plotted alongside other data using the <code><a href="reference/spatial_plot.html">spatial_plot()</a></code> function:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">t_smooth</span>, <span class="va">trial</span> <span class="op">==</span> <span class="fl">8</span><span class="op">)</span></span>
@@ -415,7 +416,7 @@
 <span><span class="fu"><a href="reference/spatial_plot.html">spatial_plot</a></span><span class="op">(</span>raw_data <span class="op">=</span> <span class="va">t_smooth</span>, fix_data <span class="op">=</span> <span class="va">t_fix</span>, sac_data <span class="op">=</span> <span class="va">t_sac</span><span class="op">)</span></span></code></pre></div>
 <p><img src="README_files/figure-gfm/unnamed-chunk-16-1.png"><!-- --></p>
 </div>
-<div class="section level3"><h3 id="built-in-data-sets">Built in data sets<a class="anchor" aria-label="anchor" href="#built-in-data-sets"></a>
+<div class="section level3"><h3 id="built-in-data-sets">Built-in data sets<a class="anchor" aria-label="anchor" href="#built-in-data-sets"></a>
 </h3></div>
 </div>
 </div>
