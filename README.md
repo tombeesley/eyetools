@@ -406,5 +406,3 @@ Saccadic eye movements can be plotted alongside other data using the
     spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-16-1.png)
-
-### Built-in data sets

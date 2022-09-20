@@ -248,6 +248,6 @@ spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
 
 ```
 
-### Built-in data sets
+
 
 
