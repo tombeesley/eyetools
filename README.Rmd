@@ -1,5 +1,5 @@
 ---
-output: github_document
+output: html_document
 editor_options: 
   chunk_output_type: console
 ---
@@ -32,7 +32,7 @@ It is free to use under the GNU General Public Licence..
 |6.| Visualisations - heatmaps, fixation plots, etc  | `spatial_plot()` | provides a 2D plot of raw data, fixations and AOIs |
 |7.| Saccade detection  | `VTI_saccade()` | Working in basic form - provides summary of velocity, start/end, duration, etc |
 |8.| velocity-based fixations | | |
-|9.| scan paths?  | | |
+|9.| scan paths  | | |
 
 ## How to use eyetools (work in progress)
 
