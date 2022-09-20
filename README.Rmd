@@ -1,6 +1,6 @@
 ---
 output: 
-  html_document:
+  md_document:
 editor_options: 
   chunk_output_type: console
 ---
