@@ -4,7 +4,7 @@
 
 **eyetools** is a package that provides a set of simple tools that will
 facilitate common steps in the processing and analysis of eye data. It
-is intended for use with data from psychological experiments. The idea
+is intended for use with data from psychological experiments and is intended to be simple to use for non-experts in eye data analysis. The idea
 is to have a workflow which is aided by these functions, going from
 processing of the raw data, to extraction of event related data (i.e.,
 fixations, saccades), to summarising those data at the trial level
