@@ -11,9 +11,15 @@
 #' @return
 #' @export
 #'
-#' @examples dist_to_visual_angle(5) # calculate visual angle of 5cm width at 60 cm viewing angle
-#' @examples dist_to_visual_angle(c(2,10), view_dist_cm = 50) # calculate visual angle of stimuli 2 and 10cm width at 50 cm viewing angle
-#' @examples dist_to_visual_angle(150, dist_type = "pixels") # calculate visual angle of 150 pixel wide
+#' @examples
+#' # calculate visual angle for stimulus of 5cm
+#' dist_to_visual_angle(5)
+#'
+#' # calculate visual angle of stimuli 2 and 10cm width at 50 cm viewing angle
+#' dist_to_visual_angle(c(2,10), view_dist_cm = 50)
+#'
+#' # calculate visual angle of 150 pixel wide
+#' dist_to_visual_angle(150, dist_type = "pixels")
 #'
 
 dist_to_visual_angle <- function(vector,

@@ -15,9 +15,6 @@ interpolate(data, maxgap = 25, method = "approx", report = FALSE)
 
 \item{report}{default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.}
 }
-\value{
-
-}
 \description{
 Extends the zoo::na.approx and zoo::na.spline functions to include a report which provides
 the proportion of missing data before and after the interpolation process. This is handy

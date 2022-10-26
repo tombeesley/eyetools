@@ -24,9 +24,6 @@ fix_dispersion(
 
 \item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation}
 }
-\value{
-
-}
 \description{
 Detects fixations according to a method similar to that proposed by Salvucci & Goldberg (1996).
 Evaluates the absolute range of values of both x and y coordinates. Looks for sufficient periods

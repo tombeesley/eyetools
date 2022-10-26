@@ -15,9 +15,7 @@
 #' @export
 #' @examples fix_dispersion(example_raw_fix, disp_tol = 150)
 #'
-#' @importFrom rlang .data
 #' @importFrom zoo na.trim
-#' @importFrom rdist cdist
 #' @importFrom pbapply pblapply
 
 fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25,...) {
@@ -83,7 +81,7 @@ fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRU
 
         last_ts  <- last_ts + 1
         # compute the new distances from this new data point
-        max_d_new_data <- max(cdist(data[last_ts,2:3],win[,2:3]))
+        max_d_new_data <- max(rdist::cdist(data[last_ts,2:3],win[,2:3]))
 
         if (is.na(max_d_new_data) | max_d_new_data >= disp_tol) {
           # either NaN detected, or

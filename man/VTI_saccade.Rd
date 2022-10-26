@@ -15,12 +15,6 @@ VTI_saccade(data, sample_rate = NULL, threshold = 150, minDur = 20, ...)
 
 \item{minDur}{minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occuring at the boundary of velocity threshold}
 }
-\value{
-
-}
 \description{
 Takes a...
-}
-\examples{
-
 }

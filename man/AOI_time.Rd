@@ -13,12 +13,6 @@ AOI_time(data, AOIs, AOI_names = NULL)
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 }
-\value{
-
-}
 \description{
 Analyses total time on defined AOI regions across trials. Currently only works with fixation data as the input.
-}
-\examples{
-
 }

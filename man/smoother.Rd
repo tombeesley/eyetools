@@ -11,12 +11,6 @@ smoother(data, span = 0.1)
 
 \item{span}{From stats::loess. The parameter α which controls the degree of smoothing.}
 }
-\value{
-
-}
 \description{
 A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
-}
-\examples{
-
 }

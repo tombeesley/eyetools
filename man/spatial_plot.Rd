@@ -32,13 +32,7 @@ spatial_plot(
 
 \item{plot_header}{display the header title text which explains graphical features of the plot.}
 }
-\value{
-
-}
 \description{
 A tool for visualising raw eye-data, processed fixations, and saccades. Can all three data types. Fixations can be labeled
 in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
-}
-\examples{
-
 }
