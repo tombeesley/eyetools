@@ -25,6 +25,8 @@ spatial_plot(
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.}
 
+\item{bg_image}{The filepath of an image to be added to the plot, for example to show a screenshot of the task.}
+
 \item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 
 \item{flip_y}{reverse the y axis coordinates (useful if origin is top of the screen)}
@@ -36,4 +38,16 @@ spatial_plot(
 \description{
 A tool for visualising raw eye-data, processed fixations, and saccades. Can all three data types. Fixations can be labeled
 in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
+}
+\examples{
+#trying to draw a screenshot under a spatial plot
+d_raw <- example_raw_WM
+d_raw <- d_raw[d_raw$trial==10,] # take just one trial
+d_fix <- fix_dispersion(d_raw)
+d_sac <- VTI_saccade(d_raw)
+spatial_plot(raw_data = d_raw,
+             fix_data = d_fix,
+             sac_data = d_sac)
+
+
 }

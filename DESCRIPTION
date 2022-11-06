@@ -16,6 +16,7 @@ Imports:
     ggplot2,
     glue,
     lifecycle,
+    magick,
     magrittr,
     pbapply,
     rdist,

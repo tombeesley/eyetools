@@ -116,8 +116,7 @@ spatial_plot(raw_data = d_raw,
              fix_data = d_fix,
              sac_data = d_sac)
 
-# add some AOI regions and screenshot
-
+# add AOI regions and screenshot
 spatial_plot(raw_data = d_raw,
              fix_data = d_fix,
              sac_data = d_sac,
