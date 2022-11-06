@@ -4,15 +4,6 @@
     <loc>https://tombeesley.github.io/eyetools/404.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/articles/analysis_steps.html</loc>
-  </url>
-  <url>
-    <loc>https://tombeesley.github.io/eyetools/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://tombeesley.github.io/eyetools/articles/package_workflow.html</loc>
-  </url>
-  <url>
     <loc>https://tombeesley.github.io/eyetools/authors.html</loc>
   </url>
   <url>
@@ -32,6 +23,9 @@
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/dist_to_visual_angle.html</loc>
+  </url>
+  <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_WM.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/example_raw_binocular.html</loc>
