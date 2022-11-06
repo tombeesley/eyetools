@@ -107,4 +107,21 @@ ggplot() +
                      linetype = "round") +
   coord_cartesian(ylim = c(0,30))
 
+# trying to draw a screenshot under a spatial plot
+d_raw <- example_raw_WM
+d_raw <- d_raw[d_raw$trial==10,] # take just one trial
+d_fix <- fix_dispersion(d_raw)
+d_sac <- VTI_saccade(d_raw)
+spatial_plot(raw_data = d_raw,
+             fix_data = d_fix,
+             sac_data = d_sac)
+
+# add some AOI regions and screenshot
+
+spatial_plot(raw_data = d_raw,
+             fix_data = d_fix,
+             sac_data = d_sac,
+             AOIs = eyetools::AOIs_WM,
+             bg_image = "inst/images/screenshot.jpg")
+
 

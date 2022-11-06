@@ -42,12 +42,30 @@
 #' @format A data frame with X rows and 4 variables:
 #' \describe{
 #'   \item{time}{timestamp of the sample}
-#'   \item{x_left}{x coordinate of the left eye}
-#'   \item{y_left}{y coordinate of the left eye}
-#'   \item{x_right}{x coordinate of the right eye}
-#'   \item{y_right}{y coordinate of the right eye}
+#'   \item{left_x}{x coordinate of the left eye}
+#'   \item{left_y}{y coordinate of the left eye}
+#'   \item{right_x}{x coordinate of the right eye}
+#'   \item{right_y}{y coordinate of the right eye}
 #'   \item{trial}{trial number}
 #'   ...
 #' }
 #'
 "example_raw_binocular"
+
+#' Example eye data from working memory task
+#'
+#' A dataset containing raw data samples for 100 trials of a working memory task. The screen contained
+#' four objects (coloured shapes), positioned at the corners of a square and participants spent 2 seconds encoding the stimuli.  Data were collected from a 120 Hz Tobii eye-tracker.
+#' This is an example of the format raw data needs to be in in order to work with the functions
+#' in eyetools.
+#'
+#' @format A data frame with 24205 rows and 4 variables:
+#' \describe{
+#'   \item{time}{timestamp of the sample}
+#'   \item{x}{x coordinate of the eye}
+#'   \item{y}{y coordinate of the eye}
+#'   \item{trial}{trial number}
+#'   ...
+#' }
+#'
+"example_raw_WM"

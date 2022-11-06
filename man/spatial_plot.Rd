@@ -9,6 +9,7 @@ spatial_plot(
   fix_data = NULL,
   sac_data = NULL,
   AOIs = NULL,
+  bg_image = NULL,
   res = c(0, 1920, 0, 1080),
   flip_y = FALSE,
   show_fix_order = TRUE,

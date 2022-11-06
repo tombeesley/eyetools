@@ -7,6 +7,7 @@
 #' @param fix_data data output from fixation function
 #' @param sac_data data output from saccade function
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.
+#' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param show_fix_order label the fixations in the order they were made
@@ -16,18 +17,21 @@
 #' @export
 #'
 #' @examples
+#' # simple plot of the raw data
+#' d <- example_raw
 #'
 #' @importFrom magrittr %>%
 #' @import ggplot2
 #' @import dplyr
 #' @import ggforce
-#'
+#' @importFrom magick image_read
 #'
 
 spatial_plot <- function(raw_data = NULL,
                          fix_data = NULL,
                          sac_data = NULL,
                          AOIs = NULL,
+                         bg_image = NULL,
                          res = c(0,1920,0,1080),
                          flip_y = FALSE,
                          show_fix_order = TRUE,
@@ -35,11 +39,24 @@ spatial_plot <- function(raw_data = NULL,
 
 
   final_g <- ggplot()
+
+  # PLOT BACKGROUND IMAGE
+  if (is.null(bg_image)==FALSE){
+    img <- magick::image_read(bg_image)
+    final_g <- final_g +
+      annotation_raster(img,
+                        xmin = res[1],
+                        xmax = res[2],
+                        ymin = res[3],
+                        ymax = res[4])
+
+  }
+
   # PLOT AOIs
   if (is.null(AOIs)==FALSE) {
 
-    rect_AOIs <- AOI_regions[!is.na(AOI_regions$height),]
-    circle_AOIs <- AOI_regions[is.na(AOI_regions$height),] # those with NAs in height column
+    rect_AOIs <- AOIs[!is.na(AOIs$height),]
+    circle_AOIs <- AOIs[is.na(AOIs$height),] # those with NAs in height column
 
     # add any rectangle AOIs
     if (is.null(rect_AOIs)==FALSE) {

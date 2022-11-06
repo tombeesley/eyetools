@@ -7,6 +7,7 @@
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
 #' @param minDur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occuring at the boundary of velocity threshold
 #'
+#' @importFrom stats dist aggregate
 #' @return
 #' @export
 #'
@@ -76,7 +77,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20, 
 
     }
     # add col headers, trial number and return
-    colnames(trial_sac_store) <- c("startBLAH", "end", "origin_x", "origin_y", "terminal_x", "terminal_y",
+    colnames(trial_sac_store) <- c("start", "end", "origin_x", "origin_y", "terminal_x", "terminal_y",
                                    "mean_velocity", "peak_velocity", "duration", "sac_n")
     trial_sac_store <- cbind(trial_sac_store, trialNumber) # add trial number
     return(trial_sac_store)
