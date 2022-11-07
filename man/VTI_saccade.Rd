@@ -4,7 +4,7 @@
 \alias{VTI_saccade}
 \title{Velocity threshold identification of saccades}
 \usage{
-VTI_saccade(data, sample_rate = NULL, threshold = 150, minDur = 20, ...)
+VTI_saccade(data, sample_rate = NULL, threshold = 150, minDur = 20)
 }
 \arguments{
 \item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
@@ -15,6 +15,13 @@ VTI_saccade(data, sample_rate = NULL, threshold = 150, minDur = 20, ...)
 
 \item{minDur}{minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occuring at the boundary of velocity threshold}
 }
+\value{
+a data frame giving the saccades found by trial
+}
 \description{
-Takes a...
+Use the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements.
+Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
+}
+\examples{
+VTI_saccade(example_raw_sac[example_raw_sac$trial<=10,])
 }

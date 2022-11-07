@@ -69,3 +69,18 @@
 #' }
 #'
 "example_raw_WM"
+
+#' Example AOIs for use with example_raw_WM
+#'
+#' This dataframe contains 4 rectangular areas of interest (AOIs), set out for use with the example_raw_WM dataset. Values are in pixels.
+#'
+#' @format A data frame with 4 rows and 4 variables:
+#' \describe{
+#'   \item{x}{centred x coordinate of the AOI}
+#'   \item{y}{centred y coordinate of the AOI}
+#'   \item{width_radius}{either the width of the AOI, or the radius for circular AOIs}
+#'   \item{height}{the height of the AOI; should be NA for circular AOIs}
+#'   ...
+#' }
+#'
+"AOIs_WM"

@@ -13,6 +13,14 @@ AOI_time(data, AOIs, AOI_names = NULL)
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 }
+\value{
+a dataframe containing the time on the passed AOIs for each trial
+}
 \description{
 Analyses total time on defined AOI regions across trials. Currently only works with fixation data as the input.
+}
+\examples{
+fix_d <- fix_dispersion(eyetools::example_raw_WM)
+AOI_time(fix_d, eyetools::AOIs_WM)
+
 }

@@ -6,10 +6,12 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #'
-#' @return
+#' @return a dataframe containing the time on the passed AOIs for each trial
 #' @export
 #'
 #' @examples
+#' fix_d <- fix_dispersion(eyetools::example_raw_WM)
+#' AOI_time(fix_d, eyetools::AOIs_WM)
 #'
 #' @importFrom dplyr between
 #'

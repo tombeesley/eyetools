@@ -9,8 +9,7 @@ fix_dispersion(
   min_dur = 150,
   disp_tol = 100,
   run_interp = TRUE,
-  NA_tol = 0.25,
-  ...
+  NA_tol = 0.25
 )
 }
 \arguments{
@@ -23,6 +22,9 @@ fix_dispersion(
 \item{run_interp}{include a call to eyetools::interpolation on each trial}
 
 \item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation}
+}
+\value{
+a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 }
 \description{
 Detects fixations according to a method similar to that proposed by Salvucci & Goldberg (1996).
