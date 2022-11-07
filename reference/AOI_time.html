@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,121 @@
 <dd><p>An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
 
+<p>a dataframe containing the time on the passed AOIs for each trial</p>
+    </div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">fix_d</span> <span class="op">&lt;-</span> <span class="fu"><a href="fix_dispersion.html">fix_dispersion</a></span><span class="op">(</span><span class="fu">eyetools</span><span class="fu">::</span><span class="va"><a href="example_raw_WM.html">example_raw_WM</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">AOI_time</span><span class="op">(</span><span class="va">fix_d</span>, <span class="fu">eyetools</span><span class="fu">::</span><span class="va"><a href="AOIs_WM.html">AOIs_WM</a></span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     trial AOI_1 AOI_2 AOI_3 AOI_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1     0   617   583   383</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2   384   334   442   583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       3   350   325   475   366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       4   317   250   250   633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       5   782   600     0   159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       6   291   734     0   816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       7   225   717   175   350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       8   275  1009     0   375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       9   493   241   775     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     10   433   533   250     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     11   441     0   708   433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     12   258   750   225   358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     13   451   300   808     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     14  1343     0   384     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     15   284   416   167   267</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16     16   525   425   300   150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17     17   734   384   408   159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18     18   650     0   425   300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19     19   784   300     0   509</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     20   283   642   250   383</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21     21     0   466   342   825</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22     22     0   567   400   783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23     23   283   192   483   233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24     24   366   868     0   300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25     25  1033   183   491     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26     26     0  1316     0   542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27     27   532   675     0   576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28     28     0  1242     0   542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29     29     0   425     0  1042</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30     30   275   567     0   683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31     31   233   309   726   459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32     32     0  1082     0   767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33     33   167   617   292   525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34     34   600   400   341   250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35     35     0  1575     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36     36     0   733   425   468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37     37   150   982   216   333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38     38   375   659   267   467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39     39   267   542   716   150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40     40   225   859   242   483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41     41   341     0   592   584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42     42   408   692     0   550</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43     43   350   283   859     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44     44     0   817     0   691</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45     45   558   717     0   474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46     46   259   726     0   766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47     47   300   976   267   241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48     48     0   542     0   458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49     49   366   666     0   616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50     50   317   342   233   784</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51     51  1334   534     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52     52     0   425   208   751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53     53   666   242     0   667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54     54   333   341   592   258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55     55     0   625     0   884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56     56   416   941   167   175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57     57  1042   358   258   233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58     58   167   749     0   717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59     59   233   876   267   467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60     60   208   933   208   334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61     61   333   732   175   576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62     62  1909     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63     63   234   441   474   650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64     64   384   859   300   225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65     65   725   275   509   208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66     66   682   358   375   258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67     67   542   640     0   525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68     68   317   625     0   566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69     69   300   658   641   258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70     70   709   351   375   417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71     71   225   350     0  1149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72     72   208   741     0   800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73     73   593   208   275   450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74     74   767   350   608     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75     75     0  1276   217   309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76     76   208   392   158   574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77     77   666   275   234   409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78     78   217   817     0   666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79     79   374   350   275   275</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80     80   726   275   217   658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81     81   400   925     0   416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82     82   317   158     0   633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83     83   459   259   334   625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84     84   375  1090     0   375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85     85   250   941     0   692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86     86   375     0  1001     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87     87     0   500     0   992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88     88   183   625     0   800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89     89   691     0   750   317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90     90   184   659     0   958</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91     91   200     0  1733     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92     92   167   533   225   858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93     93   233   225   534   475</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94     94   333   833   175   317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95     95   333   858     0   516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96     96   192     0  1058   234</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97     97   350     0  1257     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98     98   616   325   275   184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99     99     0   476   733   266</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100   100  1999     0     0     0</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
