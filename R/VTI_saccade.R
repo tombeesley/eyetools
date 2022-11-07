@@ -9,6 +9,7 @@
 #' @param minDur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occuring at the boundary of velocity threshold
 #'
 #' @importFrom stats dist aggregate
+#' @importFrom pbapply pblapply
 #' @return a data frame giving the saccades found by trial
 #' @export
 #'
@@ -25,7 +26,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, minDur = 20){
   }
 
   data <- split(data, data$trial)
-  data_sac <- lapply(data, VTI_saccade_trial, sample_rate, threshold, minDur)
+  data_sac <- pbapply::pblapply(data, VTI_saccade_trial, sample_rate, threshold, minDur)
   data_sac <- do.call(rbind.data.frame,data_sac)
   data_sac <- data_sac[,c(11,10,1,2,9,3:8)] # reorder cols
   row.names(data_sac) <- NULL # remove the row names
