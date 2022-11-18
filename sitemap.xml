@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tombeesley.github.io/eyetools/404.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/authors.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/index.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/news/index.html</loc>
+    <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/AOI_time.html</loc>
+    <loc>/reference/AOI_time.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/AOIs_WM.html</loc>
+    <loc>/reference/AOIs_WM.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/VTI_saccade.html</loc>
+    <loc>/reference/VTI_saccade.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/combine_eyes.html</loc>
+    <loc>/reference/combine_eyes.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/dist_to_visual_angle.html</loc>
+    <loc>/reference/dist_to_visual_angle.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_WM.html</loc>
+    <loc>/reference/example_raw_WM.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_binocular.html</loc>
+    <loc>/reference/example_raw_binocular.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_fix.html</loc>
+    <loc>/reference/example_raw_fix.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_sac.html</loc>
+    <loc>/reference/example_raw_sac.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/eyetools-package.html</loc>
+    <loc>/reference/eyetools-package.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/fix_dispersion.html</loc>
+    <loc>/reference/fix_dispersion.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/index.html</loc>
+    <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/interpolate.html</loc>
+    <loc>/reference/interpolate.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/pipe.html</loc>
+    <loc>/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/smoother.html</loc>
+    <loc>/reference/smoother.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/spatial_plot.html</loc>
+    <loc>/reference/spatial_plot.html</loc>
   </url>
 </urlset>
