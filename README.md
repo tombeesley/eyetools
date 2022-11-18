@@ -1,10 +1,16 @@
+<!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
 # **eyetools**
 
 ## A set of tools for eye data processing, analysis and visualisation in R
 
 **eyetools** is a package that provides a set of simple tools that will
 facilitate common steps in the processing and analysis of eye data. It
-is intended for use with data from psychological experiments and is intended to be simple to use for non-experts in eye data analysis. The idea
+is intended for use with data from psychological experiments. The idea
 is to have a workflow which is aided by these functions, going from
 processing of the raw data, to extraction of event related data (i.e.,
 fixations, saccades), to summarising those data at the trial level
@@ -117,7 +123,7 @@ can see an example with the built in data sets:
 
     example_raw_sac
 
-    ## # A tibble: 32,608 × 4
+    ## # A tibble: 32,608 x 4
     ##     time     x     y trial
     ##    <dbl> <dbl> <dbl> <dbl>
     ##  1     0  940.  535.     1
@@ -130,7 +136,7 @@ can see an example with the built in data sets:
     ##  8    23  939.  536.     1
     ##  9    27  940.  534.     1
     ## 10    30  942.  537.     1
-    ## # … with 32,598 more rows
+    ## # ... with 32,598 more rows
 
 **Importantly**, the data for each trial should be sequential and
 logical, that is, the timestamps should run continuously, without any
@@ -148,7 +154,7 @@ of the missing data before and after interpolation:
     eyetools::interpolate(example_raw_sac, report = TRUE)
 
     ## [[1]]
-    ## # A tibble: 32,608 × 4
+    ## # A tibble: 32,608 x 4
     ##     time     x     y trial
     ##    <dbl> <dbl> <dbl> <dbl>
     ##  1     0  940.  535.     1
@@ -161,10 +167,10 @@ of the missing data before and after interpolation:
     ##  8    23  939.  536.     1
     ##  9    27  940.  534.     1
     ## 10    30  942.  537.     1
-    ## # … with 32,598 more rows
+    ## # ... with 32,598 more rows
     ## 
     ## [[2]]
-    ## # A tibble: 1 × 2
+    ## # A tibble: 1 x 2
     ##   missing_perc_before missing_perc_after
     ##                 <dbl>              <dbl>
     ## 1              0.0998             0.0952
@@ -351,27 +357,27 @@ needed to indicate the presence of a saccadic eye-movement.
 
     VTI_saccade(t_smooth, sample_rate = 300)
 
-    ##    trialNumber sac_n startBLAH  end duration  origin_x origin_y terminal_x
-    ## 1            1     1       223  287       64  870.3588 527.6547   177.1630
-    ## 2            1     2       447  530       83  209.4739 500.0963  1423.6778
-    ## 3            2     1       230  280       50  843.5225 537.3153   258.2328
-    ## 4            2     2       757  840       83  184.2432 518.7122  1513.4706
-    ## 5            3     1       163  217       54  864.0695 538.9868   188.6405
-    ## 6            3     2       527  550       23  236.2502 533.8763   456.4131
-    ## 7            3     3      1087 1120       33 1671.8701 542.0387  1278.9085
-    ## 8            4     1       280  340       60  941.2610 525.2997   167.3127
-    ## 9            4     2       696  730       34  193.3663 514.7454   638.2664
-    ## 10           5     1       240  293       53  989.2586 539.9973  1655.2936
-    ## 11           5     2       646  690       44 1688.9012 545.7763  1023.0553
-    ## 12           6     1       197  247       50  828.6306 532.1597   194.2109
-    ## 13           6     2       590  627       37  189.2387 524.2148   865.8235
-    ## 14           7     1       174  224       50  746.4592 532.5643   238.6413
-    ## 15           8     1       174  237       63  869.1958 545.3931   205.9854
-    ## 16           8     2       564  664      100  162.7739 512.4705  1644.4917
-    ## 17           9     1       170  227       57  880.2617 546.0806   205.5746
-    ## 18           9     2       474  564       90  216.2176 517.2547  1621.2220
-    ## 19          10     1       194  254       60  845.9267 539.5713   226.3948
-    ## 20          10     2       530  624       94  180.4137 519.7535  1595.2826
+    ##    trialNumber sac_n start  end duration  origin_x origin_y terminal_x
+    ## 1            1     1   223  287       64  870.3588 527.6547   177.1630
+    ## 2            1     2   447  530       83  209.4739 500.0963  1423.6778
+    ## 3            2     1   230  280       50  843.5225 537.3153   258.2328
+    ## 4            2     2   757  840       83  184.2432 518.7122  1513.4706
+    ## 5            3     1   163  217       54  864.0695 538.9868   188.6405
+    ## 6            3     2   527  550       23  236.2502 533.8763   456.4131
+    ## 7            3     3  1087 1120       33 1671.8701 542.0387  1278.9085
+    ## 8            4     1   280  340       60  941.2610 525.2997   167.3127
+    ## 9            4     2   696  730       34  193.3663 514.7454   638.2664
+    ## 10           5     1   240  293       53  989.2586 539.9973  1655.2936
+    ## 11           5     2   646  690       44 1688.9012 545.7763  1023.0553
+    ## 12           6     1   197  247       50  828.6306 532.1597   194.2109
+    ## 13           6     2   590  627       37  189.2387 524.2148   865.8235
+    ## 14           7     1   174  224       50  746.4592 532.5643   238.6413
+    ## 15           8     1   174  237       63  869.1958 545.3931   205.9854
+    ## 16           8     2   564  664      100  162.7739 512.4705  1644.4917
+    ## 17           9     1   170  227       57  880.2617 546.0806   205.5746
+    ## 18           9     2   474  564       90  216.2176 517.2547  1621.2220
+    ## 19          10     1   194  254       60  845.9267 539.5713   226.3948
+    ## 20          10     2   530  624       94  180.4137 519.7535  1595.2826
     ##    terminal_y mean_velocity peak_velocity
     ## 1    494.6964      272.5147      467.6514
     ## 2    481.3370      362.4432      625.5313
