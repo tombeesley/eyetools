@@ -16,12 +16,24 @@
 #' @importFrom dplyr between
 #'
 
-AOI_time <- function(data, AOIs, AOI_names = NULL) {
+AOI_time <- function(fix_data = NULL, raw_data = NULL, AOIs, AOI_names = NULL) {
 
   # dataframe to hold AOI entry results
   # columns are trial, AOI time * number of AOIs
 
-  time_data <- sapply(split(data, data$trial), AOI_trial_process, AOIs = AOIs)
+  if (is.null(fix_data)==FALSE & is.null(raw_data)==FALSE) {
+    # input data for both fixations and raw data
+    stop("Attempt to use multiple input data objects; specify only one of fix_data or raw_data")
+  }
+  else if (is.null(fix_data)==FALSE) {
+    # process as fixation data input
+    time_data <- sapply(split(data, data$trial), AOI_trial_process_fix, AOIs = AOIs)
+  }
+  else if(is.null(raw_data)==FALSE) {
+    # process as raw data input
+    time_data <- sapply(split(data, data$trial), AOI_trial_process_raw, AOIs = AOIs)
+  }
+
 
   time_data <- cbind(unique(data$trial), t(time_data))
 
@@ -38,7 +50,7 @@ AOI_time <- function(data, AOIs, AOI_names = NULL) {
 }
 
 
-AOI_trial_process <- function(trial_data, AOIs) {
+AOI_trial_process_fix <- function(trial_data, AOIs) {
 
   aoi_time_sums <- data.frame(matrix(nrow = 1, ncol = nrow(AOIs)))
 
