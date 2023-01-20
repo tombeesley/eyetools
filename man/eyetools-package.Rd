@@ -6,6 +6,8 @@
 \alias{eyetools-package}
 \title{eyetools: Tools for eye data analysis}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 A set of tools for eye data processing. The intended flow is from data processing, to fixation analysis, to data visualisation and trial level summaries.
 }
 \seealso{

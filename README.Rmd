@@ -6,8 +6,15 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.path = "man/figures/")
+
 ```
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
 
 # **eyetools**
 
@@ -48,7 +55,7 @@ theme_set(theme_light())
 ### Installation
 
 You can install eyetools using the following code:
-```{r eval=FALSE}
+```{r, eval=FALSE}
 if (!require(devtools)) {
   install.packages("devtools")
   library(devtools)
