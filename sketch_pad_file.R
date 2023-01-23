@@ -109,11 +109,12 @@ ggplot() +
 
 # trying to draw a screenshot under a spatial plot
 d_raw <- example_raw_WM
-d_raw <- d_raw[d_raw$trial<=10,] # take just one trial
+d_raw <- d_raw[d_raw$trial<=3,] # take just one trial
 d_fix <- fix_dispersion(d_raw)
 
 AOI_time(fix_data = d_fix, AOIs = AOIs_WM) # use fix data
 AOI_time(raw_data = d_raw, AOIs = AOIs_WM, sample_rate = 120) # use raw data
+AOI_time(raw_data = d_raw, AOIs = AOIs_WM) # use raw data, no sample rate
 
 d_sac <- VTI_saccade(d_raw)
 spatial_plot(raw_data = d_raw,

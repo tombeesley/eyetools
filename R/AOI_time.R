@@ -89,6 +89,13 @@ AOI_trial_process_fix <- function(trial_data, AOIs) {
 
 AOI_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
 
+  if (is.null(sample_rate)==TRUE){
+    # estimate sample rate (ms) from timestamps and number of samples
+    trial_data[,1] <- trial_data[,1] - trial_data[1,1,drop=TRUE] # start trial timestamps at 0
+    sample_rate <- as.numeric(utils::tail(trial_data[,1],n=1)) / nrow(trial_data)
+  } else {
+    sample_rate <- 1000/sample_rate # express in ms per sample
+  }
 
 
   aoi_time_sums <- data.frame(matrix(nrow = 1, ncol = nrow(AOIs)))
@@ -108,7 +115,8 @@ AOI_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
     }
 
     # convert hits into data on time and entries
-    aoi_time_sums[a] <- round(sum(xy_hits*(1000/sample_rate), na.rm = TRUE),0) # sum the valid AOI hits - multiply by sample rate
+    aoi_time_sums[a] <- round(sum(xy_hits*sample_rate,
+                                  na.rm = TRUE),0) # sum the valid AOI hits - multiply by sample rate
 
   }
 
