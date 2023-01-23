@@ -30,11 +30,11 @@ example_mac_error
 
 fix_dispersion(example_mac_error)
 
-t_raw <- example_raw_wm
-t_raw <- filter(example_raw_wm, between(trial, 1, 220))
+t_raw <- example_raw_WM
+t_raw <- filter(example_raw_WM, between(trial, 1, 220))
 
 # # process fixations
-#fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
 t_interpolate <- interpolate(t_raw)
 
@@ -109,12 +109,18 @@ ggplot() +
 
 # trying to draw a screenshot under a spatial plot
 d_raw <- example_raw_WM
-d_raw <- d_raw[d_raw$trial==10,] # take just one trial
+d_raw <- d_raw[d_raw$trial<=10,] # take just one trial
 d_fix <- fix_dispersion(d_raw)
+
+AOI_time(fix_data = d_fix, AOIs = AOIs_WM) # use fix data
+AOI_time(raw_data = d_raw, AOIs = AOIs_WM, sample_rate = 120) # use raw data
+
 d_sac <- VTI_saccade(d_raw)
 spatial_plot(raw_data = d_raw,
              fix_data = d_fix,
              sac_data = d_sac)
+
+
 
 # add AOI regions and screenshot
 spatial_plot(raw_data = d_raw,
@@ -123,4 +129,5 @@ spatial_plot(raw_data = d_raw,
              AOIs = eyetools::AOIs_WM,
              bg_image = "inst/images/screenshot.jpg")
 
+AOI_time(fix_data = d_fix, AOIs = AOIs_WM)
 

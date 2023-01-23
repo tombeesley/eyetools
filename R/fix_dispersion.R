@@ -40,10 +40,13 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
 
   if (run_interp){data <- eyetools::interpolate(data)}
   data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
+
+  # work out sample rate
+  sample_rate <- as.numeric(utils::tail(data[,1],n=1)) / nrow(data)
+
   data <- na.trim(data) # remove leading and trailing NAs
   data$fix_num  <- NA # add a column that stores the fix number
 
-  sample_rate <- as.numeric(utils::tail(data[,1],n=1)) / nrow(data)
   first_ts <- 1 # first timestamp of window
   last_ts <- 1 # allows step into the loop
 
