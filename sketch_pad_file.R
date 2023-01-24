@@ -109,7 +109,7 @@ ggplot() +
 
 # trying to draw a screenshot under a spatial plot
 d_raw <- example_raw_WM
-d_raw <- d_raw[d_raw$trial<=3,] # take just one trial
+d_raw <- d_raw[d_raw$trial<=30,] # take just one trial
 d_fix <- fix_dispersion(d_raw)
 
 AOI_time(fix_data = d_fix, AOIs = AOIs_WM) # use fix data
