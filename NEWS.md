@@ -1,5 +1,8 @@
 # eyetools 0.4.7
 
+* added a new function AOI_seq
+* AOI_trial now works with raw data
+
 # eyetools 0.4.6
 
 # eyetools 0.4.5
