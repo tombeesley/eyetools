@@ -4,18 +4,10 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(
-  fix_data = NULL,
-  raw_data = NULL,
-  AOIs,
-  AOI_names = NULL,
-  sample_rate = NULL
-)
+AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL)
 }
 \arguments{
-\item{fix_data}{A dataframe with fixation data (from fix_dispersion)}
-
-\item{raw_data}{A dataframe with raw data}
+\item{data}{A dataframe with fixation data (from fix_dispersion) or raw data.}
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
@@ -27,7 +19,7 @@ AOI_seq(
 a dataframe containing the sequence of entries into AOIs on each trial
 }
 \description{
-Analyses the sequence of entries into defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
+Analyses the sequence of entries into defined AOI regions across trials. Works with fixation data or raw data as the input.
 }
 \examples{
 fix_d <- fix_dispersion(eyetools::example_raw_WM)
