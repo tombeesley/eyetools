@@ -109,7 +109,7 @@ ggplot() +
 
 # trying to draw a screenshot under a spatial plot
 d_raw <- example_raw_WM
-d_raw <- d_raw[d_raw$trial==5,] # take a few trials
+d_raw <- d_raw[d_raw$trial<=5,] # take a few trials
 d_fix <- fix_dispersion(d_raw)
 
 AOI_seq(data = d_fix, AOIs = AOIs_WM) # use fixation data
@@ -125,13 +125,25 @@ spatial_plot(raw_data = d_raw,
              AOIs = AOIs_WM)
 
 
+AOI_in <- eyetools::AOIs_WM
+AOI_in[4,4] <- NA
+
+
 
 # add AOI regions and screenshot
-spatial_plot(raw_data = d_raw,
-             fix_data = d_fix,
-             sac_data = d_sac,
-             AOIs = eyetools::AOIs_WM,
-             bg_image = "inst/images/screenshot.jpg")
+seq_plot(raw_data = d_raw,
+         trial_number = 5,
+         AOIs = AOI_in,
+         bin_time = 100,
+         bin_range = c(1,7))
+
+ggplot() +
+  geom_point(data = d_raw,
+             colour = time,
+             aes(x = x, y = y),
+             size = 1,
+             na.rm = TRUE)
+
 
 AOI_time(fix_data = d_fix, AOIs = AOIs_WM)
 

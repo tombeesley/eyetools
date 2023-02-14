@@ -1,6 +1,11 @@
+# eyetools 0.5.0
+* added new function seq_plot()
+* presents raw data with time component
+* data can be presented in time windows
+
 # eyetools 0.4.7
 
-* added a new function AOI_seq
+* added a new function AOI_seq()
 * AOI_trial now works with raw data
 
 # eyetools 0.4.6

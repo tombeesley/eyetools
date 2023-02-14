@@ -48,59 +48,13 @@ spatial_plot <- function(raw_data = NULL,
   final_g <- ggplot()
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE){
-    img <- magick::image_read(bg_image)
-    final_g <- final_g +
-      annotation_raster(img,
-                        xmin = res[1],
-                        xmax = res[2],
-                        ymin = res[3],
-                        ymax = res[4])
-
-  }
+  if (is.null(bg_image)==FALSE) final_g <- addBGimg(bg_image, res, final_g)
 
   # PLOT AOIs
-  if (is.null(AOIs)==FALSE) {
+  if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
 
-    rect_AOIs <- AOIs[!is.na(AOIs$height),]
-    circle_AOIs <- AOIs[is.na(AOIs$height),] # those with NAs in height column
-
-    # add any rectangle AOIs
-    if (is.null(rect_AOIs)==FALSE) {
-      final_g <- final_g +
-        geom_tile(data = rect_AOIs,
-                  aes(x = x, y = y, width = width_radius, height = height),
-                  colour = "dark blue",
-                  fill = "blue",
-                  alpha = .1)
-    }
-
-    # add any circle AOIs
-    if (is.null(circle_AOIs)==FALSE) {
-      final_g <- final_g +
-        geom_circle(data = circle_AOIs,
-                  aes(x0 = x, y0 = y, r = width_radius),
-                  colour = "dark blue",
-                  fill = "blue",
-                  alpha = .1)
-    }
-
-
-  }
-
-
-
-  # PLOT RAW DATA
-  if (is.null(raw_data)==FALSE) {
-
-    final_g <-
-      final_g +
-      geom_point(data = raw_data,
-                 aes(x = x, y = y),
-                 size = 1,
-                 na.rm = TRUE)
-
-  }
+  # add raw data
+  if (is.null(raw_data)==FALSE) final_g <- add_raw(raw_data, final_g)
 
   # PLOT FIXATION DATA
   if (is.null(fix_data)==FALSE) {
@@ -186,7 +140,67 @@ spatial_plot <- function(raw_data = NULL,
 
 
 
-return(final_g)
+  return(final_g)
 
 
 }
+
+# function to add raw data
+add_raw <- function(dataIn, ggplot_in){
+
+  ggplot_in <-
+    ggplot_in +
+    geom_point(data = dataIn,
+               aes(x = x, y = y),
+               size = 1,
+               na.rm = TRUE)
+
+    return(ggplot_in)
+}
+
+# function to add AOIs
+add_AOIs <- function(AOIs, ggplot_in){
+
+  rect_AOIs <- AOIs[!is.na(AOIs$height),]
+  circle_AOIs <- AOIs[is.na(AOIs$height),] # those with NAs in height column
+
+  # add any rectangle AOIs
+  if (is.null(rect_AOIs)==FALSE) {
+    ggplot_in <-
+      ggplot_in +
+      geom_tile(data = rect_AOIs,
+                aes(x = x, y = y, width = width_radius, height = height),
+                colour = "dark blue",
+                fill = "blue",
+                alpha = .1)
+  }
+
+  # add any circle AOIs
+  if (is.null(circle_AOIs)==FALSE) {
+    ggplot_in <-
+      ggplot_in +
+      geom_circle(data = circle_AOIs,
+                  aes(x0 = x, y0 = y, r = width_radius),
+                  colour = "dark blue",
+                  fill = "blue",
+                  alpha = .1)
+  }
+
+  return(ggplot_in)
+
+}
+
+# function to add background image
+add_BGimg <- function(bg_image_in, ggplot_in){
+  img <- magick::image_read(bg_image_in)
+  ggplot_in <-
+    ggplot_in +
+    annotation_raster(img,
+                      xmin = res[1],
+                      xmax = res[2],
+                      ymin = res[3],
+                      ymax = res[4])
+  return(ggplot_in)
+
+}
+
