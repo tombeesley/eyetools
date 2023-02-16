@@ -22,6 +22,15 @@
     <loc>https://tombeesley.github.io/eyetools/news/index.html</loc>
   </url>
   <url>
+<<<<<<< HEAD
+=======
+    <loc>https://tombeesley.github.io/eyetools/reference/AOIs_WM.html</loc>
+  </url>
+  <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/AOI_seq.html</loc>
+  </url>
+  <url>
+>>>>>>> 2c885122466b442f37615357c203d6a19a203cc7
     <loc>https://tombeesley.github.io/eyetools/reference/AOI_time.html</loc>
   </url>
   <url>
@@ -43,6 +52,12 @@
     <loc>https://tombeesley.github.io/eyetools/reference/example_raw_sac.html</loc>
   </url>
   <url>
+<<<<<<< HEAD
+=======
+    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_WM.html</loc>
+  </url>
+  <url>
+>>>>>>> 2c885122466b442f37615357c203d6a19a203cc7
     <loc>https://tombeesley.github.io/eyetools/reference/example_two_eyes_raw.html</loc>
   </url>
   <url>
@@ -61,6 +76,12 @@
     <loc>https://tombeesley.github.io/eyetools/reference/pipe.html</loc>
   </url>
   <url>
+<<<<<<< HEAD
+=======
+    <loc>https://tombeesley.github.io/eyetools/reference/seq_plot.html</loc>
+  </url>
+  <url>
+>>>>>>> 2c885122466b442f37615357c203d6a19a203cc7
     <loc>https://tombeesley.github.io/eyetools/reference/smoother.html</loc>
   </url>
   <url>

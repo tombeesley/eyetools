@@ -1,3 +1,4 @@
+
 <!-- badges: start -->
 
 [![Lifecycle:
@@ -16,87 +17,26 @@ processing of the raw data, to extraction of event related data (i.e.,
 fixations, saccades), to summarising those data at the trial level
 (e.g., time on areas of interest).
 
-**Warning - still in experimental form! Please check results carefully**
+**Warning - still in somewhat experimental form! Please check results
+carefully**
 
 to install: `devtools::install_github("tombeesley/eyetools")`
 
 It is free to use under the GNU General Public Licence..
 
-“Roadmap” for functions:
+Available functions:
 
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>order</th>
-<th>process</th>
-<th>implemented function(s)</th>
-<th>comment</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1.</td>
-<td>combine binocular data</td>
-<td><code>combine_eyes()</code></td>
-<td>works: either average or “best eye”</td>
-</tr>
-<tr class="even">
-<td>2.</td>
-<td>interpolation</td>
-<td><code>interpolate()</code></td>
-<td>working and provides a summary report of repair</td>
-</tr>
-<tr class="odd">
-<td>3.</td>
-<td>smoothing</td>
-<td><code>smoother()</code></td>
-<td>working</td>
-</tr>
-<tr class="even">
-<td>4.</td>
-<td>dispersion-based fixations</td>
-<td><code>fix_dispersion()</code></td>
-<td>working and pretty fast - needs thorough checking</td>
-</tr>
-<tr class="odd">
-<td>5.</td>
-<td>area of interest analysis</td>
-<td><code>AOI_time()</code></td>
-<td>working with both rectangular and circular AOIs</td>
-</tr>
-<tr class="even">
-<td>6.</td>
-<td>Visualisations - heatmaps, fixation plots, etc</td>
-<td><code>spatial_plot()</code></td>
-<td>provides a 2D plot of raw data, fixations and AOIs</td>
-</tr>
-<tr class="odd">
-<td>7.</td>
-<td>Saccade detection</td>
-<td><code>VTI_saccade()</code></td>
-<td>Working in basic form - provides summary of velocity, start/end,
-duration, etc</td>
-</tr>
-<tr class="even">
-<td>8.</td>
-<td>velocity-based fixations</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>9.</td>
-<td>scan paths …</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+| Implemented functions | Description                                                                                                |
+|-----------------------|------------------------------------------------------------------------------------------------------------|
+| `combine_eyes()`      | Combines binocular data (i.e., average or “best eye”)                                                      |
+| `interpolate()`       | Interpolates data across gaps; provides a summary report of repair                                         |
+| `smoother()`          | smooths data for use in saccade algorithms                                                                 |
+| `fix_dispersion()`    | Dispersion algorithm for fixation detection                                                                |
+| `VTI_saccade()`       | Velocity threshold algorithm for saccade detection. Provides summary of velocity, start/end, duration, etc |
+| `AOI_time()`          | Time on AOIs; works with rectangular and circular AOIs; works with raw and fixation data                   |
+| `AOI_seq()`           | Detect the sequence in which AOIs were entered in a trial                                                  |
+| `spatial_plot()`      | provides a 2D plot of raw data, fixations, saccades, and AOIs                                              |
+| `seq_plot()`          | provides a 2D plot of raw data in one trial. Data can be split into time bins                              |
 
 ## How to use eyetools (work in progress)
 
@@ -104,15 +44,19 @@ duration, etc</td>
 
 You can install eyetools using the following code:
 
-    if (!require(devtools)) {
-      install.packages("devtools")
-      library(devtools)
-    }
-    install_github("tombeesley/eyetools")
+``` r
+if (!require(devtools)) {
+  install.packages("devtools")
+  library(devtools)
+}
+install_github("tombeesley/eyetools")
+```
 
 and then load it:
 
-    library(eyetools)
+``` r
+library(eyetools)
+```
 
 ### The format of raw data
 
@@ -121,7 +65,9 @@ functions in eyetools. This format is 4 columns of data, with each row
 representing a sample. The four columns are: time, x, y, and trial. You
 can see an example with the built in data sets:
 
-    example_raw_sac
+``` r
+example_raw_sac
+```
 
     ## # A tibble: 32,608 × 4
     ##     time     x     y trial
@@ -151,7 +97,9 @@ repair. eyetools has an `interpolation()` function you can use to do
 this. It will produce a report of how successful the repair was in terms
 of the missing data before and after interpolation:
 
-    eyetools::interpolate(example_raw_sac, report = TRUE)
+``` r
+eyetools::interpolate(example_raw_sac, report = TRUE)
+```
 
     ## [[1]]
     ## # A tibble: 32,608 × 4
@@ -175,27 +123,33 @@ of the missing data before and after interpolation:
     ##                 <dbl>              <dbl>
     ## 1              0.0998             0.0952
 
-    raw_data <- eyetools::interpolate(example_raw_sac) # store as new object
+``` r
+raw_data <- eyetools::interpolate(example_raw_sac) # store as new object
+```
 
 We can also apply a smoothing function (`smoother()`) over the data,
 which is particularly important for the analysis of saccadic velocities.
 
-    smooth_data <- eyetools::smoother(example_raw_sac) 
+``` r
+smooth_data <- eyetools::smoother(example_raw_sac) 
+```
 
-    library(tidyverse)
+``` r
+library(tidyverse)
 
-    r <- filter(raw_data, trial == 2)
-    s <- filter(smooth_data, trial == 2)
+r <- filter(raw_data, trial == 2)
+s <- filter(smooth_data, trial == 2)
 
-    ggplot() +
-      geom_line(data = r, 
-                aes(x = time, y = y),
-                colour = "red") +
-      geom_line(data = s, 
-                aes(x = time, y = y),
-                colour = "blue")
+ggplot() +
+  geom_line(data = r, 
+            aes(x = time, y = y),
+            colour = "red") +
+  geom_line(data = s, 
+            aes(x = time, y = y),
+            colour = "blue")
+```
 
-![](man/figures/unnamed-chunk-7-1.png)
+![](man/figures/unnamed-chunk-7-1.png)<!-- -->
 
 ### Processing fixations
 
@@ -203,15 +157,17 @@ The function `fix_dispersion()` is a dispersion-based algorithm for
 identifying fixations, based on the algorithm described in Salvucci and
 Goldberg (2000). Passing raw data to this will return a data frame with
 the fixations ordered by trial and by fixation sequence, with the
-averaged x and y coordinates, timestamps and duration. The “min\_dur”
+averaged x and y coordinates, timestamps and duration. The “min_dur”
 parameter will restrict to fixations over a certain duration. The
-“disp\_tol” parameter sets the tolerance for the dispersion of data
+“disp_tol” parameter sets the tolerance for the dispersion of data
 within a fixation. Exploratory analysis of the data will be needed to
 find suitable values for these.
 
-    raw_data_f <- filter(raw_data, trial <= 3) # get a sample of trials
+``` r
+raw_data_f <- filter(raw_data, trial <= 3) # get a sample of trials
 
-    fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
+fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
+```
 
     ##    trial fix_n start  end duration    x   y prop_NA min_dur disp_tol
     ## 1      1     1     0  230      230  937 535   0.000     120      100
@@ -236,20 +192,22 @@ find suitable values for these.
 The function `spatial_plot()` is a wrapper for a series of ggplot
 commands to plot both raw data and fixation summaries.
 
-    library(patchwork)
-    # patchwork is used here to plot adjacent figures
+``` r
+library(patchwork)
+# patchwork is used here to plot adjacent figures
 
-    t_raw <- filter(example_raw_sac, trial == 9)
+t_raw <- filter(example_raw_sac, trial == 9)
 
-    # process fixations
-    t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-    raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
-    fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
+raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
+fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
 
-    raw_plot/fix_plot # combined plot with patchwork
+raw_plot/fix_plot # combined plot with patchwork
+```
 
-![](man/figures/unnamed-chunk-9-1.png)
+![](man/figures/unnamed-chunk-9-1.png)<!-- -->
 
 ### Assessing time on areas of interest
 
@@ -257,23 +215,27 @@ The function `AOI_time()` can be used to calculate the time spent on
 areas of interest. Areas of interest need to be defined by the x and y
 centre points, and the width and height in pixels:
 
-    AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
-    colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
+``` r
+AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
 
-    AOI_regions[1,] <- c(960, 540, 300, 300) # X, Y, W, H - square
-    AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
-    AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[1,] <- c(960, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
+```
 
 `AOI_time()` uses the fixation data as input to the function. In this
 example we are finding the time spent in 3 rectangular regions across
 the first 10 trials:
 
-    t_raw <- filter(example_raw_sac, between(trial,1,10))
+``` r
+t_raw <- filter(example_raw_sac, between(trial,1,10))
 
-    # process fixations
-    t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-    AOI_time(t_fix, AOIs = AOI_regions)
+AOI_time(t_fix, AOIs = AOI_regions)
+```
 
     ##    trial AOI_1 AOI_2 AOI_3
     ## 1      1   230   337   537
@@ -289,54 +251,62 @@ the first 10 trials:
 
 We can include the AOIs within our `spatial_plot()`:
 
-    t_raw <- filter(example_raw_sac, trial == 9) # single trial for plotting purposes
+``` r
+t_raw <- filter(example_raw_sac, trial == 9) # single trial for plotting purposes
 
-    # process fixations
-    t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-    spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+```
 
-![](man/figures/unnamed-chunk-12-1.png)
+![](man/figures/unnamed-chunk-12-1.png)<!-- -->
 
 We can also define AOIs as circles by specifying the radius in the 3rd
 column and setting the 4th column to NA:
 
-    AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
-    colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
+``` r
+AOI_regions <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
 
-    AOI_regions[1,] <- c(960, 540, 150, NA) # X, Y, R - circle
-    AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
-    AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[1,] <- c(960, 540, 150, NA) # X, Y, R - circle
+AOI_regions[2,] <- c(200, 540, 300, 300) # X, Y, W, H - square
+AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
 
-    t_raw <- filter(example_raw_sac, between(trial,1,10))
+t_raw <- filter(example_raw_sac, between(trial,1,10))
 
-    # process fixations
-    t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-    spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+```
 
-![](man/figures/unnamed-chunk-13-1.png)
+![](man/figures/unnamed-chunk-13-1.png)<!-- -->
 
-Circular AOIs are also handled by AOI\_time and will produce different
+Circular AOIs are also handled by AOI_time and will produce different
 results to comparable rectangular AOIs. Here fixation 5 falls outside of
 the circular AOI, but within the region of the rectangular AOI:
 
-    AOI_regions <- data.frame(matrix(nrow = 2, ncol = 4))
-    colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
+``` r
+AOI_regions <- data.frame(matrix(nrow = 2, ncol = 4))
+colnames(AOI_regions) <- c("x", "y", "width_radius", "height")
 
-    AOI_regions[1,] <- c(960, 540, 150, NA) # X, Y, R - circle in centre
-    AOI_regions[2,] <- c(960, 540, 300, 300) # X, Y, W, H - square in centre
+AOI_regions[1,] <- c(960, 540, 150, NA) # X, Y, R - circle in centre
+AOI_regions[2,] <- c(960, 540, 300, 300) # X, Y, W, H - square in centre
 
-    t_raw <- filter(example_raw_sac, trial == 13)
+t_raw <- filter(example_raw_sac, trial == 13)
 
-    # process fixations
-    t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+# process fixations
+t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-    spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+```
 
-![](man/figures/unnamed-chunk-14-1.png)
+![](man/figures/unnamed-chunk-14-1.png)<!-- -->
 
-    AOI_time(t_fix, AOIs = AOI_regions)
+``` r
+AOI_time(t_fix, AOIs = AOI_regions)
+```
 
     ##    trial AOI_1 AOI_2
     ## 13    13   180   330
@@ -351,11 +321,13 @@ can be set if known, or can be approximated using the timestamps in the
 data. The threshold determines the degrees of visual angle per second
 needed to indicate the presence of a saccadic eye-movement.
 
-    t_raw <- filter(example_raw_sac, between(trial,1,10))
+``` r
+t_raw <- filter(example_raw_sac, between(trial,1,10))
 
-    t_smooth <- smoother(t_raw)
+t_smooth <- smoother(t_raw)
 
-    VTI_saccade(t_smooth, sample_rate = 300)
+VTI_saccade(t_smooth, sample_rate = 300)
+```
 
     ##    trialNumber sac_n start  end duration  origin_x origin_y terminal_x
     ## 1            1     1   223  287       64  870.3588 527.6547   177.1630
@@ -403,12 +375,14 @@ needed to indicate the presence of a saccadic eye-movement.
 Saccadic eye movements can be plotted alongside other data using the
 `spatial_plot()` function:
 
-    t_smooth <- filter(t_smooth, trial == 8)
+``` r
+t_smooth <- filter(t_smooth, trial == 8)
 
-    t_fix <- fix_dispersion(t_smooth, disp_tol = 100, min_dur = 150)
+t_fix <- fix_dispersion(t_smooth, disp_tol = 100, min_dur = 150)
 
-    t_sac <- VTI_saccade(t_smooth, sample_rate = 300, threshold = 100)
+t_sac <- VTI_saccade(t_smooth, sample_rate = 300, threshold = 100)
 
-    spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
+spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
+```
 
-![](man/figures/unnamed-chunk-16-1.png)
+![](man/figures/unnamed-chunk-16-1.png)<!-- -->

@@ -1,3 +1,7 @@
+---
+output: github_document
+---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
@@ -16,25 +20,27 @@ knitr::opts_chunk$set(echo = TRUE,
 
 **eyetools** is a package that provides a set of simple tools that will facilitate common steps in the processing and analysis of eye data. It is intended for use with data from psychological experiments. The idea is to have a workflow which is aided by these functions, going from processing of the raw data, to extraction of event related data (i.e., fixations, saccades), to summarising those data at the trial level (e.g., time on areas of interest). 
 
-**Warning - still in experimental form! Please check results carefully**
+**Warning - still in somewhat experimental form! Please check results carefully**
 
 to install: `devtools::install_github("tombeesley/eyetools")`
 
 It is free to use under the GNU General Public Licence..
 
-"Roadmap" for functions:
+Available functions:
 
-|order | process | implemented function(s) | comment
-|-|-|-|-|
-|1.| combine binocular data | `combine_eyes()` | works: either average or "best eye" |
-|2.| interpolation | `interpolate()` | working and provides a summary report of repair |
-|3.| smoothing | `smoother()` | working |
-|4.| dispersion-based fixations  | `fix_dispersion()` | working and pretty fast - needs thorough checking |
-|5.| area of interest analysis   | `AOI_time()` | working with both rectangular and circular AOIs |
-|6.| Visualisations - heatmaps, fixation plots, etc  | `spatial_plot()` | provides a 2D plot of raw data, fixations and AOIs |
-|7.| Saccade detection  | `VTI_saccade()` | Working in basic form - provides summary of velocity, start/end, duration, etc |
-|8.| velocity-based fixations | | |
-|9.| scan paths ...  | | |
+| Implemented functions | Description |
+|-|-|
+| `combine_eyes()` | Combines binocular data (i.e., average or "best eye") |
+| `interpolate()` | Interpolates data across gaps; provides a summary report of repair |
+| `smoother()` | smooths data for use in saccade algorithms |
+| `fix_dispersion()` | Dispersion algorithm for fixation detection|
+| `VTI_saccade()` | Velocity threshold algorithm for saccade detection. Provides summary of velocity, start/end, duration, etc 
+| `AOI_time()` | Time on AOIs; works with rectangular and circular AOIs; works with raw and fixation data |
+| `AOI_seq()` | Detect the sequence in which AOIs were entered in a trial|
+|`spatial_plot()` | provides a 2D plot of raw data, fixations, saccades, and AOIs |
+| `seq_plot()` | provides a 2D plot of raw data in one trial. Data can be split into time bins |
+
+
 
 ## How to use eyetools (work in progress)
 
