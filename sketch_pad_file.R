@@ -128,15 +128,13 @@ d_raw$time
 
 d_raw_N <- d_raw %>% filter(time == 61000)
 
-<<<<<<< HEAD
+
 spatial_plot(raw_data = d_raw_N,
              AOIs = AOIs_WM)
-=======
+
 AOI_in <- eyetools::AOIs_WM
 AOI_in[4,4] <- NA
 
-
->>>>>>> 2c885122466b442f37615357c203d6a19a203cc7
 
 # add AOI regions and screenshot
 seq_plot(raw_data = d_raw,
