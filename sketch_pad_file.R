@@ -122,9 +122,14 @@ AOI_time(raw_data = d_raw, AOIs = AOIs_WM) # use raw data, no sample rate
 d_sac <- VTI_saccade(d_raw)
 spatial_plot(raw_data = d_raw,
              fix_data = d_fix,
+             AOIs = AOIs_WM,bg_image = "WM_background.png")
+
+d_raw$time
+
+d_raw_N <- d_raw %>% filter(time == 61000)
+
+spatial_plot(raw_data = d_raw_N,
              AOIs = AOIs_WM)
-
-
 
 # add AOI regions and screenshot
 spatial_plot(raw_data = d_raw,
