@@ -1,3 +1,5 @@
+# eyetools 0.5.1
+
 # eyetools 0.5.0
 * added new function seq_plot()
 * presents raw data with time component
