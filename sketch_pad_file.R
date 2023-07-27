@@ -122,7 +122,8 @@ AOI_time(raw_data = d_raw, AOIs = AOIs_WM) # use raw data, no sample rate
 d_sac <- VTI_saccade(d_raw)
 spatial_plot(raw_data = d_raw,
              fix_data = d_fix,
-             AOIs = AOIs_WM,bg_image = "WM_background.png")
+             AOIs = AOIs_WM,
+             bg_image = "WM_background.png")
 
 d_raw$time
 

@@ -48,7 +48,7 @@ spatial_plot <- function(raw_data = NULL,
   final_g <- ggplot()
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- addBGimg(bg_image, res, final_g)
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
 
   # PLOT AOIs
   if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
@@ -191,7 +191,7 @@ add_AOIs <- function(AOIs, ggplot_in){
 }
 
 # function to add background image
-add_BGimg <- function(bg_image_in, ggplot_in){
+add_BGimg <- function(bg_image_in, res, ggplot_in){
   img <- magick::image_read(bg_image_in)
   ggplot_in <-
     ggplot_in +
