@@ -1,6 +1,13 @@
 ---
 output: github_document
 ---
+<!-- 
+
+README.md is generated from README.Rmd. Please edit README.Rmd 
+
+If you use index.Rmd or README.Rmd it's your responsibility to knit the document to create the corresponding .md. pkgdown does not do this for you because it only touches files in the doc/ directory.
+
+-->
 
 
 ```{r setup, include=FALSE}

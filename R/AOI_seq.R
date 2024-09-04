@@ -6,8 +6,8 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
-#'
-#' @return a dataframe containing the sequence of entries into AOIs on each trial
+#' @param long Whether to return the AOI fixations in long or wide format. Defaults to long
+#' @return a long format dataframe containing the sequence of entries into AOIs on each trial
 #' @export
 #'
 #' @examples
@@ -15,12 +15,14 @@
 #' AOI_seq(fix_d, eyetools::AOIs_WM)
 #'
 #' @importFrom dplyr between
+#' @importFrom tidyr separate_longer_delim
 #'
 
 AOI_seq <- function(data,
                     AOIs,
                     AOI_names = NULL,
-                    sample_rate = NULL) {
+                    sample_rate = NULL,
+                    long = TRUE) {
 
   # split data by trial
   proc_data <- sapply(split(data, data$trial),
@@ -30,6 +32,10 @@ AOI_seq <- function(data,
 
   data <- data.frame(trial = unique(data$trial),
                      AOI_entry_seq = proc_data)
+
+  if (long == TRUE) {
+    data <- separate_longer_delim(data, AOI_entry_seq, delim = ";")
+  }
 
 
   return(data)

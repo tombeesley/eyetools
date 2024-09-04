@@ -4,7 +4,7 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL)
+AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE)
 }
 \arguments{
 \item{data}{A dataframe with fixation data (from fix_dispersion) or raw data.}
@@ -14,9 +14,11 @@ AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL)
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 
 \item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
+
+\item{long}{Whether to return the AOI fixations in long or wide format. Defaults to long}
 }
 \value{
-a dataframe containing the sequence of entries into AOIs on each trial
+a long format dataframe containing the sequence of entries into AOIs on each trial
 }
 \description{
 Analyses the sequence of entries into defined AOI regions across trials. Works with fixation data or raw data as the input.

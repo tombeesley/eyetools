@@ -19,7 +19,7 @@ fix_dispersion(
 
 \item{disp_tol}{Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period}
 
-\item{run_interp}{include a call to eyetools::interpolation on each trial}
+\item{run_interp}{include a call to eyetools::interpolate on each trial}
 
 \item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation}
 }

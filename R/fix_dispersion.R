@@ -9,7 +9,7 @@
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyeproc)
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-#' @param run_interp include a call to eyetools::interpolation on each trial
+#' @param run_interp include a call to eyetools::interpolate on each trial
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
