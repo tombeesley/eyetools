@@ -2,8 +2,9 @@ Type: Package
 Package: eyetools
 Title: Tools for eye data analysis
 Version: 0.5.1
-Author: Tom Beesley
-Maintainer: Tom Beesley <t.beesley@lancaster.ac.uk>
+Authors@R: c(
+    person("Beesley", "Tom", email = "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
+    person("Ivory", "Matthew", email = "matthew.ivory@lancaster.ac.uk", role = "ctb"))
 Description: A set of tools for eye data processing. The intended flow is
     from data processing, to fixation analysis, to data visualisation and
     trial level summaries.
