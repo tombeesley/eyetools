@@ -15,8 +15,6 @@
 #' @export
 #' @examples fix_dispersion(example_raw_fix, disp_tol = 150)
 #'
-#' @importFrom zoo na.trim
-#' @importFrom utils tail
 #' @importFrom pbapply pblapply
 
 fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25) {
@@ -41,7 +39,16 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
   if (run_interp){data <- eyetools::interpolate(data)}
   data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
 
-  data <- na.trim(data) # remove leading and trailing NAs
+  #get first row number where x and y is NOT NA
+  min_x <- min(which(!is.na(data$x)))
+  min_y <- min(which(!is.na(data$y)))
+  #then get max row number
+  max_x <- max(which(!is.na(data$x)))
+  max_y <- max(which(!is.na(data$y)))
+
+  #remove the leading and trailing NAs, uses min(min_1, min_2) in case one is present. Shouldn't be the case, but just ensures someone doesn't wink?
+  data <- data[min(min_x, min_y):max(max_x, max_y),]
+
   data$fix_num  <- NA # add a column that stores the fix number
 
   first_ts <- 1 # first timestamp of window

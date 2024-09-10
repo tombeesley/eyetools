@@ -23,14 +23,12 @@ Imports:
     rdist,
     rlang,
     stats,
-    tidyr,
     utils,
     zoo
 Suggests: 
     knitr,
     rmarkdown
-VignetteBuilder: 
-    knitr
+VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

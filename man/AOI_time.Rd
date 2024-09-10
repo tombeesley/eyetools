@@ -34,6 +34,4 @@ fix_d <- fix_dispersion(eyetools::example_raw_WM)
 AOI_time(fix_data = fix_d, AOIs = eyetools::AOIs_WM)
 AOI_time(raw_data = eyetools::example_raw_WM, AOIs = eyetools::AOIs_WM, sample_rate = 120)
 
-#' @importFrom dplyr between
-
 }
