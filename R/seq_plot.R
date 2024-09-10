@@ -21,6 +21,8 @@
 #' @examples
 #'
 #' @import ggplot2
+#' @importFrom utils head
+#' @importFrom stats median
 #'
 #'
 

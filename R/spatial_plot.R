@@ -27,7 +27,6 @@
 #'              sac_data = d_sac)
 #'
 #'
-#' @importFrom magrittr %>%
 #' @import ggplot2
 #' @import dplyr
 #' @import ggforce
