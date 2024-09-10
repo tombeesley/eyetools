@@ -17,4 +17,13 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Beesley Tom \email{t.beesley@lancaster.ac.uk}
+
+Other contributors:
+\itemize{
+  \item Ivory Matthew \email{matthew.ivory@lancaster.ac.uk} [contributor]
+}
+
+}
 \keyword{internal}

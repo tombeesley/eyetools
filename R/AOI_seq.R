@@ -14,9 +14,6 @@
 #' fix_d <- fix_dispersion(eyetools::example_raw_WM)
 #' AOI_seq(fix_d, eyetools::AOIs_WM)
 #'
-#' @importFrom dplyr between
-#' @importFrom tidyr separate_longer_delim
-#'
 
 AOI_seq <- function(data,
                     AOIs,
@@ -34,7 +31,17 @@ AOI_seq <- function(data,
                      AOI_entry_seq = proc_data)
 
   if (long == TRUE) {
-    data <- separate_longer_delim(data, AOI_entry_seq, delim = ";")
+    #data <- separate_longer_delim(data, AOI_entry_seq, delim = ";")
+
+    split_list <- strsplit(data$AOI_entry_seq,';')
+
+    split_list_names <- setNames(split_list, data$trial)
+
+    data <- stack(split_list_names)
+
+    data <- data.frame(trial = data$ind,
+           AOI_entry_seq = data$value)
+
   }
 
 
@@ -53,9 +60,9 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
 
     if (sum(!is.na(AOIs[a,])) == 4) {
       # square AOI
-      aoi_entries[,a] <- (between(trial_data$x, AOIs[a,1]-AOIs[a,3]/2, AOIs[a,1]+AOIs[a,3]/2) &
-                    between(trial_data$y, AOIs[a,2]-AOIs[a,4]/2, AOIs[a,2]+AOIs[a,4]/2))
-    } else if (sum(!is.na(AOIs[a,])) == 3) {
+      aoi_entries[,a] <- ((trial_data$x >= AOIs[a,1]-AOIs[a,3]/2 & trial_data$x <= AOIs[a,1]+AOIs[a,3]/2) &
+                            (trial_data$y >= AOIs[a,2]-AOIs[a,4]/2 & trial_data$y <= AOIs[a,2]+AOIs[a,4]/2))
+      } else if (sum(!is.na(AOIs[a,])) == 3) {
       # circle AOI
       aoi_entries[,a] <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
     } else {
