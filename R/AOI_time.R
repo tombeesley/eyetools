@@ -16,8 +16,6 @@
 #' AOI_time(fix_data = fix_d, AOIs = eyetools::AOIs_WM)
 #' AOI_time(raw_data = eyetools::example_raw_WM, AOIs = eyetools::AOIs_WM, sample_rate = 120)
 #'
-#'#' @importFrom dplyr between
-#'
 
 AOI_time <- function(fix_data = NULL, raw_data = NULL, AOIs, AOI_names = NULL, sample_rate = NULL) {
 
@@ -107,8 +105,8 @@ AOI_time_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
 
     if (sum(!is.na(AOIs[a,])) == 4) {
       # square AOI
-      xy_hits <- (between(trial_data$x, AOIs[a,1]-AOIs[a,3]/2, AOIs[a,1]+AOIs[a,3]/2) &
-                    between(trial_data$y, AOIs[a,2]-AOIs[a,4]/2, AOIs[a,2]+AOIs[a,4]/2))
+      xy_hits <- ((trial_data$x >= AOIs[a,1]-AOIs[a,3]/2 & trial_data$x <= AOIs[a,1]+AOIs[a,3]/2) &
+                    (trial_data$y >= AOIs[a,2]-AOIs[a,4]/2 & trial_data$y <= AOIs[a,2]+AOIs[a,4]/2))
     } else if (sum(!is.na(AOIs[a,])) == 3) {
       # circle AOI
       xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
