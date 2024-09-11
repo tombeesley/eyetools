@@ -6,7 +6,7 @@
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
-#' @param minDur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occuring at the boundary of velocity threshold
+#' @param minDur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold
 #'
 #' @importFrom stats dist aggregate
 #' @importFrom pbapply pblapply
@@ -81,8 +81,20 @@ VTI_saccade_trial <- function(data, sample_rate, threshold, minDur){
     events <- split(data, data$event_n) # split into the different events
     trial_sac_store <- lapply(events, summarise_saccades)
     trial_sac_store <- do.call(rbind.data.frame,trial_sac_store)
-    trial_sac_store <- trial_sac_store[trial_sac_store[,9] >= minDur,]
-    trial_sac_store$sac_n <- 1:nrow(trial_sac_store)
+
+    if (nrow(trial_sac_store[trial_sac_store[,9] >= minDur,]) == 0) { #test for saccades of minimum length
+      message(paste("No saccades of minimum duration detected for trial", trialNumber))
+
+      trial_sac_store <- matrix(NA,1,10)
+
+    } else {
+      trial_sac_store <- trial_sac_store[trial_sac_store[,9] >= minDur,]
+      trial_sac_store$sac_n <- 1:nrow(trial_sac_store)
+
+
+    }
+
+
   } else {
     trial_sac_store <- matrix(NA,1,10)
 
