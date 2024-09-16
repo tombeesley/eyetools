@@ -14,7 +14,9 @@
 #' @export
 #'
 #' @examples
-#' VTI_saccade(example_raw_sac[example_raw_sac$trial<=10,])
+#' \dontrun{
+#' VTI_saccade(eyetools::example_raw_sac[eyetools::example_raw_sac$trial<=10,])
+#' }
 
 VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
 
