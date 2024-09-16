@@ -24,7 +24,7 @@
 #' fix_inverse_saccade(example_raw_WM[example_raw_WM$trial == 9,])
 #'
 #' # multiple trials:
-#' data <- rbind(example_raw_WM[example_raw_WM$trial == 3,],example_raw_WM[example_raw_WM$trial == 4,])
+#' data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3,10),])
 #'
 #' fix_inverse_saccade(data)
 
@@ -42,14 +42,14 @@ fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_d
   }
 
   data <- split(data, data$trial)
-  data_fix <- pbapply::pblapply(data, VTI_saccade_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol)
+  data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol)
   data_fix <- do.call(rbind.data.frame,data_fix)
   data_fix <- data_fix[,c(7,6,1,2,5,3,4,8, 9)] # reorder cols
   row.names(data_fix) <- NULL # remove the row names
   return(as.data.frame(data_fix))
 }
 
-VTI_saccade_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol){
+fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol){
 
   if (run_interp){
     data <- eyetools::interpolate(data)
