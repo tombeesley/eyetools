@@ -14,7 +14,9 @@
 #' @export
 #'
 #' @examples
-#' VTI_saccade(example_raw_sac[example_raw_sac$trial<=10,])
+#' \dontrun{
+#' VTI_saccade(eyetools::example_raw_sac[eyetools::example_raw_sac$trial<=10,])
+#' }
 
 VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
 
@@ -82,15 +84,13 @@ VTI_saccade_trial <- function(data, sample_rate, threshold, min_dur){
     trial_sac_store <- lapply(events, summarise_saccades)
     trial_sac_store <- do.call(rbind.data.frame,trial_sac_store)
 
-    if (nrow(trial_sac_store[trial_sac_store[,9] >= min_dur,]) == 0) { #test for saccades of minimum length
-      message(paste("No saccades of minimum duration detected for trial", trialNumber))
 
+    if (nrow(trial_sac_store[trial_sac_store[,9] >= min_dur,]) == 0) { #test for saccades of minimum length
       trial_sac_store <- matrix(NA,1,10)
 
     } else {
       trial_sac_store <- trial_sac_store[trial_sac_store[,9] >= min_dur,]
       trial_sac_store$sac_n <- 1:nrow(trial_sac_store)
-
 
     }
 
@@ -104,6 +104,7 @@ VTI_saccade_trial <- function(data, sample_rate, threshold, min_dur){
                                  "mean_velocity", "peak_velocity", "duration", "sac_n")
   trial_sac_store <- cbind(trial_sac_store, trialNumber) # add trial number
   return(trial_sac_store)
+
 
 }
 

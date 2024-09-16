@@ -17,6 +17,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' #trying to draw a screenshot under a spatial plot
 #' d_raw <- example_raw_WM
 #' d_raw <- d_raw[d_raw$trial==10,] # take just one trial
@@ -25,7 +26,7 @@
 #' spatial_plot(raw_data = d_raw,
 #'              fix_data = d_fix,
 #'              sac_data = d_sac)
-#'
+#' }
 #'
 #' @import ggplot2
 #' @import dplyr
