@@ -23,33 +23,28 @@ profvis ({
 })
 
 
-# get raw data for just one trial
-library(tidyverse)
-
-example_mac_error
-
-fix_dispersion(example_mac_error)
-
-t_raw <- example_raw_WM
-t_raw <- filter(example_raw_WM, between(trial, 1, 220))
-
-# # process fixations
-fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
-
-t_interpolate <- interpolate(t_raw)
-
-t_smoothed <- smoother(t_interpolate)
-
-t_sac <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
-
-spatial_plot(raw_data = t_raw, fix_data = t_fix,sac_data = t_sac)
-
-# flatten trial list
-
-t <- do.call(rbind.data.frame,t_sac_new)
 
 
+data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3,10),])
 
+data_i <- interpolate(data)
+
+data_i_s <- smoother(data_i)
+
+t_sac <- VTI_saccade(data_i_s, threshold = 150)
+
+t_fix <- fix_dispersion(data_i_s, disp_tol = 100, min_dur = 150)
+t_fix_s <- fix_inverse_saccade(data_i_s, disp_tol = 100, min_dur = 150)
+
+t_fix$TT <- 1
+
+dP <- spatial_plot(raw_data = data_i,
+                   fix_data = t_fix)
+
+dV <- spatial_plot(raw_data = data_i,
+                   fix_data = t_fix_s)
+
+dP + dV
 
 # AOI analysis testing
 
