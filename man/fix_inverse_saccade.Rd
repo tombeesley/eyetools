@@ -11,7 +11,8 @@ fix_inverse_saccade(
   min_dur = 150,
   min_dur_sac = 20,
   disp_tol = 100,
-  run_interp = TRUE
+  run_interp = TRUE,
+  progress = TRUE
 )
 }
 \arguments{
@@ -44,7 +45,7 @@ Returns a summary of the saccades found per trial, including start and end coord
 fix_inverse_saccade(example_raw_WM[example_raw_WM$trial == 9,])
 
 # multiple trials:
-data <- rbind(example_raw_WM[example_raw_WM$trial == 3,],example_raw_WM[example_raw_WM$trial == 4,])
+data <- rbind(example_raw_WM[example_raw_WM$trial \%in\% c(3,10),])
 
 fix_inverse_saccade(data)
 }
