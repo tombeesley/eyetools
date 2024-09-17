@@ -13,7 +13,9 @@
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param run_interp include a call to eyetools::interpolate on each trial.
-
+#' @param progress Display a progress bar
+#'
+#'
 #' @importFrom stats dist aggregate
 #' @importFrom pbapply pblapply
 #' @return a data frame giving the fixations found using an inverse-saccade algorithm found by trial.
@@ -28,7 +30,7 @@
 #'
 #' fix_inverse_saccade(data)
 
-fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE){
+fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, progress = TRUE){
 
   if (run_interp == FALSE & sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
     stop("No interpolation carried out and NAs detected in your data. Either run interpolation via run_interp = TRUE, or check your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
@@ -42,7 +44,13 @@ fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_d
   }
 
   data <- split(data, data$trial)
-  data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol)
+
+  if(progress) {
+    data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol)
+  } else {
+    data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol)
+
+  }
   data_fix <- do.call(rbind.data.frame,data_fix)
   data_fix <- data_fix[,c(7,6,1,2,5,3,4,8, 9)] # reorder cols
   row.names(data_fix) <- NULL # remove the row names

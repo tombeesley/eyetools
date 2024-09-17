@@ -11,6 +11,7 @@
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param run_interp include a call to eyetools::interpolate on each trial
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
+#' @param progress Display a progress bar
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
 #' @examples fix_dispersion(example_raw_fix, disp_tol = 150)
@@ -18,11 +19,16 @@
 #' @importFrom utils tail
 #' @importFrom pbapply pblapply
 
-fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25) {
+fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25, progress = TRUE) {
 
   data <- split(data,data$trial) # create list from data by trial
   # try with progress bar
-  data_fix <- pbapply::pblapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
+  if (progress) {
+    data_fix <- pbapply::pblapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
+  } else {
+    data_fix <- lapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
+
+  }
 
   data_fix <- do.call("rbind", data_fix)
   colnames(data_fix) <- c("start", "end", "duration", "x", "y",
