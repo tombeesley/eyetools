@@ -23,6 +23,9 @@ dist_to_visual_angle(
 
 \item{screen_width_pixels}{used in conversion of pixel values. Default is 1920 pixels.}
 }
+\value{
+an equivalent-sized object to the input
+}
 \description{
 Takes a single value or vector of distances and returns the visual angle equivalent.
 }

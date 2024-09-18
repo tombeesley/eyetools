@@ -11,6 +11,14 @@ smoother(data, span = 0.1)
 
 \item{span}{From stats::loess. The parameter α which controls the degree of smoothing.}
 }
+\value{
+a dataframe of the same shape as the input data
+}
 \description{
 A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
+}
+\examples{
+
+smoother(example_raw_WM)
+
 }

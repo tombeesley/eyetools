@@ -20,9 +20,9 @@ Useful links:
 \author{
 \strong{Maintainer}: Beesley Tom \email{t.beesley@lancaster.ac.uk}
 
-Other contributors:
+Authors:
 \itemize{
-  \item Ivory Matthew \email{matthew.ivory@lancaster.ac.uk} [contributor]
+  \item Ivory Matthew \email{matthew.ivory@lancaster.ac.uk}
 }
 
 }

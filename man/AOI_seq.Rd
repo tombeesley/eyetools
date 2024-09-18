@@ -24,7 +24,7 @@ a long format dataframe containing the sequence of entries into AOIs on each tri
 Analyses the sequence of entries into defined AOI regions across trials. Works with fixation data or raw data as the input.
 }
 \examples{
-fix_d <- fix_dispersion(eyetools::example_raw_WM)
-AOI_seq(fix_d, eyetools::AOIs_WM)
+fix_d <- fixation_dispersion(example_raw_WM)
+AOI_seq(fix_d, AOIs_WM)
 
 }

@@ -30,8 +30,8 @@ a dataframe containing the time on the passed AOIs for each trial
 Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
 }
 \examples{
-fix_d <- fix_dispersion(eyetools::example_raw_WM)
-AOI_time(fix_data = fix_d, AOIs = eyetools::AOIs_WM)
-AOI_time(raw_data = eyetools::example_raw_WM, AOIs = eyetools::AOIs_WM, sample_rate = 120)
+fix_d <- fixation_dispersion(example_raw_WM)
+AOI_time(fix_data = fix_d, AOIs = AOIs_WM)
+AOI_time(raw_data = example_raw_WM, AOIs = AOIs_WM, sample_rate = 120)
 
 }
