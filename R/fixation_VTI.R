@@ -3,7 +3,7 @@
 #' Determine fixations through the removal of saccades using the velocity threshold algorithm from Salvucci & Goldberg (1996).
 #' Applies the algorithm used in VTI_saccade and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance.
 #' If they are outside this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them.
-#' Compared to fix_dispersion(), fix_inverse_saccade() is more conservative in determining a fixation as smaller saccades are discounted and following data treated as a continued fixation (assuming within pixel tolerance using disp_tol).
+#' Compared to fix_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and following data treated as a continued fixation (assuming within pixel tolerance using disp_tol).
 #' Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
@@ -24,14 +24,14 @@
 #'
 #' @examples
 #' # single trials:
-#' fix_inverse_saccade(example_raw_WM[example_raw_WM$trial == 9,])
+#' fixation_VTI(example_raw_WM[example_raw_WM$trial == 9,])
 #'
 #' # multiple trials:
 #' data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3,10),])
 #'
-#' fix_inverse_saccade(data)
+#' fixation_VTI(data)
 
-fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, smooth = FALSE, progress = TRUE){
+fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, smooth = FALSE, progress = TRUE){
 
   if (run_interp == FALSE & sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
     stop("No interpolation carried out and NAs detected in your data. Either run interpolation via run_interp = TRUE, or check your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
@@ -242,3 +242,7 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
   return(trial_fix_store)
 
 }
+
+# include for backwards compatibility with existing code
+fix_inverse_saccade <- fixation_VTI
+

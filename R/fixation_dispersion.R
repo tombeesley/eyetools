@@ -14,12 +14,12 @@
 #' @param progress Display a progress bar
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
-#' @examples fix_dispersion(example_raw_fix, disp_tol = 150)
+#' @examples fixation_dispersion(example_raw_fix, disp_tol = 150)
 #'
 #' @importFrom utils tail
 #' @importFrom pbapply pblapply
 
-fix_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25, progress = TRUE) {
+fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25, progress = TRUE) {
 
   data <- split(data,data$trial) # create list from data by trial
   # try with progress bar
@@ -160,6 +160,8 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
 }
 
 
+# include for backwards compatibility with existing code
+fix_dispersion <- fixation_dispersion
 
 
 
