@@ -24,19 +24,22 @@ profvis ({
 
 
 
+data$TT <- 1
 
-data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3,10),])
+data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3:10),])
 
 data_i <- interpolate(data)
 
 data_i_s <- smoother(data_i)
 
-t_sac <- VTI_saccade(data_i_s, threshold = 150)
+t_sac <- VTI_saccade(data_i_s, threshold = 150, )
 
 t_fix <- fix_dispersion(data_i_s, disp_tol = 100, min_dur = 150)
 t_fix_s <- fix_inverse_saccade(data_i_s, disp_tol = 100, min_dur = 150)
 
 t_fix$TT <- 1
+
+
 
 dP <- spatial_plot(raw_data = data_i,
                    fix_data = t_fix)
@@ -45,6 +48,50 @@ dV <- spatial_plot(raw_data = data_i,
                    fix_data = t_fix_s)
 
 dP + dV
+
+# getting new data for HCL task
+
+e <- read_csv("102_EG_dec.csv", col_types = cols(), col_names = FALSE) # read the data from csv
+
+e[e==-1] <- NA
+
+e <-
+  e %>%
+  select(time = X6, left_x = X1, left_y = X2,
+         right_x = X3, right_y = X4, trial = X5)
+
+# combine eyes
+e <- combine_eyes(e, "average")
+
+# mutate x/y to screen res
+e <-
+  e %>%
+  mutate(x = x*1920, y = (1-y)*1080,
+         time = round(time/1000)) %>%
+  group_by(trial) %>%
+  mutate(time = time - time[1]) %>%
+  ungroup()
+
+
+td <- read_csv("102_training.csv", col_types = cols(), col_names = FALSE)
+
+td[,c(3:6, 12, 14)]
+
+td$trial = c(1:120)
+
+td <-
+  td %>%
+  select(trial, P_cue = X3, NP_cue = X4, cue_order = X5,
+         correct_out = X6, accuracy = X12, RT = X14)
+
+e <- filter(e, trial <=100)
+td <- filter(td, trial <=100)
+
+example_raw_HCL <- e
+example_resp_HCL <- td
+
+usethis::use_data(example_raw_HCL, example_resp_HCL, overwrite = TRUE)
+
 
 # AOI analysis testing
 
