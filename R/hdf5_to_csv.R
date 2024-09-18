@@ -7,10 +7,12 @@
 #' @return A list of csv files collected from the eyetracker content, if only one eyetracking event is present, return this as a csv file
 #' @export
 #'
-#' import hdf5r
+#' @import hdf5r
 #'
 #' @examples
+#' \dontrun{
 #' hdf5_to_csv()
+#' }
 
 hdf5_to_csv <- function(filename) {
 
