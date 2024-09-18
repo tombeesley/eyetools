@@ -13,6 +13,7 @@
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param run_interp include a call to eyetools::interpolate on each trial.
+#' @param smooth include a call to eyetools::smoother on each trial
 #' @param progress Display a progress bar
 #'
 #'
@@ -30,7 +31,7 @@
 #'
 #' fix_inverse_saccade(data)
 
-fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, progress = TRUE){
+fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, smooth = TRUE, progress = TRUE){
 
   if (run_interp == FALSE & sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
     stop("No interpolation carried out and NAs detected in your data. Either run interpolation via run_interp = TRUE, or check your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
@@ -46,9 +47,9 @@ fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_d
   data <- split(data, data$trial)
 
   if(progress) {
-    data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol)
+    data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth)
   } else {
-    data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol)
+    data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth)
 
   }
   data_fix <- do.call(rbind.data.frame,data_fix)
@@ -57,10 +58,14 @@ fix_inverse_saccade <- function(data, sample_rate = NULL, threshold = 100, min_d
   return(as.data.frame(data_fix))
 }
 
-fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol){
+fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth){
 
   if (run_interp){
     data <- eyetools::interpolate(data)
+  }
+
+  if (smooth){
+    data <- eyetools::smoother(data)
   }
 
   trialNumber <- data$trial[1]
