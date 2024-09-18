@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples
-#' fix_d <- fix_dispersion(eyetools::example_raw_WM)
-#' AOI_seq(fix_d, eyetools::AOIs_WM)
+#' fix_d <- fixation_dispersion(example_raw_WM)
+#' AOI_seq(fix_d, AOIs_WM)
 #'
 #' @importFrom stats setNames complete.cases
 #' @importFrom utils stack

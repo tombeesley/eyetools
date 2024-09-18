@@ -12,9 +12,9 @@
 #' @export
 #'
 #' @examples
-#' fix_d <- fix_dispersion(eyetools::example_raw_WM)
-#' AOI_time(fix_data = fix_d, AOIs = eyetools::AOIs_WM)
-#' AOI_time(raw_data = eyetools::example_raw_WM, AOIs = eyetools::AOIs_WM, sample_rate = 120)
+#' fix_d <- fixation_dispersion(example_raw_WM)
+#' AOI_time(fix_data = fix_d, AOIs = AOIs_WM)
+#' AOI_time(raw_data = example_raw_WM, AOIs = AOIs_WM, sample_rate = 120)
 #'
 
 AOI_time <- function(fix_data = NULL, raw_data = NULL, AOIs, AOI_names = NULL, sample_rate = NULL) {

@@ -8,7 +8,7 @@
 #' @param data raw data with columns time, left_x, left_y, right_x, right_y, and trial
 #' @param method either "average" or "best_eye" - see description.
 #'
-#' @return
+#' @return a dataframe of form c("time", "x", "y", "trial")
 #' @export
 #'
 #' @examples combine_eyes(example_raw_binocular, method = "average")
