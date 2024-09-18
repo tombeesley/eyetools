@@ -1,6 +1,4 @@
-context("AOI_seq")
-
-fix_d <- eyetools::fix_dispersion(eyetools::example_raw_WM)
+fix_d <- fixation_dispersion(example_raw_WM)
 
 # a first, basic (but CONFIRMATORY) test
 testthat::expect_vector(
