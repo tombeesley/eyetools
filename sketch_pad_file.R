@@ -75,7 +75,7 @@ e <-
 
 td <- read_csv("102_training.csv", col_types = cols(), col_names = FALSE)
 
-td[,c(3:6, 12, 14)]
+td[,c(3:5, 9, 12, 14)]
 
 td$trial = c(1:120)
 
