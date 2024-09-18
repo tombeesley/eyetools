@@ -13,7 +13,7 @@
 #' @param show_fix_order label the fixations in the order they were made
 #' @param plot_header display the header title text which explains graphical features of the plot.
 #'
-#' @return
+#' @return a plot of the raw data
 #' @export
 #'
 #' @examples
@@ -23,18 +23,17 @@
 #' d_raw <- d_raw[d_raw$trial==10,] # take just one trial
 #' d_fix <- fix_dispersion(d_raw)
 #' d_sac <- VTI_saccade(d_raw)
-#' spatial_plot(raw_data = d_raw,
+#' plot_spatial(raw_data = d_raw,
 #'              fix_data = d_fix,
 #'              sac_data = d_sac)
 #' }
 #'
 #' @import ggplot2
-#' @import dplyr
 #' @import ggforce
 #' @importFrom magick image_read
 #'
 
-spatial_plot <- function(raw_data = NULL,
+plot_spatial <- function(raw_data = NULL,
                          fix_data = NULL,
                          sac_data = NULL,
                          AOIs = NULL,
@@ -112,7 +111,7 @@ spatial_plot <- function(raw_data = NULL,
   if (plot_header==TRUE){
     final_g <-
       final_g +
-      labs(title = "eyetools::spatial_plot()",
+      labs(title = "eyetools::plot_spatial()",
            subtitle = "Raw data shown as dots; Fixations shown as circles (fill = duration); \nFixation size reflects dispersion of raw data; \nAOIs shown as blue regions")
   }
 
@@ -204,3 +203,4 @@ add_BGimg <- function(bg_image_in, res, ggplot_in){
 
 }
 
+spatial_plot <- plot_spatial

@@ -19,6 +19,11 @@
 #' @export
 #'
 #' @examples
+#'# plot the raw data
+#'plot_seq(raw_data = example_raw_WM[example_raw_WM$trial == 21,])
+#'
+#' # plot raw data with bins
+#'plot_seq(raw_data = example_raw_WM[example_raw_WM$trial == 21,], bin_time = 500)
 #'
 #' @import ggplot2
 #' @importFrom utils head
@@ -26,7 +31,7 @@
 #'
 #'
 
-seq_plot <- function(raw_data = NULL,
+plot_seq <- function(raw_data = NULL,
                      trial_number = NULL,
                      AOIs = NULL,
                      bg_image = NULL,
@@ -100,7 +105,7 @@ seq_plot <- function(raw_data = NULL,
   if (plot_header==TRUE){
     final_g <-
       final_g +
-      labs(title = "eyetools::seq_plot()",
+      labs(title = "eyetools::plot_seq()",
            subtitle = "Raw data shown as dots; \nAOIs shown as blue regions")
   }
 
@@ -158,3 +163,5 @@ add_raw_time_seq <- function(dataIn, ggplot_in){
 
   return(ggplot_in)
 }
+
+seq_plot <- plot_seq
