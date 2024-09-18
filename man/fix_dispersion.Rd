@@ -9,7 +9,8 @@ fix_dispersion(
   min_dur = 150,
   disp_tol = 100,
   run_interp = TRUE,
-  NA_tol = 0.25
+  NA_tol = 0.25,
+  progress = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ fix_dispersion(
 \item{run_interp}{include a call to eyetools::interpolate on each trial}
 
 \item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation}
+
+\item{progress}{Display a progress bar}
 }
 \value{
 a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.

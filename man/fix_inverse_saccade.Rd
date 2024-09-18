@@ -29,6 +29,8 @@ fix_inverse_saccade(
 \item{disp_tol}{Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period}
 
 \item{run_interp}{include a call to eyetools::interpolate on each trial.}
+
+\item{progress}{Display a progress bar}
 }
 \value{
 a data frame giving the fixations found using an inverse-saccade algorithm found by trial.
