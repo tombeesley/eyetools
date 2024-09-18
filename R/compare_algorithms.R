@@ -13,7 +13,7 @@
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period. Supplied to both algorithms
 #' @param run_interp include a call to eyetools::interpolate on each trial. Supplied to the VTI algorithm
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation. Supplied to the dispersion algorithm
-#'
+#' @param smooth include a call to eyetools::smoother on each trial. Supplied to the VTI algorithm
 #'
 #' @return a list of the fixation data, correlation output, and data used for plotting
 #' @export
@@ -28,11 +28,11 @@
 #' @import ggplot2
 #'
 
-compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, run_interp = TRUE) {
+compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, run_interp = TRUE, smooth = TRUE) {
 
   data_split <- split(data, data$trial)
 
-  data_list <- pbapply::pblapply(data_split, get_fixations, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp)
+  data_list <- pbapply::pblapply(data_split, get_fixations, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth)
 
   data_list_temp <- data_list[[1]]
   # get the data from comparing the two algorithms
@@ -73,9 +73,9 @@ return(data_list_out)
 
 }
 
-get_fixations <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, plot_fix, cor_test, percentage) {
+get_fixations <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth) {
 
-  data_vti <- fix_inverse_saccade(data, sample_rate = sample_rate, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, run_interp = run_interp, progress = FALSE)
+  data_vti <- fix_inverse_saccade(data, sample_rate = sample_rate, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, run_interp = run_interp, smooth = smooth)
   data_disp <- fix_dispersion(data, min_dur = min_dur, disp_tol = disp_tol, NA_tol = NA_tol, progress = FALSE)
 
   data$time <- data$time - min(data$time)
