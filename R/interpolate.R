@@ -9,7 +9,7 @@
 #' @param method "approx" for linear interpolation or "spline" for cubic spline interpolation
 #' @param report default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.
 #'
-#' @return
+#' @return a dataframe of the same shape of the input data
 #' @export
 #'
 #' @examples interpolate(example_raw_fix, maxgap = 20)
