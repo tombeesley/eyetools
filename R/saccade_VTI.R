@@ -15,10 +15,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' VTI_saccade(eyetools::example_raw_sac[eyetools::example_raw_sac$trial<=10,])
+#' saccade_VTI(eyetools::example_raw_sac[eyetools::example_raw_sac$trial<=10,])
 #' }
 
-VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
+saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
 
   # sample rate estimation if NULL
   if (is.null(sample_rate)) {
@@ -28,7 +28,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
   }
 
   data <- split(data, data$trial)
-  data_sac <- pbapply::pblapply(data, VTI_saccade_trial, sample_rate, threshold, min_dur)
+  data_sac <- pbapply::pblapply(data, saccade_VTI_trial, sample_rate, threshold, min_dur)
   data_sac <- do.call(rbind.data.frame,data_sac)
   data_sac <- data_sac[,c(11,10,1,2,9,3:8)] # reorder cols
   row.names(data_sac) <- NULL # remove the row names
@@ -36,7 +36,7 @@ VTI_saccade <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
 
 }
 
-VTI_saccade_trial <- function(data, sample_rate, threshold, min_dur){
+saccade_VTI_trial <- function(data, sample_rate, threshold, min_dur){
 
   trialNumber <- data$trial[1]
   x <- data$x
@@ -108,3 +108,4 @@ VTI_saccade_trial <- function(data, sample_rate, threshold, min_dur){
 
 }
 
+VTI_saccade <- saccade_VTI
