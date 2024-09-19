@@ -1,6 +1,5 @@
 library(tidyverse)
 library(devtools)
-library(profvis)
 library(microbenchmark)
 library(patchwork)
 library(rdist)
@@ -24,8 +23,6 @@ profvis ({
 
 
 
-data$TT <- 1
-
 data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3:10),])
 
 data_i <- interpolate(data)
@@ -48,6 +45,15 @@ dV <- spatial_plot(raw_data = data_i,
                    fix_data = t_fix_s)
 
 dP + dV
+
+# gganimte
+library(gganimate)
+ 
+p <- spatial_plot(fix_data = t_fix[t_fix$trial==3,], show_fix_order = FALSE)
+ 
+p + transition_states(fix_n, transition_length = 2, state_length = 1)
+
+p + transition_states(fix_n, transition_length = c(1,5,1,5,1,5), state_length = t_fix$fix_n)
 
 # getting new data for HCL task
 
@@ -81,11 +87,15 @@ td$trial = c(1:120)
 
 td <-
   td %>%
-  select(trial, P_cue = X3, NP_cue = X4, cue_order = X5,
-         correct_out = X6, accuracy = X12, RT = X14)
+  select(trial, P_cue = X3, NP_cue = X4, cue_order = X9,
+         correct_out = X5, accuracy = X12, RT = X14)
 
-e <- filter(e, trial <=100)
-td <- filter(td, trial <=100)
+e <- filter(e, trial <=96)
+td <- filter(td, trial <=96)
+
+
+
+
 
 example_raw_HCL <- e
 example_resp_HCL <- td
