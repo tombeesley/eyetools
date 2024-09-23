@@ -33,10 +33,6 @@
 
 fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, smooth = FALSE, progress = TRUE){
 
-  if (is.na(data) | is.null(data)) {
-    stop("No data supplied")
-  }
-
   if (run_interp == FALSE & sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
     stop("No interpolation carried out and NAs detected in your data. Either run interpolation via run_interp = TRUE, or check your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
   }
