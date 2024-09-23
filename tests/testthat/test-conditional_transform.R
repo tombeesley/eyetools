@@ -12,7 +12,7 @@ test_that(
   "conditional transform returns an equal dataframe", {
   expect_equal(
     dim(conditional_transform(temp, flip = "x", cond_column = "cue_order", cond_values = 2)),
-    dim(data)
+    dim(temp)
       )}
 )
 
