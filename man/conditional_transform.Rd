@@ -7,6 +7,8 @@
 conditional_transform(
   data,
   flip = c("x", "y"),
+  cond_column,
+  cond_values,
   resolution_x = 1920,
   resolution_y = 1080
 )
@@ -16,20 +18,23 @@ conditional_transform(
 
 \item{flip}{either x or y to specify a flip across either the vertical axis or horizontal axis}
 
+\item{cond_column}{a column name, on which the flips are conditional}
+
+\item{cond_values}{which values in this column result in the flip}
+
 \item{resolution_x}{screen size in pixels for the x axis}
 
 \item{resolution_y}{screen size in pixels for the y axis}
 }
+\value{
+a dataframe of the equivalent format as the input data
+}
 \description{
-A function to counterbalance trials. The function takes the dataframe and performs a single axis flip to correct counterbalancing.
+A function to perform conditional transformations of the x/y raw data.
+The function takes the dataframe and performs a single axis flip based on the values specificed in the cond_column.
+The primary use of this function is to correct or normalise the data when counterbalancing stimulus placement within experiments (e.g., having a target stimulus appear on the left and right equally often)
 }
 \examples{
-\dontrun {
-example_raw_HCL <- example_raw_HCL |> mutate(x = ifelse(x > 1920, NA, x),
-y = ifelse(y > 1080, NA, y))
-data <- example_raw_HCL |> left_join(example_resp_HCL, by = join_by(trial))
-conditional_transform(data, flip = "x")
-}
-
+conditional_transform(example_counterbalance, flip = "x", cond_column = "cue_order", cond_values = 2)
 
 }

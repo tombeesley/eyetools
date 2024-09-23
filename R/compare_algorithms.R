@@ -75,8 +75,8 @@ return(data_list_out)
 
 get_fixations <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth) {
 
-  data_vti <- fix_inverse_saccade(data, sample_rate = sample_rate, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, run_interp = run_interp, smooth = smooth)
-  data_disp <- fix_dispersion(data, min_dur = min_dur, disp_tol = disp_tol, NA_tol = NA_tol, progress = FALSE)
+  data_vti <- fixation_VTI(data, sample_rate = sample_rate, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, run_interp = run_interp, smooth = smooth, progress = FALSE)
+  data_disp <- fixation_dispersion(data, min_dur = min_dur, disp_tol = disp_tol, NA_tol = NA_tol, progress = FALSE)
 
   data$time <- data$time - min(data$time)
 
@@ -109,17 +109,6 @@ summarise_fixations <- function(dataIn, data) {
 }
 
 summarise_comparisons <- function(dataIn) {
-  ## get fixation data together
-  #data_fix <- do.call(rbind, lapply(data_list, `[[`, 1))
-  #row.names(data_fix) <- NULL # remove the row names
-  #
-  ##get vti output
-  #data_list_vti <- do.call(rbind, lapply(data_list, `[[`, 2))
-  #row.names(data_list_vti) <- NULL # remove the row names
-  ##get disp output
-  #data_list_disp <- do.call(rbind, lapply(data_list, `[[`, 3))
-  #row.names(data_list_disp) <- NULL # remove the row names
-
   out <- list()
 
   out$desc <-  data.frame(algorithm = c("vti", "dispersion"))
