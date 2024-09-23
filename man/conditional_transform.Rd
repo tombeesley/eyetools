@@ -35,6 +35,5 @@ The function takes the dataframe and performs a single axis flip based on the va
 The primary use of this function is to correct or normalise the data when counterbalancing stimulus placement within experiments (e.g., having a target stimulus appear on the left and right equally often)
 }
 \examples{
-conditional_transform(example_counterbalance, flip = "x", cond_column = "cue_order", cond_values = 2)
-
+3
 }
