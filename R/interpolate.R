@@ -46,7 +46,7 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE) {
     #                na.rm = FALSE)) %>% # na.rm = FALSE ensures that leading and trailing NAs are not removed.
     #  ungroup()
   } else {
-    return("Error: 'method' not recognised. Use 'approx' or 'spline'")
+    stop("'method' not recognised. Use 'approx' or 'spline'")
   }
 
   # POST-INTERP summary of missing data

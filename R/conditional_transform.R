@@ -10,14 +10,16 @@
 #' @param flip either x or y to specify a flip across either the vertical axis or horizontal axis
 #' @param resolution_x screen size in pixels for the x axis
 #' @param resolution_y screen size in pixels for the y axis
-#' @return
+#'
+#' @return a dataframe of the equivalent format as the input data
 #'
 #' @examples
 #' \dontrun {
 #' example_raw_HCL <- example_raw_HCL |> mutate(x = ifelse(x > 1920, NA, x),
 #' y = ifelse(y > 1080, NA, y))
 #' data <- example_raw_HCL |> left_join(example_resp_HCL, by = join_by(trial))
-#' conditional_transform(data, flip = "x")}
+#' conditional_transform(data, flip = "x")
+#' }
 #'
 #'
 
