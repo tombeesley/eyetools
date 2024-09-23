@@ -14,13 +14,13 @@ conditional_transform(
 )
 }
 \arguments{
-\item{data}{a dataframe that includes columns of time, x, y, trial, and cue_order. Cue order should currently be in the state of 1,2 which refer to the counterbalancing of trials.}
+\item{data}{a dataframe that includes columns x and y and the column specified in cond_column. Can be raw, fixation, or saccade data.}
 
-\item{flip}{either x or y to specify a flip across either the vertical axis or horizontal axis}
+\item{flip}{either "x", to flip across vertical midline, or "y" to flip across horizontal midline}
 
 \item{cond_column}{a column name, on which the flips are conditional}
 
-\item{cond_values}{which values in this column result in the flip}
+\item{cond_values}{a single value or vector stating which values in con_column result in a flip}
 
 \item{resolution_x}{screen size in pixels for the x axis}
 

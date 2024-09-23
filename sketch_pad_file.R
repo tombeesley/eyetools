@@ -21,7 +21,7 @@ profvis ({
   a <- eyetools::fix_dispersion(example_raw_psy)
 })
 
-
+conditional_transform(exam)
 
 data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3:10),])
 
@@ -48,9 +48,9 @@ dP + dV
 
 # gganimte
 library(gganimate)
- 
+
 p <- spatial_plot(fix_data = t_fix[t_fix$trial==3,], show_fix_order = FALSE)
- 
+
 p + transition_states(fix_n, transition_length = 2, state_length = 1)
 
 p + transition_states(fix_n, transition_length = c(1,5,1,5,1,5), state_length = t_fix$fix_n)
