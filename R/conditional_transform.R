@@ -4,10 +4,10 @@
 #' The function takes the dataframe and performs a single axis flip based on the values specificed in the cond_column.
 #' The primary use of this function is to correct or normalise the data when counterbalancing stimulus placement within experiments (e.g., having a target stimulus appear on the left and right equally often)
 #'
-#' @param data a dataframe that includes columns of time, x, y, trial, and cue_order. Cue order should currently be in the state of 1,2 which refer to the counterbalancing of trials.
+#' @param data a dataframe that includes columns x and y and the column specified in cond_column. Can be raw, fixation, or saccade data.
 #' @param cond_column a column name, on which the flips are conditional
-#' @param cond_values which values in this column result in the flip
-#' @param flip either x or y to specify a flip across either the vertical axis or horizontal axis
+#' @param cond_values a single value or vector stating which values in con_column result in a flip
+#' @param flip either "x", to flip across vertical midline, or "y" to flip across horizontal midline
 #' @param resolution_x screen size in pixels for the x axis
 #' @param resolution_y screen size in pixels for the y axis
 #'
@@ -20,8 +20,8 @@
 
 conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_values, resolution_x = 1920, resolution_y = 1080) {
 
-  if(sum(colnames(data) %in% c("time", "x", "y", "trial", "cue_order")) != 5) {
-    stop("missing column names. Please check your data")
+  if(sum(colnames(data) %in% c("x", "y", cond_column)) != 5) {
+    stop("missing column names. Please check your data and the documentation")
   }
   #if flip is not specified
   if (missing(flip)) {
