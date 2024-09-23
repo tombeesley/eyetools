@@ -1,8 +1,12 @@
 #' conditional_transform
 #'
-#' A function to counterbalance trials. The function takes the dataframe and performs a single axis flip to correct counterbalancing.
+#' A function to perform conditional transformations of the x/y raw data.
+#' The function takes the dataframe and performs a single axis flip based on the values specificed in the cond_column.
+#' The primary use of this function is to correct or normalise the data when counterbalancing stimulus placement within experiments (e.g., having a target stimulus appear on the left and right equally often)
 #'
 #' @param data a dataframe that includes columns of time, x, y, trial, and cue_order. Cue order should currently be in the state of 1,2 which refer to the counterbalancing of trials.
+#' @param cond_column a column name, on which the flips are conditional
+#' @param cond_value which values in this column result in the flip
 #' @param flip either x or y to specify a flip across either the vertical axis or horizontal axis
 #' @param resolution_x screen size in pixels for the x axis
 #' @param resolution_y screen size in pixels for the y axis
@@ -35,14 +39,14 @@ conditional_transform <- function(data, flip = c("x", "y"), resolution_x = 1920,
   if (flip == "x") {
     message("Flipping from left to right")
 
-    data[data$cue_order == 2,]$x <- resolution_x-data[data$cue_order == 2,]$x
+    data[data$cond_column == cond_value,]$x <- resolution_x-data[data$cond_column == cond_value,]$x
 
   }
 
   if (flip == "y") {
     message("Flipping from top to bottom")
 
-    data[data$cue_order == 2,]$y <- resolution_y-data[data$cue_order == 2,]$y
+    data[data$cond_column == cond_value,]$y <- resolution_y-data[data$cond_column == cond_value,]$y
 
   }
 
