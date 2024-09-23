@@ -31,6 +31,12 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   }
 
   data_fix <- do.call("rbind", data_fix)
+
+  #if x and y are still all NA, stop
+  if (sum(!is.na(data_fix[[4]])) == 0|sum(!is.na(data_fix[[5]])) == 0) {
+    stop("Too many NAs present in x and y.")
+  }
+
   colnames(data_fix) <- c("start", "end", "duration", "x", "y",
                           "prop_NA", "fix_n", "min_dur", "disp_tol", "trial")
   data_fix <- data_fix[,c(10,7,1:6,8,9)] # reorder cols
@@ -42,6 +48,11 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
 trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
 
   trialNumber <- data$trial[1]
+
+  #if no observations for x or y at all
+  if (sum(!is.na(data$x)) == 0|sum(!is.na(data$y)) == 0) {
+    trial_fix_store <- NULL
+  } else {
 
   if (run_interp){data <- eyetools::interpolate(data)}
   data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamps at 0
@@ -156,7 +167,7 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
 
 
   return(trial_fix_store)
-
+}
 }
 
 
