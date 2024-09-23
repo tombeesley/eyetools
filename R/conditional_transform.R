@@ -31,10 +31,10 @@ conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_va
     stop("counterbalancing is either x (across vertical axis) or y (across horizontal axis)")
   }
 
-  if (resolution_x < max(data$x)) {
+  if (resolution_x < max(data$x, na.rm = TRUE)) {
     stop("screen resolution is smaller than the greatest value of x. Please check data or update default values of screen resolution")
   }
-  if (resolution_y < max(data$y)) {
+  if (resolution_y < max(data$y, na.rm = TRUE)) {
     stop("screen resolution is smaller than the greatest value of x. Please check data or update default values of screen resolution")
   }
 
