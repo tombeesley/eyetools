@@ -12,11 +12,10 @@
 #' @param resolution_y screen size in pixels for the y axis
 #'
 #' @return a dataframe of the equivalent format as the input data
+#' @export
 #'
 #' @examples
-#' \dontrun {
 #' conditional_transform(example_counterbalance, flip = "x", cond_column = "cue_order", cond_values = 2)
-#' }
 #'
 
 conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_values, resolution_x = 1920, resolution_y = 1080) {
@@ -33,10 +32,10 @@ conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_va
     stop("counterbalancing is either x (across vertical axis) or y (across horizontal axis)")
   }
 
-  if (resolution_x > max(data$x)) {
+  if (resolution_x < max(data$x)) {
     stop("screen resolution is smaller than the greatest value of x. Please check data or update default values of screen resolution")
   }
-  if (resolution_y > max(data$y)) {
+  if (resolution_y < max(data$y)) {
     stop("screen resolution is smaller than the greatest value of x. Please check data or update default values of screen resolution")
   }
 
