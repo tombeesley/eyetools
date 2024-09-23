@@ -15,3 +15,11 @@ test_that(
     dim(data)
       )}
 )
+
+test_that(
+  "conditional transform returns an equal dataframe", {
+    expect_error(
+      conditional_transform(temp, flip = "x", cond_column = "cue_order", cond_values = 2, resolution_x = 5),
+      "screen resolution is smaller"
+    )}
+)
