@@ -78,6 +78,7 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
       aoi_entries[,a] <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
     } else {
       # report error message of bad AOI definition
+      stop("bad definition of AOI. Cannot identify AOI region")
 
     }
   }
