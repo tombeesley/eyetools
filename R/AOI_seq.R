@@ -33,7 +33,6 @@ AOI_seq <- function(data,
                      AOI_entry_seq = proc_data)
 
   if (long == TRUE) {
-    #data <- separate_longer_delim(data, AOI_entry_seq, delim = ";")
 
     split_list <- strsplit(data$AOI_entry_seq,';')
 
@@ -41,8 +40,18 @@ AOI_seq <- function(data,
 
     data <- stack(split_list_names)
 
-    data <- data.frame(trial = data$ind,
-           AOI_entry_seq = data$value)
+    data <- data.frame(trial = as.numeric(data$ind),
+           AOI = as.numeric(data$value))
+
+# add in entry_n by way of indexing each trial
+get_row_n <- function(i) {
+  store <- data[data$trial == i,]
+  store$entry_n <- 1:nrow(store)
+
+  store
+}
+
+    data <- do.call(rbind.data.frame, lapply(1:max(data$trial), get_row_n))
 
   }
 
@@ -86,7 +95,6 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
   } else {
     aoi_seq <- paste0(aoi_seq, collapse = ";")
   }
-
   return(aoi_seq)
 
 }

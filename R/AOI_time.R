@@ -56,6 +56,15 @@ AOI_time <- function(fix_data = NULL, raw_data = NULL, AOIs, AOI_names = NULL, s
   }
 
   colnames(data) <- c("trial", AOI_name_text)
+
+  data <- do.call(cbind.data.frame, lapply(1:length(colnames(data)), function(i) {
+
+    data[,i] <- as.numeric(data[,i])
+
+  }))
+
+  colnames(data) <- c("trial", AOI_name_text)
+
   return(data.frame(data))
 
 }
