@@ -28,7 +28,7 @@
 #' @import ggplot2
 #'
 
-compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, run_interp = TRUE, smooth = TRUE) {
+compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, run_interp = TRUE, smooth = FALSE) {
 
   data_split <- split(data, data$trial)
 
