@@ -1,7 +1,7 @@
 #' conditional_transform
 #'
 #' A function to perform conditional transformations of the x/y raw data.
-#' The function takes the dataframe and performs a single axis flip based on the values specificed in the cond_column.
+#' The function takes the dataframe and performs a single axis flip based on the values specified in the cond_column.
 #' The primary use of this function is to correct or normalise the data when counterbalancing stimulus placement within experiments (e.g., having a target stimulus appear on the left and right equally often)
 #'
 #' @param data a dataframe that includes columns x and y and the column specified in cond_column. Can be raw, fixation, or saccade data.
@@ -27,10 +27,11 @@ conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_va
     stop("counterbalancing is either x (across vertical axis) or y (across horizontal axis). Please provide a value for flip.")
 
   }
-  if (!(flip %in% c("x", "y"))) { #if not v or h
+  if (!(flip %in% c("x", "y"))) { #if not x or y
     stop("counterbalancing is either x (across vertical axis) or y (across horizontal axis)")
   }
 
+  #if the screen size is smaller than the observations
   if (resolution_x < max(data$x, na.rm = TRUE)) {
     stop("screen resolution is smaller than the greatest value of x. Please check data or update default values of screen resolution")
   }
