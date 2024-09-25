@@ -3,7 +3,7 @@
 #' Determine fixations through the removal of saccades using the velocity threshold algorithm from Salvucci & Goldberg (1996).
 #' Applies the algorithm used in VTI_saccade and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance.
 #' If they are outside this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them.
-#' Compared to fix_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and following data treated as a continued fixation (assuming within pixel tolerance using disp_tol).
+#' Compared to fixation_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and following data treated as a continued fixation (assuming within pixel tolerance using disp_tol).
 #' Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
@@ -16,10 +16,9 @@
 #' @param smooth include a call to eyetools::smoother on each trial
 #' @param progress Display a progress bar
 #'
-#'
 #' @importFrom stats dist aggregate
 #' @importFrom pbapply pblapply
-#' @return a data frame giving the fixations found using an inverse-saccade algorithm found by trial.
+#' @return A list of the summary dataframe, the correlations conducted, and the data used for plotting the fixation bars
 #' @export
 #'
 #' @examples
@@ -27,14 +26,14 @@
 #' fixation_VTI(example_raw_WM[example_raw_WM$trial == 15,])
 #'
 #' # multiple trials:
-#' data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3,10),])
+#' data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3:10),])
 #'
 #' fixation_VTI(data)
 
 fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, smooth = FALSE, progress = TRUE){
 
   if (run_interp == FALSE & sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
-    stop("No interpolation carried out and NAs detected in your data. Either run interpolation via run_interp = TRUE, or check your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
+    stop("No interpolation carried out and NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
   }
 
   # sample rate estimation if NULL
@@ -46,12 +45,13 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
 
   data <- split(data, data$trial)
 
+  # either show a progress bar, or not
   if(progress) {
     data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth)
   } else {
     data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth)
-
   }
+
   data_fix <- do.call(rbind.data.frame,data_fix)
   data_fix <- data_fix[,c(7,6,1,2,5,3,4,8, 9)] # reorder cols
   row.names(data_fix) <- NULL # remove the row names
@@ -68,6 +68,7 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
     data <- eyetools::smoother(data)
   }
 
+  #### THIS NEXT CHUNK CALCULATES THE DISTANCES AND VELOCITY OF THE SACCADES ####
   trialNumber <- data$trial[1]
   x <- data$x
   y <- data$y
@@ -85,10 +86,12 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
   #first row will always be a non-event due to no preceding data, so set as a fixation
   data$saccade_detected[1] <- 1
 
+  #### END DISTANCE/VELOCITY CALCULATIONS ####
 
   data$event_n <- c(1,cumsum(abs(diff(data$saccade_detected)))+1) # get event numbers
   events <- split(data, data$event_n) # split into the different events
 
+  #CALCULCATE DURATIONS OF EACH EVENT
   get_duration <- function(dataIn) {
     first <- dataIn[1,1]
     last <- dataIn[nrow(dataIn),1]
@@ -103,23 +106,23 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
 
   data <- merge(data, timing_store) # add into main df
 
-  data$short_sac <- ifelse(data$saccade_detected == 2 & data$event_duration < min_dur_sac, TRUE, FALSE) # if is saccade and shorter than duration, flag as TRUE, else FALSE
+  # if is saccade and shorter than duration, flag as TRUE, else FALSE
+  # USEFUL TO FLAG SHORT SACCADES THAT DON'T MEET A THRESHOLD, SO FIXATIONS CAN BE TREATED AS CONTINUOUS
+  data$short_sac <- ifelse(data$saccade_detected == 2 & data$event_duration < min_dur_sac, TRUE, FALSE)
 
 
-
-  # if an event is only one row long, then proceeding steps of identifying start/end of events doesn't work so add in a duplicate row
-  # this is useful for when the end points of a saccade (at a higher velocity) ought to be treated as the start of a fixation instead
+  # if an event is only one row long, then proceeding steps of identifying start/end of events doesn't work
+  # so add in a duplicate row this is useful for when the end points of a saccade (at a higher velocity)
+  # ought to be treated as the start of a fixation instead
 
   single_row_doubled <- function(dataIn) {
 
-    if (nrow(dataIn) == 0) {
+    if (nrow(dataIn) == 0) { #IF EMPTY
       dataIn <- NULL
     }
-
     if (nrow(dataIn) == 1) {
       dataIn[2,] <- dataIn[1,] # duplicate row
     }
-
     return(dataIn)
   }
 
@@ -136,6 +139,7 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
   last_in_group <- aggregate(data, list(data$event_n), tail, 1) #get value of last row
   last_in_group$saccade_detected_last <- last_in_group$saccade_detected
 
+  #MERGE AND DROP UNNECESSARY VARIABLES
   data <- merge(data, first_in_group, all.x = TRUE)
   data$Group.1 <- NULL
   data <- merge(data, last_in_group, all.x = TRUE)
@@ -155,42 +159,38 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
   data$saccade_detected <- ifelse(!is.na(data$saccade_detected_first), data$saccade_detected_first, data$saccade_detected)
   data$saccade_detected <- ifelse(!is.na(data$saccade_detected_last), data$saccade_detected_last, data$saccade_detected)
 
-
   # collect just fixation data
   first_in_group_short <- first_in_group[first_in_group$saccade_detected ==1,]
 
-
-
   #get differences in x, y coords
   first_in_group_short$x_diff <- c(0, diff(first_in_group[first_in_group$saccade_detected ==1,]$x)) # get difference in x between fixation events, non-abs() to calculate drift over events
-
   first_in_group_short$y_diff <- c(0, diff(first_in_group[first_in_group$saccade_detected ==1,]$y)) # get difference in y between fixation events
 
+  #GET THE TOTAL CHANGE IN PIXEL DEVIATION
   first_in_group_short$distance_euclidean <- sqrt(first_in_group_short$x_diff^2 + first_in_group_short$y_diff^2)
 
-
-  ### ADD IN CHECK THAT FIXATIONS DO NOT DRIFT ###
-
-  cumsum_max100 <- function(i) {
-
-    if ( i != 0) {
-
+  #### THIS FUNCTION CALCULATES THE DISTANCE DRIFTED ACROSS CONSECUTIVE FIXATIONS
+  #### IN ORDER TO COMBINE THEM IF THEY ARE WITHIN TOLERANCE. AS OTHERWISE MICRO-SACCADES INTERFERE WITH THE
+  #### CLASSIFICATION OF THE FIXATIONS
+  calculate_drift <- function(i) {
       #this function tests whether proceeding values of x_diff deviate by over 100 pixels from the origin timepoint
       # x values - drift from i (origin event)
 
-      distance <- first_in_group_short$distance_euclidean
+    if ( i != 0) {
 
+      distance <- first_in_group_short$distance_euclidean
       distance[i] <- 0
 
       value <- (na.omit(distance)[i:length(distance)])
 
+      #IF LAST VALUE IN LENGTH AND IS NA, SET AS 0 OTHERWISE IT GETS DROPPED FROM THE OUTPUT
       if ( length(value) == 1) { if(is.na(value)) { value <- 0 }}
 
-      value_rle <- rle(value < 100)
+      value_rle <- rle(value < disp_tol) # GET A LOGICAL OF WHETHER VALUES ARE WITHIN TOLERANCE
 
-      if(value_rle$values[1] == TRUE) { upper_cap <- value_rle$lengths[1]} else { upper_cap = 0}
+      if(value_rle$values[1] == TRUE) { upper_cap <- value_rle$lengths[1]} else { upper_cap = 0} # SET CAP AS THE LENGTH OF VALUES IN TOLERANCE
 
-      ind <- i + 1:upper_cap
+      ind <- i + 1:upper_cap #GET INDEX
 
       if(any(ind > nrow(first_in_group_short))) { ind <- i }
 
@@ -199,31 +199,14 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
       data.frame(dist_cum = value[upper_cap],
                  event_n = first_in_group_short$event_n[i],
                  upper_cap)
-
-
     }
   }
 
-  max100_store <- do.call("rbind", lapply(seq(nrow(first_in_group_short)), cumsum_max100))
+  drift_store <- do.call("rbind", lapply(seq(nrow(first_in_group_short)), calculate_drift))
 
-  ### HOW TO ARRANGE IT SO DISTANCES < 100 THAT OCCUR ONCE SHOULD BE APPENDED TO THE PREVIOUS
-
-  #x <- sapply(1:nrow(max100_store), function(i) {
-  #  if(max100_store$dist_cum[i] < 100 & max100_store$upper_cap[i] == 1) {
-  #    max100_store$upper_cap[i-1] <-  max100_store$upper_cap[i-1] + 1
-  #  } else {
-  #    max100_store$upper_cap[i-1] <-  max100_store$upper_cap[i-1]
-  #  }
-  #
-  #})
-  #
-  #x <- append(unlist(x), max100_store$upper_cap[nrow(max100_store)])
-  #
-  #max100_store$upper_cap <- x
-
-  ### HERE I NOW NEED A LIST OF VALUES THAT REPEATS A VALUE FOR THE LENGTH OF UPPER CAP
-  ###  AND OVERWRITES (IGNORES) STEPS IN BETWEEN
-
+  #### THIS FOLLOWING CHUNK AND FUNCTION PROGRAMMATICALLY GOES THROUGH THE UPPER CAP VECTOR, AND GROUPS THE EVENTS TOGETHER
+  #### ASKED AND ASNSWERED HERE:
+  #### https://stackoverflow.com/questions/79015668/is-there-an-r-function-to-repeat-a-value-for-the-length-of-value-then-skip-ahea
 
   filler <- function(x, y) {
     # Decrement 'rem'
@@ -240,24 +223,20 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
     x
   }
 
-  # Create a data frame with 'id', 'rem', and 'val' columns
-  max100_store$fix_n <- Reduce(filler, max100_store$upper_cap, init = list(rem = 0, val = NA, event = 0), accumulate = TRUE) |>
-    tail(-1) |>
-    sapply(`[[`, "event_n")
+  # add the output information into a new variable
+  drift_store$fix_n <- sapply(tail(Reduce(filler, drift_store$upper_cap, init = list(rem = 0, val = NA, event = 0), accumulate = TRUE),
+                            -1),
+                            `[[`, "event_n")
 
-  #first_in_group_short <- merge(first_in_group_short, max100_store, all.x = TRUE)
-  #data$Group.1 <- NULL
 
-  data <- merge(data, max100_store, all.x = TRUE)
+  data <- merge(data, drift_store, all.x = TRUE)
   data$Group.1 <- NULL
   data <- data[order(data$time),] # merge throws the ordering off
 
-  # following steps check whether the dispersion tolerance is broken between fixations and if so,
-  # artificially adds in a saccade (to ensure that the fixations are recognised as independent of each other)
 
   data <- data[data$saccade_detected == 1,] # get the inverse-saccades
 
-
+  ### NOW THAT FIXATIONS HAVE BEEN GROUPED AND CORRECTED, THE DURATIONS NEED TO BE RECALCULATED
   get_duration2 <- function(dataIn) {
     first <- dataIn[1,2] #row $first
     last <- dataIn[nrow(dataIn),2] # $last
@@ -306,7 +285,6 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
 
     trial_fix_store$fix_n <- 1:nrow(trial_fix_store)
 
-
   } else {
     trial_fix_store <- matrix(NA,1,5)
   }
@@ -319,4 +297,3 @@ fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac
   (trial_fix_store)
 
 }
-
