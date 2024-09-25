@@ -15,8 +15,3 @@ A list of csv files collected from the eyetracker content, if only one eyetracki
 \description{
 A function to convert TOBII-generated hdf5 files to csv
 }
-\examples{
-\dontrun{
-hdf5_to_csv()
-}
-}
