@@ -21,7 +21,7 @@
 #' @examples
 #' compare_algorithms(eyetools::example_raw_WM[eyetools::example_raw_WM$trial %in% c(20:23),])
 #'
-#' #the default input can be suppressed
+#' # the default output can be suppressed
 #' compare_algorithms(example_raw_WM[example_raw_WM$trial == 16,], print_summary = FALSE)
 #'
 #' @importFrom stats cor.test reshape time
@@ -30,6 +30,7 @@
 
 compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, run_interp = TRUE, smooth = FALSE) {
 
+  #separate into trials
   data_split <- split(data, data$trial)
 
   data_list <- pbapply::pblapply(data_split, get_fixations, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth)
@@ -47,6 +48,7 @@ compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE
 
   #get plot data
   data_plot <- do.call(rbind, lapply(dataout, `[[`, 3))
+
   #create plot
   plot <- ggplot(data_plot,
          aes(time, name, group = event_n)) +
@@ -75,13 +77,16 @@ return(data_list_out)
 
 get_fixations <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth) {
 
+  # run both algorithms usign the same parameters
   data_vti <- fixation_VTI(data, sample_rate = sample_rate, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, run_interp = run_interp, smooth = smooth, progress = FALSE)
   data_disp <- fixation_dispersion(data, min_dur = min_dur, disp_tol = disp_tol, NA_tol = NA_tol, progress = FALSE)
 
+  # set time to begin at 0 for each trial
   data$time <- data$time - min(data$time)
 
   fix_store <- data.frame(fixations_vti = summarise_fixations(data_vti, data),
                           fixations_disp = summarise_fixations(data_disp, data))
+
 
   fix_store$time = 1:nrow(fix_store)-1
 
