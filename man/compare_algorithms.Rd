@@ -15,7 +15,7 @@ compare_algorithms(
   disp_tol = 100,
   NA_tol = 0.25,
   run_interp = TRUE,
-  smooth = TRUE
+  smooth = FALSE
 )
 }
 \arguments{
@@ -51,7 +51,7 @@ The raw data is run through both algorithms (using the same specified dispersion
 \examples{
 compare_algorithms(eyetools::example_raw_WM[eyetools::example_raw_WM$trial \%in\% c(20:23),])
 
-#the default input can be suppressed
+# the default output can be suppressed
 compare_algorithms(example_raw_WM[example_raw_WM$trial == 16,], print_summary = FALSE)
 
 }

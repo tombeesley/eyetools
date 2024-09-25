@@ -36,21 +36,21 @@ fixation_VTI(
 \item{progress}{Display a progress bar}
 }
 \value{
-a data frame giving the fixations found using an inverse-saccade algorithm found by trial.
+A list of the summary dataframe, the correlations conducted, and the data used for plotting the fixation bars
 }
 \description{
 Determine fixations through the removal of saccades using the velocity threshold algorithm from Salvucci & Goldberg (1996).
 Applies the algorithm used in VTI_saccade and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance.
 If they are outside this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them.
-Compared to fix_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and following data treated as a continued fixation (assuming within pixel tolerance using disp_tol).
+Compared to fixation_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and following data treated as a continued fixation (assuming within pixel tolerance using disp_tol).
 Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \examples{
 # single trials:
-fixation_VTI(example_raw_WM[example_raw_WM$trial == 9,])
+fixation_VTI(example_raw_WM[example_raw_WM$trial == 15,])
 
 # multiple trials:
-data <- rbind(example_raw_WM[example_raw_WM$trial \%in\% c(3,10),])
+data <- rbind(example_raw_WM[example_raw_WM$trial \%in\% c(3:10),])
 
 fixation_VTI(data)
 }

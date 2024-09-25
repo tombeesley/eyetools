@@ -84,3 +84,24 @@
 #' }
 #'
 "AOIs_WM"
+
+#' Example dataset from a dataset that includes counterbalancing
+#'
+#' This dataframe contains 96 trials where the predictive cue is counterbalanced and presented either on the left or the right.
+#'
+#' @format A data frame with 80,577 rows and 10 variables:
+#' \describe{
+#'   \item{time}{timestamp of the sample}
+#'   \item{x}{x coordinate of the eye}
+#'   \item{y}{y coordinate of the eye}
+#'   \item{trial}{trial number}
+#'   \item{P_cue}{Are these necessary columns?}
+#'   \item{NP_cue}{Are these necessary columns?}
+#'   \item{cue_order}{whether the predictive cue os presented on the left (1) or the right (2)}
+#'   \item{correct_out}{Are these necessary columns?}
+#'   \item{accuracy}{accuracy of selecting the correct cue}
+#'   \item{RT}{response time}
+#'   ...
+#' }
+#'
+"example_counterbalance"

@@ -16,7 +16,7 @@
 #' @param smooth include a call to eyetools::smoother on each trial
 #' @param progress Display a progress bar
 #'
-#' @importFrom stats dist aggregate
+#' @importFrom stats dist aggregate na.omit
 #' @importFrom pbapply pblapply
 #' @return A list of the summary dataframe, the correlations conducted, and the data used for plotting the fixation bars
 #' @export

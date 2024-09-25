@@ -31,7 +31,7 @@ a dataframe of the equivalent format as the input data
 }
 \description{
 A function to perform conditional transformations of the x/y raw data.
-The function takes the dataframe and performs a single axis flip based on the values specificed in the cond_column.
+The function takes the dataframe and performs a single axis flip based on the values specified in the cond_column.
 The primary use of this function is to correct or normalise the data when counterbalancing stimulus placement within experiments (e.g., having a target stimulus appear on the left and right equally often)
 }
 \examples{
