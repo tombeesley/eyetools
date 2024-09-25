@@ -9,6 +9,10 @@
 #'
 #' @import hdf5r
 #'
+#' @examples
+#' \dontrun{
+#' raw_data <- hdf5_to_csv("example_TOBII.hdf5")
+#' }
 
 hdf5_to_csv <- function(filename) {
 
