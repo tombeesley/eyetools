@@ -10,6 +10,7 @@
 #' @param flip either "x", to flip across vertical midline, or "y" to flip across horizontal midline
 #' @param resolution_x screen size in pixels for the x axis
 #' @param resolution_y screen size in pixels for the y axis
+#' @param message
 #'
 #' @return a dataframe of the equivalent format as the input data
 #' @export
@@ -17,7 +18,7 @@
 #' @examples
 #' conditional_transform(example_counterbalance, flip = "x", cond_column = "cue_order", cond_values = 2)
 
-conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_values, resolution_x = 1920, resolution_y = 1080) {
+conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_values, resolution_x = 1920, resolution_y = 1080, message = TRUE) {
 
   if(missing(cond_column)) {
     stop("missing column names. Please check your data and the documentation")
@@ -45,14 +46,16 @@ conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_va
 
   #perform main action
   if (flip == "x") {
-    message("Flipping from left to right")
+    if (message == TRUE) {
+    message("Flipping across x midline")}
 
     data[data[[cond_column]] %in% cond_values,]$x <- resolution_x-data[data[[cond_column]] %in% cond_values,]$x
 
   }
 
   if (flip == "y") {
-    message("Flipping from top to bottom")
+    if (message == TRUE) {
+      message("Flipping across y midline")}
 
     data[data[[cond_column]] %in% cond_values,]$y <- resolution_y-data[data[[cond_column]] %in% cond_values,]$y
 
