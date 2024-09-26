@@ -11,7 +11,7 @@ The primary use of this function is to correct or normalise the data when counte
 
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,8 +89,22 @@ The primary use of this function is to correct or normalise the data when counte
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fl">3</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">conditional_transform</span><span class="op">(</span><span class="va">example_counterbalance</span>, flip <span class="op">=</span> <span class="st">"x"</span>, cond_column <span class="op">=</span> <span class="st">"cue_order"</span>, cond_values <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Flipping from left to right</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 80,577 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     time     x     y trial P_cue NP_cue cue_order correct_out accuracy    RT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     0  965.  878.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     3  962.  879.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     6  959.  875.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>    10  959.  875.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>    13  966.  876.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>    16  965.  873.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>    20  960.  874.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    23  962.  873.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    26  959.  869.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    30  963.  876.     1     1      6         2           1        0 <span style="text-decoration: underline;">6</span>852.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 80,567 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
