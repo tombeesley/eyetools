@@ -19,5 +19,120 @@ knitr::opts_chunk$set(echo = TRUE,
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
+The eyetools package can help to standardise and speed up the eye data analysis, particularly in the exploratory and data manipulation stages. The suite of functions available can be used to go from relatively unprocessed data to analysis-ready. For the purpose of this tutorial, we will start with a dataset that contains eye data from three participants in a task CAN WE ADD DETAIL ON THE TASK AND WHAT IT WAS ABOUT?
 
-Here is where we can have a more detailed tutorial for going from raw data (or data in appropriate form) to the end result. This may be a good one to wait until the end of additional functions so that it can be written to include all
+You can install eyetools using the following code:
+
+```{r, eval=FALSE}
+
+if (!require(devtools)) {
+  install.packages("devtools")
+  library(devtools)
+}
+
+install_github("tombeesley/eyetools")
+
+```
+
+A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
+
+```{r}
+
+library(eyetools)
+
+```
+
+To begin with, let us load in the data and have an initial exploration of this basic format data. As we can see, the dataset is over 462,000 rows and 7 observations
+
+
+```{r}
+#this load will be hidden away and a nicer version of presenting this data will be written in
+load("data/data_for_eyetools.RData") # imports as 'data' - eye tracking data
+
+dim(data)
+```
+
+To get a basic idea of the contents of the data, we can look at the select data from the first timepoint in six trials for participant number 118. We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`).
+
+```{r}
+head(
+  data[(data$pNum == 118 & data$time == 0),]
+  )
+ 
+```
+
+A good first step is to combine the left and right eye x and y coordinates to get a single pair of [x,y] coordinates for each timepoint. The eyetools function `combine_eyes()` can do this for us. The method parameter gives the option to either "average" the two eyes, or we can use the "best_eye". For "average", the result is based on the average of the two eyes for each sample, or for samples where there is data from only a single eye, that eye is used. For "best_eye", a summary of the proportion of missing samples is computed, and the eye with the fewest missing samples is used.
+
+Here we use the default parameter "average". Important to note is that all the eyetool functions operate on data from a single participant, and so in order to process data from multiple participants, it is good practice to combine these functions using `lapply`. As the functions require data to be a single participant, we will keep the data in list format until the end.
+
+```{r}
+
+data <- lapply(split(data, data$pNum), function(dataIn) {
+          
+  dataIn_combined <- combine_eyes(dataIn, method = "average")
+          
+  #cbind(pNum = dataIn$pNum, dataIn_combined) # return the combined data with the participant identifier too
+  })
+
+```
+
+The above code returns a list of three elements, and if we take a look at just one participant, we are returned with a dataframe that has x and y variables in place of the left_* and right_* variables. This is the data format expected by many of the other eyetools functions: time, x, y, and trial.
+
+```{r}
+head(data[[2]]) # participant 118
+```
+
+The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum number of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 25. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
+
+```{r}
+data <- lapply(data, function(dataIn) {
+  interpolate(dataIn, maxgap = 25, method = "approx")
+  })
+```
+
+Depending on the experimental design, the predictive and non-predictive cues used for each trial may be counterbalanced, so sometimes the predictive cue will show on the left hand side, or sometimes on the right hand side. For the sake of consistency, it can be beneficial to normalise the predictive cues to a single side. This can help in observing patterns in the fixations. We can normalise this data using the function `conditional_transform()`. This function currently allows for a single-dimensional flip across either the horizontal or vertical midline. It can be used on raw data or fixation data, provided that variables x,y, and one to specify the counterbalance are present.
+
+The keen-eyed will notice that the present data does not contain a variable to specify the counterbalanced positions. This is contained in a separate dataset that holds the behavioural data, including the response times, the outcome, accuracy, and `cue_order` which tells us whether the predictive cue was on the left (coded as 1) or on the right (coded as 2).
+
+First we need to combine the two datasets based upon the participant identifier.
+ 
+```{r}
+load("data/data_for_eyetools 1.rdata") # imports as 'td' - behavioural data
+
+head(td)
+
+```
+
+
+```{r}
+data <- lapply(split(td, td$pNum), function(dataIn) {
+  
+  pNum <- unique(dataIn$pNum)
+  
+  merge(data[[pNum]], dataIn) #combine the datasets
+  
+})
+
+head(data[[2]])
+```
+
+Once the data has been joined we can use `conditional_transform()` to transform the x coordinates across the midline.
+
+```{r}
+data <- lapply(data, function(dataIn) {
+  
+  conditional_transform(dataIn, 
+                        flip = "x", #flip across x midline
+                        cond_column = "cue_order", #this column holds the counterbalance information
+                        cond_values = "2",#which values in cond_column to flip
+                        message = FALSE) #suppress message that would otherwise repeat - just says "Flipping across x midline"
+
+})
+```
+
+`smoother()`
+`compare_algorithms()`
+`fixation_dispersion()` or `fixation_VTI()`
+
+`AOI_*`
+`plot_*`
