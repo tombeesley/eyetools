@@ -15,10 +15,6 @@ knitr::opts_chunk$set(echo = TRUE,
 
 ```
 
-<!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-<!-- badges: end -->
-
 The eyetools package can help to standardise and speed up the eye data analysis, particularly in the exploratory and data manipulation stages. The suite of functions available can be used to go from relatively unprocessed data to analysis-ready. For the purpose of this tutorial, we will start with a dataset that contains eye data from three participants in a task CAN WE ADD DETAIL ON THE TASK AND WHAT IT WAS ABOUT?
 
 You can install eyetools using the following code:
@@ -44,6 +40,7 @@ library(eyetools)
 
 To begin with, let us load in the data and have an initial exploration of this basic format data. As we can see, the dataset is over 462,000 rows and 7 observations
 
+## Data Manipulation and Preprocessing
 
 ```{r}
 #this load will be hidden away and a nicer version of presenting this data will be written in
@@ -131,8 +128,13 @@ data <- lapply(data, function(dataIn) {
 ```
 
 `smoother()`
+
+## Fixation Detection
+
 `compare_algorithms()`
 `fixation_dispersion()` or `fixation_VTI()`
+
+## Plots and AOIs
 
 `AOI_*`
 `plot_*`
