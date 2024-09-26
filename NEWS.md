@@ -1,3 +1,5 @@
+# eyetools 0.6.1
+
 # eyetools 0.6.0
 
 # eyetools 0.5.1

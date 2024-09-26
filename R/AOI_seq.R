@@ -41,7 +41,7 @@ AOI_seq <- function(data,
     data <- stack(split_list_names)
 
     data <- data.frame(trial = as.numeric(data$ind),
-           AOI = as.numeric(data$value))
+           AOI = data$value)
 
 # add in entry_n by way of indexing each trial
 get_row_n <- function(i) {
