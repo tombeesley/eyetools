@@ -101,12 +101,12 @@ the data for multiple participants in their present state.
 ### Repairing data
 
 Raw data will often contain missing samples, which we can attempt to
-repair. eyetools has an `interpolation()` function you can use to do
-this. It will produce a report of how successful the repair was in terms
-of the missing data before and after interpolation:
+repair. eyetools has an `interpolate()` function you can use to do this.
+It will produce a report of how successful the repair was in terms of
+the missing data before and after interpolation:
 
 ``` r
-eyetools::interpolate(example_raw_sac, report = TRUE)
+interpolate(example_raw_sac, report = TRUE)
 ```
 
     ## [[1]]
@@ -132,14 +132,14 @@ eyetools::interpolate(example_raw_sac, report = TRUE)
     ## 1              0.0998             0.0952
 
 ``` r
-raw_data <- eyetools::interpolate(example_raw_sac) # store as new object
+raw_data <- interpolate(example_raw_sac) # store as new object
 ```
 
 We can also apply a smoothing function (`smoother()`) over the data,
 which is particularly important for the analysis of saccadic velocities.
 
 ``` r
-smooth_data <- eyetools::smoother(example_raw_sac) 
+smooth_data <- smoother(example_raw_sac) 
 ```
 
 ``` r
@@ -161,7 +161,7 @@ ggplot() +
 
 ### Processing fixations
 
-The function `fix_dispersion()` is a dispersion-based algorithm for
+The function `fixation_dispersion()` is a dispersion-based algorithm for
 identifying fixations, based on the algorithm described in Salvucci and
 Goldberg (2000). Passing raw data to this will return a data frame with
 the fixations ordered by trial and by fixation sequence, with the
@@ -174,7 +174,7 @@ find suitable values for these.
 ``` r
 raw_data_f <- filter(raw_data, trial <= 3) # get a sample of trials
 
-fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
+fixation_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
 ```
 
     ##    trial fix_n start  end duration    x   y prop_NA min_dur disp_tol
@@ -195,9 +195,69 @@ fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
     ## 15     3     4   747 1097      350 1732 547   0.000     120      100
     ## 16     3     5  1187 1307      120  211 543   0.243     120      100
 
+The function `fixation_VTI()` is an inverse saccade-based algorithm and
+offers an alternative algorithm for identifying fixations. The saccade
+detection is based on the “velocity threshold identification” algorithm
+(Salvucci and Goldberg, 2000) and then checks the dispersion of the
+fixations. As with `fixation_dispersion()`, passing raw data will return
+an ordered data frame by trial and fixation event.
+
+``` r
+fixation_VTI(raw_data_f, min_dur = 120, disp_tol = 100, min_dur_sac = 20)
+```
+
+    ##    trial fix_n start  end duration         x        y min_dur disp_tol
+    ## 1      1     1     0  227      227  938.5558 534.7634     120      100
+    ## 2      1     2   263  460      197  173.3073 499.6146     120      100
+    ## 3      1     3   653 1173      520 1744.0544 534.4384     120      100
+    ## 4      1     4  1570 1810      240  132.9872 530.3760     120      100
+    ## 5      2     1     0  224      224  939.2441 539.4135     120      100
+    ## 6      2     2   283  763      480  156.2593 519.9607     120      100
+    ## 7      2     3   953 1247      294 1722.0600 531.8271     120      100
+    ## 8      3     1     0  190      190  935.5209 542.3868     120      100
+    ## 9      3     2   207  530      323  158.8915 521.1675     120      100
+    ## 10     3     3   657 1093      436 1719.7962 541.7855     120      100
+    ## 11     3     4  1220 1353      133  215.9420 543.5276     120      100
+
+It is also possible to `compare_algorithms()`. This returns a plot (if
+desired) that shows the fixations detected (in terms of time) for each
+algorithm in each trial and returns by default a dataframe of the
+percentage of data tagged as a fixation, the number of fixations, as
+well as the correlation of whether timepoints are classified as a
+fixation. The stored object that results from `compare_algorithms()` is
+a list of three. Item 1 is the same printed dataframe seen below. The
+second object is a further list of the correlations made using
+`cor.test()` (of which the values are stored in object one), and the
+final object is the data required to reproduce the plot.
+
+``` r
+comparison <- compare_algorithms(raw_data_f, min_dur = 120, disp_tol = 100, min_dur_sac = 20)
+```
+
+![](man/figures/unnamed-chunk-10-1.png)<!-- -->
+
+    ##    algorithm trial  percent fix_n    corr.r        corr.p   corr.t
+    ## 1        vti     1 61.31261     4 0.7942199 6.036655e-127 31.39707
+    ## 2 dispersion     1 69.94819     6 0.7942199 6.036655e-127 31.39707
+    ## 3        vti     2 79.94652     3 0.8979390 1.178382e-134 39.35023
+    ## 4 dispersion     2 82.08556     5 0.8979390 1.178382e-134 39.35023
+    ## 5        vti     3 77.56563     4 0.6925860  3.919521e-61 19.60670
+    ## 6 dispersion     3 77.32697     5 0.6925860  3.919521e-61 19.60670
+
+The code used to produce the plots within `compare_algorithms()` is
+shown below
+
+``` r
+ggplot(comparison$plot,
+         aes(time, name, group = event_n)) +
+    geom_line(linewidth=10) +
+    facet_wrap(~trial, dir="v") +
+    theme_bw()
+```
+
 ### Plotting data
 
-The function `spatial_plot()` is a wrapper for a series of ggplot
+The function `plot_spatial()` is a wrapper for a series of ggplot
 commands to plot both raw data and fixation summaries.
 
 ``` r
@@ -207,12 +267,12 @@ commands to plot both raw data and fixation summaries.
 t_raw <- dplyr::filter(example_raw_sac, trial == 9)
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
-fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
+raw_plot <- plot_spatial(raw_data = t_raw, plot_header = TRUE)
+fixation_plot <- plot_spatial(raw_data = t_raw, fix_data = t_fix)
 
-#raw_plot/fix_plot # combined plot with patchwork
+#raw_plot/fixation_plot # combined plot with patchwork
 ```
 
 ### Assessing time on areas of interest
@@ -238,7 +298,7 @@ the first 10 trials:
 t_raw <- filter(example_raw_sac, between(trial,1,10))
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
 AOI_time(t_fix, AOIs = AOI_regions)
 ```
@@ -255,18 +315,18 @@ AOI_time(t_fix, AOIs = AOI_regions)
     ## 9      9   174   260   496
     ## 10    10   197   150   826
 
-We can include the AOIs within our `spatial_plot()`:
+We can include the AOIs within our `plot_spatial()`:
 
 ``` r
 t_raw <- filter(example_raw_sac, trial == 9) # single trial for plotting purposes
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+plot_spatial(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
 ```
 
-![](man/figures/unnamed-chunk-12-1.png)<!-- -->
+![](man/figures/unnamed-chunk-15-1.png)<!-- -->
 
 We can also define AOIs as circles by specifying the radius in the 3rd
 column and setting the 4th column to NA:
@@ -282,12 +342,12 @@ AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
 t_raw <- filter(example_raw_sac, between(trial,1,10))
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+plot_spatial(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
 ```
 
-![](man/figures/unnamed-chunk-13-1.png)<!-- -->
+![](man/figures/unnamed-chunk-16-1.png)<!-- -->
 
 Circular AOIs are also handled by AOI_time and will produce different
 results to comparable rectangular AOIs. Here fixation 5 falls outside of
@@ -303,23 +363,23 @@ AOI_regions[2,] <- c(960, 540, 300, 300) # X, Y, W, H - square in centre
 t_raw <- filter(example_raw_sac, trial == 13)
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+plot_spatial(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
 ```
 
-![](man/figures/unnamed-chunk-14-1.png)<!-- -->
+![](man/figures/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 AOI_time(t_fix, AOIs = AOI_regions)
 ```
 
-    ##    trial AOI_1 AOI_2
-    ## 13    13   180   330
+    ##   trial AOI_1 AOI_2
+    ## 1    13   180   330
 
 ### Processing saccades
 
-The function `VTI_saccade()` provides a means of processing the data for
+The function `saccade_VTI()` provides a means of processing the data for
 saccades, based on a “velocity threshold identification” algorithm, as
 described in Salvucci and Goldberg (2000). As described above, it is
 wise to use the `smoother()` function on the data first. THe sample rate
@@ -332,7 +392,7 @@ t_raw <- filter(example_raw_sac, between(trial,1,10))
 
 t_smooth <- smoother(t_raw)
 
-VTI_saccade(t_smooth, sample_rate = 300)
+saccade_VTI(t_smooth, sample_rate = 300)
 ```
 
     ##    trialNumber sac_n start  end duration  origin_x origin_y terminal_x
@@ -379,16 +439,16 @@ VTI_saccade(t_smooth, sample_rate = 300)
     ## 20   557.3451      377.0585      673.8068
 
 Saccadic eye movements can be plotted alongside other data using the
-`spatial_plot()` function:
+`plot_spatial()` function:
 
 ``` r
 t_smooth <- filter(t_smooth, trial == 8)
 
-t_fix <- fix_dispersion(t_smooth, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_smooth, disp_tol = 100, min_dur = 150)
 
-t_sac <- VTI_saccade(t_smooth, sample_rate = 300, threshold = 100)
+t_sac <- saccade_VTI(t_smooth, sample_rate = 300, threshold = 100)
 
-spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
+plot_spatial(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
 ```
 
-![](man/figures/unnamed-chunk-16-1.png)<!-- -->
+![](man/figures/unnamed-chunk-19-1.png)<!-- -->
