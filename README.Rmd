@@ -87,17 +87,18 @@ example_raw_sac
 
 ### Repairing data
 
-Raw data will often contain missing samples, which we can attempt to repair. eyetools has an `interpolation()` function you can use to do this. It will produce a report of how successful the repair was in terms of the missing data before and after interpolation:
+Raw data will often contain missing samples, which we can attempt to repair. eyetools has an `interpolate()` function you can use to do this. It will produce a report of how successful the repair was in terms of the missing data before and after interpolation:
 
 ```{r}
-eyetools::interpolate(example_raw_sac, report = TRUE)
-raw_data <- eyetools::interpolate(example_raw_sac) # store as new object
+interpolate(example_raw_sac, report = TRUE)
+
+raw_data <- interpolate(example_raw_sac) # store as new object
 ```
 
 We can also apply a smoothing function (`smoother()`) over the data, which is particularly important for the analysis of saccadic velocities. 
 
 ```{r}
-smooth_data <- eyetools::smoother(example_raw_sac) 
+smooth_data <- smoother(example_raw_sac) 
 ```
 
 ```{r}
@@ -119,13 +120,41 @@ ggplot() +
 
 ### Processing fixations
 
-The function `fix_dispersion()` is a dispersion-based algorithm for identifying fixations, based on the algorithm described in Salvucci and Goldberg (2000). Passing raw data to this will return a data frame with the fixations ordered by trial and by fixation sequence, with the averaged x and y coordinates, timestamps and duration. The "min_dur" parameter will restrict to fixations over a certain duration. The "disp_tol" parameter sets the tolerance for the dispersion of data within a fixation. Exploratory analysis of the data will be needed to find suitable values for these.
+The function `fixation_dispersion()` is a dispersion-based algorithm for identifying fixations, based on the algorithm described in Salvucci and Goldberg (2000). Passing raw data to this will return a data frame with the fixations ordered by trial and by fixation sequence, with the averaged x and y coordinates, timestamps and duration. The "min_dur" parameter will restrict to fixations over a certain duration. The "disp_tol" parameter sets the tolerance for the dispersion of data within a fixation. Exploratory analysis of the data will be needed to find suitable values for these.
 
 ```{r}
 
 raw_data_f <- filter(raw_data, trial <= 3) # get a sample of trials
 
-fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
+fixation_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
+
+```
+
+The function `fixation_VTI()` is an inverse saccade-based algorithm and offers an alternative algorithm for identifying fixations. The saccade detection is based on the "velocity threshold identification" algorithm (Salvucci and Goldberg, 2000) and then checks the dispersion of the fixations. As with `fixation_dispersion()`, passing raw data will return an ordered data frame by trial and fixation event.
+
+```{r}
+
+fixation_VTI(raw_data_f, min_dur = 120, disp_tol = 100, min_dur_sac = 20)
+
+```
+
+It is also possible to `compare_algorithms()`. This returns a plot (if desired) that shows the fixations detected (in terms of time) for each algorithm in each trial and returns by default a dataframe of the percentage of data tagged as a fixation, the number of fixations, as well as the correlation of whether timepoints are classified as a fixation. The stored object that results from `compare_algorithms()` is a list of three. Item 1 is the same printed dataframe seen below. The second object is a further list of the correlations made using `cor.test()` (of which the values are stored in object one), and the final object is the data required to reproduce the plot.
+
+```{r}
+
+comparison <- compare_algorithms(raw_data_f, min_dur = 120, disp_tol = 100, min_dur_sac = 20)
+
+```
+
+The code used to produce the plots within `compare_algorithms()` is shown below
+
+```{r eval=FALSE}
+
+ggplot(comparison$plot,
+         aes(time, name, group = event_n)) +
+    geom_line(linewidth=10) +
+    facet_wrap(~trial, dir="v") +
+    theme_bw()
 
 ```
 
@@ -133,7 +162,7 @@ fix_dispersion(raw_data_f, min_dur = 120, disp_tol = 100)
 
 ### Plotting data
 
-The function `spatial_plot()` is a wrapper for a series of ggplot commands to plot both raw data and fixation summaries. 
+The function `plot_spatial()` is a wrapper for a series of ggplot commands to plot both raw data and fixation summaries. 
 
 ```{r fig.height=8, fig.width=8, warning=FALSE}
 library(patchwork)
@@ -142,12 +171,12 @@ library(patchwork)
 t_raw <- dplyr::filter(example_raw_sac, trial == 9)
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
-fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
+raw_plot <- plot_spatial(raw_data = t_raw, plot_header = TRUE)
+fixation_plot <- plot_spatial(raw_data = t_raw, fixation_data = t_fix)
 
-raw_plot/fix_plot # combined plot with patchwork
+raw_plot/fixation_plot # combined plot with patchwork
 
 ```
 
@@ -173,22 +202,22 @@ AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
 t_raw <- filter(example_raw_sac, between(trial,1,10))
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
 AOI_time(t_fix, AOIs = AOI_regions)
 
 ```
 
-We can include the AOIs within our `spatial_plot()`:
+We can include the AOIs within our `plot_spatial()`:
 
 ```{r}
 
 t_raw <- filter(example_raw_sac, trial == 9) # single trial for plotting purposes
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+plot_spatial(raw_data = t_raw, fixation_data = t_fix, AOIs = AOI_regions)
 
 ```
 
@@ -206,9 +235,9 @@ AOI_regions[3,] <- c(1720, 540, 300, 300) # X, Y, W, H - square
 t_raw <- filter(example_raw_sac, between(trial,1,10))
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+plot_spatial(raw_data = t_raw, fixation_data = t_fix, AOIs = AOI_regions)
 
 ```
 
@@ -225,9 +254,9 @@ AOI_regions[2,] <- c(960, 540, 300, 300) # X, Y, W, H - square in centre
 t_raw <- filter(example_raw_sac, trial == 13)
 
 # process fixations
-t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 
-spatial_plot(raw_data = t_raw, fix_data = t_fix, AOIs = AOI_regions)
+plot_spatial(raw_data = t_raw, fixation_data = t_fix, AOIs = AOI_regions)
 
 AOI_time(t_fix, AOIs = AOI_regions)
 
@@ -250,17 +279,17 @@ VTI_saccade(t_smooth, sample_rate = 300)
 
 ```
 
-Saccadic eye movements can be plotted alongside other data using the `spatial_plot()` function:
+Saccadic eye movements can be plotted alongside other data using the `plot_spatial()` function:
 
 ```{r}
 
 t_smooth <- filter(t_smooth, trial == 8)
 
-t_fix <- fix_dispersion(t_smooth, disp_tol = 100, min_dur = 150)
+t_fix <- fixation_dispersion(t_smooth, disp_tol = 100, min_dur = 150)
 
 t_sac <- VTI_saccade(t_smooth, sample_rate = 300, threshold = 100)
 
-spatial_plot(raw_data = t_smooth, fix_data = t_fix, sac_data = t_sac)
+plot_spatial(raw_data = t_smooth, fixation_data = t_fix, sac_data = t_sac)
 
 ```
 
