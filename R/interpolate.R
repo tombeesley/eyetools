@@ -9,13 +9,12 @@
 #' @param method "approx" for linear interpolation or "spline" for cubic spline interpolation
 #' @param report default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.
 #'
-#' @return
+#' @return a dataframe of the same shape of the input data
 #' @export
 #'
 #' @examples interpolate(example_raw_fix, maxgap = 20)
 #' @examples interpolate(example_raw_fix, method = "approx", maxgap = 50, report = TRUE)
 #'
-#' @importFrom magrittr %>%
 #' @import dplyr
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline
@@ -30,15 +29,24 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE) {
 
   # interpolation process
   if (method %in% c("approx","spline")) {
-    data <- data %>%
-      group_by(.data$trial) %>% # interpolation process acts upon the data from each trial independently
-      mutate(across(c(.data$x,.data$y), # for both x and y columns
-                    get(paste0("na.",method)), # turns method argument into function name
-                    maxgap = 25,
-                    na.rm = FALSE)) %>% # na.rm = FALSE ensures that leading and trailing NAs are not removed.
-      ungroup()
+
+    data <- group_by(data, trial) # interpolation process acts upon the data from each trial independently
+    data <- mutate(data, across(c(x,y), # for both x and y columns
+                                get(paste0("na.",method)), # turns method argument into function name
+                                maxgap = 25,
+                                na.rm = FALSE)) # na.rm = FALSE ensures that leading and trailing NAs are not removed.
+    data <- ungroup(data)
+
+    #piped version
+    #data <- data %>%
+    #  group_by(.data$trial) %>% # interpolation process acts upon the data from each trial independently
+    #  mutate(across(c(.data$x,.data$y), # for both x and y columns
+    #                get(paste0("na.",method)), # turns method argument into function name
+    #                maxgap = 25,
+    #                na.rm = FALSE)) %>% # na.rm = FALSE ensures that leading and trailing NAs are not removed.
+    #  ungroup()
   } else {
-    return("Error: 'method' not recognised. Use 'approx' or 'spline'")
+    stop("'method' not recognised. Use 'approx' or 'spline'")
   }
 
   # POST-INTERP summary of missing data

@@ -4,10 +4,12 @@
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param span From stats::loess. The parameter α which controls the degree of smoothing.
-#' @return
+#' @return a dataframe of the same shape as the input data
 #' @export
 #'
 #' @examples
+#'
+#' smoother(example_raw_WM)
 #'
 #' @importFrom stats loess predict na.exclude
 #'

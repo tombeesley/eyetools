@@ -1,4 +1,8 @@
 
+<!-- 
+&#10;README.md is generated from README.Rmd. Please edit README.Rmd 
+&#10;If you use index.Rmd or README.Rmd it's your responsibility to knit the document to create the corresponding .md. pkgdown does not do this for you because it only touches files in the doc/ directory.
+&#10;-->
 <!-- badges: start -->
 
 [![Lifecycle:
@@ -22,21 +26,25 @@ carefully**
 
 to install: `devtools::install_github("tombeesley/eyetools")`
 
-It is free to use under the GNU General Public Licence..
+It is free to use under the GNU General Public Licence.
 
 Available functions:
 
-| Implemented functions | Description                                                                                                |
-|-----------------------|------------------------------------------------------------------------------------------------------------|
-| `combine_eyes()`      | Combines binocular data (i.e., average or “best eye”)                                                      |
-| `interpolate()`       | Interpolates data across gaps; provides a summary report of repair                                         |
-| `smoother()`          | smooths data for use in saccade algorithms                                                                 |
-| `fix_dispersion()`    | Dispersion algorithm for fixation detection                                                                |
-| `VTI_saccade()`       | Velocity threshold algorithm for saccade detection. Provides summary of velocity, start/end, duration, etc |
-| `AOI_time()`          | Time on AOIs; works with rectangular and circular AOIs; works with raw and fixation data                   |
-| `AOI_seq()`           | Detect the sequence in which AOIs were entered in a trial                                                  |
-| `spatial_plot()`      | provides a 2D plot of raw data, fixations, saccades, and AOIs                                              |
-| `seq_plot()`          | provides a 2D plot of raw data in one trial. Data can be split into time bins                              |
+| Implemented functions   | Description                                                                                           |
+|-------------------------|-------------------------------------------------------------------------------------------------------|
+| `AOI_seq()`             | Detect the sequence in which AOIs were entered in a trial                                             |
+| `AOI_time()`            | Time on AOIs; works with rectangular and circular AOIs; works with raw and fixation data              |
+| `combine_eyes()`        | Combines binocular data (i.e., average or “best eye”)                                                 |
+| `compare_algorithms()`  | Provides a comparison between the dispersion and VTI fixation algorithms with correlations and plot   |
+| `conditional_transform` | Implements a single-axis flip for specific trials to normalise data with counterbalanced designs      |
+| `fixation_dispersion()` | Dispersion algorithm for fixation detection                                                           |
+| `fixation_VTI()`        | An inverse saccade algorithm for fixation detection                                                   |
+| `hdf5_to_csv()`         | converts eyetracking data retrieved from TOBII eyetrackers to csv                                     |
+| `interpolate()`         | Interpolates data across gaps; provides a summary report of repair                                    |
+| `plot_seq()`            | provides a 2D plot of raw data in one trial. Data can be split into time bins                         |
+| `plot_spatial()`        | provides a 2D plot of raw data, fixations, saccades, and AOIs                                         |
+| `saccade_VTI()`         | Velocity threshold algorithm for saccade detection. Provides summary of velocity, start/end, duration |
+| `smoother()`            | smooths data for use in saccade algorithms                                                            |
 
 ## How to use eyetools (work in progress)
 
@@ -82,7 +90,7 @@ example_raw_sac
     ##  8    23  939.  536.     1
     ##  9    27  940.  534.     1
     ## 10    30  942.  537.     1
-    ## # … with 32,598 more rows
+    ## # ℹ 32,598 more rows
 
 **Importantly**, the data for each trial should be sequential and
 logical, that is, the timestamps should run continuously, without any
@@ -115,7 +123,7 @@ eyetools::interpolate(example_raw_sac, report = TRUE)
     ##  8    23  939.  536.     1
     ##  9    27  940.  534.     1
     ## 10    30  942.  537.     1
-    ## # … with 32,598 more rows
+    ## # ℹ 32,598 more rows
     ## 
     ## [[2]]
     ## # A tibble: 1 × 2
@@ -193,10 +201,10 @@ The function `spatial_plot()` is a wrapper for a series of ggplot
 commands to plot both raw data and fixation summaries.
 
 ``` r
-library(patchwork)
+#library(patchwork)
 # patchwork is used here to plot adjacent figures
 
-t_raw <- filter(example_raw_sac, trial == 9)
+t_raw <- dplyr::filter(example_raw_sac, trial == 9)
 
 # process fixations
 t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
@@ -204,10 +212,8 @@ t_fix <- fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
 raw_plot <- spatial_plot(raw_data = t_raw, plot_header = TRUE)
 fix_plot <- spatial_plot(raw_data = t_raw, fix_data = t_fix)
 
-raw_plot/fix_plot # combined plot with patchwork
+#raw_plot/fix_plot # combined plot with patchwork
 ```
-
-![](man/figures/unnamed-chunk-9-1.png)<!-- -->
 
 ### Assessing time on areas of interest
 

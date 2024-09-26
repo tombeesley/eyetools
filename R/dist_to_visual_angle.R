@@ -8,7 +8,8 @@
 #' @param screen_width_cm used in conversion of pixel values. Default is 51 cm (24" monitor).
 #' @param screen_width_pixels used in conversion of pixel values. Default is 1920 pixels.
 #'
-#' @return
+#'
+#' @return an equivalent-sized object to the input
 #' @export
 #'
 #' @examples

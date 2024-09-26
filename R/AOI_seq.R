@@ -6,21 +6,22 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
-#'
-#' @return a dataframe containing the sequence of entries into AOIs on each trial
+#' @param long Whether to return the AOI fixations in long or wide format. Defaults to long
+#' @return a long format dataframe containing the sequence of entries into AOIs on each trial
 #' @export
 #'
 #' @examples
-#' fix_d <- fix_dispersion(eyetools::example_raw_WM)
-#' AOI_seq(fix_d, eyetools::AOIs_WM)
+#' fix_d <- fixation_dispersion(example_raw_WM)
+#' AOI_seq(fix_d, AOIs_WM)
 #'
-#' @importFrom dplyr between
-#'
+#' @importFrom stats setNames complete.cases
+#' @importFrom utils stack
 
 AOI_seq <- function(data,
                     AOIs,
                     AOI_names = NULL,
-                    sample_rate = NULL) {
+                    sample_rate = NULL,
+                    long = TRUE) {
 
   # split data by trial
   proc_data <- sapply(split(data, data$trial),
@@ -30,6 +31,29 @@ AOI_seq <- function(data,
 
   data <- data.frame(trial = unique(data$trial),
                      AOI_entry_seq = proc_data)
+
+  if (long == TRUE) {
+
+    split_list <- strsplit(data$AOI_entry_seq,';')
+
+    split_list_names <- setNames(split_list, data$trial)
+
+    data <- stack(split_list_names)
+
+    data <- data.frame(trial = as.numeric(data$ind),
+           AOI = as.numeric(data$value))
+
+# add in entry_n by way of indexing each trial
+get_row_n <- function(i) {
+  store <- data[data$trial == i,]
+  store$entry_n <- 1:nrow(store)
+
+  store
+}
+
+    data <- do.call(rbind.data.frame, lapply(1:max(data$trial), get_row_n))
+
+  }
 
 
   return(data)
@@ -47,13 +71,14 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
 
     if (sum(!is.na(AOIs[a,])) == 4) {
       # square AOI
-      aoi_entries[,a] <- (between(trial_data$x, AOIs[a,1]-AOIs[a,3]/2, AOIs[a,1]+AOIs[a,3]/2) &
-                    between(trial_data$y, AOIs[a,2]-AOIs[a,4]/2, AOIs[a,2]+AOIs[a,4]/2))
-    } else if (sum(!is.na(AOIs[a,])) == 3) {
+      aoi_entries[,a] <- ((trial_data$x >= AOIs[a,1]-AOIs[a,3]/2 & trial_data$x <= AOIs[a,1]+AOIs[a,3]/2) &
+                            (trial_data$y >= AOIs[a,2]-AOIs[a,4]/2 & trial_data$y <= AOIs[a,2]+AOIs[a,4]/2))
+      } else if (sum(!is.na(AOIs[a,])) == 3) {
       # circle AOI
       aoi_entries[,a] <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
     } else {
       # report error message of bad AOI definition
+      stop("bad definition of AOI. Cannot identify AOI region")
 
     }
   }
@@ -71,7 +96,6 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
   } else {
     aoi_seq <- paste0(aoi_seq, collapse = ";")
   }
-
   return(aoi_seq)
 
 }

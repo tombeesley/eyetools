@@ -11,6 +11,9 @@ combine_eyes(data, method = "average")
 
 \item{method}{either "average" or "best_eye" - see description.}
 }
+\value{
+a dataframe of form c("time", "x", "y", "trial")
+}
 \description{
 Combines the data from binocular samples into X/Y coordinate pairs. Two
 methods can be used: "average" or "best_eye". For "average", the result is based on the average of the two eyes for each sample,

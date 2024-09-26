@@ -1,6 +1,5 @@
 library(tidyverse)
 library(devtools)
-library(profvis)
 library(microbenchmark)
 library(patchwork)
 library(rdist)
@@ -22,33 +21,86 @@ profvis ({
   a <- eyetools::fix_dispersion(example_raw_psy)
 })
 
+conditional_transform(exam)
 
-# get raw data for just one trial
-library(tidyverse)
+data <- rbind(example_raw_WM[example_raw_WM$trial %in% c(3:10),])
 
-example_mac_error
+data_i <- interpolate(data)
 
-fix_dispersion(example_mac_error)
+data_i_s <- smoother(data_i)
 
-t_raw <- example_raw_WM
-t_raw <- filter(example_raw_WM, between(trial, 1, 220))
+t_sac <- VTI_saccade(data_i_s, threshold = 150, )
 
-# # process fixations
-fix_dispersion(t_raw, disp_tol = 100, min_dur = 150)
+t_fix <- fix_dispersion(data_i_s, disp_tol = 100, min_dur = 150)
+t_fix_s <- fix_inverse_saccade(data_i_s, disp_tol = 100, min_dur = 150)
 
-t_interpolate <- interpolate(t_raw)
-
-t_smoothed <- smoother(t_interpolate)
-
-t_sac <- VTI_saccade(t_smoothed, sample_rate = NULL, threshold = 150)
-
-spatial_plot(raw_data = t_raw, fix_data = t_fix,sac_data = t_sac)
-
-# flatten trial list
-
-t <- do.call(rbind.data.frame,t_sac_new)
+t_fix$TT <- 1
 
 
+
+dP <- spatial_plot(raw_data = data_i,
+                   fix_data = t_fix)
+
+dV <- spatial_plot(raw_data = data_i,
+                   fix_data = t_fix_s)
+
+dP + dV
+
+# gganimte
+library(gganimate)
+
+p <- spatial_plot(fix_data = t_fix[t_fix$trial==3,], show_fix_order = FALSE)
+
+p + transition_states(fix_n, transition_length = 2, state_length = 1)
+
+p + transition_states(fix_n, transition_length = c(1,5,1,5,1,5), state_length = t_fix$fix_n)
+
+# getting new data for HCL task
+
+e <- read_csv("102_EG_dec.csv", col_types = cols(), col_names = FALSE) # read the data from csv
+
+e[e==-1] <- NA
+
+e <-
+  e %>%
+  select(time = X6, left_x = X1, left_y = X2,
+         right_x = X3, right_y = X4, trial = X5)
+
+# combine eyes
+e <- combine_eyes(e, "average")
+
+# mutate x/y to screen res
+e <-
+  e %>%
+  mutate(x = x*1920, y = (1-y)*1080,
+         time = round(time/1000)) %>%
+  group_by(trial) %>%
+  mutate(time = time - time[1]) %>%
+  ungroup()
+
+
+td <- read_csv("102_training.csv", col_types = cols(), col_names = FALSE)
+
+td[,c(3:5, 9, 12, 14)]
+
+td$trial = c(1:120)
+
+td <-
+  td %>%
+  select(trial, P_cue = X3, NP_cue = X4, cue_order = X9,
+         correct_out = X5, accuracy = X12, RT = X14)
+
+e <- filter(e, trial <=96)
+td <- filter(td, trial <=96)
+
+
+
+
+
+example_raw_HCL <- e
+example_resp_HCL <- td
+
+usethis::use_data(example_raw_HCL, example_resp_HCL, overwrite = TRUE)
 
 
 # AOI analysis testing

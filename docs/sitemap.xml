@@ -7,6 +7,9 @@
     <loc>https://tombeesley.github.io/eyetools/articles/analysis_steps.html</loc>
   </url>
   <url>
+    <loc>https://tombeesley.github.io/eyetools/articles/eyetools.html</loc>
+  </url>
+  <url>
     <loc>https://tombeesley.github.io/eyetools/articles/index.html</loc>
   </url>
   <url>
@@ -22,19 +25,25 @@
     <loc>https://tombeesley.github.io/eyetools/news/index.html</loc>
   </url>
   <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/AOIs_WM.html</loc>
-  </url>
-  <url>
     <loc>https://tombeesley.github.io/eyetools/reference/AOI_seq.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/AOI_time.html</loc>
   </url>
   <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/AOIs_WM.html</loc>
+  </url>
+  <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/VTI_saccade.html</loc>
+  </url>
+  <url>
     <loc>https://tombeesley.github.io/eyetools/reference/combine_eyes.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/dist_to_visual_angle.html</loc>
+  </url>
+  <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_WM.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/example_raw_binocular.html</loc>
@@ -47,9 +56,6 @@
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/example_raw_sac.html</loc>
-  </url>
-  <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/example_raw_WM.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/example_two_eyes_raw.html</loc>
@@ -77,8 +83,5 @@
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/spatial_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://tombeesley.github.io/eyetools/reference/VTI_saccade.html</loc>
   </url>
 </urlset>

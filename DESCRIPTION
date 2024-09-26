@@ -1,9 +1,10 @@
 Type: Package
 Package: eyetools
 Title: Tools for eye data analysis
-Version: 0.5.1
-Author: Tom Beesley
-Maintainer: Tom Beesley <t.beesley@lancaster.ac.uk>
+Version: 0.6.0
+Authors@R: c(
+    person("Beesley", "Tom", email = "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
+    person("Ivory", "Matthew", email = "matthew.ivory@lancaster.ac.uk", role = "aut"))
 Description: A set of tools for eye data processing. The intended flow is
     from data processing, to fixation analysis, to data visualisation and
     trial level summaries.
@@ -15,6 +16,7 @@ Imports:
     ggforce,
     ggplot2,
     glue,
+    hdf5r,
     lifecycle,
     magick,
     magrittr,
@@ -26,11 +28,12 @@ Imports:
     zoo
 Suggests: 
     knitr,
-    rmarkdown
-VignetteBuilder: 
-    knitr
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.3.1
 URL: https://tombeesley.github.io/eyetools/
+Config/testthat/edition: 3
