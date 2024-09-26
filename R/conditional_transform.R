@@ -15,9 +15,13 @@
 #' @export
 #'
 #' @examples
-#' 3
+#' conditional_transform(example_counterbalance, flip = "x", cond_column = "cue_order", cond_values = 2)
 
 conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_values, resolution_x = 1920, resolution_y = 1080) {
+
+  if(missing(cond_column)) {
+    stop("missing column names. Please check your data and the documentation")
+  }
 
   if(sum(colnames(data) %in% c("x", "y", cond_column)) != 3) {
     stop("missing column names. Please check your data and the documentation")
