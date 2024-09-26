@@ -106,7 +106,7 @@ summarise_fixations <- function(dataIn, data) {
   fixations <- rep(0, max(data$time))
 
   for (i in 1:nrow(dataIn)) {
-    fixations[between(1:length(fixations), dataIn$start[i], dataIn$end[i])] <- 1
+    fixations[1:length(fixations) >= dataIn$start[i] & 1:length(fixations) <= dataIn$end[i]] <- 1
   }
 
   return(fixations)

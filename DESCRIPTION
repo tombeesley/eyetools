@@ -12,14 +12,12 @@ License: GPL-3
 Depends: 
     R (>= 2.10)
 Imports: 
-    dplyr,
     ggforce,
     ggplot2,
     glue,
     hdf5r,
     lifecycle,
     magick,
-    magrittr,
     pbapply,
     rdist,
     rlang,

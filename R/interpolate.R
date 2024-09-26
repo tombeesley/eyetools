@@ -15,7 +15,6 @@
 #' @examples interpolate(example_raw_fix, maxgap = 20)
 #' @examples interpolate(example_raw_fix, method = "approx", maxgap = 50, report = TRUE)
 #'
-#' @import dplyr
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
@@ -28,23 +27,24 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE) {
   }
 
   # interpolation process
-  if (method %in% c("approx","spline")) {
+  if (method %in% c("approx", "spline")) {
 
-    data <- group_by(data, trial) # interpolation process acts upon the data from each trial independently
-    data <- mutate(data, across(c(x,y), # for both x and y columns
-                                get(paste0("na.",method)), # turns method argument into function name
-                                maxgap = 25,
-                                na.rm = FALSE)) # na.rm = FALSE ensures that leading and trailing NAs are not removed.
-    data <- ungroup(data)
+    # Split the data by 'trial'
+    data_split <- split(data, data$trial)
 
-    #piped version
-    #data <- data %>%
-    #  group_by(.data$trial) %>% # interpolation process acts upon the data from each trial independently
-    #  mutate(across(c(.data$x,.data$y), # for both x and y columns
-    #                get(paste0("na.",method)), # turns method argument into function name
-    #                maxgap = 25,
-    #                na.rm = FALSE)) %>% # na.rm = FALSE ensures that leading and trailing NAs are not removed.
-    #  ungroup()
+    # Function to apply na interpolation on both x and y columns
+    interpolate_na <- function(df) {
+      df$x <- get(paste0("na.", method))(df$x, maxgap = 25, na.rm = FALSE)
+      df$y <- get(paste0("na.", method))(df$y, maxgap = 25, na.rm = FALSE)
+      return(df)
+    }
+
+    # Apply the interpolation function to each trial's data
+    data_split <- lapply(data_split, interpolate_na)
+
+    # Recombine the split data back into a single dataframe
+    data <- do.call(rbind, data_split)
+
   } else {
     stop("'method' not recognised. Use 'approx' or 'spline'")
   }
@@ -56,7 +56,7 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE) {
 
   # return
   if (report) {
-    report_return <- tibble(missing_perc_before = pre_missing,
+    report_return <- data.frame(missing_perc_before = pre_missing,
                             missing_perc_after = post_missing)
     return(list(data, report_return))
   } else {
