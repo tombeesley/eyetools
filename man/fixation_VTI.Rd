@@ -2,7 +2,7 @@
 % Please edit documentation in R/fixation_VTI.R
 \name{fixation_VTI}
 \alias{fixation_VTI}
-\title{Fixation detection using inverse saccade identification}
+\title{Fixation detection using a velocity threshold identification method}
 \usage{
 fixation_VTI(
   data,
@@ -36,14 +36,14 @@ fixation_VTI(
 \item{progress}{Display a progress bar}
 }
 \value{
-A list of the summary dataframe, the correlations conducted, and the data used for plotting the fixation bars
+a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 }
 \description{
-Determine fixations through the removal of saccades using the velocity threshold algorithm from Salvucci & Goldberg (1996).
+Determine fixations by assessing the velocity of eye-movements, using a method that is similar to that proposed by Salvucci & Goldberg (1996).
 Applies the algorithm used in VTI_saccade and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance.
-If they are outside this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them.
-Compared to fixation_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and following data treated as a continued fixation (assuming within pixel tolerance using disp_tol).
-Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
+If they are outside of this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them.
+Compared to fixation_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and the resulting data is treated as a continued fixation (assuming it is within the pixel tolerance set by disp_tol).
+Returns a summary of the fixations found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \examples{
 # single trials:
@@ -53,4 +53,6 @@ fixation_VTI(example_raw_WM[example_raw_WM$trial == 15,])
 data <- rbind(example_raw_WM[example_raw_WM$trial \%in\% c(3:10),])
 
 fixation_VTI(data)
+
+#' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.
 }

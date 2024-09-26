@@ -2,7 +2,7 @@
 % Please edit documentation in R/fixation_dispersion.R
 \name{fixation_dispersion}
 \alias{fixation_dispersion}
-\title{Fixation detection by dispersion method}
+\title{Fixation detection using a dispersion method}
 \usage{
 fixation_dispersion(
   data,
@@ -14,7 +14,7 @@ fixation_dispersion(
 )
 }
 \arguments{
-\item{data}{A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyeproc)}
+\item{data}{A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyetools)}
 
 \item{min_dur}{Minimum duration (in milliseconds) of period over which fixations are assessed}
 
@@ -30,12 +30,16 @@ fixation_dispersion(
 a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 }
 \description{
-Detects fixations according to a method similar to that proposed by Salvucci & Goldberg (1996).
-Evaluates the absolute range of values of both x and y coordinates. Looks for sufficient periods
-in which the ranges are both below the specified dispersion tolerance. NAs are considered breaks
+Detects fixations by assessing dispersion of the eye position, using a method that is similar to that proposed by Salvucci & Goldberg (1996).
+Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods
+in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks
 in the data and are not permitted within a valid fixation period.
+Runs the interpolation algorithm by default to fix small breaks in the data.
 }
 \examples{
 fixation_dispersion(example_raw_fix, disp_tol = 150)
 
+}
+\references{
+Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.
 }
