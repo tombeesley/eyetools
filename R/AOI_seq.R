@@ -46,13 +46,16 @@ AOI_seq <- function(data,
 # add in entry_n by way of indexing each trial
 get_row_n <- function(i) {
   store <- data[data$trial == i,]
-  store$entry_n <- 1:nrow(store)
+
+  if (nrow(store) == 0) { store <- NULL} else {
+  store$entry_n <- 1:nrow(store)}
 
   store
 }
 
     data <- do.call(rbind.data.frame, lapply(1:max(data$trial), get_row_n))
 
+    data <- data[data$AOI != "NA",] # remove rows that are NA
   }
 
 
