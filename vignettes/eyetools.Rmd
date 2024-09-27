@@ -1,6 +1,6 @@
 ---
 title: "An introduction to eyetools"
-author: "Tom Beesley, Matthew Ivory"
+author: "Matthew Ivory, Tom Beesley"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{An introduction to eyetools}
@@ -12,6 +12,8 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       fig.path = "../man/figures/")
+
+knitr::opts_chunk$set(warning = FALSE) # suppress warnings for easier reading
 
 ```
 
@@ -35,6 +37,7 @@ A quick note before starting: the following tutorial is written using only the d
 ```{r}
 
 library(eyetools)
+library(ggplot2)
 
 ```
 
@@ -45,6 +48,7 @@ To begin with, let us load in the data and have an initial exploration of this b
 ```{r}
 #this load will be hidden away and a nicer version of presenting this data will be written in
 load("data/data_for_eyetools.RData") # imports as 'data' - eye tracking data
+load("data/data_for_eyetools 1.rdata") # imports as 'td' - behavioural data # actually loads both, these need resaving...
 
 dim(data)
 ```
@@ -91,26 +95,25 @@ Depending on the experimental design, the predictive and non-predictive cues use
 
 The keen-eyed will notice that the present data does not contain a variable to specify the counterbalanced positions. This is contained in a separate dataset that holds the behavioural data, including the response times, the outcome, accuracy, and `cue_order` which tells us whether the predictive cue was on the left (coded as 1) or on the right (coded as 2).
 
-First we need to combine the two datasets based upon the participant identifier.
- 
 ```{r}
-load("data/data_for_eyetools 1.rdata") # imports as 'td' - behavioural data
 
 head(td)
 
 ```
 
+First we need to combine the two datasets based upon the participant identifier. We then need to reorder the columns into the `time, x, y, trial` format required for future eyetools functions.
 
 ```{r}
 data <- lapply(split(td, td$pNum), function(dataIn) {
   
   pNum <- unique(dataIn$pNum)
   
-  merge(data[[pNum]], dataIn) #combine the datasets
+  dataIn <- merge(data[[pNum]], dataIn) #combine the datasets
+  
+  dataIn[,c(2:4, 1, 5:ncol(dataIn))] #reorder the columns
   
 })
 
-head(data[[2]])
 ```
 
 Once the data has been joined we can use `conditional_transform()` to transform the x coordinates across the midline.
@@ -127,14 +130,149 @@ data <- lapply(data, function(dataIn) {
 })
 ```
 
-`smoother()`
+An additional step that can be beneficial is to make the eye data `smoother()`. This function helps to smooth the gaze data, removing particularly jerky movements. For now, let's store the smoothed data in a new object.
+
+```{r}
+
+data_smooth <- lapply(data, function(dataIn) {
+  
+  smoother(dataIn, 
+           span = 0.1) # default setting. This controls the degree of smoothing
+  
+  })
+
+```
+
+The below plot shows the difference between the raw and smoothed data.
+
+```{r}
+
+raw <-  # participant 118, trial 5
+
+smooth <- data_smooth[[2]][data_smooth[[2]]$trial == 5,] # participant 118, trial 5
+
+ggplot() +
+  geom_line(data = raw, 
+            aes(x = time, y = y),
+            colour = "red") +
+  geom_line(data = smooth, 
+            aes(x = time, y = y),
+            colour = "blue") +
+  theme_bw()
+```
 
 ## Fixation Detection
 
-`compare_algorithms()`
-`fixation_dispersion()` or `fixation_VTI()`
+In this next stage, we can start to explore the functions available for determining fixations within the data. The two main functions here are `fixation_dispersion()` and `fixation_VTI()`. Alongside these, is the option to `compare_algorithms()` which produces a small number of metrics and plots to help visualise the two fixation algorithms. We will first demonstrate and explain the two algorithms before demonstrating `compare_algorithms()` as this relies on the two fixation algorithms.
+
+### Dispersion Algorithm
+
+`fixation_dispersion()` detects fixations by assessing the dispersion of the eye position using a method similar to that proposed by Salvucci and Goldberg (1996)^[Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.]. Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks in the data and are not permitted within a valid fixation period. By default, it runs the interpolation algorithm and this can be switched off using the relevant parameter.
+
+```{r}
+fixations_disp <- lapply(data_smooth, function(dataIn) {
+  
+  fixation_dispersion(dataIn,
+                      min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
+                      disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
+                      run_interp = FALSE, # the default is true, but we have already run interpolate()
+                      NA_tol = 0.25, # the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
+                      progress = FALSE) # whether to display a progress bar or not, when running multiple participants 
+                                        # this is best set to false as it presents a bar for each participant
+  
+})
+```
+
+The resultant data output from `fixation_dispersion()` presents data by trial and fixation. It gives the start and end time for these fixations along with their duration and the x,y coordinates for the entry of the fixation.
+
+```{r}
+head(fixations_disp[[2]]) # show sample of output data for participant 118
+```
+
+### VTI Algorithm
+
+The `fixation_VTI()` function operates differently to `fixation_dispersion()`. It determines fixations by assessing the velocity of eye-movements, using a method that is similar to that proposed by Salvucci & Goldberg (1996). Applies the algorithm used in `VTI_saccade()` and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance. If they are outside of this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them. Compared to `fixation_dispersion()`, `fixation_VTI()` is more conservative in determining a fixation as smaller saccades are discounted and the resulting data is treated as a continued fixation (assuming it is within the pixel tolerance set by disp_tol).
+
+In simple terms, `fixation_VTI()` calculates the saccades within the data and says the inverse to a saccade should be treated as a fixation. To avoid eye gaze drift, it applies a dispersion tolerance parameter as well to ensure that fixations can be appropriately localised to an x,y coordinate pair. One current limitation to `fixation_VTI()` that is not present in `fixation_dispersion()` is the need for data to be complete with no NAs present, as it cannot compute the inverse saccades.
+
+The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. Lower values for the threshold parameter may allow for fixations to be suitably detected with smooth data.
+
+
+```{r}
+fixations_VTI <- lapply(data, function(dataIn) {
+  
+  dataIn <- na.omit(dataIn)
+  
+  fixation_VTI(dataIn,
+               threshold = 100,
+                      min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
+                      min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
+                      disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
+                      run_interp = FALSE, # the default is true, but we have already run interpolate()
+                      smooth = FALSE, # already run above
+                      progress = FALSE) # whether to display a progress bar or not, when running multiple participants 
+                                        # this is best set to false as it presents a bar for each participant
+})
+```
+
+```{r}
+head(fixations_VTI[[2]]) # show sample of output data for participant 118
+```
+
+This is also a sensible point to briefly highlight the underlying saccade detection process. This can be accessed directly using `saccade_VTI()`. This uses the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements. It calculates the length of a saccade based on the velocity of the eye being above a certain threshold.
+
+```{r}
+
+saccades <- saccade_VTI(data[[2]])
+
+head(saccades)
+
+```
+
+### Comparing the algorithms
+
+As mentioned above, a supplementary function exists to compare the two fixation algorithms, the imaginatively named `compare_algorithms()`. To demonstrate this, we apply it against a reduced dataset of five unsmoothed trials from one participant. It takes a combination of the parameters from both the fixation algorithms, and by default always prints a summary table that is also stored in the returned list. It is recommended to store this in an object as the output can be quite long.
+
+```{r}
+data_subset <- data[[2]][data[[2]]$trial %in% c(1),]
+data_subset <- data_subset[,1:4] #keep only time, x, y, and trial
+
+comparison <- compare_algorithms(data_subset,
+                                 plot_fixations = TRUE,
+                                 print_summary = TRUE,
+                                 sample_rate = NULL,
+                                 threshold = 100,
+                                 min_dur = 150,
+                                 min_dur_sac = 20,
+                                 disp_tol = 100,
+                                 NA_tol = 0.25,
+                                 run_interp = TRUE,
+                                 smooth = FALSE)
+```
+
+And for the smoothed data as a comparison
+
+```{r}
+data_subset_smooth <- data_smooth[[2]][data_smooth[[2]]$trial %in% c(1),]
+data_subset_smooth <- data_subset_smooth[,1:4] #keep only time, x, y, and trial
+
+comparison_smooth <- compare_algorithms(data_subset_smooth,
+                                 plot_fixations = TRUE,
+                                 print_summary = TRUE,
+                                 sample_rate = NULL,
+                                 threshold = 100,
+                                 min_dur = 150,
+                                 min_dur_sac = 20,
+                                 disp_tol = 100,
+                                 NA_tol = 0.25,
+                                 run_interp = TRUE,
+                                 smooth = FALSE)
+
+```
 
 ## Plots and AOIs
+
+Finally, once we have preprocessed the data and collected our fixation data (we will proceed using the `fixations_disp` dataset), we can start looking at Areas of Interest (AOIs) and forming plots of the fixations.
 
 `AOI_*`
 `plot_*`
