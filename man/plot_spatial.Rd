@@ -39,7 +39,7 @@ plot_spatial(
 a plot of the raw data
 }
 \description{
-A tool for visualising raw eye-data, processed fixations, and saccades. Can all three data types. Fixations can be labeled
+A tool for visualising raw eye-data, processed fixations, and saccades. Can use all three data types. Fixations can be labeled
 in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 }
 \examples{

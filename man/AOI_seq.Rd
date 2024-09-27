@@ -7,7 +7,7 @@
 AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE)
 }
 \arguments{
-\item{data}{A dataframe with fixation data (from fix_dispersion) or raw data.}
+\item{data}{A dataframe with fixation data (from fix_dispersion).}
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
@@ -21,7 +21,7 @@ AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE)
 a long format dataframe containing the sequence of entries into AOIs on each trial
 }
 \description{
-Analyses the sequence of entries into defined AOI regions across trials. Works with fixation data or raw data as the input.
+Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data. Raw data will return an object of inaccurate AOI entries
 }
 \examples{
 fix_d <- fixation_dispersion(example_raw_WM)

@@ -10,7 +10,8 @@ conditional_transform(
   cond_column,
   cond_values,
   resolution_x = 1920,
-  resolution_y = 1080
+  resolution_y = 1080,
+  message = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ conditional_transform(
 \item{resolution_x}{screen size in pixels for the x axis}
 
 \item{resolution_y}{screen size in pixels for the y axis}
+
+\item{message}{}
 }
 \value{
 a dataframe of the equivalent format as the input data
