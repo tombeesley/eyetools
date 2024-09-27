@@ -87,9 +87,10 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
 
   # simplify to vector of AOI entries
   aoi_seq <- rowSums(aoi_entries)
-  aoi_seq <- aoi_seq[aoi_seq>0] # remove fixations without aoi hits
+  #aoi_seq <- aoi_seq[aoi_seq>0] # remove fixations without aoi hits
   find_repeat_entries <- c(TRUE, diff(aoi_seq)!=0)
   aoi_seq <- aoi_seq[find_repeat_entries]
+  aoi_seq <- aoi_seq[aoi_seq != 0] #remove non AOI fixations
 
   if (is.null(AOI_names)==FALSE) {
     aoi_seq <- paste0(AOI_names[aoi_seq], collapse = ";")
