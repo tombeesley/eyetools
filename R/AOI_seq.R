@@ -1,8 +1,9 @@
 #' Sequence analysis of area of interest entries
 #'
-#' Analyses the sequence of entries into defined AOI regions across trials. Works with fixation data or raw data as the input.
+#' Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data. Raw data will return an object of inaccurate AOI entries
 #'
-#' @param data A dataframe with fixation data (from fix_dispersion) or raw data.
+#'
+#' @param data A dataframe with fixation data (from fix_dispersion).
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
