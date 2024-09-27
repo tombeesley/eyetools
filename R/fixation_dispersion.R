@@ -14,7 +14,10 @@
 #' @param progress Display a progress bar
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
-#' @examples fixation_dispersion(example_raw_fix, disp_tol = 150)
+#' @examples
+#' \dontrun {
+#' fixation_dispersion(example_raw_fix, disp_tol = 150)
+#' }
 #'
 #' @importFrom utils tail
 #' @importFrom pbapply pblapply
