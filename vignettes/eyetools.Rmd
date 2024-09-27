@@ -322,9 +322,8 @@ Finally, eyetools contains two `plot_` functions, `plot_seq()` and `plot_spatial
 The most simple use is to just pass it raw data:
 
 ```{r}
-set.seed(242709)
 
-plot_seq(data[[2]])
+plot_seq(data[[2]], trial_number = 57)
 
 ```
 
@@ -344,4 +343,14 @@ plot_seq(data[[2]], trial_number = 57, AOIs = AOI_areas, bin_time = 1000)
 
 ```
 
-The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
+The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution.
+
+```{r}
+plot_spatial(raw_data = data[[2]])
+
+#plot the spatial data for trial 57 only. 
+plot_spatial(fix_data = fixations_VTI[[2]][fixations_VTI[[2]]$trial %in% c(57),]) # a LOT of fixations, let's take a sample
+
+plot_spatial(sac_data = saccades)
+```
+
