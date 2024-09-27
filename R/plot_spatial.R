@@ -1,6 +1,6 @@
 #' Plot raw data and fixations
 #'
-#' A tool for visualising raw eye-data, processed fixations, and saccades. Can all three data types. Fixations can be labeled
+#' A tool for visualising raw eye-data, processed fixations, and saccades. Can use all three data types. Fixations can be labeled
 #' in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 #'
 #' @param raw_data data in standard raw data form (time, x, y, trial)

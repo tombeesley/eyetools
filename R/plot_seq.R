@@ -77,7 +77,7 @@ plot_seq <- function(raw_data = NULL,
   final_g <- ggplot(data = raw_data)
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- addBGimg(bg_image, res, final_g)
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
 
   # PLOT AOIs
   if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
