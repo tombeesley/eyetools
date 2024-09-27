@@ -58,7 +58,7 @@ plot_spatial <- function(raw_data = NULL,
   # PLOT FIXATION DATA
   if (is.null(fix_data)==FALSE) {
 
-    fix_data <- mutate(fix_data, fix_n = 1:n())
+    fix_data$fix_n <- seq_len(nrow(fix_data))
 
     final_g <-
       final_g +
