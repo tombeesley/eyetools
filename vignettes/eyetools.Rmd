@@ -270,9 +270,78 @@ comparison_smooth <- compare_algorithms(data_subset_smooth,
 
 ```
 
-## Plots and AOIs
+## Areas of Interest
 
-Finally, once we have preprocessed the data and collected our fixation data (we will proceed using the `fixations_disp` dataset), we can start looking at Areas of Interest (AOIs) and forming plots of the fixations.
+Finally, once we have preprocessed the data and collected our fixation data (we will proceed using the `fixations_disp` dataset), we can start looking at Areas of Interest (AOIs) and then plots of the fixations.
 
-`AOI_*`
-`plot_*`
+For the `AOI_` "family" of functions, we need to specify where our AOIs were presented on the screen. This will enable us to determine when a participant enters or exits these areas.
+
+```{r}
+# set areas of interest
+AOI_areas <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_areas) <- c("x", "y", "width_radius", "height")
+
+AOI_areas[1,] <- c(410, 840, 400, 300) # Left cue
+AOI_areas[2,] <- c(1510, 840, 400, 300) # Right cue
+AOI_areas[3,] <- c(960, 270, 300, 500) # outcomes
+
+AOI_areas
+```
+
+The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. Works with fixation data or raw data as the input.
+
+```{r}
+
+data_AOI_sequence <- AOI_seq(fixations_disp[[2]], # just participant 118, otherwise incorporate into lapply() as above
+        AOI_areas,
+        AOI_names = NULL,
+        sample_rate = NULL,
+        long = TRUE) 
+
+data_AOI_sequence[data_AOI_sequence$trial == 3,] # a one trial sample output
+```
+
+`AOI_time()` analyses the total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both). This gives a cumulative total time spent for each trial.
+
+
+```{r}
+
+data_AOI_time <- AOI_time(fix_data = fixations_disp[[2]], # just participant 118, otherwise incorporate into lapply() as above
+        AOIs = AOI_areas)
+
+head(data_AOI_time)
+```
+
+## Plotting Functions
+
+Finally, eyetools contains two `plot_` functions, `plot_seq()` and `plot_spatial()`. 
+
+`plot_seq()` is a tool for visualising the timecourse of raw data over a single trial. If data from multiple trials are present, then a single trial will be sampled at random. Alternatively, the trial_number can be specified. Data can be plotted across the whole trial, or can be split into bins to present distinct plots for each time window.
+
+
+The most simple use is to just pass it raw data:
+
+```{r}
+set.seed(242709)
+
+plot_seq(data[[2]])
+
+```
+
+But the parameters of `plot_seq()` can help exploration be more informative. We can in background images or the AOIs
+```{r}
+
+plot_seq(data[[2]], trial_number = 57, bg_image = "data/HCL_sample_image.jpg") # add background image
+
+plot_seq(data[[2]], trial_number = 57, AOIs = AOI_areas) # add AOIs
+
+```
+
+You also have the option to split the time into bins to reduce the amount of data plotted
+
+```{r}
+plot_seq(data[[2]], trial_number = 57, AOIs = AOI_areas, bin_time = 1000)
+
+```
+
+The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
