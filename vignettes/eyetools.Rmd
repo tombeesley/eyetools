@@ -219,6 +219,8 @@ fixations_VTI <- lapply(data, function(dataIn) {
 head(fixations_VTI[[2]]) # show sample of output data for participant 118
 ```
 
+#### Saccades
+
 This is also a sensible point to briefly highlight the underlying saccade detection process. This can be accessed directly using `saccade_VTI()`. This uses the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements. It calculates the length of a saccade based on the velocity of the eye being above a certain threshold.
 
 ```{r}
