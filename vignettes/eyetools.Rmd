@@ -8,7 +8,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       fig.path = "../man/figures/")
@@ -17,7 +16,7 @@ knitr::opts_chunk$set(warning = FALSE) # suppress warnings for easier reading
 
 ```
 
-The eyetools package can help to standardise and speed up the eye data analysis, particularly in the exploratory and data manipulation stages. The suite of functions available can be used to go from relatively unprocessed data to analysis-ready. For the purpose of this tutorial, we will start with a dataset that contains eye data from three participants in a task CAN WE ADD DETAIL ON THE TASK AND WHAT IT WAS ABOUT?
+The eyetools package is designed to provide a consistent set of functions that helps researchers perform straightforward, yet powerful, steps in the analysis of eye-data. The suite of functions will allow the user to go from relatively unprocessed data to trial level summaries that are ready for statistical analysis.
 
 You can install eyetools using the following code:
 
@@ -36,14 +35,17 @@ A quick note before starting: the following tutorial is written using only the d
 
 ```{r}
 
+# matthew - what is the purpose of showing these library commands?
 library(eyetools)
-library(ggplot2)
+library(ggplot2) # this doesn't need to be loaded, right?
 
 ```
 
-To begin with, let us load in the data and have an initial exploration of this basic format data. As we can see, the dataset is over 462,000 rows and 7 observations
-
 ## Data Manipulation and Preprocessing
+
+Eyetools has built in example data that can be used while getting to grips with the package. For the purpose of this tutorial, we will start with a dataset that contains binocular eye data from three participants from a simple contingency learning task (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015). In this task there are two stimuli that appear simultaneously on each trial (to the left and right of the screen). Participants look at these cues and then make a decision by selecting an "outcome response" button.
+
+Let's load in this binocular data and explore the format. As we can see, the dataset is over 462,000 rows and 7 observations
 
 ```{r}
 #this load will be hidden away and a nicer version of presenting this data will be written in
@@ -53,7 +55,11 @@ load("data/data_for_eyetools 1.rdata") # imports as 'td' - behavioural data # ac
 dim(data)
 ```
 
-To get a basic idea of the contents of the data, we can look at the select data from the first timepoint in six trials for participant number 118. We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`).
+To get a basic idea of the contents of the data, we can look at the select data from the first timepoint in six trials for participant number 118.
+
+[this seems a slightly odd thing to look at in the data. Maybe just look at the first 20 timestamps from a suitable trial?]
+
+We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`).
 
 ```{r}
 head(
@@ -62,9 +68,13 @@ head(
  
 ```
 
-A good first step is to combine the left and right eye x and y coordinates to get a single pair of [x,y] coordinates for each timepoint. The eyetools function `combine_eyes()` can do this for us. The method parameter gives the option to either "average" the two eyes, or we can use the "best_eye". For "average", the result is based on the average of the two eyes for each sample, or for samples where there is data from only a single eye, that eye is used. For "best_eye", a summary of the proportion of missing samples is computed, and the eye with the fewest missing samples is used.
+We have an additional column `pNum`, which is not essential to the analysis steps. However, eyetools will accept additional columns and retain these columns in the analysis.
 
-Here we use the default parameter "average". Important to note is that all the eyetool functions operate on data from a single participant, and so in order to process data from multiple participants, it is good practice to combine these functions using `lapply`. As the functions require data to be a single participant, we will keep the data in list format until the end.
+### Converting binocular data to monocular data
+
+We need combine the left and right eye x and y coordinates to get a single pair of [x,y] coordinates for each timepoint. The eyetools function `combine_eyes()` can do this for us. The `method` parameter gives the option to either "average" the two eyes, or we can use the "best_eye". For "average", the result is based on the average of the two eyes for each sample, or for samples where there is data from only a single eye, that eye is used. For "best_eye", a summary of the proportion of missing samples is computed, and the eye with the fewest missing samples is used. Here we use the default parameter "average".
+
+It is important to note is that all the eyetools functions operate on data from a single participant, and so in order to process data from multiple participants, it is good practice to combine these functions using `lapply`. As the functions require data to be a single participant, we will keep the data in list format until the end.
 
 ```{r}
 
@@ -77,11 +87,13 @@ data <- lapply(split(data, data$pNum), function(dataIn) {
 
 ```
 
-The above code returns a list of three elements, and if we take a look at just one participant, we are returned with a dataframe that has x and y variables in place of the left_* and right_* variables. This is the data format expected by many of the other eyetools functions: time, x, y, and trial.
+The above code returns a list of three elements, and if we take a look at just one participant, we are returned with a dataframe that has x and y variables in place of the left\_\* and right\_\* variables. This is the data format expected by many of the other eyetools functions: time, x, y, and trial.
 
 ```{r}
 head(data[[2]]) # participant 118
 ```
+
+[it seems that at this stage "pNum" is lost in the eye data. It's not clear how you then manage to the merge the data with the td data....]
 
 The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum number of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 25. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
 
@@ -167,7 +179,9 @@ In this next stage, we can start to explore the functions available for determin
 
 ### Dispersion Algorithm
 
-`fixation_dispersion()` detects fixations by assessing the dispersion of the eye position using a method similar to that proposed by Salvucci and Goldberg (1996)^[Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.]. Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks in the data and are not permitted within a valid fixation period. By default, it runs the interpolation algorithm and this can be switched off using the relevant parameter.
+`fixation_dispersion()` detects fixations by assessing the dispersion of the eye position using a method similar to that proposed by Salvucci and Goldberg (1996)[^1]. Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks in the data and are not permitted within a valid fixation period. By default, it runs the interpolation algorithm and this can be switched off using the relevant parameter.
+
+[^1]: Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.
 
 ```{r}
 fixations_disp <- lapply(data_smooth, function(dataIn) {
@@ -196,7 +210,6 @@ The `fixation_VTI()` function operates differently to `fixation_dispersion()`. I
 In simple terms, `fixation_VTI()` calculates the saccades within the data and says the inverse to a saccade should be treated as a fixation. To avoid eye gaze drift, it applies a dispersion tolerance parameter as well to ensure that fixations can be appropriately localised to an x,y coordinate pair. One current limitation to `fixation_VTI()` that is not present in `fixation_dispersion()` is the need for data to be complete with no NAs present, as it cannot compute the inverse saccades.
 
 The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. Lower values for the threshold parameter may allow for fixations to be suitably detected with smooth data.
-
 
 ```{r}
 fixations_VTI <- lapply(data, function(dataIn) {
@@ -305,7 +318,6 @@ data_AOI_sequence[data_AOI_sequence$trial == 3,] # a one trial sample output
 
 `AOI_time()` analyses the total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both). This gives a cumulative total time spent for each trial.
 
-
 ```{r}
 
 data_AOI_time <- AOI_time(fix_data = fixations_disp[[2]], # just participant 118, otherwise incorporate into lapply() as above
@@ -316,10 +328,9 @@ head(data_AOI_time)
 
 ## Plotting Functions
 
-Finally, eyetools contains two `plot_` functions, `plot_seq()` and `plot_spatial()`. 
+Finally, eyetools contains two `plot_` functions, `plot_seq()` and `plot_spatial()`.
 
 `plot_seq()` is a tool for visualising the timecourse of raw data over a single trial. If data from multiple trials are present, then a single trial will be sampled at random. Alternatively, the trial_number can be specified. Data can be plotted across the whole trial, or can be split into bins to present distinct plots for each time window.
-
 
 The most simple use is to just pass it raw data:
 
@@ -330,6 +341,7 @@ plot_seq(data[[2]], trial_number = 57)
 ```
 
 But the parameters of `plot_seq()` can help exploration be more informative. We can in background images or the AOIs
+
 ```{r}
 
 plot_seq(data[[2]], trial_number = 57, bg_image = "data/HCL_sample_image.jpg") # add background image
@@ -355,4 +367,3 @@ plot_spatial(fix_data = fixations_VTI[[2]][fixations_VTI[[2]]$trial %in% c(57),]
 
 plot_spatial(sac_data = saccades)
 ```
-
