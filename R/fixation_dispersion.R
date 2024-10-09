@@ -15,7 +15,7 @@
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' fixation_dispersion(example_raw_fix, disp_tol = 150)
 #' }
 #'
@@ -61,116 +61,116 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
     trial_fix_store <- NULL
   } else {
 
-  if (run_interp){data <- eyetools::interpolate(data)}
-  data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamp values at 0
+    if (run_interp){data <- eyetools::interpolate(data)}
+    data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamp values at 0
 
-  #get first row number where x and y is NOT NA
-  min_x <- min(which(!is.na(data$x)))
-  min_y <- min(which(!is.na(data$y)))
-  #then get max row number
-  max_x <- max(which(!is.na(data$x)))
-  max_y <- max(which(!is.na(data$y)))
+    #get first row number where x and y is NOT NA
+    min_x <- min(which(!is.na(data$x)))
+    min_y <- min(which(!is.na(data$y)))
+    #then get max row number
+    max_x <- max(which(!is.na(data$x)))
+    max_y <- max(which(!is.na(data$y)))
 
-  #remove the leading and trailing NAs
-  data <- data[min(min_x, min_y):max(max_x, max_y),]
+    #remove the leading and trailing NAs
+    data <- data[min(min_x, min_y):max(max_x, max_y),]
 
-  data$fix_num  <- NA # add a column that stores the fix number
+    data$fix_num  <- NA # add a column that stores the fix number
 
-  first_ts <- 1 # first timestamp of window
-  last_ts <- 1 # allows step into the loop
+    first_ts <- 1 # first timestamp of window
+    last_ts <- 1 # allows step into the loop
 
-  fix_cnt  <- 1
-  new_window <- TRUE
+    fix_cnt  <- 1
+    new_window <- TRUE
 
-  while (last_ts <= nrow(data)) { # while window is within limits of data
+    while (last_ts <= nrow(data)) { # while window is within limits of data
 
-    if (new_window == TRUE){
+      if (new_window == TRUE){
 
-      future_ts <- which(data[,1] >= data[first_ts,1,drop=TRUE] + min_dur)
-      last_ts <- future_ts[1] #gets the earliest timestamp from all future valid ts
-      if (is.na(last_ts)){
-        break # last time stamp not valid (beyond window)
-      }
-
-      win <- data[first_ts:last_ts,] # the window of trials to evaluate
-
-      if (mean(is.na(win$x)) < NA_tol) { # if within the tolerance of NA_tol
-        max_d_win <- max(dist(win[,2:3]),na.rm = TRUE) # get max dispersion across this new window
-        if (is.infinite(max_d_win)) {
-          print("is infinite")
+        future_ts <- which(data[,1] >= data[first_ts,1,drop=TRUE] + min_dur)
+        last_ts <- future_ts[1] #gets the earliest timestamp from all future valid ts
+        if (is.na(last_ts)){
+          break # last time stamp not valid (beyond window)
         }
-      } else {
-        # window has too many NA, so shift along
-        max_d_win <- disp_tol + 1 # artificially make this not a fixation
-      }
+
+        win <- data[first_ts:last_ts,] # the window of trials to evaluate
+
+        if (mean(is.na(win$x)) < NA_tol) { # if within the tolerance of NA_tol
+          max_d_win <- max(dist(win[,2:3]),na.rm = TRUE) # get max dispersion across this new window
+          if (is.infinite(max_d_win)) {
+            print("is infinite")
+          }
+        } else {
+          # window has too many NA, so shift along
+          max_d_win <- disp_tol + 1 # artificially make this not a fixation
+        }
 
 
-      if(max_d_win <= disp_tol){
-        # start of a fixation
-        data[first_ts:last_ts,"fix_num"] <- fix_cnt
-        # print(fix_cnt)
+        if(max_d_win <= disp_tol){
+          # start of a fixation
+          data[first_ts:last_ts,"fix_num"] <- fix_cnt
+          # print(fix_cnt)
 
-        new_window = FALSE # not a new window; look to extend fixation
+          new_window = FALSE # not a new window; look to extend fixation
 
-      } else {
-        # looking for the start of a new fixation
-        # shift window along 1 timestamp
-        first_ts  <- first_ts + 1
+        } else {
+          # looking for the start of a new fixation
+          # shift window along 1 timestamp
+          first_ts  <- first_ts + 1
+          last_ts  <- last_ts + 1
+        }
+      } else { # extend the window
+
+        # increase the size of the window by a single timestamp
         last_ts  <- last_ts + 1
-      }
-    } else { # extend the window
+        # compute the new distances from this new data point
+        max_d_new_data <- max(rdist::cdist(data[last_ts,2:3],win[,2:3]))
 
-      # increase the size of the window by a single timestamp
-      last_ts  <- last_ts + 1
-      # compute the new distances from this new data point
-      max_d_new_data <- max(rdist::cdist(data[last_ts,2:3],win[,2:3]))
+        if (is.na(max_d_new_data) | max_d_new_data >= disp_tol) {
+          # either NA detected, or
+          # the addition of data point broke the dispersion threshold
+          # so make this last data point the first one for a new window
+          new_window <- TRUE
+          first_ts <- last_ts
+          fix_cnt <- fix_cnt + 1 # next fixation
 
-      if (is.na(max_d_new_data) | max_d_new_data >= disp_tol) {
-        # either NA detected, or
-        # the addition of data point broke the dispersion threshold
-        # so make this last data point the first one for a new window
-        new_window <- TRUE
-        first_ts <- last_ts
-        fix_cnt <- fix_cnt + 1 # next fixation
-
-      } else { # otherwise this can be included in last fixation
-        data[last_ts,"fix_num"] <- fix_cnt # add current fixation number to this timestamp
-        win <- data[first_ts:last_ts,] # update the window to include this data point
+        } else { # otherwise this can be included in last fixation
+          data[last_ts,"fix_num"] <- fix_cnt # add current fixation number to this timestamp
+          win <- data[first_ts:last_ts,] # update the window to include this data point
+        }
       }
     }
+
+    # function to extract summary information from fixations
+    summarise_fixations <- function(data){
+      start <- as.numeric(data[1,1]) # first timestamp
+      end <- as.numeric(data[nrow(data),1]) # last timestamp
+      dur <- end-start
+      mean_x <- as.numeric(round(mean(data$x, na.rm = TRUE)),digits = 0)
+      mean_y <- as.numeric(round(mean(data$y, na.rm = TRUE)),digits = 0)
+      prop_NA <- as.numeric(round(mean((is.na(data$x) | is.na(data$y))),digits = 3))
+
+      return(c(start, end, dur, mean_x, mean_y, prop_NA))
+
+    }
+    # print(data[1,4])
+
+    # get trial summary of fixations
+    if ((sum(is.na(data$fix_num)) == nrow(data)) == FALSE){
+      data_s <- split(data,data$fix_num) # create list based on the fixation number from data
+      trial_fix_store <- t(sapply(data_s, summarise_fixations))
+      trial_fix_store <- cbind(1:nrow(trial_fix_store), trial_fix_store) #fixation number
+    }
+    else {
+      # no fixations detected - write NAs
+      trial_fix_store <- matrix(NA,1,7)
+    }
+    trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
+    trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
+    trial_fix_store <- cbind(trialNumber, trial_fix_store) # add trial number
+
+
+    return(trial_fix_store) # returns the fixations for that trial to the main algorithm
   }
-
-  # function to extract summary information from fixations
-  summarise_fixations <- function(data){
-    start <- as.numeric(data[1,1]) # first timestamp
-    end <- as.numeric(data[nrow(data),1]) # last timestamp
-    dur <- end-start
-    mean_x <- as.numeric(round(mean(data$x, na.rm = TRUE)),digits = 0)
-    mean_y <- as.numeric(round(mean(data$y, na.rm = TRUE)),digits = 0)
-    prop_NA <- as.numeric(round(mean((is.na(data$x) | is.na(data$y))),digits = 3))
-
-    return(c(start, end, dur, mean_x, mean_y, prop_NA))
-
-  }
-  # print(data[1,4])
-
-  # get trial summary of fixations
-  if ((sum(is.na(data$fix_num)) == nrow(data)) == FALSE){
-    data_s <- split(data,data$fix_num) # create list based on the fixation number from data
-    trial_fix_store <- t(sapply(data_s, summarise_fixations))
-    trial_fix_store <- cbind(1:nrow(trial_fix_store), trial_fix_store) #fixation number
-  }
-  else {
-    # no fixations detected - write NAs
-    trial_fix_store <- matrix(NA,1,7)
-  }
-  trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
-  trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
-  trial_fix_store <- cbind(trialNumber, trial_fix_store) # add trial number
-
-
-  return(trial_fix_store) # returns the fixations for that trial to the main algorithm
-}
 }
 
 # ALIAS
