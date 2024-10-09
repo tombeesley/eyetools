@@ -1,7 +1,8 @@
 #' Example eye data from a simple contingency learning task
 #'
 #' A dataset containing raw data samples for 72 trials of a simple learning experiment,
-#' with several clearly defined AOIs on the screen, producing many distinct fixations each trial. Data were collected from a 300 Hz Tobii eye-tracker.
+#' with several clearly defined AOIs on the screen, producing many distinct fixations each trial.
+#' Data were collected from a 300 Hz Tobii eye-tracker.
 #' This is an example of the format raw data needs to be in in order to work with the functions
 #' in eyetools.
 #'
@@ -19,7 +20,8 @@
 #' Example eye data visual search
 #'
 #' A dataset containing raw data samples for 100 trials of a simple visual search task,
-#' in which saccades were made (left or right) from a central location on the screen each trial. Data were collected from a 300 Hz Tobii eye-tracker.
+#' in which saccades were made (left or right) from a central location on the screen each trial.
+#' Data were collected from a 300 Hz Tobii eye-tracker.
 #' This is an example of the format raw data needs to be in in order to work with the functions
 #' in eyetools.
 #'
@@ -55,7 +57,8 @@
 #' Example eye data from working memory task
 #'
 #' A dataset containing raw data samples for 100 trials of a working memory task. The screen contained
-#' four objects (coloured shapes), positioned at the corners of a square and participants spent 2 seconds encoding the stimuli.  Data were collected from a 120 Hz Tobii eye-tracker.
+#' four objects (coloured shapes), positioned at the corners of a square and participants spent 2 seconds encoding the stimuli.
+#' Data were collected from a 120 Hz Tobii eye-tracker.
 #' This is an example of the format raw data needs to be in in order to work with the functions
 #' in eyetools.
 #'
@@ -72,7 +75,8 @@
 
 #' Example AOIs for use with example_raw_WM
 #'
-#' This dataframe contains 4 rectangular areas of interest (AOIs), set out for use with the example_raw_WM dataset. Values are in pixels.
+#' This dataframe contains 4 rectangular areas of interest (AOIs), set out for use with the example_raw_WM dataset.
+#' Values are in pixels.
 #'
 #' @format A data frame with 4 rows and 4 variables:
 #' \describe{
@@ -105,3 +109,38 @@
 #' }
 #'
 "example_counterbalance"
+
+#' Example dataset from that contains binocular eye data from three participants from a simple contingency learning task
+#' (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015). In this task there are two stimuli that appear simultaneously
+#' on each trial (to the left and right of the screen).
+#' Participants look at these cues and then make a decision by selecting an "outcome response" button.
+#'
+#' The dataset contains data from two participants and the first six trials of the study.
+#'
+#' @format A dataframe of 31,041 observations and seven variables
+#' \describe{
+#'  \item{pNum}{participant number}
+#'  \item{time}{timestamp of the sample (milliseconds)}
+#'  \item{left_x}{x coordinate of the left eye}
+#'  \item{left_y}{y coordinate of the left eye}
+#'  \item{right_x}{x coordinate of the right eye}
+#'  \item{right_y}{y coordinate of the right eye}
+#'  \item{trial}{trial number}
+#'  ...
+#' }
+"HCL"
+
+#' Example dataset of behavioural data to compliment dataset HCL. This contains information on stimuli
+#' (such as the side the predictive cue was presented on) as well as response data, including accuracy and response times
+#'
+#' @format A dataframe of 12 observations and eight variables
+#' \describe{
+#'  \item{pNum}{participant number}
+#'  \item{trial}{trial number}
+#'  \item{P_cue}{Are these necessary columns?}
+#'  \item{NP_cue}{Are these necessary columns?}
+#'  \item{cue_order}{whether the predictive cue os presented on the left (1) or the right (2)}
+#'  \item{correct_out}{NAre these necessary columns?}
+#'  \item{accuracy}{response accuracy}
+#'  \item{RT}{response time in milliseconds}
+"HCL_behavioural"

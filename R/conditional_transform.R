@@ -10,13 +10,14 @@
 #' @param flip either "x", to flip across vertical midline, or "y" to flip across horizontal midline
 #' @param resolution_x screen size in pixels for the x axis
 #' @param resolution_y screen size in pixels for the y axis
-#' @param message
+#' @param message whether to output messages during function. Useful to turn off when using in a vectorised fashion where it is running multiple times
 #'
 #' @return a dataframe of the equivalent format as the input data
 #' @export
 #'
 #' @examples
-#' conditional_transform(example_counterbalance, flip = "x", cond_column = "cue_order", cond_values = 2)
+#' conditional_transform(example_counterbalance, flip = "x",
+#'                       cond_column = "cue_order", cond_values = 2)
 
 conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_values, resolution_x = 1920, resolution_y = 1080, message = TRUE) {
 
