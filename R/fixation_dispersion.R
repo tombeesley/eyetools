@@ -44,9 +44,8 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   }
 
   # tidy columns
-  colnames(data_fix) <- c("start", "end", "duration", "x", "y",
-                          "prop_NA", "fix_n", "min_dur", "disp_tol", "trial")
-  data_fix <- data_fix[,c(10,7,1:6,8,9)] # reorder cols
+  colnames(data_fix) <- c("trial", "fix_n", "start", "end", "duration", "x", "y",
+                          "prop_NA", "min_dur", "disp_tol")
   row.names(data_fix) <- NULL # remove the row names
   return(as.data.frame(data_fix))
 
@@ -159,7 +158,7 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
   if ((sum(is.na(data$fix_num)) == nrow(data)) == FALSE){
     data_s <- split(data,data$fix_num) # create list based on the fixation number from data
     trial_fix_store <- t(sapply(data_s, summarise_fixations))
-    trial_fix_store <- cbind(trial_fix_store, 1:nrow(trial_fix_store)) #fixation number
+    trial_fix_store <- cbind(1:nrow(trial_fix_store), trial_fix_store) #fixation number
   }
   else {
     # no fixations detected - write NAs
@@ -167,7 +166,7 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
   }
   trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
   trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
-  trial_fix_store <- cbind(trial_fix_store, trialNumber) # add trial number
+  trial_fix_store <- cbind(trialNumber, trial_fix_store) # add trial number
 
 
   return(trial_fix_store) # returns the fixations for that trial to the main algorithm
