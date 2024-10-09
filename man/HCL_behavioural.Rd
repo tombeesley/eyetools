@@ -16,6 +16,8 @@ A dataframe of 12 observations and eight variables
 \item{correct_out}{NAre these necessary columns?}
 \item{accuracy}{response accuracy}
 \item{RT}{response time in milliseconds}
+...
+}
 }
 \usage{
 HCL_behavioural

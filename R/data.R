@@ -119,14 +119,14 @@
 #'
 #' @format A dataframe of 31,041 observations and seven variables
 #' \describe{
-#'  \item{pNum}{participant number}
-#'  \item{time}{timestamp of the sample (milliseconds)}
-#'  \item{left_x}{x coordinate of the left eye}
-#'  \item{left_y}{y coordinate of the left eye}
-#'  \item{right_x}{x coordinate of the right eye}
-#'  \item{right_y}{y coordinate of the right eye}
-#'  \item{trial}{trial number}
-#'  ...
+#'   \item{pNum}{participant number}
+#'   \item{time}{timestamp of the sample (milliseconds)}
+#'   \item{left_x}{x coordinate of the left eye}
+#'   \item{left_y}{y coordinate of the left eye}
+#'   \item{right_x}{x coordinate of the right eye}
+#'   \item{right_y}{y coordinate of the right eye}
+#'   \item{trial}{trial number}
+#'   ...
 #' }
 "HCL"
 
@@ -135,12 +135,14 @@
 #'
 #' @format A dataframe of 12 observations and eight variables
 #' \describe{
-#'  \item{pNum}{participant number}
-#'  \item{trial}{trial number}
-#'  \item{P_cue}{Are these necessary columns?}
-#'  \item{NP_cue}{Are these necessary columns?}
-#'  \item{cue_order}{whether the predictive cue os presented on the left (1) or the right (2)}
-#'  \item{correct_out}{NAre these necessary columns?}
-#'  \item{accuracy}{response accuracy}
-#'  \item{RT}{response time in milliseconds}
+#'   \item{pNum}{participant number}
+#'   \item{trial}{trial number}
+#'   \item{P_cue}{Are these necessary columns?}
+#'   \item{NP_cue}{Are these necessary columns?}
+#'   \item{cue_order}{whether the predictive cue os presented on the left (1) or the right (2)}
+#'   \item{correct_out}{NAre these necessary columns?}
+#'   \item{accuracy}{response accuracy}
+#'   \item{RT}{response time in milliseconds}
+#'   ...
+#' }
 "HCL_behavioural"
