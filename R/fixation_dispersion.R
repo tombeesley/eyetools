@@ -97,7 +97,7 @@ trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
 
       if (mean(is.na(win$x)) < NA_tol) { # if within the tolerance of NA_tol
         max_d_win <- max(dist(win[,2:3]),na.rm = TRUE) # get max dispersion across this new window
-        if (is.infinite(max(dist(win[,2:3]),na.rm = TRUE))) {
+        if (is.infinite(max_d_win)) {
           print("is infinite")
         }
       } else {
