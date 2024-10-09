@@ -27,17 +27,17 @@ if (!require(devtools)) {
   library(devtools)
 }
 
-install_github("tombeesley/eyetools")
+install_github("tombeesley/eyetools@develop")
 
 ```
 
 A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
 
-```{r}
+```{r }
 
-# matthew - what is the purpose of showing these library commands?
+# matthew - what is the purpose of showing these library commands? ## FOR COMPLETENESS
 library(eyetools)
-library(ggplot2) # this doesn't need to be loaded, right?
+library(ggplot2) # this doesn't need to be loaded, right? ## CURRENTLY A CHUNK USES IT DIRECTLY
 
 ```
 
@@ -45,26 +45,23 @@ library(ggplot2) # this doesn't need to be loaded, right?
 
 Eyetools has built in example data that can be used while getting to grips with the package. For the purpose of this tutorial, we will start with a dataset that contains binocular eye data from three participants from a simple contingency learning task (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015). In this task there are two stimuli that appear simultaneously on each trial (to the left and right of the screen). Participants look at these cues and then make a decision by selecting an "outcome response" button.
 
-Let's load in this binocular data and explore the format. As we can see, the dataset is over 462,000 rows and 7 observations
+Let's load in this binocular data and explore the format. As we can see, the dataset is  31,041 rows and 7 observations
 
 ```{r}
-#this load will be hidden away and a nicer version of presenting this data will be written in
-load("data/data_for_eyetools.RData") # imports as 'data' - eye tracking data
-load("data/data_for_eyetools 1.rdata") # imports as 'td' - behavioural data # actually loads both, these need resaving...
+data(HCL, package = "eyetools")
+
+data <- HCL # eye tracking data
 
 dim(data)
 ```
 
-To get a basic idea of the contents of the data, we can look at the select data from the first timepoint in six trials for participant number 118.
-
-[this seems a slightly odd thing to look at in the data. Maybe just look at the first 20 timestamps from a suitable trial?]
+To get a basic idea of the contents of the data, we can look at the first 10 observations in the data
 
 We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`).
 
 ```{r}
-head(
-  data[(data$pNum == 118 & data$time == 0),]
-  )
+
+head(data[data$pNum == 118,], 10)
  
 ```
 
@@ -93,7 +90,7 @@ The above code returns a list of three elements, and if we take a look at just o
 head(data[[2]]) # participant 118
 ```
 
-[it seems that at this stage "pNum" is lost in the eye data. It's not clear how you then manage to the merge the data with the td data....]
+[it seems that at this stage "pNum" is lost in the eye data. It's not clear how you then manage to the merge the data with the data_behavioural data....]
 
 The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum number of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 25. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
 
@@ -109,14 +106,16 @@ The keen-eyed will notice that the present data does not contain a variable to s
 
 ```{r}
 
-head(td)
+data_behavioural <- HCL_behavioural # behavioural data
+
+head(data_behavioural)
 
 ```
 
 First we need to combine the two datasets based upon the participant identifier. We then need to reorder the columns into the `time, x, y, trial` format required for future eyetools functions.
 
 ```{r}
-data <- lapply(split(td, td$pNum), function(dataIn) {
+data <- lapply(split(data_behavioural, data_behavioural$pNum), function(dataIn) {
   
   pNum <- unique(dataIn$pNum)
   
@@ -320,7 +319,8 @@ data_AOI_sequence[data_AOI_sequence$trial == 3,] # a one trial sample output
 
 ```{r}
 
-data_AOI_time <- AOI_time(fix_data = fixations_disp[[2]], # just participant 118, otherwise incorporate into lapply() as above
+data_AOI_time <- AOI_time(data = fixations_disp[[2]], # just participant 118, otherwise incorporate into lapply() as above
+        data_type = "fix",
         AOIs = AOI_areas)
 
 head(data_AOI_time)
@@ -336,7 +336,7 @@ The most simple use is to just pass it raw data:
 
 ```{r}
 
-plot_seq(data[[2]], trial_number = 57)
+plot_seq(data[[2]], trial_number = 1)
 
 ```
 
@@ -344,16 +344,16 @@ But the parameters of `plot_seq()` can help exploration be more informative. We 
 
 ```{r}
 
-plot_seq(data[[2]], trial_number = 57, bg_image = "data/HCL_sample_image.jpg") # add background image
+plot_seq(data[[2]], trial_number = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
 
-plot_seq(data[[2]], trial_number = 57, AOIs = AOI_areas) # add AOIs
+plot_seq(data[[2]], trial_number = 1, AOIs = AOI_areas) # add AOIs
 
 ```
 
 You also have the option to split the time into bins to reduce the amount of data plotted
 
 ```{r}
-plot_seq(data[[2]], trial_number = 57, AOIs = AOI_areas, bin_time = 1000)
+plot_seq(data[[2]], trial_number = 1, AOIs = AOI_areas, bin_time = 1000)
 
 ```
 
