@@ -2,48 +2,48 @@
 #'
 #' Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
 #'
-#' @param fix_data A dataframe with fixation data (from fix_dispersion)
-#' @param raw_data A dataframe with raw data
+#' @param data A dataframe  of either fixation data (from fix_dispersion) or raw data
+#' @param data_type Whether data is a fixation ("fix") or raw data ("raw")
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
-#' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
+#' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #'
 #' @return a dataframe containing the time on the passed AOIs for each trial
 #' @export
 #'
 #' @examples
 #' fix_d <- fixation_dispersion(example_raw_WM)
-#' AOI_time(fix_data = fix_d, AOIs = AOIs_WM)
-#' AOI_time(raw_data = example_raw_WM, AOIs = AOIs_WM, sample_rate = 120)
+#' AOI_time(data = fix_d, data_type = "fix", AOIs = AOIs_WM)
+#' AOI_time(data = example_raw_WM, data_type = "raw", AOIs = AOIs_WM, sample_rate = 120)
 #'
 
-AOI_time <- function(fix_data = NULL, raw_data = NULL, AOIs, AOI_names = NULL, sample_rate = NULL) {
+AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL) {
 
   # dataframe to hold AOI entry results
   # columns are trial, AOI time * number of AOIs
 
-  if (is.null(fix_data)==FALSE & is.null(raw_data)==FALSE) {
+  if (is.null(data_type) == TRUE) {
     # input data for both fixations and raw data
-    stop("Attempt to use multiple input data objects; specify only one of fix_data or raw_data")
+    stop("Type of data not specified. Use `data_type = 'fix'` for fixations or `data_type = 'raw'` for raw data")
 
-  } else if (is.null(fix_data)==FALSE) {
+  } else if (data_type == "fix") {
 
     # process as fixation data input
-    proc_data <- sapply(split(fix_data, fix_data$trial),
+    proc_data <- sapply(split(data, data$trial),
                         AOI_time_trial_process_fix,
                         AOIs = AOIs)
 
-    data <- cbind(unique(fix_data$trial), t(proc_data))
+    data <- cbind(unique(data$trial), t(proc_data))
 
-  } else if(is.null(raw_data)==FALSE) {
+  } else if(data_type == "raw") {
 
     # process as raw data input
-    proc_data <- sapply(split(raw_data, raw_data$trial),
+    proc_data <- sapply(split(data, data$trial),
                         AOI_time_trial_process_raw,
                         AOIs = AOIs,
                         sample_rate = sample_rate)
 
-    data <- cbind(unique(raw_data$trial), t(proc_data))
+    data <- cbind(unique(data$trial), t(proc_data))
 
   }
 
