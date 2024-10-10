@@ -1,9 +1,10 @@
 #' Sequence analysis of area of interest entries
 #'
-#' Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data. Raw data will return an object of inaccurate AOI entries
+#' Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data.
 #'
 #'
-#' @param data A dataframe with fixation data (from fix_dispersion).
+#' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
+#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
@@ -13,55 +14,76 @@
 #'
 #' @examples
 #' fix_d <- fixation_dispersion(example_raw_WM)
-#' AOI_seq(fix_d, AOIs_WM)
+#' AOI_seq(fix_d, AOIs = AOIs_WM)
 #'
 #' @importFrom stats setNames complete.cases
 #' @importFrom utils stack
 
-AOI_seq <- function(data,
-                    AOIs,
-                    AOI_names = NULL,
-                    sample_rate = NULL,
-                    long = TRUE) {
+AOI_seq <- function(data, participant_ID = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE) {
 
-  # split data by trial
-  proc_data <- sapply(split(data, data$trial),
-                      AOI_seq_trial_process,
-                      AOIs = AOIs,
-                      AOI_names)
+  if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
 
-  data <- data.frame(trial = unique(data$trial),
-                     AOI_entry_seq = proc_data)
-
-  if (long == TRUE) {
-
-    split_list <- strsplit(data$AOI_entry_seq,';')
-
-    split_list_names <- setNames(split_list, data$trial)
-
-    data <- stack(split_list_names)
-
-    data <- data.frame(trial = as.numeric(data$ind),
-           AOI = data$value)
-
-# add in entry_n by way of indexing each trial
-get_row_n <- function(i) {
-  store <- data[data$trial == i,]
-
-  if (nrow(store) == 0) { store <- NULL} else {
-  store$entry_n <- 1:nrow(store)}
-
-  store
-}
-
-    data <- do.call(rbind.data.frame, lapply(1:max(data$trial), get_row_n))
-
-    data <- data[data$AOI != "NA",] # remove rows that are NA
+  if(missing(participant_ID)) { #if ppt_ID not specified, assume single participant
+    participant_ID = "participant_ID"
+    data <- cbind(data, participant_ID = c(1)) # just assign a value
   }
 
+  #if column doesn't exist
+  if(is.null(data[[participant_ID]])) stop("No participant identifier column detected")
 
-  return(data)
+  #internals carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
+  internals <- function(data, AOIs, AOI_names, sample_rate, long) {
 
+    # split data by trial
+    proc_data <- sapply(split(data, data$trial),
+                        AOI_seq_trial_process,
+                        AOIs = AOIs,
+                        AOI_names)
+
+    data <- data.frame(data[[participant_ID]][1],
+                       trial = unique(data$trial),
+                       AOI_entry_seq = proc_data)
+
+    colnames(data)[1] <- participant_ID #keep same column as entered
+
+    if (long == TRUE) {
+
+      split_list <- strsplit(data$AOI_entry_seq,';')
+
+      split_list_names <- setNames(split_list, data$trial)
+
+      data_long <- stack(split_list_names)
+
+      data <- data.frame(participant_ID = data[[participant_ID]][1],
+                         trial = as.numeric(data_long$ind),
+                         AOI = data_long$value)
+
+      # add in entry_n by way of indexing each trial
+      get_row_n <- function(i) {
+        store <- data[data$trial == i,]
+
+        if (nrow(store) == 0) { store <- NULL} else {
+          store$entry_n <- 1:nrow(store)}
+
+        store
+      }
+
+      data <- do.call(rbind.data.frame, lapply(1:max(data$trial), get_row_n))
+
+      data <- data[data$AOI != "NA",] # remove rows that are NA
+    }
+
+
+    return(data)
+
+  }
+
+  data <- split(data, data[[participant_ID]])
+  out <- lapply(data, internals, AOIs, AOI_names, sample_rate, long)
+  out <- do.call("rbind.data.frame", out)
+  rownames(out) <- NULL
+
+  return(out)
 }
 
 
@@ -77,7 +99,7 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
       # square AOI
       aoi_entries[,a] <- ((trial_data$x >= AOIs[a,1]-AOIs[a,3]/2 & trial_data$x <= AOIs[a,1]+AOIs[a,3]/2) &
                             (trial_data$y >= AOIs[a,2]-AOIs[a,4]/2 & trial_data$y <= AOIs[a,2]+AOIs[a,4]/2))
-      } else if (sum(!is.na(AOIs[a,])) == 3) {
+    } else if (sum(!is.na(AOIs[a,])) == 3) {
       # circle AOI
       aoi_entries[,a] <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
     } else {
