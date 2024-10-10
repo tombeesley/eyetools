@@ -4,11 +4,11 @@
 #'
 #'
 #' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
-#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param long Whether to return the AOI fixations in long or wide format. Defaults to long
+#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a long format dataframe containing the sequence of entries into AOIs on each trial
 #' @export
 #'
@@ -19,7 +19,7 @@
 #' @importFrom stats setNames complete.cases
 #' @importFrom utils stack
 
-AOI_seq <- function(data, participant_ID = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE) {
+AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE, participant_ID = "participant_ID") {
 
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
 

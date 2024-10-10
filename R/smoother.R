@@ -40,7 +40,6 @@ smoother <- function(data, span = 0.1, participant_ID = "participant_ID") {
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-
   if (out[['participant_ID']][1] == "NOT A VALID ID") out[['participant_ID']] <- NULL
 
   return(out)
