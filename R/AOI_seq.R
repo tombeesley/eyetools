@@ -23,16 +23,18 @@ AOI_seq <- function(data, participant_ID = NULL, AOIs, AOI_names = NULL, sample_
 
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
 
-  if(missing(participant_ID)) { #if ppt_ID not specified, assume single participant
-    participant_ID = "participant_ID"
-    data <- cbind(data, participant_ID = c(1)) # just assign a value
+  #first check for multiple/single ppt data
+  if (participant_ID == 'participant_ID') {
+    if(is.null(data[['participant_ID']])) {
+      participant_ID = "participant_ID"
+      data <- cbind(data, participant_ID = c("NOT A VALID ID")) # just assign a value
+    }
+  } else {
+    if(is.null(data[[participant_ID]])) stop(paste0("No participant identifier column called '", participant_ID, "' detected"))
   }
 
-  #if column doesn't exist
-  if(is.null(data[[participant_ID]])) stop("No participant identifier column detected")
-
-  #internals carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
-  internals <- function(data, AOIs, AOI_names, sample_rate, long) {
+  #internal_AOI_seq carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
+  internal_AOI_seq <- function(data, AOIs, AOI_names, sample_rate, long) {
 
     # split data by trial
     proc_data <- sapply(split(data, data$trial),
@@ -73,13 +75,15 @@ AOI_seq <- function(data, participant_ID = NULL, AOIs, AOI_names = NULL, sample_
       data <- data[data$AOI != "NA",] # remove rows that are NA
     }
 
+    #RETURN THE DATA TO THE SAME FORMAT IF SINGLE PPT
+    if (data[['participant_ID']][1] == "NOT A VALID ID") data[['participant_ID']] <- NULL
 
     return(data)
 
-  }
+      }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internals, AOIs, AOI_names, sample_rate, long)
+  out <- lapply(data, internal_AOI_seq, AOIs, AOI_names, sample_rate, long)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
