@@ -34,6 +34,7 @@ internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
 
   } else if (data_type == "fix") {
 
+    ppt_label <- data[[participant_ID]][[1]]
     # process as fixation data input
     proc_data <- sapply(split(data, data$trial),
                         AOI_time_trial_process_fix,
@@ -42,6 +43,7 @@ internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
     data <- cbind(unique(data$trial), t(proc_data))
 
   } else if(data_type == "raw") {
+    ppt_label <- data[[participant_ID]][[1]]
 
     # process as raw data input
     proc_data <- sapply(split(data, data$trial),
@@ -70,7 +72,7 @@ internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
     return(data[,i])
   }))
 
-  data <- cbind(test[[2]][[participant_ID]][1], data)
+  data <- cbind(ppt_label, data)
   colnames(data) <- c(participant_ID, "trial", AOI_name_text)
 
   return(data)
