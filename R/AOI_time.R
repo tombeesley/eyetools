@@ -7,6 +7,7 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
+#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe containing the time on the passed AOIs for each trial
 #' @export
@@ -17,11 +18,16 @@
 #' AOI_time(data = example_raw_WM, data_type = "raw", AOIs = AOIs_WM, sample_rate = 120)
 #'
 
-AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL) {
+AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, participant_ID = "participant_ID") {
 
+  #first check for multiple/single ppt data
+  test <- .check_ppt_n_in(participant_ID, data)
+  participant_ID <- test[[1]]
+  data <- test[[2]]
   # dataframe to hold AOI entry results
   # columns are trial, AOI time * number of AOIs
 
+internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
   if (is.null(data_type) == TRUE) {
     # input data for both fixations and raw data
     stop("Type of data not specified. Use `data_type = 'fix'` for fixations or `data_type = 'raw'` for raw data")
@@ -50,22 +56,34 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
   if (is.null(AOI_names)==FALSE) {
     AOI_name_text <- AOI_names
-  }
-  else {
+  } else {
     AOI_name_text <- sprintf("AOI_%s",1:nrow(AOIs))
   }
 
-  colnames(data) <- c("trial", AOI_name_text)
+
+  data <- data.frame(data)
 
   data <- do.call(cbind.data.frame, lapply(1:length(colnames(data)), function(i) {
 
-    data[,i] <- as.numeric(data[,i])
+      data[,i] <- as.numeric(data[,i])
 
+    return(data[,i])
   }))
 
-  colnames(data) <- c("trial", AOI_name_text)
+  data <- cbind(test[[2]][[participant_ID]][1], data)
+  colnames(data) <- c(participant_ID, "trial", AOI_name_text)
 
-  return(data.frame(data))
+  return(data)
+}
+
+  data <- split(data, data[[participant_ID]])
+  out <- lapply(data, internal_AOI_time, data_type, AOIs, AOI_names, sample_rate)
+  out <- do.call("rbind.data.frame", out)
+  rownames(out) <- NULL
+
+  data <- .check_ppt_n_out(out)
+
+  return(data)
 
 }
 
@@ -93,6 +111,7 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
       aoi_time_sums[a] <- sum(xy_hits*trial_data$dur) # sum the valid AOI hits
 
     }
+
 
   return(aoi_time_sums)
 
