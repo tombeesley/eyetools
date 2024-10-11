@@ -23,14 +23,9 @@
 interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, participant_ID = "participant_ID") {
 
   #first check for multiple/single ppt data
-  if (participant_ID == 'participant_ID') {
-    if(is.null(data[['participant_ID']])) {
-      participant_ID = "participant_ID"
-      data <- cbind(data, participant_ID = c("NOT A VALID ID")) # just assign a value
-    }
-  } else {
-    if(is.null(data[[participant_ID]])) stop(paste0("No participant identifier column called '", participant_ID, "' detected"))
-  }
+  test <- .check_ppt_n_in(participant_ID, data)
+  participant_ID <- test[[1]]
+  data <- test[[2]]
 
   internal_interpolate <- function(data, maxgap, method, report) {
     # PRE-INTERP summary of missing data
@@ -82,7 +77,7 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, pa
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-  if (out[['participant_ID']][1] == "NOT A VALID ID") out[['participant_ID']] <- NULL
+  out <- .check_ppt_n_out(out)
 
   return(out)
 

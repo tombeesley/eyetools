@@ -24,14 +24,9 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRU
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
 
   #first check for multiple/single ppt data
-  if (participant_ID == 'participant_ID') {
-    if(is.null(data[['participant_ID']])) {
-      participant_ID = "participant_ID"
-      data <- cbind(data, participant_ID = c("NOT A VALID ID")) # just assign a value
-    }
-  } else {
-    if(is.null(data[[participant_ID]])) stop(paste0("No participant identifier column called '", participant_ID, "' detected"))
-  }
+  test <- .check_ppt_n_in(participant_ID, data)
+  participant_ID <- test[[1]]
+  data <- test[[2]]
 
   #internal_AOI_seq carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
   internal_AOI_seq <- function(data, AOIs, AOI_names, sample_rate, long) {
@@ -127,6 +122,9 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
   } else {
     aoi_seq <- paste0(aoi_seq, collapse = ";")
   }
+
+  aoi_seq <- .check_ppt_n_out(aoi_seq)
+
   return(aoi_seq)
 
 }

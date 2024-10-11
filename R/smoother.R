@@ -18,14 +18,9 @@
 smoother <- function(data, span = 0.1, participant_ID = "participant_ID") {
 
   #first check for multiple/single ppt data
-  if (participant_ID == 'participant_ID') {
-    if(is.null(data[['participant_ID']])) {
-      participant_ID = "participant_ID"
-      data <- cbind(data, participant_ID = c("NOT A VALID ID")) # just assign a value
-    }
-  } else {
-    if(is.null(data[[participant_ID]])) stop(paste0("No participant identifier column called '", participant_ID, "' detected"))
-  }
+  test <- .check_ppt_n_in(participant_ID, data)
+  participant_ID <- test[[1]]
+  data <- test[[2]]
 
   internal_smooth <- function(data, span) {
 
@@ -54,6 +49,8 @@ smoother_trial <- function(data, span = 0.1){
 
   data$x <- predict(loess_x)
   data$y <- predict(loess_y)
+
+  data <- .check_ppt_n_out(data)
 
   return(data)
 
