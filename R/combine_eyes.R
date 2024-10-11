@@ -35,15 +35,18 @@ combine_eyes <- function(data, method = "average") {
 
   } else {
 
-    stop("Unexpected input to parameter 'method'. Use 'avergage' or 'best_eye'.")
+    stop("Unexpected input to parameter 'method'. Use 'average' or 'best_eye'.")
 
   }
 
-  data <- cbind(data$time, x, y, data$trial)
+  data$left_x <- NULL
+  data$left_y <- NULL
+  data$right_x <- NULL
+  data$right_y <- NULL
+
+  data <- cbind(data,x, y)
 
   data[data == 'NaN']=NA # convert any NaN (from mean()) to NA
-
-  colnames(data) <- c("time", "x", "y", "trial")
 
   data <- data.frame(data)
 
