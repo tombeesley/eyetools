@@ -79,7 +79,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     } else {
 
       if (run_interp){data <- eyetools::interpolate(data)}
-      data[,1] <- data[,1] - data[1,1,drop=TRUE] # start trial timestamp values at 0
+      data$time <- data$time - data$time[1] # start trial timestamp values at 0
 
       #get first row number where x and y is NOT NA
       min_x <- min(which(!is.na(data$x)))
@@ -103,7 +103,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
 
         if (new_window == TRUE){
 
-          future_ts <- which(data[,1] >= data[first_ts,1,drop=TRUE] + min_dur)
+          future_ts <- which(data$time >= data$time[first_ts] + min_dur)
           last_ts <- future_ts[1] #gets the earliest timestamp from all future valid ts
           if (is.na(last_ts)){
             break # last time stamp not valid (beyond window)
@@ -112,7 +112,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           win <- data[first_ts:last_ts,] # the window of trials to evaluate
 
           if (mean(is.na(win$x)) < NA_tol) { # if within the tolerance of NA_tol
-            max_d_win <- max(dist(win[,2:3]),na.rm = TRUE) # get max dispersion across this new window
+            max_d_win <- max(dist(win[,c("x", "y")]),na.rm = TRUE) # get max dispersion across this new window
             if (is.infinite(max_d_win)) {
               print("is infinite")
             }
@@ -140,7 +140,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           # increase the size of the window by a single timestamp
           last_ts  <- last_ts + 1
           # compute the new distances from this new data point
-          max_d_new_data <- max(rdist::cdist(data[last_ts,2:3],win[,2:3]))
+          max_d_new_data <- max(rdist::cdist(data[last_ts, c("x", "y")],win[,c("x", "y")]))
 
           if (is.na(max_d_new_data) | max_d_new_data >= disp_tol) {
             # either NA detected, or
@@ -159,8 +159,8 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
 
       # function to extract summary information from fixations
       summarise_fixations <- function(data){
-        start <- as.numeric(data[1,1]) # first timestamp
-        end <- as.numeric(data[nrow(data),1]) # last timestamp
+        start <- as.numeric(data$time[1]) # first timestamp
+        end <- as.numeric(data$time[nrow(data)]) # last timestamp
         dur <- end-start
         mean_x <- as.numeric(round(mean(data$x, na.rm = TRUE)),digits = 0)
         mean_y <- as.numeric(round(mean(data$y, na.rm = TRUE)),digits = 0)
