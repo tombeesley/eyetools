@@ -33,7 +33,8 @@ a long format dataframe containing the sequence of entries into AOIs on each tri
 Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data.
 }
 \examples{
-fix_d <- fixation_dispersion(example_raw_WM)
-AOI_seq(fix_d, AOIs = AOIs_WM)
+data <- combine_eyes(HCL)
+fix_d <- fixation_dispersion(data, participant_ID = "pNum")
+AOI_seq(fix_d, AOIs = HCL_AOIs, participant_ID = "pNum")
 
 }

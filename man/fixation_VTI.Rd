@@ -49,12 +49,10 @@ Compared to fixation_dispersion(), fixation_VTI() is more conservative in determ
 Returns a summary of the fixations found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \examples{
-# single trials:
-fixation_VTI(example_raw_WM[example_raw_WM$trial == 15,])
+data <- combine_eyes(HCL)
+fixation_VTI(data, participant_ID = "pNum")
 
-# multiple trials:
-
-fixation_VTI(example_raw_WM[example_raw_WM$trial \%in\% c(16),])
-
-#' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.
+}
+\references{
+Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.
 }

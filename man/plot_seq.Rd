@@ -5,7 +5,7 @@
 \title{Plot of raw data over time}
 \usage{
 plot_seq(
-  raw_data = NULL,
+  data = NULL,
   trial_number = NULL,
   AOIs = NULL,
   bg_image = NULL,
@@ -17,7 +17,7 @@ plot_seq(
 )
 }
 \arguments{
-\item{raw_data}{A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.}
+\item{data}{A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.}
 
 \item{trial_number}{can be used to select a particular trial within the data}
 
@@ -44,10 +44,15 @@ a single trial will be sampled at random. Alternatively, the trial_number can be
 trial, or can be split into bins to present distinct plots for each time window.
 }
 \examples{
+data <- combine_eyes(HCL)
+
 # plot the raw data
-plot_seq(raw_data = example_raw_WM[example_raw_WM$trial == 21,])
+plot_seq(data = data[data$pNum == 118,])
+
+# with AOIs
+plot_seq(data = data[data$pNum == 118,], AOIs = HCL_AOIs)
 
 # plot raw data with bins
-plot_seq(raw_data = example_raw_WM[example_raw_WM$trial == 21,], bin_time = 500)
+plot_seq(data = data[data$pNum == 118,], bin_time = 500)
 
 }

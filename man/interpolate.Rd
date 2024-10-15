@@ -32,7 +32,7 @@ the proportion of missing data before and after the interpolation process. This 
 for evaluating the effectiveness of the repair.
 }
 \examples{
-HCL_combined <- combine_eyes(HCL)
-interpolate(HCL_combined, maxgap = 20, participant_ID = "pNum")
+data <- combine_eyes(HCL)
+interpolate(data, maxgap = 20, participant_ID = "pNum")
 
 }

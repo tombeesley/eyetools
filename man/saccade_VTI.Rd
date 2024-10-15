@@ -31,5 +31,6 @@ Use the velocity threshold algorithm from Salvucci & Goldberg (1996) to determin
 Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \examples{
-saccade_VTI(example_raw_sac[example_raw_sac$trial<=10,])
+data <- combine_eyes(HCL)
+saccade_VTI(data, participant_ID = "pNum")
 }

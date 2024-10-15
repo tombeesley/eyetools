@@ -40,9 +40,8 @@ in the data and are not permitted within a valid fixation period.
 Runs the interpolation algorithm by default to fix small breaks in the data.
 }
 \examples{
-\dontrun{
-fixation_dispersion(HCL_comb, disp_tol = 150, participant_ID = "pNum")
-}
+data <- combine_eyes(HCL)
+fixation_dispersion(data, participant_ID = "pNum")
 
 }
 \references{

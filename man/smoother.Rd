@@ -20,7 +20,8 @@ a dataframe of the same shape as the input data
 A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
 }
 \examples{
+data <- combine_eyes(HCL)
 
-smoother(example_raw_WM)
+smoother(data, participant_ID = "pNum")
 
 }

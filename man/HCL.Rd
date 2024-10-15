@@ -3,7 +3,7 @@
 \docType{data}
 \name{HCL}
 \alias{HCL}
-\title{Example dataset from that contains binocular eye data from three participants from a simple contingency learning task
+\title{Example dataset from that contains binocular eye data from two participants from a simple contingency learning task
 (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015). In this task there are two stimuli that appear simultaneously
 on each trial (to the left and right of the screen).
 Participants look at these cues and then make a decision by selecting an "outcome response" button.}

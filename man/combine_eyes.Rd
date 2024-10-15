@@ -21,6 +21,6 @@ or for samples where there is data from only a single eye, that eye is used. For
 is computed, and the eye with the fewest missing samples is used.
 }
 \examples{
-combine_eyes(example_raw_binocular, method = "average")
+combine_eyes(HCL, method = "average")
 
 }

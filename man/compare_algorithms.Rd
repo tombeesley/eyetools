@@ -46,12 +46,11 @@ a list of the fixation data, correlation output, and data used for plotting
 }
 \description{
 A tool for comparing the two different algorithms present in this package. This function is useful for assessing the data as well as exploring which algorithm is likely to fit data more appropriately.
-The raw data is run through both algorithms (using the same specified dispersion tolerances, etc.) before making comparisons of the underlying data.
+The raw data is run through both algorithms (using the same specified dispersion tolerances, etc.) before making comparisons of the underlying data. Can only be used for single participant data.
 }
 \examples{
-compare_algorithms(eyetools::example_raw_WM[eyetools::example_raw_WM$trial \%in\% c(20:23),])
+data <- combine_eyes(HCL)
+compare_algorithms(data[data$pNum == 118,])
 
-# the default output can be suppressed
-compare_algorithms(example_raw_WM[example_raw_WM$trial == 16,], print_summary = FALSE)
 
 }
