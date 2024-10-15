@@ -4,10 +4,17 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE)
+AOI_seq(
+  data,
+  AOIs,
+  AOI_names = NULL,
+  sample_rate = NULL,
+  long = TRUE,
+  participant_ID = "participant_ID"
+)
 }
 \arguments{
-\item{data}{A dataframe with fixation data (from fix_dispersion).}
+\item{data}{A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data}
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
@@ -16,15 +23,17 @@ AOI_seq(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE)
 \item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
 
 \item{long}{Whether to return the AOI fixations in long or wide format. Defaults to long}
+
+\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a long format dataframe containing the sequence of entries into AOIs on each trial
 }
 \description{
-Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data. Raw data will return an object of inaccurate AOI entries
+Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data.
 }
 \examples{
 fix_d <- fixation_dispersion(example_raw_WM)
-AOI_seq(fix_d, AOIs_WM)
+AOI_seq(fix_d, AOIs = AOIs_WM)
 
 }

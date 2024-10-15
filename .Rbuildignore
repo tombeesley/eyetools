@@ -6,4 +6,5 @@
 ^\.github$
 ^vignettes/articles$
 ^index\.Rmd$
-*.yml
+^_config\.yml$
+^README\.Rmd$

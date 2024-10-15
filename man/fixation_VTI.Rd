@@ -13,7 +13,8 @@ fixation_VTI(
   disp_tol = 100,
   run_interp = TRUE,
   smooth = FALSE,
-  progress = TRUE
+  progress = TRUE,
+  participant_ID = "participant_ID"
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ fixation_VTI(
 \item{smooth}{include a call to eyetools::smoother on each trial}
 
 \item{progress}{Display a progress bar}
+
+\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
@@ -50,9 +53,8 @@ Returns a summary of the fixations found per trial, including start and end coor
 fixation_VTI(example_raw_WM[example_raw_WM$trial == 15,])
 
 # multiple trials:
-data <- rbind(example_raw_WM[example_raw_WM$trial \%in\% c(3:10),])
 
-fixation_VTI(data)
+fixation_VTI(example_raw_WM[example_raw_WM$trial \%in\% c(16),])
 
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.
 }

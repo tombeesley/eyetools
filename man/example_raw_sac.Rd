@@ -19,7 +19,8 @@ example_raw_sac
 }
 \description{
 A dataset containing raw data samples for 100 trials of a simple visual search task,
-in which saccades were made (left or right) from a central location on the screen each trial. Data were collected from a 300 Hz Tobii eye-tracker.
+in which saccades were made (left or right) from a central location on the screen each trial.
+Data were collected from a 300 Hz Tobii eye-tracker.
 This is an example of the format raw data needs to be in in order to work with the functions
 in eyetools.
 }

@@ -3,40 +3,43 @@ title: "An introduction to eyetools"
 author: "Matthew Ivory, Tom Beesley"
 output: rmarkdown::html_vignette
 vignette: >
-%\VignetteIndexEntry{An introduction to eyetools}
+  %\VignetteIndexEntry{An introduction to eyetools}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
   
 ```{r setup, include=FALSE}
+
 knitr::opts_chunk$set(echo = TRUE,
 fig.path = "../man/figures/")
 
 knitr::opts_chunk$set(warning = FALSE) # suppress warnings for easier reading
 
 ```
-  
-  The eyetools package is designed to provide a consistent set of functions that helps researchers perform straightforward, yet powerful, steps in the analysis of eye-data. The suite of functions will allow the user to go from relatively unprocessed data to trial level summaries that are ready for statistical analysis.
-  
-  You can install eyetools using the following code:
-  
+
+
+The eyetools package is designed to provide a consistent set of functions that helps researchers perform straightforward, yet powerful, steps in the analysis of eye-data. The suite of functions will allow the user to go from relatively unprocessed data to trial level summaries that are ready for statistical analysis.
+
+You can install eyetools using the following code:
+
+
 ```{r, eval=FALSE}
 
 if (!require(devtools)) {
-install.packages("devtools")
-library(devtools)
+  install.packages("devtools")
+  library(devtools)
 }
 
 install_github("tombeesley/eyetools@develop")
 
-  ```
-  
-  A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
-  
-  ```{r}
-  
-library(eyetools)
+```
 
+A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
+
+```{r}
+
+library(eyetools)
+library(ggplot2)
 ```
 
 ## Data Manipulation and Preprocessing
@@ -178,12 +181,12 @@ In this next stage, we can start to explore the functions available for determin
 
 ```{r}
 data_fixations_disp <- fixation_dispersion(data,
-                          min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
-                          disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-                          run_interp = FALSE, # the default is true, but we have already run interpolate()
-                          NA_tol = 0.25, # the proportion of NAs tolerated within any window of samples evaluated as a fixation
-                          progress = FALSE, # whether to display a progress bar or not
-                          participant_ID = "pNum") 
+                                           min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
+                                           disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
+                                           run_interp = FALSE, # the default is true, but we have already run interpolate()
+                                           NA_tol = 0.25, # the proportion of NAs tolerated within any window of samples evaluated as a fixation
+                                           progress = FALSE, # whether to display a progress bar or not
+                                           participant_ID = "pNum") 
 ```
 
 The resultant data output from `fixation_dispersion()` presents data by trial and fixation. It gives the start and end time for these fixations along with their duration and the x,y coordinates for the entry of the fixation.
@@ -203,14 +206,14 @@ The `fixation_VTI()` works best on unsmoothed data (with default settings), as t
 ```{r}
 
 data_fixations_VTI <- fixation_VTI(data,
-             threshold = 80, #smoothed data, so use a lower threshold
-             min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
-             min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
-             disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-             run_interp = TRUE,
-             smooth = FALSE,
-             progress = FALSE, # whether to display a progress bar or not, when running multiple participants 
-             participant_ID = "pNum")
+                                   threshold = 80, #smoothed data, so use a lower threshold
+                                   min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
+                                   min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
+                                   disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
+                                   run_interp = TRUE,
+                                   smooth = FALSE,
+                                   progress = FALSE, # whether to display a progress bar or not, when running multiple participants 
+                                   participant_ID = "pNum")
 ```
 
 ```{r}

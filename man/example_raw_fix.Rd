@@ -19,7 +19,8 @@ example_raw_fix
 }
 \description{
 A dataset containing raw data samples for 72 trials of a simple learning experiment,
-with several clearly defined AOIs on the screen, producing many distinct fixations each trial. Data were collected from a 300 Hz Tobii eye-tracker.
+with several clearly defined AOIs on the screen, producing many distinct fixations each trial.
+Data were collected from a 300 Hz Tobii eye-tracker.
 This is an example of the format raw data needs to be in in order to work with the functions
 in eyetools.
 }

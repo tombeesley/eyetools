@@ -130,7 +130,7 @@
 #' }
 "HCL"
 
-#' Example dataset of behavioural data to compliment dataset HCL. This contains information on stimuli
+#' Example dataset of behavioural data to complement dataset HCL. This contains information on stimuli
 #' (such as the side the predictive cue was presented on) as well as response data, including accuracy and response times
 #'
 #' @format A dataframe of 12 observations and eight variables
@@ -146,3 +146,19 @@
 #'   ...
 #' }
 "HCL_behavioural"
+
+#' Example AOIs for use with HCL
+#'
+#' This dataframe contains three rectangular areas of interest (AOIs), set out for use with the HCL dataset.
+#' Values are in pixels.
+#'
+#' @format A data frame with 3 rows and 4 variables:
+#' \describe{
+#'   \item{x}{centred x coordinate of the AOI}
+#'   \item{y}{centred y coordinate of the AOI}
+#'   \item{width_radius}{either the width of the AOI, or the radius for circular AOIs}
+#'   \item{height}{the height of the AOI; should be NA for circular AOIs}
+#'   ...
+#' }
+#'
+"HCL_AOIs"

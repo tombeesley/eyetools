@@ -4,12 +4,14 @@
 \alias{smoother}
 \title{Smoothing of raw data}
 \usage{
-smoother(data, span = 0.1)
+smoother(data, span = 0.1, participant_ID = "participant_ID")
 }
 \arguments{
 \item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
 
 \item{span}{From stats::loess. The parameter α which controls the degree of smoothing.}
+
+\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe of the same shape as the input data
