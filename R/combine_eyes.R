@@ -11,7 +11,7 @@
 #' @return a dataframe of form c("time", "x", "y", "trial")
 #' @export
 #'
-#' @examples combine_eyes(example_raw_binocular, method = "average")
+#' @examples combine_eyes(HCL, method = "average")
 #'
 
 combine_eyes <- function(data, method = "average") {

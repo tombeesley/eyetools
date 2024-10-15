@@ -1,3 +1,10 @@
+#' Checks for whether data is multi or single participant
+#'
+#' Two internal functions for processing data to detect participant_ID values
+#'
+#' @NoRd
+#'
+
 .check_ppt_n_in <- function(participant_ID, data) {
 
   if (participant_ID == 'participant_ID') {

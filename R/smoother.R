@@ -9,8 +9,9 @@
 #' @export
 #'
 #' @examples
+#' data <- combine_eyes(HCL)
 #'
-#' smoother(example_raw_WM)
+#' smoother(data, participant_ID = "pNum")
 #'
 #' @importFrom stats loess predict na.exclude
 #'

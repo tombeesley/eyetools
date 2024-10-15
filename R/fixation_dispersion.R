@@ -16,9 +16,8 @@
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
 #' @examples
-#' \dontrun{
-#' fixation_dispersion(HCL_comb, disp_tol = 150, participant_ID = "pNum")
-#' }
+#' data <- combine_eyes(HCL)
+#' fixation_dispersion(data, participant_ID = "pNum")
 #'
 #' @importFrom utils tail
 #' @importFrom pbapply pblapply

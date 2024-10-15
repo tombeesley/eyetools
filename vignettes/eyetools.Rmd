@@ -201,7 +201,7 @@ The `fixation_VTI()` function operates differently to `fixation_dispersion()`. I
 
 In simple terms, `fixation_VTI()` calculates the saccades within the data and identifies fixations as (essentially) non-saccade periods. To avoid eye gaze drift, it applies a dispersion tolerance parameter as well to ensure that fixations can be appropriately localised to an x,y coordinate pair. One current limitation to `fixation_VTI()` that is not present in `fixation_dispersion()` is the need for data to be complete with no NAs present, otherwise it cannot compute the saccades.
 
-The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. WHen working with smoothed data, lowering the default threshold parameter is recommended as the "jerky" saccadic starts are less sudden and so the entry point of a saccade is sooner.
+The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. When working with smoothed data, lowering the default threshold parameter is recommended as the "jerky" saccadic starts are less sudden and so the entry point of a saccade is sooner.
 
 ```{r}
 

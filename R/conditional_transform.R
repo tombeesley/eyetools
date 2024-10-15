@@ -16,8 +16,11 @@
 #' @export
 #'
 #' @examples
-#' conditional_transform(example_counterbalance, flip = "x",
-#'                       cond_column = "cue_order", cond_values = 2)
+#' data <- combine_eyes(HCL)
+#' data <- merge(data, HCL_behavioural)
+#' conditional_transform(data, flip = "x",
+#'                       cond_column = "cue_order",
+#'                       cond_values = 2)
 
 conditional_transform <- function(data, flip = c("x", "y"), cond_column, cond_values, resolution_x = 1920, resolution_y = 1080, message = TRUE) {
 

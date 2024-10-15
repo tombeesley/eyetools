@@ -17,16 +17,10 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' #trying to draw a screenshot under a spatial plot
-#' d_raw <- example_raw_WM
-#' d_raw <- d_raw[d_raw$trial==10,] # take just one trial
-#' d_fix <- fix_dispersion(d_raw)
-#' d_sac <- VTI_saccade(d_raw)
-#' plot_spatial(raw_data = d_raw,
-#'              fix_data = d_fix,
-#'              sac_data = d_sac)
-#' }
+#' data <- combine_eyes(HCL)
+#'
+#' # plot the raw data
+#' plot_spatial(raw_data = data[data$pNum == 118,])
 #'
 #' @import ggplot2
 #' @import ggforce

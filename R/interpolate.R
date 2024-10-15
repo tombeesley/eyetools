@@ -14,8 +14,8 @@
 #' @export
 #'
 #' @examples
-#' HCL_combined <- combine_eyes(HCL)
-#' interpolate(HCL_combined, maxgap = 20, participant_ID = "pNum")
+#' data <- combine_eyes(HCL)
+#' interpolate(data, maxgap = 20, participant_ID = "pNum")
 #'
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline

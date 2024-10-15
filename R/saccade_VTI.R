@@ -15,7 +15,8 @@
 #' @export
 #'
 #' @examples
-#' saccade_VTI(example_raw_sac[example_raw_sac$trial<=10,])
+#' data <- combine_eyes(HCL)
+#' saccade_VTI(data, participant_ID = "pNum")
 
 saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20, participant_ID = "participant_ID"){
 

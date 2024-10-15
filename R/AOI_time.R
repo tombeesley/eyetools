@@ -13,10 +13,15 @@
 #' @export
 #'
 #' @examples
-#' fix_d <- fixation_dispersion(example_raw_WM)
-#' AOI_time(data = fix_d, data_type = "fix", AOIs = AOIs_WM)
-#' AOI_time(data = example_raw_WM, data_type = "raw", AOIs = AOIs_WM, sample_rate = 120)
+#' data <- combine_eyes(HCL)
+#' fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 #'
+#' # fixation data
+#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs)
+#'
+#' #raw data
+#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, sample_rate = 120)
+
 
 AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, participant_ID = "participant_ID") {
 

@@ -1,7 +1,7 @@
 #' A battery of metrics and plots to compare the two algorithms (dispersion and VTI)
 #'
 #' A tool for comparing the two different algorithms present in this package. This function is useful for assessing the data as well as exploring which algorithm is likely to fit data more appropriately.
-#' The raw data is run through both algorithms (using the same specified dispersion tolerances, etc.) before making comparisons of the underlying data.
+#' The raw data is run through both algorithms (using the same specified dispersion tolerances, etc.) before making comparisons of the underlying data. Can only be used for single participant data.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param plot_fixations Whether to plot the detected fixations. default as TRUE
@@ -19,10 +19,9 @@
 #' @export
 #'
 #' @examples
-#' compare_algorithms(eyetools::example_raw_WM[eyetools::example_raw_WM$trial %in% c(20:23),])
+#' data <- combine_eyes(HCL)
+#' compare_algorithms(data[data$pNum == 118,])
 #'
-#' # the default output can be suppressed
-#' compare_algorithms(example_raw_WM[example_raw_WM$trial == 16,], print_summary = FALSE)
 #'
 #' @importFrom stats cor.test reshape time
 #' @import ggplot2
