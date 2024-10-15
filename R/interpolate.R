@@ -13,14 +13,19 @@
 #' @return a dataframe of the same shape of the input data
 #' @export
 #'
-#' @examples interpolate(example_raw_fix, maxgap = 20)
-#' @examples interpolate(example_raw_fix, method = "approx", maxgap = 50, report = TRUE)
+#' @examples
+#' HCL_combined <- combine_eyes(HCL)
+#' interpolate(HCL_combined, maxgap = 20, participant_ID = "pNum")
 #'
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
 #'
 interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, participant_ID = "participant_ID") {
+
+  if(is.null(data$x) | is.null(data$y)) {
+    stop("Columns 'x' or 'y' not found.")
+  }
 
   #first check for multiple/single ppt data
   test <- .check_ppt_n_in(participant_ID, data)
