@@ -99,15 +99,13 @@ An additional step that can be beneficial is to pass the eye data through the `s
 
 ```{r}  
 data_smooth <- smoother(data,
-                        span = .1) # default setting. This controls the degree of smoothing
+                        span = .1, # default setting. This controls the degree of smoothing
+                        participant_ID = "pNum")
 
-```
 
-The below plot shows the difference between the raw and smoothed data.
-
-```{r}  
 
 # participant 118, trial 5  
+# y coord
 ggplot() +
   geom_line(data = data[data$pNum == 118 & data$trial == 5,],
             aes(x = time, y = y),
@@ -117,7 +115,25 @@ ggplot() +
             colour = "blue") +   
   theme_bw()
 ```
-[**** ONCE FIXED, HERE WE CAN REPORT ON THE SPAN PARAMETER AND HOW IT CAN BE USED TO PROVIDE AN OPTIMAL SMOOTHENING]
+The plot above shows the difference between the raw and smoothed data. With the default smoothing setting, we can see that the smoothed data does not track the actual data as closely as it could. The lower the value of `span`, the closer the smoothed data represents the raw data. The difference is minimal, but a visual inspection suggests that a span of .02 is a good value for this data example. It is important that the fixations and saccades are matched closely to ensure data quality.
+
+```{r}
+
+data_smooth <- smoother(data, 
+                        span = .02,
+                        participant_ID = "pNum")
+
+# y coord
+ggplot() +
+  geom_line(data = data[data$pNum == 118 & data$trial == 5,],
+            aes(x = time, y = y),
+            colour = "red") +  
+  geom_line(data = data_smooth[data_smooth$pNum == 118 & data_smooth$trial == 5,],              
+            aes(x = time, y = y),             
+            colour = "blue") +   
+  theme_bw()
+```
+
 
 ### Counterbalancing positions
 
@@ -245,26 +261,6 @@ comparison <- compare_algorithms(data_subset,
                                  NA_tol = 0.25,
                                  run_interp = TRUE,
                                  smooth = FALSE)
-```
-
-And for the smoothed data as a comparison
-
-```{r}
-data_subset_smooth <- data_smooth[[2]][data_smooth[[2]]$trial %in% c(1),]
-data_subset_smooth <- data_subset_smooth[,1:4] #keep only time, x, y, and trial
-
-comparison_smooth <- compare_algorithms(data_subset_smooth,
-                                        plot_fixations = TRUE,
-                                        print_summary = TRUE,
-                                        sample_rate = NULL,
-                                        threshold = 100,
-                                        min_dur = 150,
-                                        min_dur_sac = 20,
-                                        disp_tol = 100,
-                                        NA_tol = 0.25,
-                                        run_interp = TRUE,
-                                        smooth = FALSE)
-
 ```
 
 ## Areas of Interest
