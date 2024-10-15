@@ -151,17 +151,12 @@ head(data_behavioural)
 
 ```
 
-First we need to combine the two datasets based upon the participant identifier.
+First we need to combine the two datasets based upon the participant identifier. Once the data has been joined we can use `conditional_transform()` to transform the x coordinates across the midline.
+
 
 ```{r}
 
-data <- merge(data, data_behavioural) # merges with the common variables pNum and trial
-
-```
-
-Once the data has been joined we can use `conditional_transform()` to transform the x coordinates across the midline.
-
-```{r}
+data <- merge(data_smooth, data_behavioural) # merges with the common variables pNum and trial
 
 data <- conditional_transform(data, 
                               flip = "x", #flip across x midline
@@ -203,19 +198,16 @@ The `fixation_VTI()` function operates differently to `fixation_dispersion()`. I
 
 In simple terms, `fixation_VTI()` calculates the saccades within the data and identifies fixations as (essentially) non-saccade periods. To avoid eye gaze drift, it applies a dispersion tolerance parameter as well to ensure that fixations can be appropriately localised to an x,y coordinate pair. One current limitation to `fixation_VTI()` that is not present in `fixation_dispersion()` is the need for data to be complete with no NAs present, otherwise it cannot compute the saccades.
 
-The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. [\*\*hmmm, my understanding was that the opposite was true. I thought the smoothed data was critical for assessment of gradual changes in velocity - otherwise don't you get highly variable velocities in unsmoothed data?]
-
-Lower values for the threshold parameter may allow for fixations to be suitably detected with smooth data.
+The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. WHen working with smoothed data, lowering the default threshold parameter is recommended as the "jerky" saccadic starts are less sudden and so the entry point of a saccade is sooner.
 
 ```{r}
-data_nonNA <- na.omit(data)
 
-data_fixations_VTI <- fixation_VTI(data_nonNA,
-             threshold = 100,
+data_fixations_VTI <- fixation_VTI(data,
+             threshold = 80, #smoothed data, so use a lower threshold
              min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
              min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
              disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-             run_interp = FALSE, # the default is true, but we have already run interpolate()
+             run_interp = TRUE,
              smooth = FALSE,
              progress = FALSE, # whether to display a progress bar or not, when running multiple participants 
              participant_ID = "pNum")
@@ -239,22 +231,17 @@ head(saccades)
 
 ### Comparing the algorithms
 
-As mentioned above, a supplementary function exists to compare the two fixation algorithms, the imaginatively named `compare_algorithms()`. To demonstrate this, we apply it against a reduced dataset of five unsmoothed trials from one participant. It takes a combination of the parameters from both the fixation algorithms, and by default always prints a summary table that is also stored in the returned list. It is recommended to store this in an object as the output can be quite long.
+As mentioned above, a supplementary function exists to compare the two fixation algorithms, the imaginatively named `compare_algorithms()`. To demonstrate this, we apply it against a reduced dataset of just one participant. It takes a combination of the parameters from both the fixation algorithms, and by default  prints a summary table that is also stored in the returned list. It is recommended to store this in an object as the output can be quite long depending on the number of trials.
 
 ```{r}
 #some functions are best with single-participant data
 data_118 <- data[data$pNum == 118,]
 
-#take two trial for easier visualisation
-data_subset <- data_118[data_118$trial %in% 2:3,]
-
-#data_subset$pNum <- NULL
-
-comparison <- compare_algorithms(data_subset,
+comparison <- compare_algorithms(data_118,
                                  plot_fixations = TRUE,
                                  print_summary = TRUE,
                                  sample_rate = NULL,
-                                 threshold = 100,
+                                 threshold = 80, #lowering the default threshold produces a better result when using smoothed data
                                  min_dur = 150,
                                  min_dur_sac = 20,
                                  disp_tol = 100,
