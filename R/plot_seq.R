@@ -60,7 +60,7 @@ plot_seq <- function(raw_data = NULL,
     }
   }
 
-  raw_data[,1] <- raw_data[,1] - raw_data[1,1,drop=TRUE] # start trial timestamps at 0
+  raw_data$time <- raw_data$time - raw_data$time[1] # start trial timestamps at 0
 
   if (is.null(bin_time)==FALSE){
     raw_data$bin <- ceiling(raw_data$time/bin_time)

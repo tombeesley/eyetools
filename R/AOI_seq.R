@@ -31,6 +31,7 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRU
   #internal_AOI_seq carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
   internal_AOI_seq <- function(data, AOIs, AOI_names, sample_rate, long) {
 
+
     # split data by trial
     proc_data <- sapply(split(data, data$trial),
                         AOI_seq_trial_process,
@@ -55,6 +56,9 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRU
                          trial = as.numeric(data_long$ind),
                          AOI = data_long$value)
 
+      #keep original name
+      colnames(data)[1] <- participant_ID
+
       # add in entry_n by way of indexing each trial
       get_row_n <- function(i) {
         store <- data[data$trial == i,]
@@ -69,9 +73,8 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRU
 
       data <- data[data$AOI != "NA",] # remove rows that are NA
     }
-
     #RETURN THE DATA TO THE SAME FORMAT IF SINGLE PPT
-    if (data[['participant_ID']][1] == "NOT A VALID ID") data[['participant_ID']] <- NULL
+    if (data[[participant_ID]][1] == "NOT A VALID ID") data[[participant_ID]] <- NULL
 
     return(data)
 
@@ -81,6 +84,8 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRU
   out <- lapply(data, internal_AOI_seq, AOIs, AOI_names, sample_rate, long)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
+
+  out <- .check_ppt_n_out(out)
 
   return(out)
 }
@@ -123,7 +128,6 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
     aoi_seq <- paste0(aoi_seq, collapse = ";")
   }
 
-  aoi_seq <- .check_ppt_n_out(aoi_seq)
 
   return(aoi_seq)
 

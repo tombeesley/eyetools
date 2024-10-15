@@ -34,7 +34,6 @@ compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE
   data_split <- split(data, data$trial)
 
   data_list <- pbapply::pblapply(data_split, get_fixations, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth)
-
   data_list_temp <- data_list[[1]]
   # get the data from comparing the two algorithms
   dataout <- lapply(data_list, summarise_comparisons)
@@ -140,14 +139,12 @@ summarise_comparisons <- function(dataIn) {
   out[['desc']]$corr.t <-  correlation$statistic
 
   # create plot data
-  data_to_plot <- reshape(dataIn[[1]], direction = "long", list(5:6), v.names = "value", timevar = NULL)
-  data_to_plot[grepl("\\.1", rownames(data_to_plot)),]$id <- "fixations_vti"
-  data_to_plot[grepl("\\.2", rownames(data_to_plot)),]$id <- "fixations_disp"
-  #add in name variable and remove unnecessary ID
-  data_to_plot$name <- data_to_plot$id
-  data_to_plot$id <- NULL
+  data_to_plot <- reshape(dataIn[[1]], direction = "long", list(c("fixations_vti", "fixations_disp")), v.names = "value", timevar = NULL, idvar = "name")
+  data_to_plot[grepl("\\.1", rownames(data_to_plot)),]$name <- "fixations_vti"
+  data_to_plot[grepl("\\.2", rownames(data_to_plot)),]$name <- "fixations_disp"
+
   #reorder cols
-  data_to_plot <- data_to_plot[,c(1:4,6,5)]
+  data_to_plot <- data_to_plot[,c("time", "trial", "x", "y", "value", "name")]
   #arrange by time for easier reading
   #data_to_plot <- arrange(data_to_plot, time)
   data_to_plot$name <- factor(data_to_plot$name)
