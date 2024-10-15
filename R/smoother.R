@@ -25,7 +25,7 @@ smoother <- function(data, span = 0.1, participant_ID = "participant_ID") {
   internal_smooth <- function(data, span) {
 
     data_s <- split(data, data$trial)
-    by_trial_data <- lapply(data_s, smoother_trial)
+    by_trial_data <- lapply(data_s, smoother_trial, span)
     flat_trials <- do.call(rbind.data.frame, by_trial_data)
     return(flat_trials)
   }
@@ -42,7 +42,7 @@ smoother <- function(data, span = 0.1, participant_ID = "participant_ID") {
 }
 
 
-smoother_trial <- function(data, span = 0.1){
+smoother_trial <- function(data, span){
 
   loess_x <- loess(x ~ time, data = data, span = span, na.action = na.exclude)
   loess_y <- loess(y ~ time, data = data, span = span, na.action = na.exclude)
