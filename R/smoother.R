@@ -7,7 +7,7 @@
 #' if not it is handled as single participant data, or the participant_ID needs to be specified
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
-#' @param span From stats::loess. The parameter α which controls the degree of smoothing.
+#' @param span From stats::loess. The parameter alpha which controls the degree of smoothing.
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a dataframe of the same shape as the input data
 #' @export
