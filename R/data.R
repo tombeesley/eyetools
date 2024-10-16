@@ -18,8 +18,10 @@
 #' }
 "HCL"
 
-#' Example dataset of behavioural data to complement dataset HCL. This contains information on stimuli
-#' (such as the side the predictive cue was presented on) as well as response data, including accuracy and response times
+#' Example dataset of behavioural data to complement dataset HCL.
+#'
+#' This contains information on stimuli (such as the side the predictive cue was presented on)
+#' as well as response data, including accuracy and response times
 #'
 #' @format A dataframe of 12 observations and eight variables
 #' \describe{

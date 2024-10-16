@@ -234,7 +234,7 @@ AOI_time(t_fix, AOIs = AOI_regions)
 
 ### Processing saccades
 
-The function `VTI_saccade()` provides a means of processing the data for saccades, based on a "velocity threshold identification" algorithm, as described in Salvucci and Goldberg (2000). As described above, it is wise to use the `smoother()` function on the data first. THe sample rate can be set if known, or can be approximated using the timestamps in the data. The threshold determines the degrees of visual angle per second needed to indicate the presence of a saccadic eye-movement. 
+The function `VTI_saccade()` provides a means of processing the data for saccades, based on a "velocity threshold identification" algorithm, as described in Salvucci and Goldberg (2000). As described above, it is wise to use the `smoother()` function on the data first. The sample rate can be set if known, or can be approximated using the timestamps in the data. The threshold determines the degrees of visual angle per second needed to indicate the presence of a saccadic eye-movement. 
 
 ```{r}
 

@@ -177,7 +177,7 @@ In this next stage, we can start to explore the functions available for determin
 
 `fixation_dispersion()` detects fixations by assessing the *dispersion* of the eye position using a method similar to that proposed by Salvucci and Goldberg (1996)[^1]. This evaluates the maximum dispersion (distance) between x/y coordinates across a window of data, and looks for sufficient periods in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks in the data and are not permitted within a valid fixation period. By default, it runs the interpolation algorithm and this can be switched off using the relevant parameter.
 
-[^1]: Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA ’00, 71–78.
+[^1]: Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
 ```{r}
 data_fixations_disp <- fixation_dispersion(data,

@@ -3,8 +3,7 @@
 \docType{data}
 \name{HCL_behavioural}
 \alias{HCL_behavioural}
-\title{Example dataset of behavioural data to complement dataset HCL. This contains information on stimuli
-(such as the side the predictive cue was presented on) as well as response data, including accuracy and response times}
+\title{Example dataset of behavioural data to complement dataset HCL.}
 \format{
 A dataframe of 12 observations and eight variables
 \describe{
@@ -23,7 +22,7 @@ A dataframe of 12 observations and eight variables
 HCL_behavioural
 }
 \description{
-Example dataset of behavioural data to complement dataset HCL. This contains information on stimuli
-(such as the side the predictive cue was presented on) as well as response data, including accuracy and response times
+This contains information on stimuli (such as the side the predictive cue was presented on)
+as well as response data, including accuracy and response times
 }
 \keyword{datasets}
