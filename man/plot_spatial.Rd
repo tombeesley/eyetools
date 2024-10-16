@@ -45,4 +45,7 @@ data <- combine_eyes(HCL)
 # plot the raw data
 plot_spatial(data = data[data$pNum == 118,], data_type = "raw")
 
+# add in AOIs
+plot_spatial(data = data[data$pNum == 118,], data_type = "raw", AOIs = HCL_AOIs)
+
 }

@@ -39,6 +39,11 @@ in which this maximum dispersion is below the specified dispersion tolerance. NA
 in the data and are not permitted within a valid fixation period.
 Runs the interpolation algorithm by default to fix small breaks in the data.
 }
+\details{
+It can take either single participant data or multiple participants where there is a variable for unique participant identification.
+The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_ID needs to be specified
+}
 \examples{
 data <- combine_eyes(HCL)
 fixation_dispersion(data, participant_ID = "pNum")

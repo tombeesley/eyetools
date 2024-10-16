@@ -46,12 +46,14 @@ compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE
 
   #get plot data
   data_plot <- do.call(rbind, lapply(dataout, `[[`, 3))
+  name <- data_plot$name
+  event_n <- data_plot$event_n
 
   #create plot
   plot <- ggplot(data_plot,
          aes(time, name, group = event_n)) +
     geom_line(linewidth=10) +
-    facet_wrap(~trial, dir="v") +
+    facet_wrap(~trial, dir="v", scales = "free_x") +
     theme_bw()
 
   if (plot_fixations) {

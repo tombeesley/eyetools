@@ -21,6 +21,9 @@
 #' # plot the raw data
 #' plot_spatial(data = data[data$pNum == 118,], data_type = "raw")
 #'
+#' # add in AOIs
+#' plot_spatial(data = data[data$pNum == 118,], data_type = "raw", AOIs = HCL_AOIs)
+#'
 #' @import ggplot2
 #' @import ggforce
 #' @importFrom magick image_read
@@ -57,6 +60,12 @@ plot_spatial <- function(data = NULL,
   if (data_type == "fix") {
 
     data$fix_n <- seq_len(nrow(data))
+    x <- data$x
+    y <- data$y
+    disp_tol <- data$disp_tol
+    duration <- data$duration
+    fix_n <- data$fix_n
+
 
     final_g <-
       final_g +
@@ -80,6 +89,11 @@ plot_spatial <- function(data = NULL,
 
   # PLOT SACCADE DATA
   if (data_type == "sac"){
+
+    origin_x <- data$origin_x
+    origin_y <- data$origin_y
+    terminal_x <- data$terminal_x
+    terminal_y <- data$terminal_y
 
     final_g <-
       final_g +
@@ -145,6 +159,9 @@ plot_spatial <- function(data = NULL,
 # function to add raw data
 add_raw <- function(dataIn, ggplot_in){
 
+  x <- dataIn$x
+  y <- dataIn$y
+
   ggplot_in <-
     ggplot_in +
     geom_point(data = dataIn,
@@ -157,6 +174,11 @@ add_raw <- function(dataIn, ggplot_in){
 
 # function to add AOIs
 add_AOIs <- function(AOIs, ggplot_in){
+
+  x <- AOIs$x
+  y <- AOIs$y
+  width_radius <- AOIs$width_radius
+  height <- AOIs$height
 
   rect_AOIs <- AOIs[!is.na(AOIs$height),]
   circle_AOIs <- AOIs[is.na(AOIs$height),] # those with NAs in height column

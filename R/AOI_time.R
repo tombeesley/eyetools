@@ -2,6 +2,10 @@
 #'
 #' Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
 #'
+#' AOI_time can take either single participant data or multiple participants where there is a variable for unique participant identification.
+#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
+#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#'
 #' @param data A dataframe  of either fixation data (from fix_dispersion) or raw data
 #' @param data_type Whether data is a fixation ("fix") or raw data ("raw")
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
@@ -9,7 +13,7 @@
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
-#' @return a dataframe containing the time on the passed AOIs for each trial
+#' @return a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 #' @export
 #'
 #' @examples

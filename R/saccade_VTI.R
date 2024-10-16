@@ -3,6 +3,10 @@
 #' Use the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements.
 #' Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
+#' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
+#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
+#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades

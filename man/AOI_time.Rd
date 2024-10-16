@@ -27,10 +27,15 @@ AOI_time(
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
-a dataframe containing the time on the passed AOIs for each trial
+a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 }
 \description{
 Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
+}
+\details{
+AOI_time can take either single participant data or multiple participants where there is a variable for unique participant identification.
+The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_ID needs to be specified
 }
 \examples{
 data <- combine_eyes(HCL)

@@ -2,6 +2,10 @@
 #'
 #' A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
 #'
+#' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
+#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
+#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param span From stats::loess. The parameter α which controls the degree of smoothing.
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant

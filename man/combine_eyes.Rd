@@ -12,7 +12,7 @@ combine_eyes(data, method = "average")
 \item{method}{either "average" or "best_eye" - see description.}
 }
 \value{
-a dataframe of form c("time", "x", "y", "trial")
+a dataframe of x-2 variables (with left_x and right_x condensed to x, and left_y and right_y condensed to y) and the same number of observations as the input data
 }
 \description{
 Combines the data from binocular samples into X/Y coordinate pairs. Two

@@ -27,14 +27,17 @@ AOI_seq(
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
-a long format dataframe containing the sequence of entries into AOIs on each trial
+a dataframe containing the sequence of entries into AOIs on each trial.
+
+If long is TRUE, then each AOI entry is returned on a new row, if FALSE, then a row per trial is returned with all AOI entries in one character string
 }
 \description{
-Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data.
+Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.
 }
 \examples{
 data <- combine_eyes(HCL)
 fix_d <- fixation_dispersion(data, participant_ID = "pNum")
+
 AOI_seq(fix_d, AOIs = HCL_AOIs, participant_ID = "pNum")
 
 }

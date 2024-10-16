@@ -8,7 +8,7 @@
 #' @param data raw data with columns time, left_x, left_y, right_x, right_y, and trial
 #' @param method either "average" or "best_eye" - see description.
 #'
-#' @return a dataframe of form c("time", "x", "y", "trial")
+#' @return a dataframe of x-2 variables (with left_x and right_x condensed to x, and left_y and right_y condensed to y) and the same number of observations as the input data
 #' @export
 #'
 #' @examples combine_eyes(HCL, method = "average")

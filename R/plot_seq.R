@@ -73,9 +73,10 @@ plot_seq <- function(data = NULL,
     if (is.null(bin_range)==FALSE){
       data <- data[data$bin >= head(bin_range, 1) & data$bin <= tail(bin_range,1),]
     }
-    data$bin_end <- data$bin*bin_time
-    # data$bin_start <- data$bin_end-bin_time
-    # data$bin_name <- as.factor(paste0(data$bin_start, "-", data$bin_end))
+    bin_end <- data$bin*bin_time
+    data$bin_end <- bin_end
+      # data$bin_start <- data$bin_end-bin_time
+      # data$bin_name <- as.factor(paste0(data$bin_start, "-", data$bin_end))
 
   }
 
@@ -157,6 +158,9 @@ plot_seq <- function(data = NULL,
 
 # function to add raw data
 add_raw_time_seq <- function(dataIn, ggplot_in){
+
+  x <- dataIn$x
+  y <- dataIn$y
 
   ggplot_in <-
     ggplot_in +

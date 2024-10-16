@@ -6,6 +6,10 @@
 #' in the data and are not permitted within a valid fixation period.
 #' Runs the interpolation algorithm by default to fix small breaks in the data.
 #'
+#' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
+#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
+#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyetools)
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
@@ -32,7 +36,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   data <- test[[2]]
 
 
-  internal_fixation_dispersion <- function(data, min_dur, dis_tol, run_interp, NA_tol, progress) {
+  internal_fixation_dispersion <- function(data, min_dur, disp_tol, run_interp, NA_tol, progress) {
 
     ppt_label <- data[[participant_ID]][1]
 
@@ -193,7 +197,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_fixation_dispersion, min_dur, dis_tol, run_interp, NA_tol, progress)
+  out <- lapply(data, internal_fixation_dispersion, min_dur, disp_tol, run_interp, NA_tol, progress)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 

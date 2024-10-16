@@ -30,6 +30,11 @@ a data frame giving the saccades found by trial
 Use the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements.
 Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
+\details{
+It can take either single participant data or multiple participants where there is a variable for unique participant identification.
+The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_ID needs to be specified
+}
 \examples{
 data <- combine_eyes(HCL)
 saccade_VTI(data, participant_ID = "pNum")

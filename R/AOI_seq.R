@@ -1,6 +1,6 @@
 #' Sequence analysis of area of interest entries
 #'
-#' Analyses the sequence of entries into defined AOI regions across trials. Should be used with fixation data.
+#' Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.
 #'
 #'
 #' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
@@ -9,12 +9,15 @@
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param long Whether to return the AOI fixations in long or wide format. Defaults to long
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
-#' @return a long format dataframe containing the sequence of entries into AOIs on each trial
+#' @return a dataframe containing the sequence of entries into AOIs on each trial.
+#'
+#' If long is TRUE, then each AOI entry is returned on a new row, if FALSE, then a row per trial is returned with all AOI entries in one character string
 #' @export
 #'
 #' @examples
 #' data <- combine_eyes(HCL)
 #' fix_d <- fixation_dispersion(data, participant_ID = "pNum")
+#'
 #' AOI_seq(fix_d, AOIs = HCL_AOIs, participant_ID = "pNum")
 #'
 #' @importFrom stats setNames complete.cases

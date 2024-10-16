@@ -8,3 +8,4 @@
 ^index\.Rmd$
 ^_config\.yml$
 ^README\.Rmd$
+^inst/extdata$
