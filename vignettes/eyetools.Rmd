@@ -58,7 +58,9 @@ dim(HCL)
 
 To get a basic idea of the contents of the data, we can look at the first 10 observations in the data
 
-We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`).
+We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`). 
+
+By default eyetools assumes that the resolution of eye data is in pixels (and a default screen size of 1920x1080), however the functions should work with any units (with no guarantee as it is not tested with units other than pixels).
 
 ```{r}
 
@@ -95,6 +97,13 @@ Note that as the participant identifier column is not "participant_ID" (as eyeto
 
 ```{r}
 data <- interpolate(data, maxgap = 25, method = "approx", participant_ID = "pNum")
+```
+
+You can also request a report of the differences in NA values present before and after the interpolation as well
+
+```{r}
+
+interpolate_report <- interpolate(data, maxgap = 25, method = "approx", participant_ID = "pNum", report = TRUE)
 
 ```
 
@@ -104,7 +113,6 @@ An additional step that can be beneficial is to pass the eye data through the `s
 data_smooth <- smoother(data,
                         span = .1, # default setting. This controls the degree of smoothing
                         participant_ID = "pNum")
-
 
 
 # participant 118, trial 5  
