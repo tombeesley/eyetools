@@ -168,5 +168,3 @@ add_raw_time_seq <- function(dataIn, ggplot_in){
 
   return(ggplot_in)
 }
-
-seq_plot <- plot_seq
