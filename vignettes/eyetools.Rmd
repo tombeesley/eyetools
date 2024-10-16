@@ -66,7 +66,7 @@ head(HCL[HCL$pNum == 118,], 10)
 
 ```
 
-eyetools functions can accept either single-participant data or multi-participant data. By default, most functions assume that data is of a single participant **unless** a participant identifier column called `participant_ID` is present,in which case the data is handled as multi-participant. In cases where participants are identified with a different variable, functions accept a parameter of `participant_ID` that takes a character string of the identifying column.
+eyetools functions can accept either single-participant data or multi-participant data. By default, most functions assume that data is of a single participant **unless** a participant identifier column called `participant_ID` is present,in which case the data is handled as multi-participant. In cases where participants are identified with a different variable, functions accept a parameter of `participant_ID` that takes a character string of the identifying column. In situations where participant_ID is not declared, and when duplicated non-consecutive trials are detected (that implies multi-participant data being input as single-participant), the function will error. This is a good point to then check your data structure, ensure that it is labelled correctly and ordered by trial and time.
 
 ### Converting binocular data to monocular data
 
@@ -335,10 +335,11 @@ plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs, bin_time = 1000)
 The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution.
 
 ```{r}
-plot_spatial(raw_data = data_118)
+plot_spatial(data = data_118, data_type = "raw")
 
 #plot the spatial data for one trial only
-plot_spatial(fix_data = data_fixations_disp[data_fixations_disp$trial == 1,]) # a LOT of fixations, let's take a sample
+plot_spatial(data = data_fixations_disp[data_fixations_disp$trial == 1,], # a LOT of fixations, let's take a sample
+             data_type = "fix")
 
-plot_spatial(sac_data = saccades)
+plot_spatial(data = saccades, data_type = "sac")
 ```

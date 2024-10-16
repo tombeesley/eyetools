@@ -3,9 +3,8 @@
 #' A tool for visualising raw eye-data, processed fixations, and saccades. Can use all three data types. Fixations can be labeled
 #' in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 #'
-#' @param raw_data data in standard raw data form (time, x, y, trial)
-#' @param fix_data data output from fixation function
-#' @param sac_data data output from saccade function
+#' @param data A dataframe  of either fixation data (from fix_dispersion) or raw data
+#' @param data_type Whether data is a fixation ("fix") raw data ("raw"), or saccade ("sac")
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.
 #' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
@@ -20,16 +19,15 @@
 #' data <- combine_eyes(HCL)
 #'
 #' # plot the raw data
-#' plot_spatial(raw_data = data[data$pNum == 118,])
+#' plot_spatial(data = data[data$pNum == 118,], data_tpe = "raw")
 #'
 #' @import ggplot2
 #' @import ggforce
 #' @importFrom magick image_read
 #'
 
-plot_spatial <- function(raw_data = NULL,
-                         fix_data = NULL,
-                         sac_data = NULL,
+plot_spatial <- function(data = NULL,
+                         data_type = NULL,
                          AOIs = NULL,
                          bg_image = NULL,
                          res = c(0,1920,0,1080),
@@ -37,6 +35,11 @@ plot_spatial <- function(raw_data = NULL,
                          show_fix_order = TRUE,
                          plot_header = FALSE) {
 
+  if (is.null(data_type) == TRUE) {
+    # input data for both fixations and raw data
+    stop("Type of data not specified. Use `data_type = 'fix'` for fixations `data_type = 'raw'` for raw data, or 'sac' for saccades")
+
+  }
 
   final_g <- ggplot()
 
@@ -47,23 +50,24 @@ plot_spatial <- function(raw_data = NULL,
   if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
 
   # add raw data
-  if (is.null(raw_data)==FALSE) final_g <- add_raw(raw_data, final_g)
+
+  if (data_type == "raw") final_g <- add_raw(data, final_g)
 
   # PLOT FIXATION DATA
-  if (is.null(fix_data)==FALSE) {
+  if (data_type == "fix") {
 
-    fix_data$fix_n <- seq_len(nrow(fix_data))
+    data$fix_n <- seq_len(nrow(data))
 
     final_g <-
       final_g +
-      geom_circle(data = fix_data,
+      geom_circle(data = data,
                  aes(x0 = x, y0 = y, r = disp_tol/2, fill = duration),
                  alpha = .2)
     if (show_fix_order == TRUE) {
 
       final_g <-
         final_g +
-        geom_label(data = fix_data,
+        geom_label(data = data,
                    aes(x = x, y = y, label = fix_n),
                    hjust = 1,
                    vjust = 1,
@@ -75,11 +79,11 @@ plot_spatial <- function(raw_data = NULL,
   }
 
   # PLOT SACCADE DATA
-  if (is.null(sac_data)==FALSE){
+  if (data_type == "sac"){
 
     final_g <-
       final_g +
-      geom_segment(data = sac_data,
+      geom_segment(data = data,
                    aes(x = origin_x, y = origin_y, xend = terminal_x, yend = terminal_y),
                    colour = "blue",
                    arrow = arrow(length = unit(0.5, "cm")),
@@ -196,5 +200,3 @@ add_BGimg <- function(bg_image_in, res, ggplot_in){
   return(ggplot_in)
 
 }
-
-spatial_plot <- plot_spatial
