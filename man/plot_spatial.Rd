@@ -5,9 +5,8 @@
 \title{Plot raw data and fixations}
 \usage{
 plot_spatial(
-  raw_data = NULL,
-  fix_data = NULL,
-  sac_data = NULL,
+  data = NULL,
+  data_type = NULL,
   AOIs = NULL,
   bg_image = NULL,
   res = c(0, 1920, 0, 1080),
@@ -17,11 +16,9 @@ plot_spatial(
 )
 }
 \arguments{
-\item{raw_data}{data in standard raw data form (time, x, y, trial)}
+\item{data}{A dataframe  of either fixation data (from fix_dispersion) or raw data}
 
-\item{fix_data}{data output from fixation function}
-
-\item{sac_data}{data output from saccade function}
+\item{data_type}{Whether data is a fixation ("fix") raw data ("raw"), or saccade ("sac")}
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.}
 
@@ -46,6 +43,6 @@ in the order they were made. Can overlay areas of interest (AOIs) and customise 
 data <- combine_eyes(HCL)
 
 # plot the raw data
-plot_spatial(raw_data = data[data$pNum == 118,])
+plot_spatial(data = data[data$pNum == 118,], data_type = "raw")
 
 }

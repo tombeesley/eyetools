@@ -4,7 +4,7 @@
 \name{eyetools-package}
 \alias{eyetools}
 \alias{eyetools-package}
-\title{eyetools: Tools for eye data analysis}
+\title{eyetools: Tools for Eye Data Analysis}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 

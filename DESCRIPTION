@@ -1,6 +1,6 @@
 Type: Package
 Package: eyetools
-Title: Tools for eye data analysis
+Title: Tools for Eye Data Analysis
 Version: 0.6.1
 Authors@R: c(
     person("Beesley", "Tom", email = "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
