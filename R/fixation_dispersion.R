@@ -74,7 +74,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   # this is the trial level process that runs on the data for a single trial within the main algorithm
   trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
 
-    trialNumber <- data$trial[1]
+    trial <- data$trial[1]
 
     #if no observations for x or y at all
     if (sum(!is.na(data$x)) == 0|sum(!is.na(data$y)) == 0) {
@@ -186,7 +186,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
       }
       trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
       trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
-      trial_fix_store <- cbind(trialNumber, trial_fix_store) # add trial number
+      trial_fix_store <- cbind(trial, trial_fix_store) # add trial number
 
       #trial_fix_store <- cbind(ppt_label, trial_fix_store)
 
