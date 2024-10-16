@@ -64,7 +64,6 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, pa
     } else {
       stop("'method' not recognised. Use 'approx' or 'spline'")
     }
-
     # POST-INTERP summary of missing data
     if (report) {
       post_missing <- mean((is.na(data$x) | is.na(data$y)))
@@ -83,10 +82,35 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, pa
 
   data <- split(data, data[[participant_ID]])
   out <- lapply(data, internal_interpolate, maxgap, method, report)
-  out <- do.call("rbind.data.frame", out)
-  rownames(out) <- NULL
+  #browser()
+  if (report) {
 
-  out <- .check_ppt_n_out(out)
+    report <- do.call(rbind, lapply(temp, function(data, i) {
+
+      data[[2]]
+
+    }))
+
+    report[[participant_ID]] <- rownames(report)
+    rownames(report) <- NULL
+    report <- report[,c(participant_ID, "missing_perc_before", "missing_perc_after")]
+
+    data <- do.call(rbind, lapply(temp, function(data, i)
+      { data[[1]] }
+      )
+      )
+
+    data$id <- rownames(data)
+    rownames(data) <- NULL
+
+    out <- list(data, report)
+    out[[1]] <- .check_ppt_n_out(out[[1]])
+
+  } else {
+    out <- do.call("rbind.data.frame", out)
+    rownames(out) <- NULL
+    out <- .check_ppt_n_out(out)
+  }
 
   return(out)
 
