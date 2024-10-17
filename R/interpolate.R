@@ -85,7 +85,7 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, pa
   #browser()
   if (report) {
 
-    report <- do.call(rbind, lapply(temp, function(data, i) {
+    report <- do.call(rbind, lapply(out, function(data, i) {
 
       data[[2]]
 
@@ -95,7 +95,7 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, pa
     rownames(report) <- NULL
     report <- report[,c(participant_ID, "missing_perc_before", "missing_perc_after")]
 
-    data <- do.call(rbind, lapply(temp, function(data, i)
+    data <- do.call(rbind, lapply(out, function(data, i)
       { data[[1]] }
       )
       )
