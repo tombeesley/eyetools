@@ -105,6 +105,7 @@ You can also request a report of the differences in NA values present before and
 
 interpolate_report <- interpolate(data, maxgap = 25, method = "approx", participant_ID = "pNum", report = TRUE)
 
+interpolate_report[[2]]
 ```
 
 An additional step that can be beneficial is to pass the eye data through the `smoother()` function. This removes particularly jerky transitions between samples and is critical for the analysis of velocities in the eye-movements. For now, let's store the smoothed data in a new object.
@@ -283,10 +284,11 @@ AOI_areas
 
 ```{r}
 
-data_AOI_time <- AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+#data_AOI_time <- 
+AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
                           data_type = "fix",
                           AOIs = AOI_areas,
-                          participant_ID = "pNum")
+                          participant_ID = "pNum", as_prop = T, trial_time = c(HCL_behavioural$RT))
 
 head(data_AOI_time)
 ```

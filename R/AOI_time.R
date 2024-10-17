@@ -11,6 +11,8 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
+#' @param as_prop whether to return time in AOI as a proportion of the total time of trial
+#' @param trial_time a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
@@ -28,7 +30,7 @@
 #'          sample_rate = 120, participant_ID = "pNum")
 
 
-AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, participant_ID = "participant_ID") {
+AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL, participant_ID = "participant_ID") {
 
   #first check for multiple/single ppt data
   test <- .check_ppt_n_in(participant_ID, data)
@@ -37,65 +39,75 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
   # dataframe to hold AOI entry results
   # columns are trial, AOI time * number of AOIs
 
-internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
-  if (is.null(data_type) == TRUE) {
-    # input data for both fixations and raw data
-    stop("Type of data not specified. Use `data_type = 'fix'` for fixations or `data_type = 'raw'` for raw data")
+  internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
+    if (is.null(data_type) == TRUE) {
+      # input data for both fixations and raw data
+      stop("Type of data not specified. Use `data_type = 'fix'` for fixations or `data_type = 'raw'` for raw data")
 
-  } else if (data_type == "fix") {
+    } else if (data_type == "fix") {
 
-    ppt_label <- data[[participant_ID]][[1]]
-    # process as fixation data input
-    proc_data <- sapply(split(data, data$trial),
-                        AOI_time_trial_process_fix,
-                        AOIs = AOIs)
+      ppt_label <- data[[participant_ID]][[1]]
+      # process as fixation data input
+      proc_data <- sapply(split(data, data$trial),
+                          AOI_time_trial_process_fix,
+                          AOIs = AOIs)
 
-    data <- cbind(unique(data$trial), t(proc_data))
+      data <- cbind(unique(data$trial), t(proc_data))
 
-  } else if(data_type == "raw") {
-    ppt_label <- data[[participant_ID]][[1]]
+    } else if(data_type == "raw") {
+      ppt_label <- data[[participant_ID]][[1]]
 
-    # process as raw data input
-    proc_data <- sapply(split(data, data$trial),
-                        AOI_time_trial_process_raw,
-                        AOIs = AOIs,
-                        sample_rate = sample_rate)
+      # process as raw data input
+      proc_data <- sapply(split(data, data$trial),
+                          AOI_time_trial_process_raw,
+                          AOIs = AOIs,
+                          sample_rate = sample_rate)
 
-    data <- cbind(unique(data$trial), t(proc_data))
+      data <- cbind(unique(data$trial), t(proc_data))
 
-  }
-
-
-  if (is.null(AOI_names)==FALSE) {
-    AOI_name_text <- AOI_names
-  } else {
-    AOI_name_text <- sprintf("AOI_%s",1:nrow(AOIs))
-  }
+    }
 
 
-  data <- data.frame(data)
+    if (is.null(AOI_names)==FALSE) {
+      AOI_name_text <- AOI_names
+    } else {
+      AOI_name_text <- sprintf("AOI_%s",1:nrow(AOIs))
+    }
 
-  data <- do.call(cbind.data.frame, lapply(1:length(colnames(data)), function(i) {
+
+    data <- data.frame(data)
+
+    data <- do.call(cbind.data.frame, lapply(1:length(colnames(data)), function(i) {
 
       data[,i] <- as.numeric(data[,i])
 
-    return(data[,i])
-  }))
+      return(data[,i])
+    }))
 
-  data <- cbind(ppt_label, data)
-  colnames(data) <- c(participant_ID, "trial", AOI_name_text)
+    data <- cbind(ppt_label, data)
+    colnames(data) <- c(participant_ID, "trial", AOI_name_text)
 
-  return(data)
-}
+    return(data)
+  }
 
   data <- split(data, data[[participant_ID]])
   out <- lapply(data, internal_AOI_time, data_type, AOIs, AOI_names, sample_rate)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-  data <- .check_ppt_n_out(out)
+  out <- .check_ppt_n_out(out)
 
-  return(data)
+  if (as_prop) {
+
+    if (length(trial_time) != nrow(out)) stop(paste("trial_time is not equal to the number of trials x participants in the data. Expected", nrow(out), "trial_time observations. Received", length(trial_time)))
+
+    out$trial_time <- trial_time
+    out[,3:ncol(out)] <- out[,3:ncol(out)]/trial_time
+    out$trial_time <- NULL
+
+  }
+
+  return(out)
 
 }
 
@@ -104,25 +116,25 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
 
   aoi_time_sums <- data.frame(matrix(nrow = 1, ncol = nrow(AOIs)))
 
-    for (a in 1:nrow(AOIs)) {
+  for (a in 1:nrow(AOIs)) {
 
-      if (sum(!is.na(AOIs[a,])) == 4) {
-        # square AOI
-        xy_hits <- (trial_data$x >= (AOIs[a,1] - AOIs[a,3]/2) & trial_data$x <= (AOIs[a,1] + AOIs[a,3]/2)) &
-          (trial_data$y >= (AOIs[a,2] - AOIs[a,4]/2) & trial_data$y <= (AOIs[a,2] + AOIs[a,4]/2))
+    if (sum(!is.na(AOIs[a,])) == 4) {
+      # square AOI
+      xy_hits <- (trial_data$x >= (AOIs[a,1] - AOIs[a,3]/2) & trial_data$x <= (AOIs[a,1] + AOIs[a,3]/2)) &
+        (trial_data$y >= (AOIs[a,2] - AOIs[a,4]/2) & trial_data$y <= (AOIs[a,2] + AOIs[a,4]/2))
 
-      } else if (sum(!is.na(AOIs[a,])) == 3) {
-        # circle AOI
-        xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
-      } else {
-        # report error message of bad AOI definition
-
-      }
-
-      # convert hits into data on time and entries
-      aoi_time_sums[a] <- sum(xy_hits*trial_data$dur) # sum the valid AOI hits
+    } else if (sum(!is.na(AOIs[a,])) == 3) {
+      # circle AOI
+      xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
+    } else {
+      # report error message of bad AOI definition
 
     }
+
+    # convert hits into data on time and entries
+    aoi_time_sums[a] <- sum(xy_hits*trial_data$dur) # sum the valid AOI hits
+
+  }
 
 
   return(aoi_time_sums)
