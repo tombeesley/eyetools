@@ -284,16 +284,25 @@ AOI_areas
 
 ```{r}
 
-#data_AOI_time <- 
-AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+data_AOI_time <- AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
                           data_type = "fix",
                           AOIs = AOI_areas,
-                          participant_ID = "pNum", as_prop = T, trial_time = c(HCL_behavioural$RT))
+                          participant_ID = "pNum")
 
 head(data_AOI_time)
 ```
 
-The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest.
+The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest. Or you can request that the function returns the time spent in AOIs as a proportion of overall time in the trial, which requires an input vector that has the values, luckily this is something contained in the `HCL_behavioural` obect.
+
+```{r}
+AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+                          data_type = "fix",
+                          AOIs = AOI_areas,
+                          participant_ID = "pNum", 
+                          as_prop = T, 
+                          trial_time = HCL_behavioural$RT) #vector of trial times
+```
+
 
 The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. This works with fixation data or raw data as the input.
 
