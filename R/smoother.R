@@ -8,6 +8,7 @@
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param span From stats::loess. The parameter alpha which controls the degree of smoothing.
+#' @param plot whether to plot the raw and smoothed plot for inspection
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a dataframe of the same shape as the input data
 #' @export
@@ -20,7 +21,7 @@
 #' @importFrom stats loess predict na.exclude
 #'
 
-smoother <- function(data, span = 0.1, participant_ID = "participant_ID") {
+smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participant_ID") {
 
   #first check for multiple/single ppt data
   test <- .check_ppt_n_in(participant_ID, data)
@@ -41,6 +42,44 @@ smoother <- function(data, span = 0.1, participant_ID = "participant_ID") {
   rownames(out) <- NULL
 
   out <- .check_ppt_n_out(out)
+#browser()
+  if (plot) {
+
+    raw <- test[[2]]
+    raw$participant_ID <- raw[,participant_ID]
+    smooth <- out
+    smooth$participant_ID <- smooth[,participant_ID]
+
+    ppt <- sample(unique(raw$participant_ID), 1) #sample one participant
+    trials <- sample(unique(raw$trial), 2) #sample two trials
+
+    raw <- raw[raw$participant_ID == ppt & raw$trial == trials,]
+    smooth <- smooth[smooth$participant_ID == ppt & smooth$trial == trials,]
+
+####
+    raw_long <- reshape(raw, dir = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
+    smooth_long <- reshape(smooth, dir = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
+
+    raw_long[raw_long$axis == 1,]$axis <- "x"
+    raw_long[raw_long$axis == 2,]$axis <- "y"
+    smooth_long[smooth_long$axis == 1,]$axis <- "x"
+    smooth_long[smooth_long$axis == 2,]$axis <- "y"
+    ####
+
+    print(paste("Showing trials:", paste(trials, collapse = ", "), "for participant", ppt))
+
+    to_plot <- ggplot() +
+      geom_line(data = raw_long,
+                aes(x = time, y = coord),
+                colour = "red") +
+      geom_line(data = smooth_long,
+                aes(x = time, y = coord),
+                colour = "blue") +
+      facet_wrap("trial ~ axis", scales = "free") +
+      theme_bw()
+
+    plot(to_plot)
+  }
 
   return(out)
 

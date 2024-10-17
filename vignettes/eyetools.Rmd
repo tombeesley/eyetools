@@ -39,7 +39,7 @@ A quick note before starting: the following tutorial is written using only the d
 ```{r}
 
 library(eyetools)
-library(ggplot2)
+
 ```
 
 ## Data Manipulation and Preprocessing
@@ -108,42 +108,30 @@ interpolate_report <- interpolate(data, maxgap = 25, method = "approx", particip
 interpolate_report[[2]]
 ```
 
-An additional step that can be beneficial is to pass the eye data through the `smoother()` function. This removes particularly jerky transitions between samples and is critical for the analysis of velocities in the eye-movements. For now, let's store the smoothed data in a new object.
+An additional step that can be beneficial is to pass the eye data through the `smoother()` function. This removes particularly jerky transitions between samples and is critical for the analysis of velocities in the eye-movements. For now, let's store the smoothed data in a new object. We can also ask for a plot of the data so that we can visually inspect it to see how well it fits the data.
 
 ```{r}  
+set.seed(0410) #set seed to show same participant and trials in both chunks
+
 data_smooth <- smoother(data,
                         span = .1, # default setting. This controls the degree of smoothing
-                        participant_ID = "pNum")
-
-
-# participant 118, trial 5  
-# y coord
-ggplot() +
-  geom_line(data = data[data$pNum == 118 & data$trial == 5,],
-            aes(x = time, y = y),
-            colour = "red") +  
-  geom_line(data = data_smooth[data_smooth$pNum == 118 & data_smooth$trial == 5,],              
-            aes(x = time, y = y),             
-            colour = "blue") +   
-  theme_bw()
+                        participant_ID = "pNum", 
+                        plot = TRUE) # whether to plot or not, FALSE as default
 ```
-The plot above shows the difference between the raw and smoothed data. With the default smoothing setting, we can see that the smoothed data does not track the actual data as closely as it could. The lower the value of `span`, the closer the smoothed data represents the raw data. The difference is minimal, but a visual inspection suggests that a span of .02 is a good value for this data example. It is important that the fixations and saccades are matched closely to ensure data quality.
+
+
+
+The plot above shows the difference between the raw and smoothed data for a randomly selected participant and two random trials (simply for visualisation purposes and to keep the amount of plotting to a minimum). 
+
+With the default smoothing setting, we can see that the smoothed data does not track the actual data as closely as it could. The lower the value of `span`, the closer the smoothed data represents the raw data. A visual inspection of the plot suggests that a span of .02 is a good value for this data example. It is important that the fixations and saccades are matched closely to ensure data quality. Oversmooth and you end up with significant data loss, undersmooth and all the jerky eye movement is preserved rendering the use of `smoother()` meaningless, so a good inspection and testing of values can be useful.
 
 ```{r}
+set.seed(0410) #set seed to show same participant and trials in both chunks
 
 data_smooth <- smoother(data, 
                         span = .02,
-                        participant_ID = "pNum")
-
-# y coord
-ggplot() +
-  geom_line(data = data[data$pNum == 118 & data$trial == 5,],
-            aes(x = time, y = y),
-            colour = "red") +  
-  geom_line(data = data_smooth[data_smooth$pNum == 118 & data_smooth$trial == 5,],              
-            aes(x = time, y = y),             
-            colour = "blue") +   
-  theme_bw()
+                        participant_ID = "pNum",
+                        plot = TRUE)
 ```
 
 
