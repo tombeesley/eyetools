@@ -1,5 +1,5 @@
 ---
-title: "Animating eyetools data"
+title: "Animating eyetools Data"
 author: "Matthew Ivory, Tom Beesley"
 
 ---
@@ -19,6 +19,14 @@ library(tidyverse)
 
 In this article, we offer examples of how eyetools data can be used with the [gganimate](https://gganimate.com/) package.
 
+```{r}
+data <- combine_eyes(HCL) |> 
+  interpolate(participant_ID = "pNum")
+
+data_smooth <- smoother(data, span = .02, participant_ID = "pNum")
+
+```
+
 ## Plotting raw data with lag
 
 This animation takes raw data (of a single trial), transforms it into a larger dataset with plot-specific parameters, and then provides an animation of the participant's gaze. The lag feature highlights the path taken and slowly fades to allow more data to be presented
@@ -26,9 +34,8 @@ This animation takes raw data (of a single trial), transforms it into a larger d
 ```{r, warning=FALSE}
 
 
-data <- example_counterbalance[example_counterbalance$trial == 3,] |> # take a random trial
-  interpolate() |>
-  smoother() |>
+data_plot1 <- data_smooth |> 
+  filter(pNum == "118", trial == "1") |> # take a single participant and trial
   mutate(id = seq(1, n()), # add an ID column to original dataset,
          type = "original",
          size = 10, # specify initial size
@@ -36,20 +43,21 @@ data <- example_counterbalance[example_counterbalance$trial == 3,] |> # take a r
   mutate(time = time - min(time))
 
 #bind the original dataset to a mid and end state too
-data_2 <- rbind(data,
-                data |> # create second version of the dataset - this is the tail
+data_plot1 <- rbind(data_plot1,
+                data_plot1 |> # create second version of the dataset - this is the tail
                   mutate(type = "mid_state",      
                          time = time + 45,         
                          size = size * 0.5,        
                          alpha = alpha * 0.2),     
                 
-                data |>                           
+                data_plot1 |>                           
                   mutate(type = "end_state",      
                          time = time + 300, # this determines the length of the tail and the final state   
+                         size = size * 0.5,        
                          alpha = 0))            
 
 # pass this combined dataset to ggplot & animate
-plot_animate <- data_2 |>
+plot_animate <- data_plot1 |>
   ggplot(aes(x = x, y = y, group = id,
              size = size, alpha = alpha)) +
   # add a background image
@@ -65,11 +73,94 @@ plot_animate <- data_2 |>
   lims(x = c(0, 1920), y = c(0, 1080))
 
 animate(plot_animate,
-        duration = 14)
+        duration =  round(max(data_plot1$time)/1000),
+        start_pause = 5)
 
 ## To save an animation
 #anim_save("point_lag.gif", plot_animate, height = 1080, width = 1920, duration = round(max(data_2$time)/1000),
 #          end_pause = 5)
+```
+
+## Plotting raw and smoothed data
+
+We can also improve upon the static plot presented in the `smoother()` function by animating the x and y together.
+```{r}
+data_both <- data |> 
+  left_join(data_smooth, suffix = c("_raw", "_smooth"), by = join_by("pNum", "time", "trial")) |> 
+    filter(pNum == "118", trial == "1") # take a single participant and trial
+
+data_both <- data_both |> 
+  pivot_longer(cols = c("x_raw", "x_smooth"), values_to = "x", names_to = "x_names") |> 
+  pivot_longer(cols = c("y_raw", "y_smooth"), values_to = "y", names_to = "y_names") |> 
+  filter((x_names == "x_raw" & y_names == "y_raw") | (x_names == "x_smooth" & y_names == "y_smooth")) |> 
+  mutate(smoothed = str_remove(x_names, "x_"), .after = trial) |> 
+  select(-c(x_names, y_names))
+```
+
+This first plot is quite rudimentary but shows a single timepoint position and the difference between the raw and `smoother()` data. 
+
+```{r}
+plot_animate_smooth <- data_both |> 
+  ggplot(aes(x = x, y = y, colour = smoothed)) +
+  geom_point(size = 10) +
+  lims(x = c(0, 1920), y = c(0, 1080)) +
+  transition_components(time)
+
+animate(plot_animate_smooth,
+        duration =  round(max(data_both$time)/1000),
+        start_pause = 5)
+
+```
+
+### Combining the smooth plot with the lag plot
+
+A much more sophisticated plot is made by combining the lag plot and the `smoother()` comparison plot. In doing so, and tweaking some values, we can see how well the smoothed data adheres to the original data whilst removing the jerkiness of the raw data
+```{r}
+data_plot3 <- data_both |>
+  mutate(id = seq(1, n()), # add an ID column to original dataset,
+         type = "original",
+         size = 10, # specify initial size
+         alpha = 1) |> # specify initial alpha
+  mutate(time = time - min(time)) |> 
+  arrange(time, desc(smoothed))
+
+#bind the original dataset to a mid and end state too
+data_plot3 <- rbind(data_plot3,
+                data_plot3 |> # create second version of the dataset - this is the tail
+                  mutate(type = "mid_state",      
+                         time = time + 45,         
+                         size = size * 0.5,        
+                         alpha = 1),     
+                
+                data_plot3 |>                           
+                  mutate(type = "end_state",      
+                         time = time*2, # this determines the length of the tail and the final state   
+                         size = size * 0.5,        
+                         alpha = 1))            
+
+data_plot3 <- data_plot3 |> 
+  mutate(time = ifelse(time > max(data_both$time), max(data_both$time), time)) |> 
+  mutate(alpha = ifelse(type %in% c("mid_state", "end_state") & smoothed == "smooth", .2, alpha))
+
+# pass this combined dataset to ggplot & animate
+plot_animate3 <- data_plot3 |>
+  ggplot(aes(x = x, y = y, colour = smoothed, group = id,
+             size = size, alpha = alpha)) +
+  # add a background image
+  #annotation_raster(magick::image_read("../data/HCL_sample_image.jpg"),
+  #                  xmin = 0,
+  #                  xmax = 1920,
+  #                  ymin = 0,
+  #                  ymax = 1080) +
+  geom_point() +
+  transition_components(time) +
+  scale_size_identity() +
+  scale_alpha_identity() +
+  lims(x = c(0, 1920), y = c(0, 1080))
+
+animate(plot_animate3,
+        duration = round(max(data_plot3$time)/1000),
+        start_pause = 5)
 ```
 
 ## Plotting AOI entries over raw data
@@ -105,4 +196,3 @@ animate(plot_animate,
 #
 #animate(plot_animate, duration = round(max(data_plot$time)/100))
 ```
-
