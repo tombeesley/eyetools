@@ -19,7 +19,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="An introduction to eyetools">
 <meta property="og:description" content="eyetools">
-<meta property="og:image" content="https://tombeesley.github.io/eyetools/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -33,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,12 +46,6 @@
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Animating-eyetools-data.html">Animating eyetools data</a>
-  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -74,7 +67,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>An introduction to eyetools</h1>
+      <img src="" class="logo" alt=""><h1>An introduction to eyetools</h1>
                         <h4 data-toc-skip class="author">Matthew Ivory,
 Tom Beesley</h4>
             
@@ -97,14 +90,13 @@ that are ready for statistical analysis.</p>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tombeesley/eyetools@develop"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tombeesley/eyetools"</span><span class="op">)</span></span></code></pre></div>
 <p>A quick note before starting: the following tutorial is written using
 only the dependencies contained within eyetools, so that means that if
 you are planning on following this tutorial through, you only need to
 install eyetools.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tombeesley.github.io/eyetools/">eyetools</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tombeesley.github.io/eyetools/">eyetools</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="data-manipulation-and-preprocessing">Data Manipulation and Preprocessing<a class="anchor" aria-label="anchor" href="#data-manipulation-and-preprocessing"></a>
 </h2>
@@ -133,6 +125,10 @@ identifier (<code>pNum</code>), the timepoint of the trial
 (<code>left_x</code> and <code>left_y</code>), the right eye coordinates
 (<code>right_x</code> and <code>right_y</code>), as well as a trial
 identifier (<code>trial</code>).</p>
+<p>By default eyetools assumes that the resolution of eye data is in
+pixels (and a default screen size of 1920x1080), however the functions
+should work with any units (with no guarantee as it is not tested with
+units other than pixels).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">HCL</span><span class="op">[</span><span class="va">HCL</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span>,<span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 7</span></span></span>
@@ -155,7 +151,11 @@ column called <code>participant_ID</code> is present,in which case the
 data is handled as multi-participant. In cases where participants are
 identified with a different variable, functions accept a parameter of
 <code>participant_ID</code> that takes a character string of the
-identifying column.</p>
+identifying column. In situations where participant_ID is not declared,
+and when duplicated non-consecutive trials are detected (that implies
+multi-participant data being input as single-participant), the function
+will error. This is a good point to then check your data structure,
+ensure that it is labelled correctly and ordered by trial and time.</p>
 <div class="section level3">
 <h3 id="converting-binocular-data-to-monocular-data">Converting binocular data to monocular data<a class="anchor" aria-label="anchor" href="#converting-binocular-data-to-monocular-data"></a>
 </h3>
@@ -208,51 +208,53 @@ which are both calls to <code><a href="https://rdrr.io/pkg/zoo/man/na.approx.htm
 specified in the function call.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">25</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
+<p>You can also request a report of the differences in NA values present
+before and after the interpolation as well</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">interpolate_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">25</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, report <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">interpolate_report</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##   pNum missing_perc_before missing_perc_after</span></span>
+<span><span class="co">## 1  118         0.015838577        0.015838577</span></span>
+<span><span class="co">## 2  119         0.005402579        0.005402579</span></span></code></pre>
 <p>An additional step that can be beneficial is to pass the eye data
 through the <code><a href="../reference/smoother.html">smoother()</a></code> function. This removes particularly
 jerky transitions between samples and is critical for the analysis of
 velocities in the eye-movements. For now, let’s store the smoothed data
-in a new object.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>,</span>
+in a new object. We can also ask for a plot of the data so that we can
+visually inspect it to see how well it fits the data.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0410</span><span class="op">)</span> <span class="co">#set seed to show same participant and trials in both chunks</span></span>
+<span></span>
+<span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>                        span <span class="op">=</span> <span class="fl">.1</span>, <span class="co"># default setting. This controls the degree of smoothing</span></span>
-<span>                        participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span></span>
-<span><span class="co"># participant 118, trial 5  </span></span>
-<span><span class="co"># y coord</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span> <span class="op">&amp;</span> <span class="va">data</span><span class="op">$</span><span class="va">trial</span> <span class="op">==</span> <span class="fl">5</span>,<span class="op">]</span>,</span>
-<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>,</span>
-<span>            colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>  </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_smooth</span><span class="op">[</span><span class="va">data_smooth</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span> <span class="op">&amp;</span> <span class="va">data_smooth</span><span class="op">$</span><span class="va">trial</span> <span class="op">==</span> <span class="fl">5</span>,<span class="op">]</span>,              </span>
-<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>,             </span>
-<span>            colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>   </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-8-1.png" width="700"> The
-plot above shows the difference between the raw and smoothed data. With
-the default smoothing setting, we can see that the smoothed data does
-not track the actual data as closely as it could. The lower the value of
-<code>span</code>, the closer the smoothed data represents the raw data.
-The difference is minimal, but a visual inspection suggests that a span
-of .02 is a good value for this data example. It is important that the
-fixations and saccades are matched closely to ensure data quality.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>, </span>
-<span>                        span <span class="op">=</span> <span class="fl">.02</span>,</span>
-<span>                        participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># y coord</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span> <span class="op">&amp;</span> <span class="va">data</span><span class="op">$</span><span class="va">trial</span> <span class="op">==</span> <span class="fl">5</span>,<span class="op">]</span>,</span>
-<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>,</span>
-<span>            colour <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>  </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_smooth</span><span class="op">[</span><span class="va">data_smooth</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span> <span class="op">&amp;</span> <span class="va">data_smooth</span><span class="op">$</span><span class="va">trial</span> <span class="op">==</span> <span class="fl">5</span>,<span class="op">]</span>,              </span>
-<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>,             </span>
-<span>            colour <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>   </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>                        participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, </span>
+<span>                        plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># whether to plot or not, FALSE as default</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "Showing trials: 4, 6 for participant 119"</span></span></code></pre>
 <p><img src="../reference/figures/unnamed-chunk-9-1.png" width="700"></p>
+<p>The plot above shows the difference between the raw and smoothed data
+for a randomly selected participant and two random trials (simply for
+visualisation purposes and to keep the amount of plotting to a
+minimum).</p>
+<p>With the default smoothing setting, we can see that the smoothed data
+does not track the actual data as closely as it could. The lower the
+value of <code>span</code>, the closer the smoothed data represents the
+raw data. A visual inspection of the plot suggests that a span of .02 is
+a good value for this data example. It is important that the fixations
+and saccades are matched closely to ensure data quality. Oversmooth and
+you end up with significant data loss, undersmooth and all the jerky eye
+movement is preserved rendering the use of <code><a href="../reference/smoother.html">smoother()</a></code>
+meaningless, so a good inspection and testing of values can be
+useful.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0410</span><span class="op">)</span> <span class="co">#set seed to show same participant and trials in both chunks</span></span>
+<span></span>
+<span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>                        span <span class="op">=</span> <span class="fl">.02</span>,</span>
+<span>                        participant_ID <span class="op">=</span> <span class="st">"pNum"</span>,</span>
+<span>                        plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "Showing trials: 4, 6 for participant 119"</span></span></code></pre>
+<p><img src="../reference/figures/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="counterbalancing-positions">Counterbalancing positions<a class="anchor" aria-label="anchor" href="#counterbalancing-positions"></a>
@@ -284,7 +286,7 @@ a separate dataset that holds the behavioural data, including the
 response times, the outcome, accuracy, and <code>cue_order</code> which
 tells us whether the target cue was on the left (coded as 1) or on the
 right (coded as 2).</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_behavioural</span> <span class="op">&lt;-</span> <span class="va">HCL_behavioural</span> <span class="co"># behavioural data</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_behavioural</span><span class="op">)</span></span></code></pre></div>
@@ -301,7 +303,7 @@ right (coded as 2).</p>
 identifier. Once the data has been joined we can use
 <code><a href="../reference/conditional_transform.html">conditional_transform()</a></code> to transform the x coordinates
 across the midline.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">data_smooth</span>, <span class="va">data_behavioural</span><span class="op">)</span> <span class="co"># merges with the common variables pNum and trial</span></span>
 <span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/conditional_transform.html">conditional_transform</a></span><span class="op">(</span><span class="va">data</span>, </span>
@@ -337,7 +339,7 @@ is below the specified dispersion tolerance. NAs are considered breaks
 in the data and are not permitted within a valid fixation period. By
 default, it runs the interpolation algorithm and this can be switched
 off using the relevant parameter.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_fixations_disp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixation_dispersion.html">fixation_dispersion</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>                                           min_dur <span class="op">=</span> <span class="fl">150</span>, <span class="co"># Minimum duration (in milliseconds) of period over which fixations are assessed</span></span>
 <span>                                           disp_tol <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period</span></span>
@@ -349,7 +351,7 @@ off using the relevant parameter.</p>
 presents data by trial and fixation. It gives the start and end time for
 these fixations along with their duration and the x,y coordinates for
 the entry of the fixation.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_fixations_disp</span><span class="op">)</span> <span class="co"># show sample of output data</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trial fix_n start  end duration    x   y prop_NA min_dur disp_tol</span></span>
 <span><span class="co">## 1  118     1     1     0  173      173  959 811       0     150      100</span></span>
@@ -388,7 +390,7 @@ default settings), as the smoothing process alters the velocity of the
 eye movement. When working with smoothed data, lowering the default
 threshold parameter is recommended as the “jerky” saccadic starts are
 less sudden and so the entry point of a saccade is sooner.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_fixations_VTI</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixation_VTI.html">fixation_VTI</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>                                   threshold <span class="op">=</span> <span class="fl">80</span>, <span class="co">#smoothed data, so use a lower threshold</span></span>
 <span>                                   min_dur <span class="op">=</span> <span class="fl">150</span>, <span class="co"># Minimum duration (in milliseconds) of period over which fixations are assessed</span></span>
@@ -398,7 +400,7 @@ less sudden and so the entry point of a saccade is sooner.</p>
 <span>                                   smooth <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                                   progress <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># whether to display a progress bar or not, when running multiple participants </span></span>
 <span>                                   participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_fixations_VTI</span><span class="op">)</span> <span class="co"># show sample of output data for participant 118</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trialNumber fix_n start  end duration         x        y min_dur</span></span>
 <span><span class="co">## 1  118           1     1     0  727      727  959.2461 598.7982     150</span></span>
@@ -423,7 +425,7 @@ saccade detection process. This can be accessed directly using
 from Salvucci &amp; Goldberg (1996) to determine saccadic eye movements.
 It calculates the length of a saccade based on the velocity of the eye
 being above a certain threshold.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">saccades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">saccades</span><span class="op">)</span></span></code></pre></div>
@@ -454,7 +456,7 @@ combination of the parameters from both the fixation algorithms, and by
 default prints a summary table that is also stored in the returned list.
 It is recommended to store this in an object as the output can be quite
 long depending on the number of trials.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#some functions are best with single-participant data</span></span>
 <span><span class="va">data_118</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span>,<span class="op">]</span></span>
 <span></span>
@@ -469,7 +471,7 @@ long depending on the number of trials.</p>
 <span>                                 NA_tol <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>                                 run_interp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                 smooth <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="../reference/figures/unnamed-chunk-18-1.png" width="700"></p>
 <pre><code><span><span class="co">##     algorithm trial  percent fix_n    corr.r        corr.p    corr.t</span></span>
 <span><span class="co">## 1         vti     1 88.46249    19 0.6810053  0.000000e+00 59.088592</span></span>
 <span><span class="co">## 2  dispersion     1 84.05546    35 0.6810053  0.000000e+00 59.088592</span></span>
@@ -494,7 +496,7 @@ Interest (AOIs) and then plots of the fixations.</p>
 <p>For the <code>AOI_</code> “family” of functions, we need to specify
 where our AOIs were presented on the screen. This will enable us to
 determine when a participant enters or exits these areas.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set areas of interest</span></span>
 <span><span class="va">AOI_areas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">AOI_areas</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"width_radius"</span>, <span class="st">"height"</span><span class="op">)</span></span>
@@ -512,7 +514,7 @@ determine when a participant enters or exits these areas.</p>
 regions across trials. Works with fixation and raw data as the input
 (must use one or the other, not both). This gives a cumulative total
 time spent for each trial.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_AOI_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_fixations_disp</span>, <span class="co"># just participant 118, otherwise incorporate into lapply() as above</span></span>
 <span>                          data_type <span class="op">=</span> <span class="st">"fix"</span>,</span>
 <span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
@@ -528,11 +530,34 @@ time spent for each trial.</p>
 <span><span class="co">## 6  118     6   879   783  2356</span></span></code></pre>
 <p>The returned data show the time in milliseconds on each area of
 interest, per trial. It is also possible to specify names for the
-different areas of interest.</p>
+different areas of interest. Or you can request that the function
+returns the time spent in AOIs as a proportion of overall time in the
+trial, which requires an input vector that has the values, luckily this
+is something contained in the <code>HCL_behavioural</code> obect.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_fixations_disp</span>, <span class="co"># just participant 118, otherwise incorporate into lapply() as above</span></span>
+<span>                          data_type <span class="op">=</span> <span class="st">"fix"</span>,</span>
+<span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
+<span>                          participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, </span>
+<span>                          as_prop <span class="op">=</span> <span class="cn">T</span>, </span>
+<span>                          trial_time <span class="op">=</span> <span class="va">HCL_behavioural</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span> <span class="co">#vector of trial times</span></span></code></pre></div>
+<pre><code><span><span class="co">##    pNum trial     AOI_1     AOI_2     AOI_3</span></span>
+<span><span class="co">## 1   118     1 0.1176383 0.2416636 0.3930189</span></span>
+<span><span class="co">## 2   118     2 0.1367421 0.1741986 0.4651282</span></span>
+<span><span class="co">## 3   118     3 0.1391737 0.1080352 0.5397965</span></span>
+<span><span class="co">## 4   118     4 0.3468838 0.2441707 0.2367043</span></span>
+<span><span class="co">## 5   118     5 0.2463722 0.0000000 0.4798608</span></span>
+<span><span class="co">## 6   118     6 0.1682554 0.1498794 0.4509781</span></span>
+<span><span class="co">## 7   119     1 0.1597284 0.3425844 0.2219270</span></span>
+<span><span class="co">## 8   119     2 0.1640896 0.1978148 0.3960240</span></span>
+<span><span class="co">## 9   119     3 0.2519910 0.2803862 0.2931970</span></span>
+<span><span class="co">## 10  119     4 0.2115344 0.4452717 0.1376355</span></span>
+<span><span class="co">## 11  119     5 0.2448598 0.3419782 0.2207165</span></span>
+<span><span class="co">## 12  119     6 0.2206532 0.2522878 0.3526349</span></span></code></pre>
 <p>The <code><a href="../reference/AOI_seq.html">AOI_seq()</a></code> function analyses the sequence of entries
 into defined AOI regions across trials. This works with fixation data or
 raw data as the input.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_AOI_sequence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_seq.html">AOI_seq</a></span><span class="op">(</span><span class="va">data_fixations_disp</span>,</span>
 <span>                             <span class="va">AOI_areas</span>,         </span>
 <span>                             AOI_names <span class="op">=</span> <span class="cn">NULL</span>,         </span>
@@ -566,37 +591,46 @@ then a single trial will be sampled at random. Alternatively, the
 the whole trial, or can be split into bins to present distinct plots for
 each time window.</p>
 <p>The most simple use is to just pass it raw data:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_118</span>, trial_number <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="../reference/figures/unnamed-chunk-23-1.png" width="700"></p>
 <p>But the parameters of <code><a href="../reference/plot_seq.html">plot_seq()</a></code> can help exploration be
 more informative. We can also add a background image and/or the AOIs we
 have defined:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_118</span>, trial_number <span class="op">=</span> <span class="fl">1</span>, bg_image <span class="op">=</span> <span class="st">"data/HCL_sample_image.jpg"</span><span class="op">)</span> <span class="co"># add background image</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-22-1.png" width="700"></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<p><img src="../reference/figures/unnamed-chunk-24-1.png" width="700"></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_118</span>, trial_number <span class="op">=</span> <span class="fl">1</span>, AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span><span class="op">)</span> <span class="co"># add AOIs</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-22-2.png" width="700"></p>
+<p><img src="../reference/figures/unnamed-chunk-24-2.png" width="700"></p>
 <p>You also have the option to split the time into bins to reduce the
 amount of data plotted</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_118</span>, trial_number <span class="op">=</span> <span class="fl">1</span>, AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, bin_time <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="../reference/figures/unnamed-chunk-25-1.png" width="700"></p>
 <p>The other plotting function is <code><a href="../reference/plot_spatial.html">plot_spatial()</a></code>, which is
 a tool for visualising raw eye-data, processed fixations, and saccades.
 Fixations can be labeled in the order they were made. You can also
-overlay areas of interest (AOIs) and customise the resolution.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>raw_data <span class="op">=</span> <span class="va">data_118</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-24-1.png" width="700"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#plot the spatial data for one trial only</span></span>
-<span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>fix_data <span class="op">=</span> <span class="va">data_fixations_disp</span><span class="op">[</span><span class="va">data_fixations_disp</span><span class="op">$</span><span class="va">trial</span> <span class="op">==</span> <span class="fl">1</span>,<span class="op">]</span><span class="op">)</span> <span class="co"># a LOT of fixations, let's take a sample</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-24-2.png" width="700"></p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>sac_data <span class="op">=</span> <span class="va">saccades</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-24-3.png" width="700"></p>
+overlay areas of interest (AOIs) and customise the resolution. It takes
+separate parameters for fixations, raw data, and saccades so they can be
+plotted simultaneously. You can also specify the trial_number to
+plot.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>raw_data <span class="op">=</span> <span class="va">data_118</span>, trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/unnamed-chunk-26-1.png" width="700"></p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>fix_data <span class="op">=</span> <span class="fu"><a href="../reference/fixation_dispersion.html">fixation_dispersion</a></span><span class="op">(</span><span class="va">data_118</span><span class="op">)</span>, trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/unnamed-chunk-26-2.png" width="700"></p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>sac_data <span class="op">=</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data_118</span><span class="op">)</span>, trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/unnamed-chunk-26-3.png" width="700"></p>
+<p>Or as mentioned, simultaneously:</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>raw_data <span class="op">=</span> <span class="va">data_118</span>,</span>
+<span>             fix_data <span class="op">=</span> <span class="fu"><a href="../reference/fixation_dispersion.html">fixation_dispersion</a></span><span class="op">(</span><span class="va">data_118</span><span class="op">)</span>,</span>
+<span>             sac_data <span class="op">=</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data_118</span><span class="op">)</span>,</span>
+<span>             trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/unnamed-chunk-27-1.png" width="700"></p>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

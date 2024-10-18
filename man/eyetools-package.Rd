@@ -6,8 +6,6 @@
 \alias{eyetools-package}
 \title{eyetools: Tools for Eye Data Analysis}
 \description{
-\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
-
 A set of tools for easier eye data processing. It enables automation of actions across the pipeline starting from combining binocular data, repairing missing data, through to event-related processing (fixations, saccades, time in AOIs), to data visualisation. These tools take relatively raw (trial, time, x, and y form) data and can be used to return fixations, saccades, and AOI entries and time spent in AOIs. As the tools rely on this basic data format, the functions can work with data from any eye tracking device.
 }
 \seealso{
