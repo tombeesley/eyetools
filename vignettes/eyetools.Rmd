@@ -342,14 +342,24 @@ plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs, bin_time = 1000)
 
 ```
 
-The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution.
+The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
 
 ```{r}
-plot_spatial(data = data_118, data_type = "raw")
+plot_spatial(raw_data = data_118, trial_number = 1)
 
-#plot the spatial data for one trial only
-plot_spatial(data = data_fixations_disp[data_fixations_disp$trial == 1,], # a LOT of fixations, let's take a sample
-             data_type = "fix")
+plot_spatial(fix_data = fixation_dispersion(data_118), trial_number = 1)
 
-plot_spatial(data = saccades, data_type = "sac")
+plot_spatial(sac_data = saccade_VTI(data_118), trial_number = 1)
+
 ```
+
+Or as mentioned, simultaneously:
+
+```{r}
+plot_spatial(raw_data = data_118,
+             fix_data = fixation_dispersion(data_118),
+             sac_data = saccade_VTI(data_118),
+             trial_number = 1)
+
+```
+

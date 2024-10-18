@@ -11,7 +11,6 @@
       time_rep <- duplicated(rle(data$time)$values)
 
       if (sum(trial_rep) > 0) stop("multiple duplicated trials detected. Have you forgotten to specify the participant_ID?")
-      if (sum(time_rep) > 0) stop("multiple duplicated timepoints detected. Have you forgotten to specify the participant_ID?")
 
       participant_ID = "participant_ID"
       data <- cbind(data, participant_ID = c("NOT A VALID ID")) # just assign a value
