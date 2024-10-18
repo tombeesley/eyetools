@@ -7,7 +7,8 @@ author: "Matthew Ivory, Tom Beesley"
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  warning = FALSE
 )
 ```
 
@@ -97,13 +98,15 @@ data_both <- data_both |>
   select(-c(x_names, y_names))
 ```
 
-This first plot is quite rudimentary but shows a single timepoint position and the difference between the raw and `smoother()` data. 
+This first plot is quite rudimentary but shows a single timepoint position and the difference between the raw and `smoother()` data. The smoothed data is transparent to stop it from obscuring the raw data where they are well aligned.
 
 ```{r}
 plot_animate_smooth <- data_both |> 
-  ggplot(aes(x = x, y = y, colour = smoothed)) +
+  mutate(alpha = ifelse(smoothed == "smooth", .5, 1)) |> 
+  ggplot(aes(x = x, y = y, colour = smoothed, fill = smoothed, alpha = alpha)) +
   geom_point(size = 10) +
   lims(x = c(0, 1920), y = c(0, 1080)) +
+  scale_alpha_identity() +
   transition_components(time)
 
 animate(plot_animate_smooth,

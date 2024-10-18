@@ -30,7 +30,7 @@ if (!require(devtools)) {
   library(devtools)
 }
 
-install_github("tombeesley/eyetools@develop")
+install_github("tombeesley/eyetools")
 
 ```
 

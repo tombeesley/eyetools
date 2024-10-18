@@ -1,15 +1,18 @@
 Type: Package
 Package: eyetools
 Title: Tools for Eye Data Analysis
-Version: 0.6.1
+Version: 0.7.0
 Authors@R: c(
     person("Beesley", "Tom", , "matthew.ivory@lancaster.ac.uk", role = c("aut", "cre")),
     person("Ivory", "Matthew", , "matthew.ivory@lancaster.ac.uk", role = "aut")
   )
-Description: A set of tools for eye data processing. The intended flow is
-    from data processing, to fixation analysis, to data visualisation and
-    trial level summaries.
+Description: A set of tools for easier eye data processing. 
+  It enables automation of actions across the pipeline starting from combining binocular data, repairing missing data, 
+  through to event-related processing (fixations, saccades, time in AOIs), to data visualisation. These tools take relatively raw (trial, time, x, and y form) data 
+  and can be used to return fixations, saccades, and AOI entries and time spent in AOIs. 
+  As the tools rely on this basic data format, the functions can work with data from any eye tracking device.
 License: GPL-3
+cph: Tom Beesley
 URL: https://tombeesley.github.io/eyetools/
 Depends: 
     R (>= 2.10)
@@ -34,7 +37,6 @@ Suggests:
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
-cph: Tom Beesley
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

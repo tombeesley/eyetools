@@ -1,4 +1,13 @@
+# eyetools 0.7.0
+* added support for multi-participant data in most functions
+* standardised expected data input to functions
+* added optional parameter for proportion of time spent to AOI_time()
+* fixed smoother() span parameter
+* added plots to smoother()
+* improved handling of variable order in all functions
+
 # eyetools 0.6.1
+* added new functions: compare_algorithms(), conditional_transform(), fixation_VTI(), hdf5_to_csv()
 
 # eyetools 0.6.0
 

@@ -10,6 +10,8 @@ AOI_time(
   AOIs,
   AOI_names = NULL,
   sample_rate = NULL,
+  as_prop = FALSE,
+  trial_time = NULL,
   participant_ID = "participant_ID"
 )
 }
@@ -23,6 +25,10 @@ AOI_time(
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 
 \item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
+
+\item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}
+
+\item{trial_time}{a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset}
 
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }

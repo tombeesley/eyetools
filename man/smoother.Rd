@@ -4,12 +4,14 @@
 \alias{smoother}
 \title{Smoothing of raw data}
 \usage{
-smoother(data, span = 0.1, participant_ID = "participant_ID")
+smoother(data, span = 0.1, plot = FALSE, participant_ID = "participant_ID")
 }
 \arguments{
 \item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
 
 \item{span}{From stats::loess. The parameter alpha which controls the degree of smoothing.}
+
+\item{plot}{whether to plot the raw and smoothed plot for inspection}
 
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
@@ -28,5 +30,8 @@ if not it is handled as single participant data, or the participant_ID needs to 
 data <- combine_eyes(HCL)
 
 smoother(data, participant_ID = "pNum")
+
+#with an inspection plot
+smoother(data, span = .02, participant_ID = "pNum", plot = TRUE)
 
 }

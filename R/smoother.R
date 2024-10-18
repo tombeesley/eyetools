@@ -18,6 +18,9 @@
 #'
 #' smoother(data, participant_ID = "pNum")
 #'
+#' #with an inspection plot
+#' smoother(data, span = .02, participant_ID = "pNum", plot = TRUE)
+#'
 #' @importFrom stats loess predict na.exclude
 #'
 
@@ -53,12 +56,15 @@ smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participa
     ppt <- sample(unique(raw$participant_ID), 1) #sample one participant
     trials <- sample(unique(raw$trial), 2) #sample two trials
 
-    raw <- raw[raw$participant_ID == ppt & raw$trial == trials,]
-    smooth <- smooth[smooth$participant_ID == ppt & smooth$trial == trials,]
+    raw <- raw[raw$participant_ID == ppt,]
+    raw <- raw[raw$trial == trials,]
+    smooth <- smooth[smooth$participant_ID == ppt,]
+    smooth <- smooth[smooth$trial == trials,]
 
 ####
-    raw_long <- reshape(raw, dir = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
-    smooth_long <- reshape(smooth, dir = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
+    coord <- NULL
+    raw_long <- reshape(raw, direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
+    smooth_long <- reshape(smooth, direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
 
     raw_long[raw_long$axis == 1,]$axis <- "x"
     raw_long[raw_long$axis == 2,]$axis <- "y"
