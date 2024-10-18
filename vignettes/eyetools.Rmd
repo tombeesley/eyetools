@@ -1,7 +1,10 @@
 ---
 title: "An introduction to eyetools"
 author: "Matthew Ivory, Tom Beesley"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 9
+    fig_height: 6
 vignette: >
   %\VignetteIndexEntry{An introduction to eyetools}
   %\VignetteEngine{knitr::rmarkdown}
