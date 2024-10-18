@@ -1,7 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^fix_dispersion_old\.R$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^\.github$
+^vignettes/articles$
+^index\.Rmd$
+^_config\.yml$
+^README\.Rmd$
+^inst/extdata$

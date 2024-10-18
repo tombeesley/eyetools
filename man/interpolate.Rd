@@ -4,7 +4,13 @@
 \alias{interpolate}
 \title{Interpolation of missing data (NAs)}
 \usage{
-interpolate(data, maxgap = 25, method = "approx", report = FALSE)
+interpolate(
+  data,
+  maxgap = 25,
+  method = "approx",
+  report = FALSE,
+  participant_ID = "participant_ID"
+)
 }
 \arguments{
 \item{data}{dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)}
@@ -14,6 +20,8 @@ interpolate(data, maxgap = 25, method = "approx", report = FALSE)
 \item{method}{"approx" for linear interpolation or "spline" for cubic spline interpolation}
 
 \item{report}{default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.}
+
+\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe of the same shape of the input data
@@ -23,8 +31,13 @@ Extends the zoo::na.approx and zoo::na.spline functions to include a report whic
 the proportion of missing data before and after the interpolation process. This is handy
 for evaluating the effectiveness of the repair.
 }
+\details{
+It can take either single participant data or multiple participants where there is a variable for unique participant identification.
+The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_ID needs to be specified
+}
 \examples{
-interpolate(example_raw_fix, maxgap = 20)
-interpolate(example_raw_fix, method = "approx", maxgap = 50, report = TRUE)
+data <- combine_eyes(HCL)
+interpolate(data, maxgap = 20, participant_ID = "pNum")
 
 }

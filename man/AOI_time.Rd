@@ -5,33 +5,52 @@
 \title{Time analysis of area of interest entries}
 \usage{
 AOI_time(
-  fix_data = NULL,
-  raw_data = NULL,
+  data,
+  data_type = NULL,
   AOIs,
   AOI_names = NULL,
-  sample_rate = NULL
+  sample_rate = NULL,
+  as_prop = FALSE,
+  trial_time = NULL,
+  participant_ID = "participant_ID"
 )
 }
 \arguments{
-\item{fix_data}{A dataframe with fixation data (from fix_dispersion)}
+\item{data}{A dataframe  of either fixation data (from fix_dispersion) or raw data}
 
-\item{raw_data}{A dataframe with raw data}
+\item{data_type}{Whether data is a fixation ("fix") or raw data ("raw")}
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 
-\item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
+\item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
+
+\item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}
+
+\item{trial_time}{a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset}
+
+\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
-a dataframe containing the time on the passed AOIs for each trial
+a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 }
 \description{
 Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
 }
+\details{
+AOI_time can take either single participant data or multiple participants where there is a variable for unique participant identification.
+The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_ID needs to be specified
+}
 \examples{
-fix_d <- fixation_dispersion(example_raw_WM)
-AOI_time(fix_data = fix_d, AOIs = AOIs_WM)
-AOI_time(raw_data = example_raw_WM, AOIs = AOIs_WM, sample_rate = 120)
+data <- combine_eyes(HCL)
+fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 
+# fixation data
+AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum")
+
+#raw data
+AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs,
+         sample_rate = 120, participant_ID = "pNum")
 }

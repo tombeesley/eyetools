@@ -4,7 +4,7 @@
 #' a single trial will be sampled at random. Alternatively, the trial_number can be specified. Data can be plotted across the whole
 #' trial, or can be split into bins to present distinct plots for each time window.
 #'
-#' @param raw_data A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.
+#' @param data A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.
 #' @param trial_number can be used to select a particular trial within the data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
@@ -19,11 +19,16 @@
 #' @export
 #'
 #' @examples
-#'# plot the raw data
-#'plot_seq(raw_data = example_raw_WM[example_raw_WM$trial == 21,])
+#' data <- combine_eyes(HCL)
+#'
+#' # plot the raw data
+#' plot_seq(data = data[data$pNum == 118,])
+#'
+#' # with AOIs
+#' plot_seq(data = data[data$pNum == 118,], AOIs = HCL_AOIs)
 #'
 #' # plot raw data with bins
-#'plot_seq(raw_data = example_raw_WM[example_raw_WM$trial == 21,], bin_time = 500)
+#' plot_seq(data = data[data$pNum == 118,], bin_time = 500)
 #'
 #' @import ggplot2
 #' @importFrom utils head
@@ -31,7 +36,7 @@
 #'
 #'
 
-plot_seq <- function(raw_data = NULL,
+plot_seq <- function(data = NULL,
                      trial_number = NULL,
                      AOIs = NULL,
                      bg_image = NULL,
@@ -44,46 +49,47 @@ plot_seq <- function(raw_data = NULL,
 
   # if there is a particular trial number specified
   if (!is.null(trial_number)){
-    raw_data <- raw_data[raw_data$trial==trial_number,]
-    if (nrow(raw_data)==0){
+    data <- data[data$trial==trial_number,]
+    if (nrow(data)==0){
       stop("Error: trial number error? No data found")
     }
 
   } else {
     # get a random sample from the trial list
-    trial_list <- unique(raw_data$trial)
+    trial_list <- unique(data$trial)
 
     if (length(trial_list)>1) {
       rand_trial <- sample(trial_list,1)
       print(paste0("Multiple trials detected: randomly sampled - trial:", rand_trial))
-      raw_data <- raw_data[raw_data$trial==rand_trial,]
+      data <- data[data$trial==rand_trial,]
     }
   }
 
-  raw_data[,1] <- raw_data[,1] - raw_data[1,1,drop=TRUE] # start trial timestamps at 0
+  data$time <- data$time - data$time[1] # start trial timestamps at 0
 
   if (is.null(bin_time)==FALSE){
-    raw_data$bin <- ceiling(raw_data$time/bin_time)
-    raw_data$bin[1] <- 1
+    data$bin <- ceiling(data$time/bin_time)
+    data$bin[1] <- 1
     if (is.null(bin_range)==FALSE){
-      raw_data <- raw_data[raw_data$bin >= head(bin_range, 1) & raw_data$bin <= tail(bin_range,1),]
+      data <- data[data$bin >= head(bin_range, 1) & data$bin <= tail(bin_range,1),]
     }
-    raw_data$bin_end <- raw_data$bin*bin_time
-    # raw_data$bin_start <- raw_data$bin_end-bin_time
-    # raw_data$bin_name <- as.factor(paste0(raw_data$bin_start, "-", raw_data$bin_end))
+    bin_end <- data$bin*bin_time
+    data$bin_end <- bin_end
+      # data$bin_start <- data$bin_end-bin_time
+      # data$bin_name <- as.factor(paste0(data$bin_start, "-", data$bin_end))
 
   }
 
-  final_g <- ggplot(data = raw_data)
+  final_g <- ggplot(data = data)
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- addBGimg(bg_image, res, final_g)
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
 
   # PLOT AOIs
   if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
 
   # add raw data
-  if (is.null(raw_data)==FALSE) final_g <- add_raw_time_seq(raw_data, final_g)
+  if (is.null(data)==FALSE) final_g <- add_raw_time_seq(data, final_g)
 
   final_g <-
     final_g +
@@ -95,7 +101,7 @@ plot_seq <- function(raw_data = NULL,
     scale_colour_gradient2(low = "light yellow",
                            mid = "orange",
                            high = "dark red",
-                           midpoint = median(raw_data$time)) +
+                           midpoint = median(data$time)) +
     coord_fixed() +
     guides(size = "none") +
     labs(y = "Vertical coordinate (pixels)",
@@ -153,6 +159,9 @@ plot_seq <- function(raw_data = NULL,
 # function to add raw data
 add_raw_time_seq <- function(dataIn, ggplot_in){
 
+  x <- dataIn$x
+  y <- dataIn$y
+
   ggplot_in <-
     ggplot_in +
     geom_point(data = dataIn,
@@ -163,5 +172,3 @@ add_raw_time_seq <- function(dataIn, ggplot_in){
 
   return(ggplot_in)
 }
-
-seq_plot <- plot_seq

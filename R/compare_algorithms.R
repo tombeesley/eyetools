@@ -1,7 +1,7 @@
 #' A battery of metrics and plots to compare the two algorithms (dispersion and VTI)
 #'
 #' A tool for comparing the two different algorithms present in this package. This function is useful for assessing the data as well as exploring which algorithm is likely to fit data more appropriately.
-#' The raw data is run through both algorithms (using the same specified dispersion tolerances, etc.) before making comparisons of the underlying data.
+#' The raw data is run through both algorithms (using the same specified dispersion tolerances, etc.) before making comparisons of the underlying data. Can only be used for single participant data.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param plot_fixations Whether to plot the detected fixations. default as TRUE
@@ -19,10 +19,9 @@
 #' @export
 #'
 #' @examples
-#' compare_algorithms(eyetools::example_raw_WM[eyetools::example_raw_WM$trial %in% c(20:23),])
+#' data <- combine_eyes(HCL)
+#' compare_algorithms(data[data$pNum == 118,])
 #'
-#' # the default output can be suppressed
-#' compare_algorithms(example_raw_WM[example_raw_WM$trial == 16,], print_summary = FALSE)
 #'
 #' @importFrom stats cor.test reshape time
 #' @import ggplot2
@@ -34,7 +33,6 @@ compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE
   data_split <- split(data, data$trial)
 
   data_list <- pbapply::pblapply(data_split, get_fixations, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth)
-
   data_list_temp <- data_list[[1]]
   # get the data from comparing the two algorithms
   dataout <- lapply(data_list, summarise_comparisons)
@@ -48,12 +46,14 @@ compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE
 
   #get plot data
   data_plot <- do.call(rbind, lapply(dataout, `[[`, 3))
+  name <- data_plot$name
+  event_n <- data_plot$event_n
 
   #create plot
   plot <- ggplot(data_plot,
          aes(time, name, group = event_n)) +
     geom_line(linewidth=10) +
-    facet_wrap(~trial, dir="v") +
+    facet_wrap(~trial, dir="v", scales = "free_x") +
     theme_bw()
 
   if (plot_fixations) {
@@ -106,7 +106,7 @@ summarise_fixations <- function(dataIn, data) {
   fixations <- rep(0, max(data$time))
 
   for (i in 1:nrow(dataIn)) {
-    fixations[between(1:length(fixations), dataIn$start[i], dataIn$end[i])] <- 1
+    fixations[1:length(fixations) >= dataIn$start[i] & 1:length(fixations) <= dataIn$end[i]] <- 1
   }
 
   return(fixations)
@@ -140,14 +140,12 @@ summarise_comparisons <- function(dataIn) {
   out[['desc']]$corr.t <-  correlation$statistic
 
   # create plot data
-  data_to_plot <- reshape(dataIn[[1]], direction = "long", list(5:6), v.names = "value", timevar = NULL)
-  data_to_plot[grepl("\\.1", rownames(data_to_plot)),]$id <- "fixations_vti"
-  data_to_plot[grepl("\\.2", rownames(data_to_plot)),]$id <- "fixations_disp"
-  #add in name variable and remove unnecessary ID
-  data_to_plot$name <- data_to_plot$id
-  data_to_plot$id <- NULL
+  data_to_plot <- reshape(dataIn[[1]], direction = "long", list(c("fixations_vti", "fixations_disp")), v.names = "value", timevar = NULL, idvar = "name")
+  data_to_plot[grepl("\\.1", rownames(data_to_plot)),]$name <- "fixations_vti"
+  data_to_plot[grepl("\\.2", rownames(data_to_plot)),]$name <- "fixations_disp"
+
   #reorder cols
-  data_to_plot <- data_to_plot[,c(1:4,6,5)]
+  data_to_plot <- data_to_plot[,c("time", "trial", "x", "y", "value", "name")]
   #arrange by time for easier reading
   #data_to_plot <- arrange(data_to_plot, time)
   data_to_plot$name <- factor(data_to_plot$name)

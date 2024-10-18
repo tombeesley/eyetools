@@ -1,23 +1,352 @@
 ---
 title: "An introduction to eyetools"
-author: "Tom Beesley, Matthew Ivory"
+author: "Matthew Ivory, Tom Beesley"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{An introduction to eyetools}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-
+  
 ```{r setup, include=FALSE}
+
 knitr::opts_chunk$set(echo = TRUE,
-                      fig.path = "../man/figures/")
+fig.path = "../man/figures/")
+
+knitr::opts_chunk$set(warning = FALSE) # suppress warnings for easier reading
 
 ```
 
-<!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-<!-- badges: end -->
+
+The eyetools package is designed to provide a consistent set of functions that helps researchers perform straightforward, yet powerful, steps in the analysis of eye-data. The suite of functions will allow the user to go from relatively unprocessed data to trial level summaries that are ready for statistical analysis.
+
+You can install eyetools using the following code:
 
 
-Here is where we can have a more detailed tutorial for going from raw data (or data in appropriate form) to the end result. This may be a good one to wait until the end of additional functions so that it can be written to include all
+```{r, eval=FALSE}
+
+if (!require(devtools)) {
+  install.packages("devtools")
+  library(devtools)
+}
+
+install_github("tombeesley/eyetools")
+
+```
+
+A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
+
+```{r}
+
+library(eyetools)
+
+```
+
+## Data Manipulation and Preprocessing
+
+Eyetools has built in example data that can be used while getting to grips with the package. For the purpose of this tutorial, we will start with a small dataset that contains binocular eye data from two participants (and six trials) from a simple contingency learning task (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015). In this task there are two stimuli that appear simultaneously on each trial (to the left and right in the top half of the screen). Participants look at these cues and then make a decision by selecting an "outcome response" button.
+
+[![Screenshot of a trial from Beesley et al. 2015](data/HCL_sample_image.jpg){width="960"}](https://journals.sagepub.com/doi/10.1080/17470218.2015.1009919)
+
+Let's load in this binocular data and explore the format. As we can see, the dataset is formed of 31,041 rows and 7 variables
+
+```{r}
+data(HCL, package = "eyetools")
+
+dim(HCL)
+```
+
+To get a basic idea of the contents of the data, we can look at the first 10 observations in the data
+
+We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`). 
+
+By default eyetools assumes that the resolution of eye data is in pixels (and a default screen size of 1920x1080), however the functions should work with any units (with no guarantee as it is not tested with units other than pixels).
+
+```{r}
+
+head(HCL[HCL$pNum == 118,], 10)
+
+```
+
+eyetools functions can accept either single-participant data or multi-participant data. By default, most functions assume that data is of a single participant **unless** a participant identifier column called `participant_ID` is present,in which case the data is handled as multi-participant. In cases where participants are identified with a different variable, functions accept a parameter of `participant_ID` that takes a character string of the identifying column. In situations where participant_ID is not declared, and when duplicated non-consecutive trials are detected (that implies multi-participant data being input as single-participant), the function will error. This is a good point to then check your data structure, ensure that it is labelled correctly and ordered by trial and time.
+
+### Converting binocular data to monocular data
+
+We need to combine the left and right eye x and y coordinates to get a single pair of [x,y] coordinates for each timepoint. The eyetools function `combine_eyes()` can do this for us. The `method` parameter gives the option to either "average" the two eyes, or we can use the "best_eye". For "average", the result is based on the average of the two eyes for each sample, or for samples where there is data from only a single eye, that eye is used. For "best_eye", a summary of the proportion of missing samples is computed, and the eye with the fewest missing samples is used. Here we use the default parameter "average".
+
+`combine_eyes()` is one of the few core eyetools functions that doesn't handle multi-participant/single-participant data differently. Primarily because of the function's construction and its intended useage, it does not need to do so.
+
+```{r}
+
+data <- combine_eyes(HCL)
+
+```
+
+The above code returns a flattened list of all participants data, and if we take a look at just one participant, we are returned with a dataframe that has x and y variables in place of the left\_\* and right\_\* variables. This is the data format needed by many of the other eyetools functions: time, x, y, and trial. The ordering of the variables should not matter, however most of the functions will impose an ordering in how the information is returned.
+
+```{r}
+head(data) # participant 118
+```
+
+
+### Fixing missing data and repairing data
+
+The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum number of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 25. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
+
+Note that as the participant identifier column is not "participant_ID" (as eyetools expects as default), it needs to be specified in the function call.
+
+```{r}
+data <- interpolate(data, maxgap = 25, method = "approx", participant_ID = "pNum")
+```
+
+You can also request a report of the differences in NA values present before and after the interpolation as well
+
+```{r}
+
+interpolate_report <- interpolate(data, maxgap = 25, method = "approx", participant_ID = "pNum", report = TRUE)
+
+interpolate_report[[2]]
+```
+
+An additional step that can be beneficial is to pass the eye data through the `smoother()` function. This removes particularly jerky transitions between samples and is critical for the analysis of velocities in the eye-movements. For now, let's store the smoothed data in a new object. We can also ask for a plot of the data so that we can visually inspect it to see how well it fits the data.
+
+```{r}  
+set.seed(0410) #set seed to show same participant and trials in both chunks
+
+data_smooth <- smoother(data,
+                        span = .1, # default setting. This controls the degree of smoothing
+                        participant_ID = "pNum", 
+                        plot = TRUE) # whether to plot or not, FALSE as default
+```
+
+
+
+The plot above shows the difference between the raw and smoothed data for a randomly selected participant and two random trials (simply for visualisation purposes and to keep the amount of plotting to a minimum). 
+
+With the default smoothing setting, we can see that the smoothed data does not track the actual data as closely as it could. The lower the value of `span`, the closer the smoothed data represents the raw data. A visual inspection of the plot suggests that a span of .02 is a good value for this data example. It is important that the fixations and saccades are matched closely to ensure data quality. Oversmooth and you end up with significant data loss, undersmooth and all the jerky eye movement is preserved rendering the use of `smoother()` meaningless, so a good inspection and testing of values can be useful.
+
+```{r}
+set.seed(0410) #set seed to show same participant and trials in both chunks
+
+data_smooth <- smoother(data, 
+                        span = .02,
+                        participant_ID = "pNum",
+                        plot = TRUE)
+```
+
+
+### Counterbalancing positions
+
+Many psychology experiments will position stimuli on the screen in a counterbalanced fashion. For example, in the example data we are using, there are two stimuli, with one of these appearing on the left and one on the right. In our design, one of the cue stimuli is a "target" and one is a "distractor", and the experiment counterbalances whether these are positioned on the left or right across trials.
+
+Eyetools has a built in function which allows us to transform the x (or y) values of the stimuli to take into account a counterbalancing variable: `conditional_transform()`. This function currently allows for a single-dimensional flip across either the horizontal or vertical midline. It can be used on raw data or fixation data. It requires the spatial coordinates (x, y) and a specification of the counterbalancing variable. The result is a normalised set of data, in which the x (and/or y) position is consistent across counterbalanced conditions (e.g., in our example, we can transform the data so that the target cue is always on the left). This transformation is especially useful for future visualisations and calculation of time on areas of interest. Note that `conditional_transform()` is another function that does not discriminate between multi-participant and single-participant data and so no participant_ID parameter is required
+
+The keen-eyed will notice that the present data does not contain a variable to specify the counterbalanced positions. This is contained in a separate dataset that holds the behavioural data, including the response times, the outcome, accuracy, and `cue_order` which tells us whether the target cue was on the left (coded as 1) or on the right (coded as 2).
+
+```{r}
+
+data_behavioural <- HCL_behavioural # behavioural data
+
+head(data_behavioural)
+
+```
+
+First we need to combine the two datasets based upon the participant identifier. Once the data has been joined we can use `conditional_transform()` to transform the x coordinates across the midline.
+
+
+```{r}
+
+data <- merge(data_smooth, data_behavioural) # merges with the common variables pNum and trial
+
+data <- conditional_transform(data, 
+                              flip = "x", #flip across x midline
+                              cond_column = "cue_order", #this column holds the counterbalance information
+                              cond_values = "2",#which values in cond_column to flip
+                              message = FALSE) #suppress message that would repeat "Flipping across x midline" 
+
+```
+
+## Fixation Detection
+
+In this next stage, we can start to explore the functions available for determining fixations within the data. The two main functions here are `fixation_dispersion()` and `fixation_VTI()`. Alongside these, is the option to `compare_algorithms()` which produces a small number of metrics and plots to help visualise the two fixation algorithms. We will first demonstrate and explain the two algorithms before demonstrating `compare_algorithms()` as this relies on the two fixation algorithms.
+
+### Dispersion Algorithm
+
+`fixation_dispersion()` detects fixations by assessing the *dispersion* of the eye position using a method similar to that proposed by Salvucci and Goldberg (1996)[^1]. This evaluates the maximum dispersion (distance) between x/y coordinates across a window of data, and looks for sufficient periods in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks in the data and are not permitted within a valid fixation period. By default, it runs the interpolation algorithm and this can be switched off using the relevant parameter.
+
+[^1]: Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
+
+```{r}
+data_fixations_disp <- fixation_dispersion(data,
+                                           min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
+                                           disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
+                                           run_interp = FALSE, # the default is true, but we have already run interpolate()
+                                           NA_tol = 0.25, # the proportion of NAs tolerated within any window of samples evaluated as a fixation
+                                           progress = FALSE, # whether to display a progress bar or not
+                                           participant_ID = "pNum") 
+```
+
+The resultant data output from `fixation_dispersion()` presents data by trial and fixation. It gives the start and end time for these fixations along with their duration and the x,y coordinates for the entry of the fixation.
+
+```{r}
+head(data_fixations_disp) # show sample of output data
+```
+
+### VTI Algorithm
+
+The `fixation_VTI()` function operates differently to `fixation_dispersion()`. It determines fixations by assessing the *velocity* of eye-movements, using a method that is similar to that proposed by Salvucci & Goldberg (1996). This applies the algorithm used in `VTI_saccade()` (detailed below) and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance. If they are outside of this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them. Compared to `fixation_dispersion()`, `fixation_VTI()` is more conservative in determining a fixation as smaller saccades are discounted and the resulting data is treated as a continued fixation (assuming it is within the pixel tolerance set by disp_tol).
+
+In simple terms, `fixation_VTI()` calculates the saccades within the data and identifies fixations as (essentially) non-saccade periods. To avoid eye gaze drift, it applies a dispersion tolerance parameter as well to ensure that fixations can be appropriately localised to an x,y coordinate pair. One current limitation to `fixation_VTI()` that is not present in `fixation_dispersion()` is the need for data to be complete with no NAs present, otherwise it cannot compute the saccades.
+
+The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. When working with smoothed data, lowering the default threshold parameter is recommended as the "jerky" saccadic starts are less sudden and so the entry point of a saccade is sooner.
+
+```{r}
+
+data_fixations_VTI <- fixation_VTI(data,
+                                   threshold = 80, #smoothed data, so use a lower threshold
+                                   min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
+                                   min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
+                                   disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
+                                   run_interp = TRUE,
+                                   smooth = FALSE,
+                                   progress = FALSE, # whether to display a progress bar or not, when running multiple participants 
+                                   participant_ID = "pNum")
+```
+
+```{r}
+head(data_fixations_VTI) # show sample of output data for participant 118
+```
+
+#### Saccades
+
+This is also a sensible point to briefly highlight the underlying saccade detection process. This can be accessed directly using `saccade_VTI()`. This uses the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements. It calculates the length of a saccade based on the velocity of the eye being above a certain threshold.
+
+```{r}
+
+saccades <- saccade_VTI(data, participant_ID = "pNum")
+
+head(saccades)
+
+```
+
+### Comparing the algorithms
+
+As mentioned above, a supplementary function exists to compare the two fixation algorithms, the imaginatively named `compare_algorithms()`. To demonstrate this, we apply it against a reduced dataset of just one participant. It takes a combination of the parameters from both the fixation algorithms, and by default  prints a summary table that is also stored in the returned list. It is recommended to store this in an object as the output can be quite long depending on the number of trials.
+
+```{r}
+#some functions are best with single-participant data
+data_118 <- data[data$pNum == 118,]
+
+comparison <- compare_algorithms(data_118,
+                                 plot_fixations = TRUE,
+                                 print_summary = TRUE,
+                                 sample_rate = NULL,
+                                 threshold = 80, #lowering the default threshold produces a better result when using smoothed data
+                                 min_dur = 150,
+                                 min_dur_sac = 20,
+                                 disp_tol = 100,
+                                 NA_tol = 0.25,
+                                 run_interp = TRUE,
+                                 smooth = FALSE)
+```
+
+## Areas of Interest
+
+Once we have collected our fixation data (we will proceed using the `fixations_disp` dataset), we can start looking at Areas of Interest (AOIs) and then plots of the fixations.
+
+For the `AOI_` "family" of functions, we need to specify where our AOIs were presented on the screen. This will enable us to determine when a participant enters or exits these areas.
+
+```{r}
+# set areas of interest
+AOI_areas <- data.frame(matrix(nrow = 3, ncol = 4))
+colnames(AOI_areas) <- c("x", "y", "width_radius", "height")
+
+AOI_areas[1,] <- c(410, 840, 400, 300) # Left cue
+AOI_areas[2,] <- c(1510, 840, 400, 300) # Right cue
+AOI_areas[3,] <- c(960, 270, 300, 500) # outcomes
+
+AOI_areas
+```
+
+`AOI_time()` analyses the total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both). This gives a cumulative total time spent for each trial.
+
+```{r}
+
+data_AOI_time <- AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+                          data_type = "fix",
+                          AOIs = AOI_areas,
+                          participant_ID = "pNum")
+
+head(data_AOI_time)
+```
+
+The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest. Or you can request that the function returns the time spent in AOIs as a proportion of overall time in the trial, which requires an input vector that has the values, luckily this is something contained in the `HCL_behavioural` obect.
+
+```{r}
+AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+                          data_type = "fix",
+                          AOIs = AOI_areas,
+                          participant_ID = "pNum", 
+                          as_prop = T, 
+                          trial_time = HCL_behavioural$RT) #vector of trial times
+```
+
+
+The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. This works with fixation data or raw data as the input.
+
+```{r}  
+
+data_AOI_sequence <- AOI_seq(data_fixations_disp,
+                             AOI_areas,         
+                             AOI_names = NULL,         
+                             sample_rate = NULL,         
+                             long = TRUE,
+                             participant_ID = "pNum")   
+
+head(data_AOI_sequence)
+```
+
+The returned data provide a list of the entries into the AOIs, across each trial. By default the data is returned in long format, with one row per entry.
+
+## Plotting Functions
+
+Finally, eyetools contains two `plot_*` functions, `plot_seq()` and `plot_spatial()`. These functions are not designed to accommodate multi-participant data and work best with single trials.
+
+`plot_seq()` is a tool for visualising the timecourse of raw data over a single trial. If data from multiple trials are present, then a single trial will be sampled at random. Alternatively, the `trial_number` can be specified. Data can be plotted across the whole trial, or can be split into bins to present distinct plots for each time window.
+
+The most simple use is to just pass it raw data:
+
+```{r}
+
+plot_seq(data_118, trial_number = 1)
+
+```
+
+But the parameters of `plot_seq()` can help exploration be more informative. We can also add a background image and/or the AOIs we have defined:
+
+```{r}
+
+plot_seq(data_118, trial_number = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
+
+plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs) # add AOIs
+
+```
+
+You also have the option to split the time into bins to reduce the amount of data plotted
+
+```{r}
+plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs, bin_time = 1000)
+
+```
+
+The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution.
+
+```{r}
+plot_spatial(data = data_118, data_type = "raw")
+
+#plot the spatial data for one trial only
+plot_spatial(data = data_fixations_disp[data_fixations_disp$trial == 1,], # a LOT of fixations, let's take a sample
+             data_type = "fix")
+
+plot_spatial(data = saccades, data_type = "sac")
+```
