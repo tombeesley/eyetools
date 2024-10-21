@@ -3,7 +3,7 @@ Package: eyetools
 Title: Tools for Eye Data Analysis
 Version: 0.7.0
 Authors@R: c(
-    person("Beesley", "Tom", , "matthew.ivory@lancaster.ac.uk", role = c("aut", "cre")),
+    person("Beesley", "Tom", , "tom.beesley@lancaster.ac.uk", role = c("aut", "cre")),
     person("Ivory", "Matthew", , "matthew.ivory@lancaster.ac.uk", role = "aut")
   )
 Description: A set of tools for easier eye data processing. 
@@ -12,7 +12,6 @@ Description: A set of tools for easier eye data processing.
   and can be used to return fixations, saccades, and AOI entries and time spent in AOIs. 
   As the tools rely on this basic data format, the functions can work with data from any eye tracking device.
 License: GPL-3
-cph: Tom Beesley
 URL: https://tombeesley.github.io/eyetools/
 Depends: 
     R (>= 2.10)
