@@ -44,6 +44,8 @@ The function looks for an identifier named \code{participant_ID} by default and 
 if not it is handled as single participant data, or the participant_ID needs to be specified
 }
 \examples{
+
+\dontrun{
 data <- combine_eyes(HCL)
 fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 
@@ -53,4 +55,6 @@ AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNu
 #raw data
 AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs,
          sample_rate = 120, participant_ID = "pNum")
+}
+
 }

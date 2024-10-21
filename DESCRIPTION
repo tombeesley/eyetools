@@ -6,11 +6,10 @@ Authors@R: c(
     person("Beesley", "Tom", , "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
     person("Ivory", "Matthew", , "matthew.ivory@lancaster.ac.uk", role = "aut")
   )
-Description: A set of tools for easier eye data processing. 
-  It enables automation of actions across the pipeline starting from combining binocular data, repairing missing data, 
-  through to event-related processing (fixations, saccades, time in AOIs), to data visualisation. These tools take relatively raw (trial, time, x, and y form) data 
-  and can be used to return fixations, saccades, and AOI entries and time spent in AOIs. 
-  As the tools rely on this basic data format, the functions can work with data from any eye tracking device.
+Description: A set of tools for easier eye data processing. It enables the automation of core actions across the pipeline from basic data
+  formats of trial, time, x, and y coordinates, and standardises the processing of binocular data, fixing missing data, smoothing data, 
+  and plotting eye gaze information. The toolset also offers event-related processing, such as calculating fixations, saccades, 
+  and time in Areas of Interest. The tools are designed to work with data from any eye tracking device.
 License: GPL-3
 URL: https://tombeesley.github.io/eyetools/
 Depends: 

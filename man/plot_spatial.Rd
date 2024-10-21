@@ -46,6 +46,7 @@ A tool for visualising raw eye-data, processed fixations, and saccades. Can use 
 in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 }
 \examples{
+\dontrun{
 data <- combine_eyes(HCL)
 data <- data[data$pNum == 118,]
 # plot the raw data
@@ -57,4 +58,5 @@ plot_spatial(raw_data = data, fix_data = fixation_dispersion(data))
 #plot one trial
 plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_number = 1)
 
+}
 }
