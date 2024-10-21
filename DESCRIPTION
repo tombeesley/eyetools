@@ -3,7 +3,7 @@ Package: eyetools
 Title: Tools for Eye Data Analysis
 Version: 0.7.0
 Authors@R: c(
-    person("Beesley", "Tom", , "tom.beesley@lancaster.ac.uk", role = c("aut", "cre")),
+    person("Beesley", "Tom", , "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
     person("Ivory", "Matthew", , "matthew.ivory@lancaster.ac.uk", role = "aut")
   )
 Description: A set of tools for easier eye data processing. 
