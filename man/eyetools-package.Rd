@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Beesley Tom \email{matthew.ivory@lancaster.ac.uk}
+\strong{Maintainer}: Beesley Tom \email{tom.beesley@lancaster.ac.uk}
 
 Authors:
 \itemize{
