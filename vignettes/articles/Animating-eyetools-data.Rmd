@@ -13,15 +13,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, message=FALSE}
+```{r setup, message=FALSE, eval=FALSE, eval=FALSE}
 library(eyetools)
 library(gganimate)
 library(tidyverse)
 library(zoo)
 ```
 
-
-```{r}
+```{r, eval=FALSE}
 data <- combine_eyes(HCL) |> 
   interpolate(participant_ID = "pNum")
 
@@ -33,7 +32,7 @@ data_smooth <- smoother(data, span = .02, participant_ID = "pNum")
 
 This animation takes raw data (of a single trial), transforms it into a larger dataset with plot-specific parameters, and then provides an animation of the participant's gaze. The lag feature highlights the path taken and slowly fades to allow more data to be presented
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, eval=FALSE}
 data_plot1 <- data_smooth |> 
   filter(pNum == "118", trial == "1") |> # take a single participant and trial
   mutate(id = seq(1, n()), # add an ID column to original dataset,
@@ -90,7 +89,7 @@ animate(plot_animate,
 ## Plotting raw and smoothed data
 
 We can also improve upon the static plot presented in the `smoother()` function by animating the x and y together.
-```{r}
+```{r, eval=FALSE}
 data_both <- data |> 
   left_join(data_smooth, suffix = c("_raw", "_smooth"), by = join_by("pNum", "time", "trial")) |> 
     filter(pNum == "118", trial == "1") # take a single participant and trial
@@ -105,7 +104,7 @@ data_both <- data_both |>
 
 This first plot is quite rudimentary but shows a single timepoint position and the difference between the raw and `smoother()` data. The smoothed data is transparent to stop it from obscuring the raw data where they are well aligned.
 
-```{r}
+```{r, eval=FALSE}
 plot_animate_smooth <- data_both |> 
   mutate(alpha = ifelse(smoothed == "smooth", .5, 1)) |> 
   ggplot(aes(x = x, y = y, colour = smoothed, fill = smoothed, alpha = alpha)) +
@@ -134,7 +133,7 @@ anim_save("figures/raw_smooth_single.gif", plot_animate_smooth, height = 1080, w
 ### Combining the smooth plot with the lag plot
 
 A much more sophisticated plot is made by combining the lag plot and the `smoother()` comparison plot. In doing so, and tweaking some values, we can see how well the smoothed data adheres to the original data whilst removing the jerkiness of the raw data
-```{r}
+```{r, eval=FALSE}
 data_plot3 <- data_both |>
   mutate(id = seq(1, n()), # add an ID column to original dataset,
          type = "original",
@@ -197,7 +196,7 @@ anim_save("figures/raw_smooth_lag.gif", plot_animate3, height = 1080, width = 19
 
 This section enables the plot colour to change when the eye is detected within an AOI.
 
-```{r}
+```{r, eval=FALSE}
 data_plot4 <- data_smooth |> 
   filter(pNum == 118, trial == 1) |> 
   mutate(in_AOI = case_when(between(x, HCL_AOIs$x[1] - HCL_AOIs$width_radius[1]/2, HCL_AOIs$x[1] + HCL_AOIs$width_radius[1]/2) & 
@@ -223,7 +222,7 @@ data_plot4 <- data_smooth |>
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 plot_animate_4 <- data_plot4 |>
   ggplot(aes(x = x, y = y,
              colour = in_AOI
@@ -260,7 +259,7 @@ anim_save("figures/AOI_entry.gif", plot_animate_4, height = 1080, width = 1920, 
 
 ## Plotting time spent in Areas of Interest over time
 
-```{r}
+```{r, eval=FALSE}
 data_growth <- data_smooth |> 
   filter(pNum == 118, trial == 1) |> 
   mutate(in_AOI = case_when(between(x, HCL_AOIs$x[1] - HCL_AOIs$width_radius[1]/2, HCL_AOIs$x[1] + HCL_AOIs$width_radius[1]/2) & 
@@ -313,7 +312,7 @@ anim_save("figures/data_growth_all.gif", growth_all, height = 1080, width = 1920
 
 Done by adding a single filter in the in_AOI column
 
-```{r}
+```{r, eval=FALSE}
 data_growth_partial <- data_smooth |> 
   filter(pNum == 118, trial == 1) |> 
   mutate(in_AOI = case_when(between(x, HCL_AOIs$x[1] - HCL_AOIs$width_radius[1]/2, HCL_AOIs$x[1] + HCL_AOIs$width_radius[1]/2) & 
