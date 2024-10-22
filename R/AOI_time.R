@@ -19,6 +19,8 @@
 #' @export
 #'
 #' @examples
+#'
+#' \dontrun{
 #' data <- combine_eyes(HCL)
 #' fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 #'
@@ -28,6 +30,8 @@
 #' #raw data
 #' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs,
 #'          sample_rate = 120, participant_ID = "pNum")
+#' }
+#'
 
 
 AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL, participant_ID = "participant_ID") {
