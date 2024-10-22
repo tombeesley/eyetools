@@ -3,6 +3,7 @@ title: "Animating eyetools Data"
 author: "Matthew Ivory, Tom Beesley"
 
 ---
+In this article, we offer examples of how eyetools data can be used with the [gganimate](https://gganimate.com/) package. This article is code heavy as it is designed to demonstrate the capacity of gganimate in tandem with eyetools and for relatively straightforward application to one's own data.
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -12,14 +13,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message=FALSE}
 library(eyetools)
 library(gganimate)
 library(tidyverse)
 library(zoo)
 ```
 
-In this article, we offer examples of how eyetools data can be used with the [gganimate](https://gganimate.com/) package.
 
 ```{r}
 data <- combine_eyes(HCL) |> 
