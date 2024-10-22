@@ -15,10 +15,12 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- combine_eyes(HCL)
 #' fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 #'
 #' AOI_seq(fix_d, AOIs = HCL_AOIs, participant_ID = "pNum")
+#' }
 #'
 #' @importFrom stats setNames complete.cases
 #' @importFrom utils stack

@@ -60,7 +60,7 @@ plot_seq <- function(data = NULL,
 
     if (length(trial_list)>1) {
       rand_trial <- sample(trial_list,1)
-      print(paste0("Multiple trials detected: randomly sampled - trial:", rand_trial))
+      message(paste0("Multiple trials detected: randomly sampled - trial:", rand_trial))
       data <- data[data$trial==rand_trial,]
     }
   }

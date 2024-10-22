@@ -18,6 +18,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- combine_eyes(HCL)
 #' data <- data[data$pNum == 118,]
 #' # plot the raw data
@@ -29,6 +30,7 @@
 #' #plot one trial
 #' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_number = 1)
 #'
+#' }
 #' @import ggplot2
 #' @import ggforce
 #' @importFrom magick image_read

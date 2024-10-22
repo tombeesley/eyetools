@@ -19,9 +19,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- combine_eyes(HCL)
 #' compare_algorithms(data[data$pNum == 118,])
-#'
+#'}
 #'
 #' @importFrom stats cor.test reshape time
 #' @import ggplot2

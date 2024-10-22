@@ -20,8 +20,10 @@
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
 #' @examples
+#' \dontrun{
 #' data <- combine_eyes(HCL)
 #' fixation_dispersion(data, participant_ID = "pNum")
+#' }
 #'
 #' @importFrom utils tail
 #' @importFrom pbapply pblapply
@@ -117,7 +119,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           if (mean(is.na(win$x)) < NA_tol) { # if within the tolerance of NA_tol
             max_d_win <- max(dist(win[,c("x", "y")]),na.rm = TRUE) # get max dispersion across this new window
             if (is.infinite(max_d_win)) {
-              print("is infinite")
+              stop("is infinite")
             }
           } else {
             # window has too many NA, so shift along

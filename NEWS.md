@@ -1,3 +1,6 @@
+# eyetools 0.7.1
+* updated functinos to not print(), instead uses message()
+
 # eyetools 0.7.0
 * added support for multi-participant data in most functions
 * standardised expected data input to functions
