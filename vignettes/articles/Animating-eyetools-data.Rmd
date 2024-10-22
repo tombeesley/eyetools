@@ -83,8 +83,9 @@ animate(plot_animate,
 #          end_pause = 5)
 ```
 
-[Graphic showing the raw eye gaze data imposed over a sample stimuli image.](figures/point_lag.gif)
-
+```{r, fig.cap='Graphic showing the raw eye gaze data imposed over a sample stimuli image.'}
+knitr::include_graphics("figures/point_lag.gif")
+```
 
 ## Plotting raw and smoothed data
 
@@ -128,7 +129,9 @@ anim_save("figures/raw_smooth_single.gif", plot_animate_smooth, height = 1080, w
           end_pause = 5)
 ```
 
-[Image showing single timepoint difference between raw and smoothed data](figures/raw_smooth_single.gif)
+```{r, fig.cap='Image showing single timepoint difference between raw and smoothed data'}
+knitr::include_graphics("figures/raw_smooth_single.gif")
+```
 
 ### Combining the smooth plot with the lag plot
 
@@ -190,7 +193,10 @@ anim_save("figures/raw_smooth_lag.gif", plot_animate3, height = 1080, width = 19
           end_pause = 5)
 ```
 
-[Image showing lagged timepoint difference between raw and smoothed data](figures/raw_smooth_lag.gif)
+```{r, fig.cap='Image showing lagged timepoint difference between raw and smoothed data'}
+knitr::include_graphics("figures/raw_smooth_lag.gif")
+```
+
 
 ## Plotting AOI entries over raw data
 
@@ -255,7 +261,9 @@ anim_save("figures/AOI_entry.gif", plot_animate_4, height = 1080, width = 1920, 
           end_pause = 5)
 ```
 
-[Image showing lagged timepoint difference between raw and smoothed data](figures/AOI_entry.gif)
+```{r, fig.cap='Image showing lagged timepoint difference between raw and smoothed data'}
+knitr::include_graphics("figures/AOI_entry.gif")
+```
 
 ## Plotting time spent in Areas of Interest over time
 
@@ -306,7 +314,10 @@ anim_save("figures/data_growth_all.gif", growth_all, height = 1080, width = 1920
           end_pause = 5)
 ```
 
-[Image showing the proportion of time spent in an AOI over time](figures/data_growth_all.gif)
+```{r, fig.cap='Image showing the proportion of time spent in an AOI over time'}
+knitr::include_graphics("figures/data_growth_all.gif")
+```
+
 
 ### Or just predictive and non-predictive cues
 
@@ -359,4 +370,6 @@ anim_save("figures/data_growth_partial.gif", growth_partial, height = 1080, widt
           end_pause = 5)
 ```
 
-[Image showing the proportion of time spent in an AOI over time](figures/data_growth_partial.gif)
+```{r, fig.cap='Image showing the proportion of time spent in an AOI over time'}
+knitr::include_graphics("figures/data_growth_partial.gif")
+```
