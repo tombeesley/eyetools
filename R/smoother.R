@@ -72,7 +72,7 @@ smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participa
     smooth_long[smooth_long$axis == 2,]$axis <- "y"
     ####
 
-    print(paste("Showing trials:", paste(trials, collapse = ", "), "for participant", ppt))
+    message(paste("Showing trials:", paste(trials, collapse = ", "), "for participant", ppt))
 
     to_plot <- ggplot() +
       geom_line(data = raw_long,
