@@ -123,7 +123,7 @@ animate(plot_animate_smooth,
 
 ```
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval = FALSE}
 # To save an animation
 anim_save("figures/raw_smooth_single.gif", plot_animate_smooth, height = 1080, width = 1920, duration = round(max(data_both$time)/1000),
           end_pause = 5)
@@ -185,7 +185,7 @@ animate(plot_animate3,
         start_pause = 5)
 ```
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval = FALSE}
 # To save an animation
 anim_save("figures/raw_smooth_lag.gif", plot_animate3, height = 1080, width = 1920, duration = round(max(data_both$time)/1000),
           end_pause = 5)
@@ -250,7 +250,7 @@ animate(plot_animate_4,
         duration = round(max(data_plot4$time)/1000))
 ```
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval = FALSE}
 # To save an animation
 anim_save("figures/AOI_entry.gif", plot_animate_4, height = 1080, width = 1920, duration = round(max(data_plot4$time)/1000),
           end_pause = 5)
@@ -301,7 +301,7 @@ animate(growth_all,
         duration = round(max(data_growth$time)/1000))
 ```
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval = FALSE}
 # To save an animation
 anim_save("figures/data_growth_all.gif", growth_all, height = 1080, width = 1920, duration = round(max(data_growth$time)/1000),
           end_pause = 5)
@@ -354,7 +354,7 @@ animate(growth_partial,
         duration = round(max(data_growth$time)/1000))
 ```
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval = FALSE}
 # To save an animation
 anim_save("figures/data_growth_partial.gif", growth_partial, height = 1080, width = 1920, duration = round(max(data_growth$time)/1000),
           end_pause = 5)
