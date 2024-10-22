@@ -1,0 +1,24 @@
+---
+title: "Getting Data eyetools Ready"
+author: "Matthew Ivory, Tom Beesley"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(eyetools)
+```
+
+In this brief article, we will cover the basics for transforming raw data from eye trackers into eyetools ready format.
+
+```{r}
+
+hdf_filename <- "https://github.com/tombeesley/eyetools/raw/refs/heads/master/inst/extdata/example_TOBII.hdf5"
+
+```
+
