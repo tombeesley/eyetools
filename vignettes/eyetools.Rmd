@@ -26,7 +26,7 @@ The eyetools package is designed to provide a consistent set of functions that h
 You can install eyetools using the following code:
 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, include=FALSE}
 
 if (!require(devtools)) {
   install.packages("devtools")

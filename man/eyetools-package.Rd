@@ -5,9 +5,7 @@
 \alias{eyetools}
 \alias{eyetools-package}
 \title{eyetools: Analyse Eye Data}
-\description{
-Enables the automation of actions across the pipeline starting from combining raw binocular data, repairing missing data, through to event-related processing (fixations, saccades, time in AOIs), to data visualisation. These tools take relatively raw (trial, time, x, and y form) data and can be used to return fixations, saccades, and AOI entries and time spent in AOIs. As the tools rely on this basic data format, the functions can work with data from any eye tracking device. Implements fixation and saccade detection using methods proposed by Salvucci and Goldberg (2000) \doi{10.1145/355017.355028}
-}
+\description{Enables the automation of actions across the pipeline starting from combining raw binocular data, repairing missing data, through to event-related processing (fixations, saccades, time in AOIs), to data visualisation. These tools take relatively raw (trial, time, x, and y form) data and can be used to return fixations, saccades, and AOI entries and time spent in AOIs. As the tools rely on this basic data format, the functions can work with data from any eye tracking device. Implements fixation and saccade detection using methods proposed by Salvucci and Goldberg (2000) \doi{10.1145/355017.355028}}
 \seealso{
 Useful links:
 \itemize{
@@ -17,7 +15,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Beesley Tom \email{matthew.ivory@lancaster.ac.uk}
+\strong{Maintainer}: Beesley Tom \email{t.beesley@lancaster.ac.uk}
 
 Authors:
 \itemize{
