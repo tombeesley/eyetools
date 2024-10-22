@@ -262,6 +262,7 @@ data_growth |>
 ### Or just predictive and non-predictive cues
 
 Done by adding a single filter in the in_AOI column
+
 ```{r}
 data_growth <- data_smooth |> 
   filter(pNum == 118, trial == 1) |> 
