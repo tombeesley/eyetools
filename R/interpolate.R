@@ -27,7 +27,7 @@
 #'
 interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, participant_ID = "participant_ID") {
 
-  if(is.null(data$x) | is.null(data$y)) {
+  if(is.null(data$x) || is.null(data$y)) {
     stop("Columns 'x' or 'y' not found.")
   }
 

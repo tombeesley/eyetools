@@ -56,7 +56,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     data_fix <- as.data.frame(data_fix)
 
     ###if x and y are still all NA, stop
-    if (sum(!is.na(as.numeric(data_fix[['V7']]))) == 0|sum(!is.na(as.numeric(data_fix[['V8']]))) == 0) {
+    if (sum(!is.na(as.numeric(data_fix[['V7']]))) == 0 || sum(!is.na(as.numeric(data_fix[['V8']]))) == 0) {
       stop("Too many NAs present in x and y.")
     }
 
@@ -79,7 +79,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     trial <- data$trial[1]
 
     #if no observations for x or y at all
-    if (sum(!is.na(data$x)) == 0|sum(!is.na(data$y)) == 0) {
+    if (sum(!is.na(data$x)) == 0 || sum(!is.na(data$y)) == 0) {
       trial_fix_store <- NULL
     } else {
 
@@ -147,7 +147,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           # compute the new distances from this new data point
           max_d_new_data <- max(rdist::cdist(data[last_ts, c("x", "y")],win[,c("x", "y")]))
 
-          if (is.na(max_d_new_data) | max_d_new_data >= disp_tol) {
+          if (is.na(max_d_new_data) || max_d_new_data >= disp_tol) {
             # either NA detected, or
             # the addition of data point broke the dispersion threshold
             # so make this last data point the first one for a new window

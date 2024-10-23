@@ -123,13 +123,13 @@ plot_seq <- function(data = NULL,
     breaks_y = round(seq(res[3],res[4],(res[4]-res[3])/4),0)
   }
 
-  if (is.null(res)==FALSE & flip_y==FALSE) {
+  if (is.null(res)==FALSE && flip_y==FALSE) {
     final_g <- final_g +
       scale_x_continuous(limits = res[1:2],
                          breaks = breaks_x) +
       scale_y_continuous(limits = res[3:4],
                          breaks = breaks_y)
-  } else if (is.null(res)==FALSE & flip_y==TRUE) {
+  } else if (is.null(res)==FALSE && flip_y==TRUE) {
     final_g <- final_g +
       scale_x_continuous(limits = res[1:2],
                          breaks = breaks_x) +
