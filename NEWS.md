@@ -1,5 +1,8 @@
+# eyetools 0.7.2
+* updated function examples to \donttest where appropriate
+
 # eyetools 0.7.1
-* updated functinos to not print(), instead uses message()
+* updated functions to not print(), instead uses message()
 
 # eyetools 0.7.0
 * added support for multi-participant data in most functions

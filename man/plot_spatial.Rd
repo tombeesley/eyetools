@@ -46,7 +46,7 @@ A tool for visualising raw eye-data, processed fixations, and saccades. Can use 
 in the order they were made. Can overlay areas of interest (AOIs) and customise the resolution.
 }
 \examples{
-\dontrun{
+\donttest{
 data <- combine_eyes(HCL)
 data <- data[data$pNum == 118,]
 # plot the raw data

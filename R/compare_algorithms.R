@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data <- combine_eyes(HCL)
 #' compare_algorithms(data[data$pNum == 118,])
 #'}

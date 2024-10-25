@@ -49,7 +49,7 @@ A tool for comparing the two different algorithms present in this package. This 
 The raw data is run through both algorithms (using the same specified dispersion tolerances, etc.) before making comparisons of the underlying data. Can only be used for single participant data.
 }
 \examples{
-\dontrun{
+\donttest{
 data <- combine_eyes(HCL)
 compare_algorithms(data[data$pNum == 118,])
 }

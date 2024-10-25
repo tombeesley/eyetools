@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data <- combine_eyes(HCL)
 #' data <- data[data$pNum == 118,]
 #' # plot the raw data

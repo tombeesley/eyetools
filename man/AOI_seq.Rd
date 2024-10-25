@@ -35,7 +35,7 @@ If long is TRUE, then each AOI entry is returned on a new row, if FALSE, then a 
 Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.
 }
 \examples{
-\dontrun{
+\donttest{
 data <- combine_eyes(HCL)
 fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 

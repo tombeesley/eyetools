@@ -20,7 +20,7 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' data <- combine_eyes(HCL)
 #' fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 #'

@@ -29,7 +29,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data <- combine_eyes(HCL)
 #' fixation_VTI(data, participant_ID = "pNum")
 #' }
