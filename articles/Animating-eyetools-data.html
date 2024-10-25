@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,19 +142,13 @@ taken and slowly fades to allow more data to be presented</p>
 <span><span class="co">## To save an animation</span></span>
 <span><span class="co">#anim_save("figures/point_lag.gif", plot_animate, height = 1080, width = 1920, duration = round(max(data_plot1$time)/1000),</span></span>
 <span><span class="co">#          end_pause = 5)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figures/point_lag.gif"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figures%2Fpoint_lag.gif" alt="Graphic showing the raw eye gaze data imposed over a sample stimuli image."><div class="figcaption">Graphic showing the raw eye gaze data imposed
-over a sample stimuli image.</div>
-</div>
 </div>
 <div class="section level2">
 <h2 id="plotting-raw-and-smoothed-data">Plotting raw and smoothed data<a class="anchor" aria-label="anchor" href="#plotting-raw-and-smoothed-data"></a>
 </h2>
 <p>We can also improve upon the static plot presented in the
 <code><a href="../reference/smoother.html">smoother()</a></code> function by animating the x and y together.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_both</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">data_smooth</span>, suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_raw"</span>, <span class="st">"_smooth"</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html" class="external-link">join_by</a></span><span class="op">(</span><span class="st">"pNum"</span>, <span class="st">"time"</span>, <span class="st">"trial"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pNum</span> <span class="op">==</span> <span class="st">"118"</span>, <span class="va">trial</span> <span class="op">==</span> <span class="st">"1"</span><span class="op">)</span> <span class="co"># take a single participant and trial</span></span>
@@ -169,7 +163,7 @@ over a sample stimuli image.</div>
 position and the difference between the raw and <code><a href="../reference/smoother.html">smoother()</a></code>
 data. The smoothed data is transparent to stop it from obscuring the raw
 data where they are well aligned.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot_animate_smooth</span> <span class="op">&lt;-</span> <span class="va">data_both</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">smoothed</span> <span class="op">==</span> <span class="st">"smooth"</span>, <span class="fl">.5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, colour <span class="op">=</span> <span class="va">smoothed</span>, fill <span class="op">=</span> <span class="va">smoothed</span>, alpha <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -177,16 +171,10 @@ data where they are well aligned.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">lims</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1920</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1080</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_identity.html" class="external-link">scale_alpha_identity</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">transition_components</span><span class="op">(</span><span class="va">time</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">plot_animate_smooth</span>,</span>
 <span>        duration <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_both</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
 <span>        start_pause <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figures/raw_smooth_single.gif"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figures%2Fraw_smooth_single.gif" alt="Image showing single timepoint difference between raw and smoothed data"><div class="figcaption">Image showing single timepoint difference
-between raw and smoothed data</div>
-</div>
 <div class="section level3">
 <h3 id="combining-the-smooth-plot-with-the-lag-plot">Combining the smooth plot with the lag plot<a class="anchor" aria-label="anchor" href="#combining-the-smooth-plot-with-the-lag-plot"></a>
 </h3>
@@ -194,7 +182,7 @@ between raw and smoothed data</div>
 the <code><a href="../reference/smoother.html">smoother()</a></code> comparison plot. In doing so, and tweaking
 some values, we can see how well the smoothed data adheres to the
 original data whilst removing the jerkiness of the raw data</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_plot3</span> <span class="op">&lt;-</span> <span class="va">data_both</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="co"># add an ID column to original dataset,</span></span>
 <span>         type <span class="op">=</span> <span class="st">"original"</span>,</span>
@@ -236,16 +224,10 @@ original data whilst removing the jerkiness of the raw data</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_identity.html" class="external-link">scale_size_identity</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_identity.html" class="external-link">scale_alpha_identity</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">lims</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1920</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1080</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">plot_animate3</span>,</span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_plot3</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
 <span>        start_pause <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figures/raw_smooth_lag.gif"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figures%2Fraw_smooth_lag.gif" alt="Image showing lagged timepoint difference between raw and smoothed data"><div class="figcaption">Image showing lagged timepoint difference
-between raw and smoothed data</div>
-</div>
 </div>
 </div>
 <div class="section level2">
@@ -253,7 +235,7 @@ between raw and smoothed data</div>
 </h2>
 <p>This section enables the plot colour to change when the eye is
 detected within an AOI.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_plot4</span> <span class="op">&lt;-</span> <span class="va">data_smooth</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span>, <span class="va">trial</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>in_AOI <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">width_radius</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">/</span><span class="fl">2</span>, <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">width_radius</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span> </span>
@@ -276,7 +258,7 @@ detected within an AOI.</p>
 <span>  <span class="va">width_radius</span> <span class="op">&lt;-</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">width_radius</span></span>
 <span>  <span class="va">height</span> <span class="op">&lt;-</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">height</span></span>
 <span>  <span class="va">rect_AOIs</span> <span class="op">&lt;-</span> <span class="va">HCL_AOIs</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">height</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot_animate_4</span> <span class="op">&lt;-</span> <span class="va">data_plot4</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>,</span>
 <span>             colour <span class="op">=</span> <span class="va">in_AOI</span></span>
@@ -295,20 +277,14 @@ detected within an AOI.</p>
 <span>      <span class="co">#          fill = "blue",</span></span>
 <span>      <span class="co">#          alpha = .1) +</span></span>
 <span>  <span class="fu">transition_components</span><span class="op">(</span><span class="va">time</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">plot_animate_4</span>, </span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_plot4</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figures/AOI_entry.gif"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figures%2FAOI_entry.gif" alt="Image showing lagged timepoint difference between raw and smoothed data"><div class="figcaption">Image showing lagged timepoint difference
-between raw and smoothed data</div>
-</div>
 </div>
 <div class="section level2">
 <h2 id="plotting-time-spent-in-areas-of-interest-over-time">Plotting time spent in Areas of Interest over time<a class="anchor" aria-label="anchor" href="#plotting-time-spent-in-areas-of-interest-over-time"></a>
 </h2>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_growth</span> <span class="op">&lt;-</span> <span class="va">data_smooth</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span>, <span class="va">trial</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>in_AOI <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">width_radius</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">/</span><span class="fl">2</span>, <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">width_radius</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span> </span>
@@ -341,20 +317,14 @@ between raw and smoothed data</div>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">transition_reveal</span><span class="op">(</span><span class="va">time</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">growth_all</span>, </span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_growth</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figures/data_growth_all.gif"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figures%2Fdata_growth_all.gif" alt="Image showing the proportion of time spent in an AOI over time"><div class="figcaption">Image showing the proportion of time spent in an
-AOI over time</div>
-</div>
 <div class="section level3">
 <h3 id="or-just-predictive-and-non-predictive-cues">Or just predictive and non-predictive cues<a class="anchor" aria-label="anchor" href="#or-just-predictive-and-non-predictive-cues"></a>
 </h3>
 <p>Done by adding a single filter in the in_AOI column</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_growth_partial</span> <span class="op">&lt;-</span> <span class="va">data_smooth</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span>, <span class="va">trial</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>in_AOI <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">width_radius</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">/</span><span class="fl">2</span>, <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">HCL_AOIs</span><span class="op">$</span><span class="va">width_radius</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span> </span>
@@ -387,15 +357,9 @@ AOI over time</div>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">transition_reveal</span><span class="op">(</span><span class="va">time</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">growth_partial</span>, </span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_growth</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figures/data_growth_partial.gif"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figures%2Fdata_growth_partial.gif" alt="Image showing the proportion of time spent in an AOI over time"><div class="figcaption">Image showing the proportion of time spent in an
-AOI over time</div>
-</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
