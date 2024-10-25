@@ -55,7 +55,7 @@ The function looks for an identifier named \code{participant_ID} by default and 
 if not it is handled as single participant data, or the participant_ID needs to be specified
 }
 \examples{
-\dontrun{
+\donttest{
 data <- combine_eyes(HCL)
 fixation_VTI(data, participant_ID = "pNum")
 }

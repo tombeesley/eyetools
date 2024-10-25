@@ -45,7 +45,7 @@ if not it is handled as single participant data, or the participant_ID needs to 
 }
 \examples{
 
-\dontrun{
+\donttest{
 data <- combine_eyes(HCL)
 fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 
