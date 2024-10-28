@@ -20,18 +20,18 @@ knitr::opts_chunk$set(echo = TRUE,
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-
 # **eyetools**
 
 ## A set of tools for eye data processing, analysis and visualisation in R
+
 
 **eyetools** is a package that provides a set of simple tools that will facilitate common steps in the processing and analysis of eye data. It is intended for use with data from psychological experiments. The idea is to have a workflow which is aided by these functions, going from processing of the raw data, to extraction of event related data (i.e., fixations, saccades), to summarising those data at the trial level (e.g., time on areas of interest). 
 
 For an indepth guide to using eyetools, see the [Get Started page](https://tombeesley.github.io/eyetools/articles/eyetools.html).
 
-to install: `devtools::install_github("tombeesley/eyetools")`
-
 It is free to use under the GNU General Public Licence.
+
+To install use `install.packages("eyetools")`
 
 Available functions:
 
