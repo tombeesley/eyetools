@@ -3,8 +3,8 @@ Package: eyetools
 Title: Analyse Eye Data
 Version: 0.7.2
 Authors@R: c(
-    person("Beesley", "Tom", , "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
-    person("Ivory", "Matthew", , "matthew.ivory@lancaster.ac.uk", role = "aut")
+    person("Tom", "Beesley", , "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
+    person("Matthew", "Ivory", , "matthew.ivory@lancaster.ac.uk", role = "aut")
   )
 Description: Enables the automation of actions across the pipeline, including 
   initial steps of transforming binocular data and gap repair to event-based 

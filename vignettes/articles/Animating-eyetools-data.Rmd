@@ -83,7 +83,7 @@ animate(plot_animate,
 #          end_pause = 5)
 ```
 
-```{r, include=FALSE, fig.cap='Graphic showing the raw eye gaze data imposed over a sample stimuli image.'}
+```{r, echo=FALSE, fig.cap='Graphic showing the raw eye gaze data imposed over a sample stimuli image.'}
 knitr::include_graphics("figures/point_lag.gif")
 ```
 
@@ -129,7 +129,7 @@ anim_save("figures/raw_smooth_single.gif", plot_animate_smooth, height = 1080, w
           end_pause = 5)
 ```
 
-```{r, include=FALSE, fig.cap='Image showing single timepoint difference between raw and smoothed data'}
+```{r, echo=FALSE, fig.cap='Image showing single timepoint difference between raw and smoothed data'}
 knitr::include_graphics("figures/raw_smooth_single.gif")
 ```
 
@@ -193,7 +193,7 @@ anim_save("figures/raw_smooth_lag.gif", plot_animate3, height = 1080, width = 19
           end_pause = 5)
 ```
 
-```{r, include=FALSE, fig.cap='Image showing lagged timepoint difference between raw and smoothed data'}
+```{r, echo=FALSE, fig.cap='Image showing lagged timepoint difference between raw and smoothed data'}
 knitr::include_graphics("figures/raw_smooth_lag.gif")
 ```
 
@@ -261,7 +261,7 @@ anim_save("figures/AOI_entry.gif", plot_animate_4, height = 1080, width = 1920, 
           end_pause = 5)
 ```
 
-```{r, include=FALSE, fig.cap='Image showing lagged timepoint difference between raw and smoothed data'}
+```{r, echo=FALSE, fig.cap='Image showing lagged timepoint difference between raw and smoothed data'}
 knitr::include_graphics("figures/AOI_entry.gif")
 ```
 
@@ -314,7 +314,7 @@ anim_save("figures/data_growth_all.gif", growth_all, height = 1080, width = 1920
           end_pause = 5)
 ```
 
-```{r, include=FALSE, fig.cap='Image showing the proportion of time spent in an AOI over time'}
+```{r, echo=FALSE, fig.cap='Image showing the proportion of time spent in an AOI over time'}
 knitr::include_graphics("figures/data_growth_all.gif")
 ```
 
@@ -370,6 +370,6 @@ anim_save("figures/data_growth_partial.gif", growth_partial, height = 1080, widt
           end_pause = 5)
 ```
 
-```{r, include=FALSE, fig.cap='Image showing the proportion of time spent in an AOI over time'}
+```{r, echo=FALSE, fig.cap='Image showing the proportion of time spent in an AOI over time'}
 knitr::include_graphics("figures/data_growth_partial.gif")
 ```
