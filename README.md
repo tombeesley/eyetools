@@ -24,12 +24,9 @@ fixations, saccades), to summarising those data at the trial level
 For an indepth guide to using eyetools, see the [Get Started
 page](https://tombeesley.github.io/eyetools/articles/eyetools.html).
 
-**Warning - still in somewhat experimental form! Please check results
-carefully**
-
-to install: `devtools::install_github("tombeesley/eyetools")`
-
 It is free to use under the GNU General Public Licence.
+
+To install use `install.packages("eyetools")`
 
 Available functions:
 
