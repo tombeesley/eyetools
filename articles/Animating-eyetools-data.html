@@ -142,6 +142,10 @@ taken and slowly fades to allow more data to be presented</p>
 <span><span class="co">## To save an animation</span></span>
 <span><span class="co">#anim_save("figures/point_lag.gif", plot_animate, height = 1080, width = 1920, duration = round(max(data_plot1$time)/1000),</span></span>
 <span><span class="co">#          end_pause = 5)</span></span></code></pre></div>
+<div class="float">
+<img src="figures%2Fpoint_lag.gif" alt="Graphic showing the raw eye gaze data imposed over a sample stimuli image."><div class="figcaption">Graphic showing the raw eye gaze data imposed
+over a sample stimuli image.</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="plotting-raw-and-smoothed-data">Plotting raw and smoothed data<a class="anchor" aria-label="anchor" href="#plotting-raw-and-smoothed-data"></a>
@@ -175,6 +179,10 @@ data where they are well aligned.</p>
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">plot_animate_smooth</span>,</span>
 <span>        duration <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_both</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
 <span>        start_pause <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="figures%2Fraw_smooth_single.gif" alt="Image showing single timepoint difference between raw and smoothed data"><div class="figcaption">Image showing single timepoint difference
+between raw and smoothed data</div>
+</div>
 <div class="section level3">
 <h3 id="combining-the-smooth-plot-with-the-lag-plot">Combining the smooth plot with the lag plot<a class="anchor" aria-label="anchor" href="#combining-the-smooth-plot-with-the-lag-plot"></a>
 </h3>
@@ -228,6 +236,10 @@ original data whilst removing the jerkiness of the raw data</p>
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">plot_animate3</span>,</span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_plot3</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
 <span>        start_pause <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="figures%2Fraw_smooth_lag.gif" alt="Image showing lagged timepoint difference between raw and smoothed data"><div class="figcaption">Image showing lagged timepoint difference
+between raw and smoothed data</div>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -280,6 +292,10 @@ detected within an AOI.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">plot_animate_4</span>, </span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_plot4</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="figures%2FAOI_entry.gif" alt="Image showing lagged timepoint difference between raw and smoothed data"><div class="figcaption">Image showing lagged timepoint difference
+between raw and smoothed data</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="plotting-time-spent-in-areas-of-interest-over-time">Plotting time spent in Areas of Interest over time<a class="anchor" aria-label="anchor" href="#plotting-time-spent-in-areas-of-interest-over-time"></a>
@@ -320,6 +336,10 @@ detected within an AOI.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">growth_all</span>, </span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_growth</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="figures%2Fdata_growth_all.gif" alt="Image showing the proportion of time spent in an AOI over time"><div class="figcaption">Image showing the proportion of time spent in an
+AOI over time</div>
+</div>
 <div class="section level3">
 <h3 id="or-just-predictive-and-non-predictive-cues">Or just predictive and non-predictive cues<a class="anchor" aria-label="anchor" href="#or-just-predictive-and-non-predictive-cues"></a>
 </h3>
@@ -360,6 +380,10 @@ detected within an AOI.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">animate</span><span class="op">(</span><span class="va">growth_partial</span>, </span>
 <span>        duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data_growth</span><span class="op">$</span><span class="va">time</span><span class="op">)</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="figures%2Fdata_growth_partial.gif" alt="Image showing the proportion of time spent in an AOI over time"><div class="figcaption">Image showing the proportion of time spent in an
+AOI over time</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -369,7 +393,7 @@ detected within an AOI.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Beesley Tom, Ivory Matthew.</p>
+  <p>Developed by Tom Beesley, Matthew Ivory.</p>
 </div>
 
 <div class="pkgdown-footer-right">
