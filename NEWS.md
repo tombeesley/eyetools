@@ -1,3 +1,6 @@
+# eyetools 0.8.0
+* added plot_AOI_growth()
+
 # eyetools 0.7.2
 * updated function examples to \donttest where appropriate
 
