@@ -79,7 +79,7 @@ animate(plot_animate,
         start_pause = 5)
 
 ## To save an animation
-#anim_save("figures/point_lag.gif", plot_animate, height = 1080, width = 1920, duration = round(max(data_plot1$time)/1000),
+#anim_save("figures/point_lag.gif", plot_animate, height = 810, width = 1440, duration = round(max(data_plot1$time)/1000),
 #          end_pause = 5)
 ```
 
@@ -125,7 +125,7 @@ animate(plot_animate_smooth,
 
 ```{r, include=FALSE, eval = FALSE}
 # To save an animation
-anim_save("figures/raw_smooth_single.gif", plot_animate_smooth, height = 1080, width = 1920, duration = round(max(data_both$time)/1000),
+anim_save("figures/raw_smooth_single.gif", plot_animate_smooth, height = 810, width = 1440, duration = round(max(data_both$time)/1000),
           end_pause = 5)
 ```
 
@@ -189,7 +189,7 @@ animate(plot_animate3,
 
 ```{r, include=FALSE, eval = FALSE}
 # To save an animation
-anim_save("figures/raw_smooth_lag.gif", plot_animate3, height = 1080, width = 1920, duration = round(max(data_both$time)/1000),
+anim_save("figures/raw_smooth_lag.gif", plot_animate3, height = 810, width = 1440, duration = round(max(data_both$time)/1000),
           end_pause = 5)
 ```
 
@@ -257,7 +257,7 @@ animate(plot_animate_4,
 
 ```{r, include=FALSE, eval = FALSE}
 # To save an animation
-anim_save("figures/AOI_entry.gif", plot_animate_4, height = 1080, width = 1920, duration = round(max(data_plot4$time)/1000),
+anim_save("figures/AOI_entry.gif", plot_animate_4, height = 810, width = 1440, duration = round(max(data_plot4$time)/1000),
           end_pause = 5)
 ```
 
@@ -268,49 +268,21 @@ knitr::include_graphics("figures/AOI_entry.gif")
 ## Plotting time spent in Areas of Interest over time
 
 ```{r, eval=FALSE}
-data_growth <- data_smooth |> 
-  filter(pNum == 118, trial == 1) |> 
-  mutate(in_AOI = case_when(between(x, HCL_AOIs$x[1] - HCL_AOIs$width_radius[1]/2, HCL_AOIs$x[1] + HCL_AOIs$width_radius[1]/2) & 
-                              between(y, HCL_AOIs$y[1] - HCL_AOIs$height[1]/2, HCL_AOIs$y[1] + HCL_AOIs$height[1]/2) ~ "AOI_1",
-                            between(x, HCL_AOIs$x[2] - HCL_AOIs$width_radius[2]/2, HCL_AOIs$x[2] + HCL_AOIs$width_radius[2]/2) & 
-                              between(y, HCL_AOIs$y[2] - HCL_AOIs$height[2]/2, HCL_AOIs$y[2] + HCL_AOIs$height[2]/2) ~ "AOI_2",
-                            between(x, HCL_AOIs$x[3] - HCL_AOIs$width_radius[3]/2, HCL_AOIs$x[3] + HCL_AOIs$width_radius[3]/2) & 
-                              between(y, HCL_AOIs$y[3] - HCL_AOIs$height[3]/2, HCL_AOIs$y[3] + HCL_AOIs$height[3]/2) ~ "AOI_3",
-                            .default = "none")) |> 
-  select(-x, -y)
-
-
-data_growth <- data_growth |> 
-  #filter(in_AOI %in% c("AOI_1", "AOI_2")) |> 
-  mutate(time_diff = c(0, diff(time))) |> 
-  group_by(in_AOI) |> 
-  mutate(time_diff = cumsum(time_diff)) |> 
-  ungroup() |> 
-  complete(pNum, time, trial, in_AOI) |> 
-  group_by(in_AOI) |> 
-  mutate(time_diff = ifelse(time == 0, 0, time_diff),
-         time_diff = na.locf(time_diff,na.rm = FALSE)) |> 
-  ungroup() |> 
-  mutate(prop = time_diff/time)
-
-####
-growth_all <- data_growth |> 
-  ggplot(aes(time, prop, colour = in_AOI, group = in_AOI)) +
-  scale_colour_discrete() +
-  geom_line() +
-  geom_point() +
+growth_all <- data_smooth |> 
+  filter(pNum == "118", trial == "1") |> 
+  plot_AOI_growth(AOIs = HCL_AOIs, AOI_names = c("Predictive", "Non Predictive", "Target")) +
+  geom_point() + 
   transition_reveal(time)
-
 ```
 
 ```{r, eval=FALSE}
 animate(growth_all, 
-        duration = round(max(data_growth$time)/1000))
+        duration = 10)
 ```
 
 ```{r, include=FALSE, eval = FALSE}
 # To save an animation
-anim_save("figures/data_growth_all.gif", growth_all, height = 1080, width = 1920, duration = round(max(data_growth$time)/1000),
+anim_save("figures/data_growth_all.gif", growth_all, height = 810, width = 1440, duration = 10,
           end_pause = 5)
 ```
 
@@ -321,52 +293,26 @@ knitr::include_graphics("figures/data_growth_all.gif")
 
 ### Or just predictive and non-predictive cues
 
-Done by adding a single filter in the in_AOI column
+This is easily done by specifying NAs in the appropriate position in the `AOI_names` argument and using the `keep_out_of_AOI == FALSE` option.
 
 ```{r, eval=FALSE}
-data_growth_partial <- data_smooth |> 
-  filter(pNum == 118, trial == 1) |> 
-  mutate(in_AOI = case_when(between(x, HCL_AOIs$x[1] - HCL_AOIs$width_radius[1]/2, HCL_AOIs$x[1] + HCL_AOIs$width_radius[1]/2) & 
-                              between(y, HCL_AOIs$y[1] - HCL_AOIs$height[1]/2, HCL_AOIs$y[1] + HCL_AOIs$height[1]/2) ~ "AOI_1",
-                            between(x, HCL_AOIs$x[2] - HCL_AOIs$width_radius[2]/2, HCL_AOIs$x[2] + HCL_AOIs$width_radius[2]/2) & 
-                              between(y, HCL_AOIs$y[2] - HCL_AOIs$height[2]/2, HCL_AOIs$y[2] + HCL_AOIs$height[2]/2) ~ "AOI_2",
-                            between(x, HCL_AOIs$x[3] - HCL_AOIs$width_radius[3]/2, HCL_AOIs$x[3] + HCL_AOIs$width_radius[3]/2) & 
-                              between(y, HCL_AOIs$y[3] - HCL_AOIs$height[3]/2, HCL_AOIs$y[3] + HCL_AOIs$height[3]/2) ~ "AOI_3",
-                            .default = "empty")) |> 
-  select(-x, -y)
 
-
-data_growth_partial <- data_growth_partial |> 
-  filter(in_AOI %in% c("AOI_1", "AOI_2")) |> #only real difference
-  mutate(time_diff = c(0, diff(time))) |> 
-  group_by(in_AOI) |> 
-  mutate(time_diff = cumsum(time_diff)) |> 
-  ungroup() |> 
-  complete(pNum, time, trial, in_AOI) |> 
-  group_by(in_AOI) |> 
-  mutate(time_diff = ifelse(time == 0, 0, time_diff),
-         time_diff = na.locf(time_diff,na.rm = FALSE)) |> 
-  ungroup() |> 
-  mutate(prop = time_diff/time)
-
-####
-growth_partial <- data_growth_partial |> 
-  ggplot(aes(time, prop, colour = in_AOI, group = in_AOI)) +
-  scale_colour_discrete() +
-  geom_line() +
-  geom_point() +
+growth_partial <- data_smooth |> 
+  filter(pNum == "118", trial == "1") |> 
+  plot_AOI_growth(AOIs = HCL_AOIs, keep_out_of_AOI = FALSE, AOI_names = c("Predictive", "Non Predictive", NA)) +
+  geom_point() + 
   transition_reveal(time)
 
 ```
 
 ```{r, eval=FALSE}
 animate(growth_partial, 
-        duration = round(max(data_growth$time)/1000))
+        duration = 10)
 ```
 
 ```{r, include=FALSE, eval = FALSE}
 # To save an animation
-anim_save("figures/data_growth_partial.gif", growth_partial, height = 1080, width = 1920, duration = round(max(data_growth$time)/1000),
+anim_save("figures/data_growth_partial.gif", growth_partial, height = 810, width = 1440, duration = 10,
           end_pause = 5)
 ```
 
