@@ -51,7 +51,7 @@ plot_seq <- function(data = NULL,
   if (!is.null(trial_number)){
     data <- data[data$trial==trial_number,]
     if (nrow(data)==0){
-      stop("Error: trial number error? No data found")
+      stop("With specified trial number no data found.")
     }
 
   } else {

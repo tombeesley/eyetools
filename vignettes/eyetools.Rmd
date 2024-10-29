@@ -318,7 +318,7 @@ The returned data provide a list of the entries into the AOIs, across each trial
 
 ## Plotting Functions
 
-Finally, eyetools contains two `plot_*` functions, `plot_seq()` and `plot_spatial()`. These functions are not designed to accommodate multi-participant data and work best with single trials.
+Finally, eyetools contains `plot_*` functions, `plot_seq()` `plot_spatial()`, and `plot_AOI_growth()`. These functions are not designed to accommodate multi-participant data and work best with single trials.
 
 `plot_seq()` is a tool for visualising the timecourse of raw data over a single trial. If data from multiple trials are present, then a single trial will be sampled at random. Alternatively, the `trial_number` can be specified. Data can be plotted across the whole trial, or can be split into bins to present distinct plots for each time window.
 
@@ -347,7 +347,7 @@ plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs, bin_time = 1000)
 
 ```
 
-The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
+`plot_spatial()` is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
 
 ```{r}
 plot_spatial(raw_data = data_118, trial_number = 6)
@@ -365,6 +365,20 @@ plot_spatial(raw_data = data_118,
              fix_data = fixation_dispersion(data_118),
              sac_data = saccade_VTI(data_118),
              trial_number = 6)
+
+```
+
+The function `plot_AOI_growth()` helps visualise how attention is directed across the development of a trial. It presents a line graph of the change in proportion of time spent in each AOI region across the trial time.
+
+```{r}
+#standard plot
+plot_AOI_growth(data = data_118, AOIs = HCL_AOIs, trial_number = 1)
+
+#remove non-AOI data
+plot_AOI_growth(data = data_118, AOIs = HCL_AOIs, trial_number = 1, keep_out_of_AOI = FALSE)
+
+#only keep predictive and non-predictive cues rather than the target AOI
+plot_AOI_growth(data = data_118, AOIs = HCL_AOIs, keep_out_of_AOI = FALSE, AOI_names = c("Predictive", "Non Predictive", NA))
 
 ```
 

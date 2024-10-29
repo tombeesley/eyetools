@@ -17,11 +17,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Beesley Tom \email{t.beesley@lancaster.ac.uk}
+\strong{Maintainer}: Tom Beesley \email{t.beesley@lancaster.ac.uk}
 
 Authors:
 \itemize{
-  \item Ivory Matthew \email{matthew.ivory@lancaster.ac.uk}
+  \item Matthew Ivory \email{matthew.ivory@lancaster.ac.uk}
 }
 
 }

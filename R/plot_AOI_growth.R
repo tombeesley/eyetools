@@ -23,6 +23,7 @@
 #'
 #' @import ggplot2
 #' @importFrom zoo na.locf
+#' @importFrom stats ave
 
 
 plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, trial_number = NULL, keep_out_of_AOI = TRUE) {
@@ -36,6 +37,24 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, trial_nu
     }
   }
 
+  # if there is a particular trial number specified
+  if (!is.null(trial_number)){
+    data <- data[data$trial==trial_number,]
+    if (nrow(data)==0){
+      stop("With specified trial number no data found.")
+    }
+
+  } else {
+    # get a random sample from the trial list
+    trial_list <- unique(data$trial)
+
+    if (length(trial_list)>1) {
+      rand_trial <- sample(trial_list,1)
+      message(paste0("Multiple trials detected: randomly sampled - trial:", rand_trial))
+      data <- data[data$trial==rand_trial,]
+    }
+  }
+  in_AOI <- NULL
   data$in_AOI <- apply(data, 1, function(row) {
     x <- as.numeric(row["x"])
     y <- as.numeric(row["y"])
@@ -80,7 +99,8 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, trial_nu
   data$time_diff <- ave(data$time_diff, data$in_AOI, FUN = function(x) zoo::na.locf(x, na.rm = FALSE))
 
   # Calculate proportion
-  data$prop <- data$time_diff / data$time
+  prop <- data$time_diff / data$time
+  data$prop <- prop
 
   #remove the out of AOI
   if (keep_out_of_AOI == FALSE) data <- data[data$in_AOI != "out of AOI",]
