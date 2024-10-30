@@ -18,7 +18,7 @@
 #' data <- combine_eyes(HCL)
 #' data <- data[data$pNum == 118 & data$trial == 1,]
 #' data <- interpolate(data)
-#' # plot the raw data
+#' # plot absolute and then proportional
 #' plot_AOI_growth(data = data, AOIs = HCL_AOIs, type = "abs")
 #' plot_AOI_growth(data = data, AOIs = HCL_AOIs, type = "prop")
 #' }
