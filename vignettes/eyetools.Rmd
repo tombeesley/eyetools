@@ -269,8 +269,8 @@ For the `AOI_` "family" of functions, we need to specify where our AOIs were pre
 AOI_areas <- data.frame(matrix(nrow = 3, ncol = 4))
 colnames(AOI_areas) <- c("x", "y", "width_radius", "height")
 
-AOI_areas[1,] <- c(410, 840, 400, 300) # Left cue
-AOI_areas[2,] <- c(1510, 840, 400, 300) # Right cue
+AOI_areas[1,] <- c(460, 840, 400, 300) # Left cue
+AOI_areas[2,] <- c(1460, 840, 400, 300) # Right cue
 AOI_areas[3,] <- c(960, 270, 300, 500) # outcomes
 
 AOI_areas
@@ -336,14 +336,14 @@ But the parameters of `plot_seq()` can help exploration be more informative. We 
 
 plot_seq(data_118, trial_number = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
 
-plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs) # add AOIs
+plot_seq(data_118, trial_number = 1, AOIs = AOI_areas) # add AOIs
 
 ```
 
 You also have the option to split the time into bins to reduce the amount of data plotted
 
 ```{r}
-plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs, bin_time = 1000)
+plot_seq(data_118, trial_number = 1, AOIs = AOI_areas, bin_time = 1000)
 
 ```
 
@@ -372,13 +372,13 @@ The function `plot_AOI_growth()` helps visualise how attention is directed acros
 
 ```{r}
 #standard plot
-plot_AOI_growth(data = data_118, AOIs = HCL_AOIs, trial_number = 1)
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, trial_number = 1)
 
 #remove non-AOI data
-plot_AOI_growth(data = data_118, AOIs = HCL_AOIs, trial_number = 1, keep_out_of_AOI = FALSE)
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, trial_number = 1, keep_out_of_AOI = FALSE)
 
 #only keep predictive and non-predictive cues rather than the target AOI
-plot_AOI_growth(data = data_118, AOIs = HCL_AOIs, keep_out_of_AOI = FALSE, AOI_names = c("Predictive", "Non Predictive", NA))
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, keep_out_of_AOI = FALSE, AOI_names = c("Predictive", "Non Predictive", NA))
 
 ```
 
