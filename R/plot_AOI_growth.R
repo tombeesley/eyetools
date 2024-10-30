@@ -7,7 +7,7 @@
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc. To omit AOIs from the plot, use NA in relevant vector position
 #' @param type either "abs" (absolute) or "prop" (proportion)
 #' @param trial_number can be used to select particular trials within the data
-#' @param keep_out_of_AOI boolean as to whether to include proportion of time spent outside AOIs
+#' @param plot_time_not_in_AOI boolean as to whether to include proportion of time spent outside AOIs
 #'
 #' @return a plot of the raw data
 #' @export
@@ -28,7 +28,7 @@
 #' @importFrom stats ave
 
 
-plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = NULL, trial_number = NULL, keep_out_of_AOI = TRUE) {
+plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = NULL, trial_number = NULL, plot_time_not_in_AOI = FALSE) {
 
   #error catches
   if(!is.null(trial_number) && !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
@@ -108,7 +108,7 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = N
   data$prop <- prop
 
   #remove the out of AOI
-  if (keep_out_of_AOI == FALSE) data <- data[data$in_AOI != "out of AOI",]
+  if (plot_time_not_in_AOI == FALSE) data <- data[data$in_AOI != "out of AOI",]
   data <- na.omit(data)
 
   if(type == "prop") {
