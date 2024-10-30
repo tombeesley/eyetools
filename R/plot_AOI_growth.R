@@ -5,6 +5,7 @@
 #' @param data raw data in standard raw data form (time, x, y, trial)
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height)
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc. To omit AOIs from the plot, use NA in relevant vector position
+#' @param type either "abs" (absolute) or "prop" (proportion)
 #' @param trial_number can be used to select particular trials within the data
 #' @param keep_out_of_AOI boolean as to whether to include proportion of time spent outside AOIs
 #'
@@ -16,9 +17,10 @@
 #' \donttest{
 #' data <- combine_eyes(HCL)
 #' data <- data[data$pNum == 118 & data$trial == 1,]
-#' data <- interpolate(data, participant_ID = "pNum")
+#' data <- interpolate(data)
 #' # plot the raw data
-#' plot_AOI_growth(data = data, AOIs = HCL_AOIs)
+#' plot_AOI_growth(data = data, AOIs = HCL_AOIs, type = "abs")
+#' plot_AOI_growth(data = data, AOIs = HCL_AOIs, type = "prop")
 #' }
 #'
 #' @import ggplot2
@@ -26,10 +28,13 @@
 #' @importFrom stats ave
 
 
-plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, trial_number = NULL, keep_out_of_AOI = TRUE) {
+plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = NULL, trial_number = NULL, keep_out_of_AOI = TRUE) {
 
   #error catches
-  if(!is.null(trial_number) & !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
+  if(!is.null(trial_number) && !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
+  if(is.null(data[['x']]) || is.null(data[['y']])) stop("No x or y variables detected")
+  if(missing(type)) stop("Argument 'type' missing")
+  if(!(type %in% c("abs", "prop"))) stop("type should be 'abs' or 'prop'.")
   if(is.null(AOIs)) {stop("Dataframe of Areas of Interest must be specified using AOIs =") }
   else {
     if(!is.null(AOI_names)) {
@@ -97,7 +102,7 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, trial_nu
   data$time_diff[is.na(data$time_diff) & data$time == 0] <- 0
   data <- data[order(data$in_AOI, data$time), ]  # Ensure data is ordered for filling
   data$time_diff <- ave(data$time_diff, data$in_AOI, FUN = function(x) zoo::na.locf(x, na.rm = FALSE))
-
+#browser()
   # Calculate proportion
   prop <- data$time_diff / data$time
   data$prop <- prop
@@ -106,8 +111,17 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, trial_nu
   if (keep_out_of_AOI == FALSE) data <- data[data$in_AOI != "out of AOI",]
   data <- na.omit(data)
 
-  ggplot(data, aes(time, prop, colour = in_AOI, group = in_AOI)) +
-    scale_colour_discrete() +
+  if(type == "prop") {
+  plot <- ggplot(data, aes(time, prop, colour = in_AOI, group = in_AOI)) +
+    labs(x = "Time", y = "Proportion of Time", colour = "Area of Interest")
+  }
+
+  if(type == "abs") {
+    plot <- ggplot(data, aes(time, time_diff, colour = in_AOI, group = in_AOI)) +
+      labs(x = "Time", y = "Absolute Time", colour = "Area of Interest")
+  }
+
+  plot + scale_colour_discrete() +
     geom_line()
 }
 
