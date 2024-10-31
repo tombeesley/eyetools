@@ -8,9 +8,7 @@
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
-#' @return a dataframe containing the sequence of entries into AOIs on each trial.
-#'
-#' If long is TRUE, then each AOI entry is returned on a new row, if FALSE, then a row per trial is returned with all AOI entries in one character string
+#' @return a dataframe containing the sequence of entries into AOIs on each trial, entry/exit/duration time into AOI
 #' @export
 #'
 #' @examples
@@ -34,7 +32,7 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
   data <- test[[2]]
 
   #internal_AOI_seq carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
-  internal_AOI_seq <- function(data, AOIs, AOI_names, sample_rate, long) {
+  internal_AOI_seq <- function(data, AOIs, AOI_names, sample_rate) {
 
 
     # split data by trial
@@ -55,7 +53,7 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
   }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_AOI_seq, AOIs, AOI_names, sample_rate, long)
+  out <- lapply(data, internal_AOI_seq, AOIs, AOI_names, sample_rate)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
@@ -88,17 +86,36 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
   }
   # this gives unique values in each row of which AOI had a hit
   aoi_entries <- as.data.frame(as.matrix(aoi_entries)%*%diag(c(1:nrow(AOIs))))
+
   aoi_entries$string <- Reduce(paste0, aoi_entries) # get a string to check for duplicates
+
+  aoi_entries$start <- trial_data$start
+  aoi_entries$end <- trial_data$end
+
+  aoi_entries$group <- cumsum(c(TRUE, diff(as.numeric(aoi_entries$string)) != 0))
+
+  aoi_entries <- do.call('rbind.data.frame', lapply(split(aoi_entries, aoi_entries$group), function(data) {
+    data$start <- min(data$start)
+    data$end <- max(data$end)
+    return(data)
+
+  }))
+
   #next section removes duplicate consecutive AOI entries
   aoi_entries <- aoi_entries[!duplicated(with(rle(aoi_entries$string),rep(seq_along(values), lengths))),]
   #remove non AOI region fixations
   aoi_entries <- aoi_entries[aoi_entries$string != "000",]
 
-  aoi_entries$string <- NULL
-  aoi_entries$AOI <- rowSums(aoi_entries)
+  aoi_entries$AOI <- rowSums(aoi_entries[, -((ncol(aoi_entries) - 3):ncol(aoi_entries))]) # just the AOIs, remove all others
 
 
-  aoi_trial_out <- data.frame(participant_ID = trial_data[[participant_ID]][1], trial = trial_data$trial[1], AOI = aoi_entries$AOI)
+  aoi_trial_out <- data.frame(participant_ID = trial_data[[participant_ID]][1],
+                              trial = trial_data$trial[1],
+                              AOI = aoi_entries$AOI,
+                              start = aoi_entries$start,
+                              end = aoi_entries$end,
+                              duration = aoi_entries$end - aoi_entries$start)
+
   aoi_trial_out$entry_n <- as.numeric(rownames(aoi_trial_out))
 
   #replace values with AOI names if given
