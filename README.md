@@ -7,6 +7,8 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+https://img.shields.io/cran/v/eyetools
+https://cranlogs.r-pkg.org/badges/grand-total/eyetools
 <!-- badges: end -->
 
 # **eyetools**
@@ -28,7 +30,7 @@ It is free to use under the GNU General Public Licence.
 
 To install use `install.packages("eyetools")`
 
-Available functions:
+Available functions in the latest CRAN version:
 
 | Implemented functions     | Description                                                                                          |
 |---------------------------|------------------------------------------------------------------------------------------------------|
@@ -45,3 +47,8 @@ Available functions:
 | `plot_spatial()`          | provides a 2D plot of raw data, fixations, saccades, and AOIs                                        |
 | `saccade_VTI()`           | Velocity threshold algorithm for saccade detection. Provides summary of velocity, location, duration |
 | `smoother()`              | smooths data for use in saccade algorithms                                                           |
+
+Additional functions that are only available in the latest development version:
+| Implemented functions     | Description                                                                                          |
+|---------------------------|------------------------------------------------------------------------------------------------------|
+| `AOI_plot_growth()`       | Plots absolute or proportional time spent in AOIs over time                                          |                                            
