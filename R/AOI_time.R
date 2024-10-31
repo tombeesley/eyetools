@@ -149,7 +149,7 @@ AOI_time_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
 
   if (is.null(sample_rate)==TRUE){
     # estimate sample rate (ms) from timestamps and number of samples
-    trial_data[,1] <- trial_data[,1] - trial_data[1,1,drop=TRUE] # start trial timestamps at 0
+    trial_data$time <- trial_data$time - trial_data$time[1] # start trial timestamps at 0
     sample_rate <- as.numeric(utils::tail(trial_data[,1],n=1)) / nrow(trial_data)
   } else {
     sample_rate <- 1000/sample_rate # express in ms per sample
