@@ -12,7 +12,7 @@
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param as_prop whether to return time in AOI as a proportion of the total time of trial
-#' @param trial_time a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset
+#' @param trial_time needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
