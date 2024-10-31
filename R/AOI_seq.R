@@ -7,7 +7,6 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
-#' @param long Whether to return the AOI fixations in long or wide format. Defaults to long
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a dataframe containing the sequence of entries into AOIs on each trial.
 #'
@@ -25,7 +24,7 @@
 #' @importFrom stats setNames complete.cases
 #' @importFrom utils stack
 
-AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRUE, participant_ID = "participant_ID") {
+AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participant_ID = "participant_ID") {
 
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
 
@@ -39,52 +38,21 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRU
 
 
     # split data by trial
-    proc_data <- sapply(split(data, data$trial),
-                        AOI_seq_trial_process,
-                        AOIs = AOIs,
-                        AOI_names)
-
-    data <- data.frame(data[[participant_ID]][1],
-                       trial = unique(data$trial),
-                       AOI_entry_seq = proc_data)
+    data <- do.call("rbind.data.frame", lapply(split(data, data$trial),
+                                                    AOI_seq_trial_process,
+                                                    AOIs = AOIs,
+                                                    AOI_names,
+                                               participant_ID))
 
     colnames(data)[1] <- participant_ID #keep same column as entered
 
-    if (long == TRUE) {
 
-      split_list <- strsplit(data$AOI_entry_seq,';')
-
-      split_list_names <- setNames(split_list, data$trial)
-
-      data_long <- stack(split_list_names)
-
-      data <- data.frame(participant_ID = data[[participant_ID]][1],
-                         trial = as.numeric(data_long$ind),
-                         AOI = data_long$value)
-
-      #keep original name
-      colnames(data)[1] <- participant_ID
-
-      # add in entry_n by way of indexing each trial
-      get_row_n <- function(i) {
-        store <- data[data$trial == i,]
-
-        if (nrow(store) == 0) { store <- NULL} else {
-          store$entry_n <- 1:nrow(store)}
-
-        store
-      }
-
-      data <- do.call(rbind.data.frame, lapply(1:max(data$trial), get_row_n))
-
-      data <- data[data$AOI != "NA",] # remove rows that are NA
-    }
     #RETURN THE DATA TO THE SAME FORMAT IF SINGLE PPT
     if (data[[participant_ID]][1] == "NOT A VALID ID") data[[participant_ID]] <- NULL
 
     return(data)
 
-      }
+  }
 
   data <- split(data, data[[participant_ID]])
   out <- lapply(data, internal_AOI_seq, AOIs, AOI_names, sample_rate, long)
@@ -97,7 +65,7 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, long = TRU
 }
 
 
-AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
+AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
 
   trial_data <- trial_data[complete.cases(trial_data),] # remove any NAs (i.e., in raw data)
 
@@ -119,23 +87,27 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
     }
   }
   # this gives unique values in each row of which AOI had a hit
-  aoi_entries <- as.matrix(aoi_entries)%*%diag(c(1:nrow(AOIs)))
+  aoi_entries <- as.data.frame(as.matrix(aoi_entries)%*%diag(c(1:nrow(AOIs))))
+  aoi_entries$string <- Reduce(paste0, aoi_entries) # get a string to check for duplicates
+  #next section removes duplicate consecutive AOI entries
+  aoi_entries <- aoi_entries[!duplicated(with(rle(aoi_entries$string),rep(seq_along(values), lengths))),]
+  #remove non AOI region fixations
+  aoi_entries <- aoi_entries[aoi_entries$string != "000",]
 
-  # simplify to vector of AOI entries
-  aoi_seq <- rowSums(aoi_entries)
-  #aoi_seq <- aoi_seq[aoi_seq>0] # remove fixations without aoi hits
-  find_repeat_entries <- c(TRUE, diff(aoi_seq)!=0)
-  aoi_seq <- aoi_seq[find_repeat_entries]
-  aoi_seq <- aoi_seq[aoi_seq != 0] #remove non AOI fixations
+  aoi_entries$string <- NULL
+  aoi_entries$AOI <- rowSums(aoi_entries)
 
-  if (is.null(AOI_names)==FALSE) {
-    aoi_seq <- paste0(AOI_names[aoi_seq], collapse = ";")
-  } else {
-    aoi_seq <- paste0(aoi_seq, collapse = ";")
+
+  aoi_trial_out <- data.frame(participant_ID = trial_data[[participant_ID]][1], trial = trial_data$trial[1], AOI = aoi_entries$AOI)
+  aoi_trial_out$entry_n <- as.numeric(rownames(aoi_trial_out))
+
+  #replace values with AOI names if given
+  if(!is.null(AOI_names)) {
+    aoi_trial_out$AOI <- AOI_names[aoi_trial_out$AOI]
+
   }
 
-
-  return(aoi_seq)
+  return(aoi_trial_out)
 
 }
 
