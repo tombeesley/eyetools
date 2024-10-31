@@ -28,7 +28,7 @@ page](https://tombeesley.github.io/eyetools/articles/eyetools.html).
 
 It is free to use under the GNU General Public Licence.
 
-To install use `install.packages("eyetools")`
+**To install use `install.packages("eyetools")`**
 
 Available functions in the latest CRAN version:
 
