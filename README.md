@@ -49,10 +49,14 @@ Available functions in the latest CRAN version:
 | `smoother()`              | smooths data for use in saccade algorithms                                                           |
 
 **Development version:**
+
 The above CRAN version is considered fairly stable and will only be updated every few months. We work on new features in the development version. This 
-version should be considered very experimental and may have bugs. You can install this using `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is the latest version. Currently this is:
-0.7.3
+version should be considered very experimental and may have bugs. You can install this using `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is the latest version. 
+
+The current development version is: 0.7.3
+
 Additional functions that are only available in the latest development version:
+
 | Implemented functions     | Description                                                                                          |
 |---------------------------|------------------------------------------------------------------------------------------------------|
 | `AOI_plot_growth()`       | Plots absolute or proportional time spent in AOIs over time                                          |                                            
