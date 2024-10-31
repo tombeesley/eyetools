@@ -7,8 +7,8 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-https://img.shields.io/cran/v/eyetools
-https://cranlogs.r-pkg.org/badges/grand-total/eyetools
+![CRAN/METACRAN Version](https://img.shields.io/cran/v/eyetools)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/eyetools?color=blue)](https://r-pkg.org/pkg/eyetools)
 <!-- badges: end -->
 
 # **eyetools**
