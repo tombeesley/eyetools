@@ -28,7 +28,7 @@ AOI_time(
 
 \item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}
 
-\item{trial_time}{a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset}
+\item{trial_time}{needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset}
 
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }

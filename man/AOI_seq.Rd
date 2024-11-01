@@ -9,7 +9,6 @@ AOI_seq(
   AOIs,
   AOI_names = NULL,
   sample_rate = NULL,
-  long = TRUE,
   participant_ID = "participant_ID"
 )
 }
@@ -22,14 +21,10 @@ AOI_seq(
 
 \item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
 
-\item{long}{Whether to return the AOI fixations in long or wide format. Defaults to long}
-
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
-a dataframe containing the sequence of entries into AOIs on each trial.
-
-If long is TRUE, then each AOI entry is returned on a new row, if FALSE, then a row per trial is returned with all AOI entries in one character string
+a dataframe containing the sequence of entries into AOIs on each trial, entry/exit/duration time into AOI
 }
 \description{
 Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.

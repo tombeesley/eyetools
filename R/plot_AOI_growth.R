@@ -1,4 +1,4 @@
-#' Plot changes in AOI entries over time of a trial
+#' Plots absolute or proportional time spent in AOIs over time
 #'
 #' A visualisation tool for plotting the changes in defined AOI regions across a single trial time.
 #'
@@ -84,7 +84,8 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = N
     return("out of AOI")
   })
 
-  data$time_diff = c(0, diff(data$time))
+  time_diff <- c(0, diff(data$time))
+  data$time_diff = time_diff
 
   # Calculate cumulative time differences for each group of in_AOI
   data <- data[order(data$in_AOI, data$time), ]  # Ensure data is ordered correctly for cumulative sum

@@ -29,19 +29,6 @@ You can install eyetools using the following code:
 install.packages('eyetools')
 ```
 
-Or if you like, you can install the latest version from Github:
-
-```{r, eval=FALSE}
-
-if (!require(devtools)) {
-  install.packages("devtools")
-  library(devtools)
-}
-
-install_github("tombeesley/eyetools")
-
-```
-
 A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
 
 ```{r}
@@ -280,7 +267,7 @@ AOI_areas
 
 ```{r}
 
-data_AOI_time <- AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+data_AOI_time <- AOI_time(data = data_fixations_disp, 
                           data_type = "fix",
                           AOIs = AOI_areas,
                           participant_ID = "pNum")
@@ -291,12 +278,33 @@ head(data_AOI_time)
 The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest. Or you can request that the function returns the time spent in AOIs as a proportion of overall time in the trial, which requires an input vector that has the values, luckily this is something contained in the `HCL_behavioural` obect.
 
 ```{r}
-AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+AOI_time(data = data_fixations_disp,
                           data_type = "fix",
                           AOIs = AOI_areas,
                           participant_ID = "pNum", 
-                          as_prop = T, 
+                          as_prop = TRUE, 
                           trial_time = HCL_behavioural$RT) #vector of trial times
+```
+
+
+As mentioned, it also works with raw data too:
+
+```{r}
+AOI_time(data = data_118, data_type = "raw", AOIs = AOI_areas,
+         participant_ID = "pNum")
+```
+
+When working with raw data, you can also take advantage of `AOI_time_binned()`, which enables data binning based on time, and calculating time spent in AOIs as a result. Using `bin_length`, you specify a desired length of bin (say 100ms) and splits data into these bins, with ant remaining data being dropped from the analysis (as it does not form a complete bin which could skew analyses). As with `AOI_time()` you can specify either absolute or proportional time spent.
+
+```{r}
+
+AOI_time_binned(data = data_118,
+         AOIs = AOI_areas,
+         participant_ID = "pNum", 
+         bin_length = 100,
+         max_time = 2000,
+         as_prop = TRUE)
+
 ```
 
 
@@ -308,7 +316,6 @@ data_AOI_sequence <- AOI_seq(data_fixations_disp,
                              AOI_areas,         
                              AOI_names = NULL,         
                              sample_rate = NULL,         
-                             long = TRUE,
                              participant_ID = "pNum")   
 
 head(data_AOI_sequence)
@@ -371,14 +378,14 @@ plot_spatial(raw_data = data_118,
 The function `plot_AOI_growth()` helps visualise how attention is directed across the development of a trial. It presents a line graph of the change in proportion of time spent in each AOI region across the trial time.
 
 ```{r}
-#standard plot
-plot_AOI_growth(data = data_118, AOIs = AOI_areas, trial_number = 1)
+#standard plot with absolute time
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "abs", trial_number = 1)
 
-#remove non-AOI data
-plot_AOI_growth(data = data_118, AOIs = AOI_areas, trial_number = 1, keep_out_of_AOI = FALSE)
+#standard plot with proportional time
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "prop", trial_number = 1)
 
 #only keep predictive and non-predictive cues rather than the target AOI
-plot_AOI_growth(data = data_118, AOIs = AOI_areas, keep_out_of_AOI = FALSE, AOI_names = c("Predictive", "Non Predictive", NA))
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "prop", AOI_names = c("Predictive", "Non Predictive", NA))
 
 ```
 

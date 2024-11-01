@@ -293,13 +293,13 @@ knitr::include_graphics("figures/data_growth_all.gif")
 
 ### Or just predictive and non-predictive cues
 
-This is easily done by specifying NAs in the appropriate position in the `AOI_names` argument and using the `keep_out_of_AOI == FALSE` option.
+This is easily done by specifying NAs in the appropriate position in the `AOI_names` parameter.
 
 ```{r, eval=FALSE}
 
 growth_partial <- data_smooth |> 
   filter(pNum == "118", trial == "1") |> 
-  plot_AOI_growth(AOIs = HCL_AOIs, keep_out_of_AOI = FALSE, AOI_names = c("Predictive", "Non Predictive", NA)) +
+  plot_AOI_growth(AOIs = HCL_AOIs, type = "prop", AOI_names = c("Predictive", "Non Predictive", NA)) +
   geom_point() + 
   transition_reveal(time)
 

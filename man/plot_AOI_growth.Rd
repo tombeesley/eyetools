@@ -2,14 +2,15 @@
 % Please edit documentation in R/plot_AOI_growth.R
 \name{plot_AOI_growth}
 \alias{plot_AOI_growth}
-\title{Plot changes in AOI entries over time of a trial}
+\title{Plots absolute or proportional time spent in AOIs over time}
 \usage{
 plot_AOI_growth(
   data = NULL,
   AOIs = NULL,
   AOI_names = NULL,
+  type = NULL,
   trial_number = NULL,
-  keep_out_of_AOI = TRUE
+  plot_time_not_in_AOI = FALSE
 )
 }
 \arguments{
@@ -19,9 +20,11 @@ plot_AOI_growth(
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc. To omit AOIs from the plot, use NA in relevant vector position}
 
+\item{type}{either "abs" (absolute) or "prop" (proportion)}
+
 \item{trial_number}{can be used to select particular trials within the data}
 
-\item{keep_out_of_AOI}{boolean as to whether to include proportion of time spent outside AOIs}
+\item{plot_time_not_in_AOI}{boolean as to whether to include proportion of time spent outside AOIs}
 }
 \value{
 a plot of the raw data
@@ -34,9 +37,10 @@ A visualisation tool for plotting the changes in defined AOI regions across a si
 \donttest{
 data <- combine_eyes(HCL)
 data <- data[data$pNum == 118 & data$trial == 1,]
-data <- interpolate(data, participant_ID = "pNum")
-# plot the raw data
-plot_AOI_growth(data = data, AOIs = HCL_AOIs)
+data <- interpolate(data)
+# plot absolute and then proportional
+plot_AOI_growth(data = data, AOIs = HCL_AOIs, type = "abs")
+plot_AOI_growth(data = data, AOIs = HCL_AOIs, type = "prop")
 }
 
 }

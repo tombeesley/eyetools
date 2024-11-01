@@ -2,6 +2,7 @@
 
 export(AOI_seq)
 export(AOI_time)
+export(AOI_time_binned)
 export(combine_eyes)
 export(compare_algorithms)
 export(conditional_transform)

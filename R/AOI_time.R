@@ -103,7 +103,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
   if (as_prop) {
 
-    if (length(trial_time) != nrow(out)) stop(paste("trial_time is not equal to the number of trials x participants in the data. Expected", nrow(out), "trial_time observations. Received", length(trial_time)))
+    if (length(trial_time) != nrow(out)) stop(paste("trial_time is not equal to the number of trials * participants in the data. Expected", nrow(out), "trial_time observations. Received", length(trial_time)))
 
     out$trial_time <- trial_time
     out[,3:ncol(out)] <- out[,3:ncol(out)]/trial_time
@@ -169,6 +169,7 @@ AOI_time_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
       xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
     } else {
       # report error message of bad AOI definition
+      stop("Bad AOI definition")
 
     }
 
