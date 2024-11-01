@@ -1,8 +1,9 @@
 #' Binned time analysis of area of interest entries
 #'
-#' Analyses total time on defined AOI regions across trials separated into bins.
-#' Works with raw data as the input.
-#' Can be separated into bin_length (determined by length of time).
+#' Analyses total time on defined AOI regions across trials separated into bins. Works with raw data as the input.
+#' Data can be sepataed into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
+#' consistent across varying lengths of trial. Any r=data that cannot fill a bin (tpyically the last few milliseconds of the trial) are dropped to
+#' ensure that bins are of a consistent length
 #'
 #' AOI_time_binned can take either single participant data or multiple participants where there is a variable for unique participant identification.
 #' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
