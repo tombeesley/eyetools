@@ -59,4 +59,5 @@ Additional functions that are only available in the latest development version:
 
 | Implemented functions     | Description                                                                                          |
 |---------------------------|------------------------------------------------------------------------------------------------------|
-| `AOI_plot_growth()`       | Plots absolute or proportional time spent in AOIs over time                                          |                                            
+| `plot_AOI_growth()`       | Plots absolute or proportional time spent in AOIs over time                                          |                                            
+| `AOI_time_binned()`       | Binned time analysis of area of interest entries                                                     |                                            
