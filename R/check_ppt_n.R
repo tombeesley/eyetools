@@ -7,8 +7,9 @@
 
       #this checks for repeated non-consecutive values of trial or time. If they are non-consecutive, error because it is likely
       #it should have the participant_ID specified
+
       trial_rep <- duplicated(rle(data$trial)$values)
-      time_rep <- duplicated(rle(data$time)$values)
+      #time_rep <- duplicated(rle(data$time)$values)
 
       if (sum(trial_rep) > 0) stop("multiple duplicated trials detected. Have you forgotten to specify the participant_ID?")
 
