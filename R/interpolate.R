@@ -50,9 +50,16 @@ interpolate <- function(data, maxgap = 25, method = "approx", report = FALSE, pa
 
       # Function to apply na interpolation on both x and y columns
       interpolate_na <- function(df) {
-        df$x <- get(paste0("na.", method))(df$x, maxgap = 25, na.rm = FALSE)
-        df$y <- get(paste0("na.", method))(df$y, maxgap = 25, na.rm = FALSE)
+        if (method == "approx") {
+          df$x <- na.approx(df$x, maxgap = maxgap, na.rm = FALSE)
+          df$y <- na.approx(df$y, maxgap = maxgap, na.rm = FALSE)
+        }
+        if (method == "spline") {
+          df$x <- na.spline(df$x, maxgap = maxgap, na.rm = FALSE) + 0*na.approx(df$x, maxgap = maxgap, na.rm = FALSE) #suppress extrapolation behaviour
+          df$y <- na.spline(df$y, maxgap = maxgap, na.rm = FALSE) + 0*na.approx(df$y, maxgap = maxgap, na.rm = FALSE)
+        }
         return(df)
+
       }
 
       # Apply the interpolation function to each trial's data
