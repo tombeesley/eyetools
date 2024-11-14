@@ -36,9 +36,10 @@ AOI_time_binned(
 a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 }
 \description{
-Analyses total time on defined AOI regions across trials separated into bins.
-Works with raw data as the input.
-Can be separated into bin_length (determined by length of time).
+Analyses total time on defined AOI regions across trials separated into bins. Works with raw data as the input.
+Data can be sepataed into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
+consistent across varying lengths of trial. Any r=data that cannot fill a bin (tpyically the last few milliseconds of the trial) are dropped to
+ensure that bins are of a consistent length
 }
 \details{
 AOI_time_binned can take either single participant data or multiple participants where there is a variable for unique participant identification.
