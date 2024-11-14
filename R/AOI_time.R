@@ -124,12 +124,12 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
 
     if (sum(!is.na(AOIs[a,])) == 4) {
       # square AOI
-      xy_hits <- (trial_data$x >= (AOIs[a,1] - AOIs[a,3]/2) & trial_data$x <= (AOIs[a,1] + AOIs[a,3]/2)) &
-        (trial_data$y >= (AOIs[a,2] - AOIs[a,4]/2) & trial_data$y <= (AOIs[a,2] + AOIs[a,4]/2))
+      xy_hits <- (trial_data$x >= as.numeric(AOIs[a,1] - AOIs[a,3]/2) & trial_data$x <= as.numeric(AOIs[a,1] + AOIs[a,3]/2)) &
+        (trial_data$y >= as.numeric(AOIs[a,2] - AOIs[a,4]/2) & trial_data$y <= as.numeric(AOIs[a,2] + AOIs[a,4]/2))
 
     } else if (sum(!is.na(AOIs[a,])) == 3) {
       # circle AOI
-      xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
+      xy_hits <- sqrt(as.numeric(AOIs[a,1]-trial_data$x)^2+as.numeric(AOIs[a,2]-trial_data$y)^2) < as.numeric(AOIs[a,3])
     } else {
       # report error message of bad AOI definition
 
