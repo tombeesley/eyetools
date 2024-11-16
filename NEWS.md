@@ -1,5 +1,6 @@
-# eyetools 0.8.0
+# eyetools 0.7.3
 * added plot_AOI_growth()
+* fixed problem with AOI_seq() where it couldn't handle trials without fixations or entries
 
 # eyetools 0.7.2
 * updated function examples to \donttest where appropriate
