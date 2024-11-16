@@ -65,8 +65,6 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
 
 AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
 
-  pNum <- trial_data$pNum[1]
-
   trial_data <- trial_data[complete.cases(trial_data),] # remove any NAs (i.e., in raw data)
 
   aoi_entries <- data.frame(matrix(nrow = nrow(trial_data), ncol = nrow(AOIs)))
@@ -91,13 +89,15 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
   if (sum(aoi_entries)==0) {
 
     # if no data, return a trial result with NAs
-    aoi_trial_out <- data.frame(participant_ID = pNum,
+    aoi_trial_out <- data.frame(participant_ID = trial_data[[participant_ID]][1],
                                 trial = NA,
                                 AOI = NA,
                                 start = NA,
                                 end = NA,
                                 duration = NA,
                                 entry_n = NA)
+
+    aoi_trial_out
 
     return(aoi_trial_out)
   }
