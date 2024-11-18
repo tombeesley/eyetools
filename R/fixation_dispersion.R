@@ -55,9 +55,9 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     data_fix <- do.call("rbind", data_fix)
     data_fix <- as.data.frame(data_fix)
 
-    ###if x and y are still all NA, stop
+    ###if x and y are  all NA, return NA as a fixation
     if (sum(!is.na(as.numeric(data_fix[['V7']]))) == 0 || sum(!is.na(as.numeric(data_fix[['V8']]))) == 0) {
-      stop("Too many NAs present in x and y.")
+      trial_fix_store <- matrix(NA,1,7)
     }
 
 
@@ -81,6 +81,14 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     #if no observations for x or y at all
     if (sum(!is.na(data$x)) == 0 || sum(!is.na(data$y)) == 0) {
       trial_fix_store <- matrix(NA,1,7)
+      trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
+      trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
+      trial_fix_store <- cbind(trial, trial_fix_store) # add trial number
+
+      #trial_fix_store <- cbind(ppt_label, trial_fix_store)
+
+      return(trial_fix_store) # returns the fixations for that trial to the main algorithm
+
     } else {
 
       if (run_interp){data <- eyetools::interpolate(data)}
