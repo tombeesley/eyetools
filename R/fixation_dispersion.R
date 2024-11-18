@@ -80,7 +80,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
 
     #if no observations for x or y at all
     if (sum(!is.na(data$x)) == 0 || sum(!is.na(data$y)) == 0) {
-      trial_fix_store <- NULL
+      trial_fix_store <- matrix(NA,1,7)
     } else {
 
       if (run_interp){data <- eyetools::interpolate(data)}
