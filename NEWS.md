@@ -1,3 +1,5 @@
+# eyetools (development version)
+
 # eyetools 0.7.3
 * added plot_AOI_growth()
 * fixed problem with AOI_seq() where it couldn't handle trials without fixations or entries
