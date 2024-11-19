@@ -1,6 +1,7 @@
 # eyetools 0.7.3
 * added plot_AOI_growth()
 * fixed problem with AOI_seq() where it couldn't handle trials without fixations or entries
+* added create_AOI_df() which will create a blank data frame for populating with AOIs
 
 # eyetools 0.7.2
 * updated function examples to \donttest where appropriate

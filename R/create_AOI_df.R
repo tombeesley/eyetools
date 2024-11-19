@@ -8,13 +8,14 @@
 #'
 #' @examples
 #' # create a data frame with 4 AOIs
-#' create_AOIs(4)
+#' create_AOI_df(4)
 #'
 
-create_AOIs <- function(num_AOIs) {
+create_AOI_df <- function(num_AOIs) {
 
   return_AOIs <- data.frame(matrix(nrow = num_AOIs, ncol = 4))
   colnames(return_AOIs) <- c("x", "y", "width_radius", "height")
+
   return(return_AOIs)
 
 }
