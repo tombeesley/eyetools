@@ -56,7 +56,6 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
   out <- lapply(data, internal_AOI_seq, AOIs, AOI_names, sample_rate)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
-
   out <- .check_ppt_n_out(out)
 
   return(out)
@@ -64,6 +63,9 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
 
 
 AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
+
+  trial_val <- trial_data$trial[[1]]
+  ppt_val <- trial_data[['participant_ID']][[1]]
 
   trial_data <- trial_data[complete.cases(trial_data),] # remove any NAs (i.e., in raw data)
 
@@ -87,10 +89,9 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
 
   # check if trial has no fixations on any AOIs
   if (sum(aoi_entries)==0) {
-
     # if no data, return a trial result with NAs
-    aoi_trial_out <- data.frame(participant_ID = trial_data[[participant_ID]][1],
-                                trial = NA,
+    aoi_trial_out <- data.frame(participant_ID = ppt_val,
+                                trial = trial_val,
                                 AOI = NA,
                                 start = NA,
                                 end = NA,
@@ -141,6 +142,8 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
     aoi_trial_out$AOI <- AOI_names[aoi_trial_out$AOI]
 
   }
+
+  rownames(aoi_trial_out) <- NULL
 
   return(aoi_trial_out)
 
