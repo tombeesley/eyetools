@@ -50,7 +50,7 @@ Available functions in the latest CRAN version:
 | `conditional_transform()` | Implements a single-axis flip for specific trials to normalise data with counterbalanced designs     |
 | `fixation_dispersion()`   | Dispersion algorithm for fixation detection                                                          |
 | `fixation_VTI()`          | An algorithm that subtracts saccadic periods for fixation detection                                  |
-| `hdf5_to_csv()`           | converts eyetracking data retrieved from TOBII eyetrackers to csv                                    |
+| `hdf5_to_df()`            | converts eyetracking data retrieved from TOBII eyetrackers to a dataframe                            |
 | `interpolate()`           | Interpolates data across gaps; provides a summary report of repair                                   |
 | `plot_seq()`              | provides a 2D plot of raw data for a single trial. Data can be split into time bins                  |
 | `plot_spatial()`          | provides a 2D plot of raw data, fixations, saccades, and AOIs                                        |

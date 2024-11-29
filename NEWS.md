@@ -1,4 +1,5 @@
 # eyetools (development version)
+* renamed `hdf5_to_csv()` to `hdf5_to_df()`
 
 # eyetools 0.7.3
 * added plot_AOI_growth()

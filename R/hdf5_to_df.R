@@ -1,6 +1,6 @@
-#' hdf5_to_csv
+#' hdf5_to_df
 #'
-#' A function to convert TOBII-generated hdf5 files to csv
+#' A function to convert TOBII-generated hdf5 files to a dataframe
 #'
 #' @param filename the hdf5 file generated from TOBII
 #'
@@ -11,10 +11,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' raw_data <- hdf5_to_csv("example_TOBII.hdf5")
+#' raw_data <- hdf5_to_df("example_TOBII.hdf5")
 #' }
 
-hdf5_to_csv <- function(filename) {
+hdf5_to_df <- function(filename) {
 
   file.h5 <- H5File$new(filename, mode="a") # 'a' mode is open
 
