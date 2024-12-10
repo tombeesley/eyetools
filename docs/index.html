@@ -50,7 +50,7 @@
     
     <a class="navbar-brand me-2" href="index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,10 +103,9 @@
 </h2>
 <p><strong>eyetools</strong> is a package that provides a set of simple tools that will facilitate common steps in the processing and analysis of eye data. It is intended for use with data from psychological experiments. The idea is to have a workflow which is aided by these functions, going from processing of the raw data, to extraction of event related data (i.e., fixations, saccades), to summarising those data at the trial level (e.g., time on areas of interest).</p>
 <p>For an indepth guide to using eyetools, see the <a href="https://tombeesley.github.io/eyetools/articles/eyetools.html">Get Started page</a>.</p>
-<p><strong>Warning - still in somewhat experimental form! Please check results carefully</strong></p>
-<p>to install: <code>devtools::install_github("tombeesley/eyetools")</code></p>
 <p>It is free to use under the GNU General Public Licence.</p>
-<p>Available functions:</p>
+<p><strong>To install use <code>install.packages("eyetools")</code></strong></p>
+<p>Available functions in the latest CRAN version:</p>
 <table class="table">
 <colgroup>
 <col width="20%">
@@ -123,11 +122,11 @@
 </tr>
 <tr class="even">
 <td><code><a href="reference/AOI_time.html">AOI_time()</a></code></td>
-<td>Time on AOIs; works with rectangular and circular AOIs; works with raw and fixation data</td>
+<td>Calculate time on AOIs; works with raw and fixation data</td>
 </tr>
 <tr class="odd">
 <td><code><a href="reference/combine_eyes.html">combine_eyes()</a></code></td>
-<td>Combines binocular data (i.e., average or “best eye”)</td>
+<td>Combines binocular data (i.e., average or “best eye”) into monocular data</td>
 </tr>
 <tr class="even">
 <td><code><a href="reference/compare_algorithms.html">compare_algorithms()</a></code></td>
@@ -143,11 +142,11 @@
 </tr>
 <tr class="odd">
 <td><code><a href="reference/fixation_VTI.html">fixation_VTI()</a></code></td>
-<td>An inverse saccade algorithm for fixation detection</td>
+<td>An algorithm that subtracts saccadic periods for fixation detection</td>
 </tr>
 <tr class="even">
-<td><code><a href="reference/hdf5_to_csv.html">hdf5_to_csv()</a></code></td>
-<td>converts eyetracking data retrieved from TOBII eyetrackers to csv</td>
+<td><code><a href="reference/hdf5_to_df.html">hdf5_to_df()</a></code></td>
+<td>converts eyetracking data retrieved from TOBII eyetrackers to a dataframe</td>
 </tr>
 <tr class="odd">
 <td><code><a href="reference/interpolate.html">interpolate()</a></code></td>
@@ -155,7 +154,7 @@
 </tr>
 <tr class="even">
 <td><code><a href="reference/plot_seq.html">plot_seq()</a></code></td>
-<td>provides a 2D plot of raw data in one trial. Data can be split into time bins</td>
+<td>provides a 2D plot of raw data for a single trial. Data can be split into time bins</td>
 </tr>
 <tr class="odd">
 <td><code><a href="reference/plot_spatial.html">plot_spatial()</a></code></td>
@@ -168,6 +167,30 @@
 <tr class="odd">
 <td><code><a href="reference/smoother.html">smoother()</a></code></td>
 <td>smooths data for use in saccade algorithms</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Development version:</strong></p>
+<p>The above CRAN version is considered fairly stable and will only be updated every few months. We work on new features in the development version. This version should be considered very experimental and may have bugs. You can install this using <code>devtools::install_github("tombeesley/eyetools@0.X.X")</code> where 0.X.X is the latest version.</p>
+<p>The current development version is: 0.7.3</p>
+<p>Additional functions that are only available in the latest development version:</p>
+<table class="table">
+<colgroup>
+<col width="27%">
+<col width="72%">
+</colgroup>
+<thead><tr class="header">
+<th>Implemented functions</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="reference/plot_AOI_growth.html">plot_AOI_growth()</a></code></td>
+<td>Plots absolute or proportional time spent in AOIs over time</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/AOI_time_binned.html">AOI_time_binned()</a></code></td>
+<td>Binned time analysis of area of interest entries</td>
 </tr>
 </tbody>
 </table>

@@ -2,7 +2,7 @@
 % Please edit documentation in R/hdf5_to_df.R
 \name{hdf5_to_df}
 \alias{hdf5_to_df}
-\title{hdf5_to_df}
+\title{Convert TOBII-generated HDF5 files to dataframe}
 \usage{
 hdf5_to_df(filename)
 }
@@ -10,7 +10,7 @@ hdf5_to_df(filename)
 \item{filename}{the hdf5 file generated from TOBII}
 }
 \value{
-A list of csv files collected from the eyetracker content, if only one eyetracking event is present, return this as a csv file
+A list of dataframes collected from the eyetracker content, if only one eyetracking event is present, return this as a single dataframe
 }
 \description{
 A function to convert TOBII-generated hdf5 files to a dataframe

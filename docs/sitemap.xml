@@ -37,6 +37,9 @@
     <loc>https://tombeesley.github.io/eyetools/reference/AOI_time.html</loc>
   </url>
   <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/AOI_time_binned.html</loc>
+  </url>
+  <url>
     <loc>https://tombeesley.github.io/eyetools/reference/HCL.html</loc>
   </url>
   <url>
@@ -67,13 +70,22 @@
     <loc>https://tombeesley.github.io/eyetools/reference/fixation_dispersion.html</loc>
   </url>
   <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/hdf5_get_event.html</loc>
+  </url>
+  <url>
     <loc>https://tombeesley.github.io/eyetools/reference/hdf5_to_csv.html</loc>
+  </url>
+  <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/hdf5_to_df.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/index.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/interpolate.html</loc>
+  </url>
+  <url>
+    <loc>https://tombeesley.github.io/eyetools/reference/plot_AOI_growth.html</loc>
   </url>
   <url>
     <loc>https://tombeesley.github.io/eyetools/reference/plot_seq.html</loc>

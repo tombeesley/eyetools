@@ -2,7 +2,7 @@
 % Please edit documentation in R/hdf5_get_event.R
 \name{hdf5_get_event}
 \alias{hdf5_get_event}
-\title{hdf5_get_event}
+\title{Get messgaes stored in TOBII-generated HDF5 files}
 \usage{
 hdf5_get_event(filename)
 }
@@ -10,10 +10,10 @@ hdf5_get_event(filename)
 \item{filename}{the hdf5 file generated from TOBII}
 }
 \value{
-A dataframe of message events as recorded by iohub
+A dataframe of message events as recorded by TOBII eye trackers
 }
 \description{
-A function to get the message event files from a TOBII-generated hdf5 files to dataframe.
+A function to get the message event files from a TOBII-generated hdf5 file to dataframe.
 Used when a Psychopy experiment uses the io.sendMessageEvent() to record events
 }
 \examples{
