@@ -50,7 +50,13 @@ plot_heatmap <- function(data = NULL,
   ndensity <- NULL
 
   # add data
-  final_g <- ggplot(data) +
+  final_g <- ggplot(data)
+
+  # PLOT BACKGROUND IMAGE
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
+
+  #plot data on top
+  final_g <- final_g +
     stat_density2d(geom="tile",
                    aes(x, y, fill = after_stat(ndensity),
                        #alpha=cut(after_stat(density),breaks=c(0,1e-6,Inf))),
@@ -59,11 +65,6 @@ plot_heatmap <- function(data = NULL,
     scale_alpha_continuous(range=c(0,1),guide="none") +
     scale_fill_viridis_b() +
     lims(x = c(res[1],res[2]), y = c(res[3], res[4]))
-
-  # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
-
-
 
   final_g <-
     final_g +
