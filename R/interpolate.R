@@ -53,8 +53,7 @@ interpolate <- function(data, maxgap = 8000, method = "approx", sample_rate = NU
 
         # estimate sample rate (ms) from difference between timestamps
         time <- data$time - data$time[1] # start trial timestamps at 0
-        sample_rate <- mean(diff(time)) #difference between timestamps
-        sample_rate <- 1000/sample_rate
+        sample_rate <- mean(diff(time)) #difference between timestamps, expressing ms per sample
         sample_rate
 
       })
