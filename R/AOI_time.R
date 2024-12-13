@@ -61,6 +61,8 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
     } else if(data_type == "raw") {
       ppt_label <- data[[participant_ID]][[1]]
 
+
+
       # process as raw data input
       proc_data <- sapply(split(data, data$trial),
                           AOI_time_trial_process_raw,
@@ -148,9 +150,9 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
 AOI_time_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
 
   if (is.null(sample_rate)==TRUE){
-    # estimate sample rate (ms) from timestamps and number of samples
+    # estimate sample rate (ms) from difference between timestamps
     trial_data$time <- trial_data$time - trial_data$time[1] # start trial timestamps at 0
-    sample_rate <- as.numeric(utils::tail(trial_data[,1],n=1)) / nrow(trial_data)
+    sample_rate <- mean(diff(trial_data$time)) #difference between timestamps, expressed in ms per sample
   } else {
     sample_rate <- 1000/sample_rate # express in ms per sample
   }

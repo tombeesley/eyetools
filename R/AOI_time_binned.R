@@ -94,13 +94,15 @@ data <- do.call('rbind.data.frame', proc_data)
 
 
 AOI_binned_time_trial_process_raw <- function(trial_data, AOIs, sample_rate, bin_length, max_time) {
+
   if (is.null(sample_rate)==TRUE){
-    # estimate sample rate (ms) from timestamps and number of samples
+    # estimate sample rate (ms) from difference between timestamps
     trial_data$time <- trial_data$time - trial_data$time[1] # start trial timestamps at 0
-    sample_rate <- as.numeric(utils::tail(trial_data$time,n=1)) / nrow(trial_data)
+    sample_rate <- mean(diff(trial_data$time)) #difference between timestamps, expressed in ms per sample
   } else {
     sample_rate <- 1000/sample_rate # express in ms per sample
   }
+
   if (is.null(max_time)) max_time <- max(trial_data$time) #set as the total trial time
 
   if(!is.null(bin_length)) {
