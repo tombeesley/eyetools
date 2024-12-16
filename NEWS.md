@@ -1,6 +1,7 @@
 # eyetools (development version)
 * renamed `hdf5_to_csv()` to `hdf5_to_df()` to accurately reflect operation
 * added `hdf5_get_event()` to access messages stored in the TOBII generated hdf5
+* updated the sample_rate estimation code in `*_VTI()`, `interpolate()`, and `AOI_time*()` functions 
 
 # eyetools 0.7.3
 * added `plot_AOI_growth()`
