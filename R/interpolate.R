@@ -57,13 +57,13 @@ interpolate <- function(data, maxgap = 8000, method = "approx", sample_rate = NU
         sample_rate
 
       })
+
+      #average sample rate across all trials
+      sample_rate <- mean(sample_rates)
     } else {
       sample_rate <- 1000/sample_rate # express in ms per sample
-      sample_rate
     }
 
-    #average sample rate across all trials
-    sample_rate <- mean(sample_rates)
 
     maxgap <- maxgap/sample_rate #expressed in rows rather than time
     maxgap <- ceiling(maxgap) #round up to nearest integer
