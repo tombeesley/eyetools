@@ -310,14 +310,13 @@ AOI_time_binned(data = data_118,
 ```
 
 
-The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. This works with fixation data or raw data as the input.
+The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. This works with fixation data.
 
 ```{r}  
 
 data_AOI_sequence <- AOI_seq(data_fixations_disp,
                              AOI_areas,         
                              AOI_names = NULL,         
-                             sample_rate = NULL,         
                              participant_ID = "pNum")   
 
 head(data_AOI_sequence)

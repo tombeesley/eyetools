@@ -16,7 +16,7 @@ AOI_time_binned(
 )
 }
 \arguments{
-\item{data}{A dataframe  of raw data}
+\item{data}{A dataframe of raw data}
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
@@ -37,7 +37,7 @@ a dataframe containing the time on the passed AOIs for each trial. One column fo
 }
 \description{
 Analyses total time on defined AOI regions across trials separated into bins. Works with raw data as the input.
-Data can be sepataed into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
+Data can be separated into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
 consistent across varying lengths of trial. Any r=data that cannot fill a bin (tpyically the last few milliseconds of the trial) are dropped to
 ensure that bins are of a consistent length
 }
