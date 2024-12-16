@@ -20,13 +20,13 @@
 #'
 #' @examples
 #' data <- combine_eyes(HCL)
-#' interpolate(data, maxgap = 8000, participant_ID = "pNum")
+#' interpolate(data, maxgap = 150, participant_ID = "pNum")
 #'
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
 #'
-interpolate <- function(data, maxgap = 8000, method = "approx", sample_rate = NULL, report = FALSE, participant_ID = "participant_ID") {
+interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE, participant_ID = "participant_ID") {
 
   if(is.null(data$x) || is.null(data$y)) {
     stop("Columns 'x' or 'y' not found.")
@@ -48,6 +48,7 @@ interpolate <- function(data, maxgap = 8000, method = "approx", sample_rate = NU
     # interpolation process
     # estimate sample rate
     if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
+    sample_rate <- 1000/sample_rate
 
     maxgap <- maxgap/sample_rate #expressed in rows rather than time
     maxgap <- ceiling(maxgap) #round up to nearest integer
