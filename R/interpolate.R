@@ -47,23 +47,7 @@ interpolate <- function(data, maxgap = 8000, method = "approx", sample_rate = NU
 
     # interpolation process
     # estimate sample rate
-    if (is.null(sample_rate)==TRUE){
-      trial <- split(data, data$trial)
-      sample_rates <- sapply(trial, function(data) {
-
-        # estimate sample rate (ms) from difference between timestamps
-        time <- data$time - data$time[1] # start trial timestamps at 0
-        sample_rate <- mean(diff(time)) #difference between timestamps, expressing ms per sample
-        sample_rate
-
-      })
-
-      #average sample rate across all trials
-      sample_rate <- mean(sample_rates)
-    } else {
-      sample_rate <- 1000/sample_rate # express in ms per sample
-    }
-
+    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
 
     maxgap <- maxgap/sample_rate #expressed in rows rather than time
     maxgap <- ceiling(maxgap) #round up to nearest integer

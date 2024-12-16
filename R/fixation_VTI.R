@@ -50,19 +50,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
   internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, run_interp, smooth, progress, participant_ID) {
 
     # estimate sample rate
-    if (is.null(sample_rate)==TRUE){
-      trial <- split(data, data$trial)
-      sample_rates <- sapply(trial, function(data) {
-
-        # estimate sample rate (ms) from difference between timestamps
-        time <- data$time - data$time[1] # start trial timestamps at 0
-        sample_rate <- mean(diff(time)) #difference between timestamps, expressing ms per sample
-        sample_rate
-
-      })
-    #average sample rate across all trials
-    sample_rate <- 1000/mean(sample_rates)
-    }
+    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
 
 
     data <- split(data, data$trial)

@@ -29,7 +29,7 @@
 #'
 #' #raw data
 #' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs,
-#'          sample_rate = 120, participant_ID = "pNum")
+#'          sample_rate = 300, participant_ID = "pNum")
 #' }
 #'
 
@@ -149,14 +149,9 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
 
 AOI_time_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
 
-  if (is.null(sample_rate)==TRUE){
-    # estimate sample rate (ms) from difference between timestamps
-    trial_data$time <- trial_data$time - trial_data$time[1] # start trial timestamps at 0
-    sample_rate <- mean(diff(trial_data$time)) #difference between timestamps, expressed in ms per sample
-  } else {
-    sample_rate <- 1000/sample_rate # express in ms per sample
-  }
 
+  if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(trial_data)
+  sample_rate <- 1000/sample_rate
 
   aoi_time_sums <- data.frame(matrix(nrow = 1, ncol = nrow(AOIs)))
 
