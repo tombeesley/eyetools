@@ -9,6 +9,7 @@ plot_heatmap(
   trial_number = NULL,
   bg_image = NULL,
   res = c(0, 1920, 0, 1080),
+  flip_y = FALSE,
   alpha_control = 0.1,
   plot_header = FALSE
 )
@@ -21,6 +22,8 @@ plot_heatmap(
 \item{bg_image}{The filepath of an image to be added to the plot, for example to show a screenshot of the task.}
 
 \item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
+
+\item{flip_y}{reverse the y axis coordinates (useful if origin is top of the screen)}
 
 \item{alpha_control}{a single value to determine how much of the heatmap to obscure. Between 0 and 1. Lower values include more data in the heatmap}
 
@@ -37,7 +40,7 @@ A tool for visualising a heatmap of raw data.
 data <- combine_eyes(HCL)
 data <- data[data$pNum == 118,]
 # plot all trials data
-plot_heatmap(data[data$pNum == 118,], alpha_control = .01)
+plot_heatmap(data, alpha_control = .01)
 
 #plot one trial
 plot_heatmap(data, trial_number = 1)

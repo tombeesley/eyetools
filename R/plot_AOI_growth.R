@@ -24,6 +24,7 @@
 #' }
 #'
 #' @import ggplot2
+#' @import viridis
 #' @importFrom zoo na.locf
 #' @importFrom stats ave
 

@@ -25,6 +25,7 @@
 #'
 #' }
 #' @import ggplot2
+#' @import viridis
 #' @importFrom magick image_read
 #'
 

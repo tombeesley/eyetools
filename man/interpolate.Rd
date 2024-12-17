@@ -6,7 +6,7 @@
 \usage{
 interpolate(
   data,
-  maxgap = 8000,
+  maxgap = 150,
   method = "approx",
   sample_rate = NULL,
   report = FALSE,
@@ -41,6 +41,6 @@ if not it is handled as single participant data, or the participant_ID needs to 
 }
 \examples{
 data <- combine_eyes(HCL)
-interpolate(data, maxgap = 8000, participant_ID = "pNum")
+interpolate(data, maxgap = 150, participant_ID = "pNum")
 
 }

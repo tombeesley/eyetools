@@ -24,6 +24,7 @@ Depends:
 Imports: 
     ggforce,
     ggplot2,
+    viridis,
     glue,
     hdf5r,
     lifecycle,

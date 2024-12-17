@@ -22,6 +22,7 @@
 #' smoother(data, span = .02, participant_ID = "pNum", plot = TRUE)
 #'
 #' @importFrom stats loess predict na.exclude
+#' @import ggplot2
 #'
 
 smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participant_ID") {

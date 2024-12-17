@@ -33,6 +33,7 @@
 #' }
 #' @import ggplot2
 #' @import ggforce
+#' @import viridis
 #' @importFrom magick image_read
 #'
 
@@ -134,7 +135,7 @@ plot_spatial <- function(raw_data = NULL,
                    hjust = 1,
                    vjust = 1,
                    size = 4) +
-        viridis::scale_fill_viridis(breaks = c(min(duration),
+        scale_fill_viridis(breaks = c(min(duration),
                                                max(duration)),
                                     labels = c("low", "high"))
 
