@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -205,7 +205,7 @@ between raw and smoothed data</div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">growth_all</span> <span class="op">&lt;-</span> <span class="va">data_smooth</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pNum</span> <span class="op">==</span> <span class="st">"118"</span>, <span class="va">trial</span> <span class="op">==</span> <span class="st">"1"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">plot_AOI_growth</span><span class="op">(</span>AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, AOI_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Predictive"</span>, <span class="st">"Non Predictive"</span>, <span class="st">"Target"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, AOI_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Predictive"</span>, <span class="st">"Non Predictive"</span>, <span class="st">"Target"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">transition_reveal</span><span class="op">(</span><span class="va">time</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -224,7 +224,7 @@ the <code>AOI_names</code> parameter.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">growth_partial</span> <span class="op">&lt;-</span> <span class="va">data_smooth</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pNum</span> <span class="op">==</span> <span class="st">"118"</span>, <span class="va">trial</span> <span class="op">==</span> <span class="st">"1"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">plot_AOI_growth</span><span class="op">(</span>AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, type <span class="op">=</span> <span class="st">"prop"</span>, AOI_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Predictive"</span>, <span class="st">"Non Predictive"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, type <span class="op">=</span> <span class="st">"prop"</span>, AOI_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Predictive"</span>, <span class="st">"Non Predictive"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">transition_reveal</span><span class="op">(</span><span class="va">time</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
