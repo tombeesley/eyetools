@@ -4,13 +4,7 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(
-  data,
-  AOIs,
-  AOI_names = NULL,
-  sample_rate = NULL,
-  participant_ID = "participant_ID"
-)
+AOI_seq(data, AOIs, AOI_names = NULL, participant_ID = "participant_ID")
 }
 \arguments{
 \item{data}{A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data}
@@ -18,8 +12,6 @@ AOI_seq(
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
-
-\item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
 
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }

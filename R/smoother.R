@@ -22,6 +22,7 @@
 #' smoother(data, span = .02, participant_ID = "pNum", plot = TRUE)
 #'
 #' @importFrom stats loess predict na.exclude
+#' @import ggplot2
 #'
 
 smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participant_ID") {
@@ -57,11 +58,11 @@ smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participa
     trials <- sample(unique(raw$trial), 2) #sample two trials
 
     raw <- raw[raw$participant_ID == ppt,]
-    raw <- raw[raw$trial == trials,]
+    raw <- raw[raw$trial %in% trials,]
     smooth <- smooth[smooth$participant_ID == ppt,]
-    smooth <- smooth[smooth$trial == trials,]
+    smooth <- smooth[smooth$trial %in% trials,]
 
-####
+    ####
     coord <- NULL
     raw_long <- reshape(raw, direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
     smooth_long <- reshape(smooth, direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
@@ -82,7 +83,7 @@ smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participa
                 aes(x = time, y = coord),
                 colour = "blue") +
       facet_wrap("trial ~ axis", scales = "free") +
-      theme_bw()
+      theme_minimal()
 
     plot(to_plot)
   }

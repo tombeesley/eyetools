@@ -28,8 +28,7 @@
 #' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum")
 #'
 #' #raw data
-#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs,
-#'          sample_rate = 120, participant_ID = "pNum")
+#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_ID = "pNum")
 #' }
 #'
 
@@ -60,6 +59,8 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
     } else if(data_type == "raw") {
       ppt_label <- data[[participant_ID]][[1]]
+
+
 
       # process as raw data input
       proc_data <- sapply(split(data, data$trial),
@@ -147,14 +148,9 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
 
 AOI_time_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
 
-  if (is.null(sample_rate)==TRUE){
-    # estimate sample rate (ms) from timestamps and number of samples
-    trial_data$time <- trial_data$time - trial_data$time[1] # start trial timestamps at 0
-    sample_rate <- as.numeric(utils::tail(trial_data[,1],n=1)) / nrow(trial_data)
-  } else {
-    sample_rate <- 1000/sample_rate # express in ms per sample
-  }
 
+  if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(trial_data)
+  sample_rate <- 1000/sample_rate
 
   aoi_time_sums <- data.frame(matrix(nrow = 1, ncol = nrow(AOIs)))
 

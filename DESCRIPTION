@@ -1,7 +1,7 @@
 Type: Package
 Package: eyetools
 Title: Analyse Eye Data
-Version: 0.7.3
+Version: 0.7.3.9000
 Authors@R: c(
     person("Tom", "Beesley", , "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
     person("Matthew", "Ivory", , "matthew.ivory@lancaster.ac.uk", role = "aut")
@@ -24,6 +24,7 @@ Depends:
 Imports: 
     ggforce,
     ggplot2,
+    viridis,
     glue,
     hdf5r,
     lifecycle,

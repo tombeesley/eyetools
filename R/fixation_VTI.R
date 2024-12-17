@@ -49,12 +49,9 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
 
   internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, run_interp, smooth, progress, participant_ID) {
 
-    # sample rate estimation if NULL
-    if (is.null(sample_rate)) {
-      ts <- aggregate(time~trial, data = data, range)
-      total_time <- sum(ts$time[,2]-ts$time[,1])
-      sample_rate <- 1000/(total_time/nrow(data)) # total time taken / samples
-    }
+    # estimate sample rate
+    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
+
 
     data <- split(data, data$trial)
     # either show a progress bar, or not
@@ -270,7 +267,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     data <- data[order(data$time),] # merge throws the ordering off
     # define function to pull out relevant data from fixations
 
-      summarise_fixations <- function(dataIn){
+    summarise_fixations <- function(dataIn){
 
       participant_ID = data[[participant_ID]][1]
       start <- dataIn$time[1]

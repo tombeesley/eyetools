@@ -1,7 +1,7 @@
 #' Binned time analysis of area of interest entries
 #'
 #' Analyses total time on defined AOI regions across trials separated into bins. Works with raw data as the input.
-#' Data can be sepataed into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
+#' Data can be separated into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
 #' consistent across varying lengths of trial. Any r=data that cannot fill a bin (tpyically the last few milliseconds of the trial) are dropped to
 #' ensure that bins are of a consistent length
 #'
@@ -9,7 +9,7 @@
 #' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
 #' if not it is handled as single participant data, or the participant_ID needs to be specified
 #'
-#' @param data A dataframe  of raw data
+#' @param data A dataframe of raw data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
@@ -94,13 +94,10 @@ data <- do.call('rbind.data.frame', proc_data)
 
 
 AOI_binned_time_trial_process_raw <- function(trial_data, AOIs, sample_rate, bin_length, max_time) {
-  if (is.null(sample_rate)==TRUE){
-    # estimate sample rate (ms) from timestamps and number of samples
-    trial_data$time <- trial_data$time - trial_data$time[1] # start trial timestamps at 0
-    sample_rate <- as.numeric(utils::tail(trial_data$time,n=1)) / nrow(trial_data)
-  } else {
-    sample_rate <- 1000/sample_rate # express in ms per sample
-  }
+
+  if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(trial_data)
+  sample_rate <- 1000/sample_rate
+
   if (is.null(max_time)) max_time <- max(trial_data$time) #set as the total trial time
 
   if(!is.null(bin_length)) {

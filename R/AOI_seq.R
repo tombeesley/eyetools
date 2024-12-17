@@ -6,7 +6,6 @@
 #' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
-#' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a dataframe containing the sequence of entries into AOIs on each trial, entry/exit/duration time into AOI
 #' @export
@@ -22,7 +21,7 @@
 #' @importFrom stats setNames complete.cases
 #' @importFrom utils stack
 
-AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participant_ID = "participant_ID") {
+AOI_seq <- function(data, AOIs, AOI_names = NULL, participant_ID = "participant_ID") {
 
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
 
@@ -32,7 +31,7 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
   data <- test[[2]]
 
   #internal_AOI_seq carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
-  internal_AOI_seq <- function(data, AOIs, AOI_names, sample_rate) {
+  internal_AOI_seq <- function(data, AOIs, AOI_names) {
 
 
     # split data by trial
@@ -53,10 +52,9 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
   }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_AOI_seq, AOIs, AOI_names, sample_rate)
+  out <- lapply(data, internal_AOI_seq, AOIs, AOI_names)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
-
   out <- .check_ppt_n_out(out)
 
   return(out)
@@ -64,6 +62,9 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, participan
 
 
 AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
+
+  trial_val <- trial_data$trial[[1]]
+  ppt_val <- trial_data[['participant_ID']][[1]]
 
   trial_data <- trial_data[complete.cases(trial_data),] # remove any NAs (i.e., in raw data)
 
@@ -87,10 +88,9 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
 
   # check if trial has no fixations on any AOIs
   if (sum(aoi_entries)==0) {
-
     # if no data, return a trial result with NAs
-    aoi_trial_out <- data.frame(participant_ID = trial_data[[participant_ID]][1],
-                                trial = NA,
+    aoi_trial_out <- data.frame(participant_ID = ppt_val,
+                                trial = trial_val,
                                 AOI = NA,
                                 start = NA,
                                 end = NA,
@@ -141,6 +141,8 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names, participant_ID) {
     aoi_trial_out$AOI <- AOI_names[aoi_trial_out$AOI]
 
   }
+
+  rownames(aoi_trial_out) <- NULL
 
   return(aoi_trial_out)
 
