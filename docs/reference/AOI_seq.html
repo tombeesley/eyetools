@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,13 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">AOI_seq</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  <span class="va">AOIs</span>,</span>
-<span>  AOI_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sample_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  participant_ID <span class="op">=</span> <span class="st">"participant_ID"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">AOI_seq</span><span class="op">(</span><span class="va">data</span>, <span class="va">AOIs</span>, AOI_names <span class="op">=</span> <span class="cn">NULL</span>, participant_ID <span class="op">=</span> <span class="st">"participant_ID"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -81,10 +75,6 @@
 
 <dt>AOI_names</dt>
 <dd><p>An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.</p></dd>
-
-
-<dt>sample_rate</dt>
-<dd><p>Optional sample rate of the eye-tracker (Hz) for use with raw_data. If not supplied, the sample rate will be estimated from the time column and the number of samples.</p></dd>
 
 
 <dt>participant_ID</dt>
@@ -114,7 +104,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6    118     1   2  3726  4223      497       6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7    118     1   3  4269  5339     1070       7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8    118     1   1  5379  6792     1413       8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    118     1   1  7632  9295     1663       9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    118     1   1  7632  9185     1553       9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10   118     1   3  9325 10439     1114      10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11   118     1   1 10495 10705      210      11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12   118     1   3 10735 12142     1407      12</span>
@@ -143,7 +133,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 35   118     4   1  2439  3353      914       5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 36   118     4   3  3393  4159      766       6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 37   118     4   2  4206  4593      387       7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38   118     4   1  4779  5459      680       8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38   118     4   1  4806  5459      653       8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 39   118     4   3  5506  6166      660       9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40   118     4   2  6209  8009     1800      10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 41   118     4   1  8062  8605      543      11</span>
@@ -172,7 +162,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 64   119     1   3  3486  4162      676       6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 65   119     1   1  4195  4655      460       7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 66   119     1   2  4709  5005      296       8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67   119     1   1  5138  7305     2167       9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67   119     1   1  5149  7305     2156       9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 68   119     1   2  7361  7888      527      10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 69   119     1   3  7931  8448      517      11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 70   119     1   3  8894  9111      217      12</span>

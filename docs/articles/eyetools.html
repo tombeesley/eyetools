@@ -32,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -226,8 +226,8 @@ before and after the interpolation as well</p>
 <span></span>
 <span><span class="va">interpolate_report</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum missing_perc_before missing_perc_after</span></span>
-<span><span class="co">## 1  118         0.015838577        0.015838577</span></span>
-<span><span class="co">## 2  119         0.005402579        0.005402579</span></span></code></pre>
+<span><span class="co">## 1  118          0.02278151         0.02278151</span></span>
+<span><span class="co">## 2  119          0.01086325         0.01086325</span></span></code></pre>
 <p>An additional step that can be beneficial is to pass the eye data
 through the <code><a href="../reference/smoother.html">smoother()</a></code> function. This removes particularly
 jerky transitions between samples and is critical for the analysis of
@@ -367,10 +367,10 @@ the entry of the fixation.</p>
 <pre><code><span><span class="co">##   pNum trial fix_n start  end duration    x   y prop_NA min_dur disp_tol</span></span>
 <span><span class="co">## 1  118     1     1     0  173      173  959 811       0     150      100</span></span>
 <span><span class="co">## 2  118     1     2   197  397      200  961 590       0     150      100</span></span>
-<span><span class="co">## 3  118     1     3   400  653      253  958 491       0     150      100</span></span>
-<span><span class="co">## 4  118     1     4   803 1067      264 1370 839       0     150      100</span></span>
-<span><span class="co">## 5  118     1     5  1233 1390      157  997 545       0     150      100</span></span>
-<span><span class="co">## 6  118     1     6  1393 1703      310  969 477       0     150      100</span></span></code></pre>
+<span><span class="co">## 3  118     1     3   400  653      253  958 490       0     150      100</span></span>
+<span><span class="co">## 4  118     1     4   803 1083      280 1372 839       0     150      100</span></span>
+<span><span class="co">## 5  118     1     5  1233 1386      153  997 545       0     150      100</span></span>
+<span><span class="co">## 6  118     1     6  1390 1700      310  969 478       0     150      100</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="vti-algorithm">VTI Algorithm<a class="anchor" aria-label="anchor" href="#vti-algorithm"></a>
@@ -414,12 +414,12 @@ less sudden and so the entry point of a saccade is sooner.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_fixations_VTI</span><span class="op">)</span> <span class="co"># show sample of output data for participant 118</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trialNumber fix_n start  end duration         x        y min_dur</span></span>
-<span><span class="co">## 1  118           1     1     0  727      727  959.2461 598.7982     150</span></span>
-<span><span class="co">## 2  118           1     2   817 1150      333 1381.7121 839.4826     150</span></span>
-<span><span class="co">## 3  118           1     3  1230 1696      466  978.8340 500.6471     150</span></span>
-<span><span class="co">## 4  118           1     4  1733 2156      423  957.8373 170.8460     150</span></span>
-<span><span class="co">## 5  118           1     5  2263 2670      407  378.2771 831.3155     150</span></span>
-<span><span class="co">## 6  118           1     6  2773 3110      337  965.2839 399.2603     150</span></span>
+<span><span class="co">## 1  118           1     1     0  717      717  958.6070 600.0978     150</span></span>
+<span><span class="co">## 2  118           1     2   810 1167      357 1379.3236 836.9181     150</span></span>
+<span><span class="co">## 3  118           1     3  1243 1696      453  977.4735 499.0165     150</span></span>
+<span><span class="co">## 4  118           1     4  1703 2150      447  958.6533 174.2973     150</span></span>
+<span><span class="co">## 5  118           1     5  2270 2660      390  376.3810 833.4158     150</span></span>
+<span><span class="co">## 6  118           1     6  2763 3633      870  969.5746 233.2405     150</span></span>
 <span><span class="co">##   disp_tol</span></span>
 <span><span class="co">## 1      100</span></span>
 <span><span class="co">## 2      100</span></span>
@@ -440,20 +440,20 @@ being above a certain threshold.</p>
 <code class="sourceCode R"><span><span class="va">saccades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">saccades</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial sac_n start  end duration origin_x origin_y terminal_x terminal_y</span></span>
-<span><span class="co">## 1  118     1     1  2186 2253       67 818.8394 313.0595   430.7754   772.7604</span></span>
-<span><span class="co">## 2  118     1     2  2700 2723       23 554.9507 656.7780   703.8855   531.0949</span></span>
-<span><span class="co">## 3  118     1     3  2730 2750       20 738.0417 503.8376   846.5695   422.0547</span></span>
-<span><span class="co">## 4  118     1     4  3653 3743       90 973.0583 141.0650   478.9231   747.9415</span></span>
-<span><span class="co">## 5  118     1     5  4213 4233       20 460.3286 722.8386   577.2034   617.8567</span></span>
-<span><span class="co">## 6  118     1     6  4239 4263       24 607.2775 592.1919   765.9896   462.1740</span></span>
+<pre><code><span><span class="co">##   pNum trial sac_n start  end duration  origin_x origin_y terminal_x terminal_y</span></span>
+<span><span class="co">## 1  118     1     1  2180 2240       60  833.2688 296.7871   487.3967   705.9158</span></span>
+<span><span class="co">## 2  118     1     2  2710 2750       40  614.5028 605.7001   862.3837   408.3421</span></span>
+<span><span class="co">## 3  118     1     3  3673 3726       53  885.6256 253.4150   558.1883   655.7776</span></span>
+<span><span class="co">## 4  118     1     4  4213 4233       20  460.3286 722.8386   577.2034   617.8567</span></span>
+<span><span class="co">## 5  118     1     5  4243 4283       40  628.1155 574.9734   877.0888   378.3259</span></span>
+<span><span class="co">## 6  118     1     6  5353 5376       23 1142.1215 616.8508  1269.8306   723.8116</span></span>
 <span><span class="co">##   mean_velocity peak_velocity</span></span>
-<span><span class="co">## 1      225.7210      321.4263</span></span>
-<span><span class="co">## 2      210.6053      284.3140</span></span>
-<span><span class="co">## 3      175.6061      209.7484</span></span>
-<span><span class="co">## 4      219.2652      344.5652</span></span>
-<span><span class="co">## 5      195.7366      251.8862</span></span>
-<span><span class="co">## 6      214.3903      290.0800</span></span></code></pre>
+<span><span class="co">## 1      225.0736      331.8455</span></span>
+<span><span class="co">## 2      200.3353      263.8863</span></span>
+<span><span class="co">## 3      243.7927      340.3059</span></span>
+<span><span class="co">## 4      195.6512      251.7763</span></span>
+<span><span class="co">## 5      202.2794      266.9614</span></span>
+<span><span class="co">## 6      185.0751      228.9918</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -483,19 +483,19 @@ long depending on the number of trials.</p>
 <span>                                 run_interp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                 smooth <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="../reference/figures/unnamed-chunk-18-1.png" width="700"></p>
-<pre><code><span><span class="co">##     algorithm trial  percent fix_n    corr.r        corr.p    corr.t</span></span>
-<span><span class="co">## 1         vti     1 88.46249    19 0.6810053  0.000000e+00 59.088592</span></span>
-<span><span class="co">## 2  dispersion     1 84.05546    35 0.6810053  0.000000e+00 59.088592</span></span>
-<span><span class="co">## 3         vti     2 89.77759    17 0.6477846 2.616829e-278 41.097244</span></span>
-<span><span class="co">## 4  dispersion     2 82.20701    23 0.6477846 2.616829e-278 41.097244</span></span>
-<span><span class="co">## 5         vti     3 81.00063    12 0.2163931  3.463818e-18  8.801836</span></span>
-<span><span class="co">## 6  dispersion     3 81.63395    16 0.2163931  3.463818e-18  8.801836</span></span>
-<span><span class="co">## 7         vti     4 79.91927    15 0.4351612 1.219004e-137 26.344437</span></span>
-<span><span class="co">## 8  dispersion     4 84.32560    24 0.4351612 1.219004e-137 26.344437</span></span>
-<span><span class="co">## 9         vti     5 88.76320    12 0.5721358 3.834637e-116 25.383123</span></span>
-<span><span class="co">## 10 dispersion     5 81.67421    14 0.5721358 3.834637e-116 25.383123</span></span>
-<span><span class="co">## 11        vti     6 82.37548    12 0.7623090 7.953886e-298 46.580269</span></span>
-<span><span class="co">## 12 dispersion     6 83.84419    14 0.7623090 7.953886e-298 46.580269</span></span></code></pre>
+<pre><code><span><span class="co">##     algorithm trial  percent fix_n     corr.r        corr.p    corr.t</span></span>
+<span><span class="co">## 1         vti     1 89.40332    17 0.71222884  0.000000e+00 64.468030</span></span>
+<span><span class="co">## 2  dispersion     1 86.01139    30 0.71222884  0.000000e+00 64.468030</span></span>
+<span><span class="co">## 3         vti     2 81.69376    14 0.77587488  0.000000e+00 59.439708</span></span>
+<span><span class="co">## 4  dispersion     2 83.87511    22 0.77587488  0.000000e+00 59.439708</span></span>
+<span><span class="co">## 5         vti     3 85.18049    13 0.09599458  1.332863e-04  3.829771</span></span>
+<span><span class="co">## 6  dispersion     3 82.64725    16 0.09599458  1.332863e-04  3.829771</span></span>
+<span><span class="co">## 7         vti     4 86.41103    16 0.72680619  0.000000e+00 57.678336</span></span>
+<span><span class="co">## 8  dispersion     4 84.19105    23 0.72680619  0.000000e+00 57.678336</span></span>
+<span><span class="co">## 9         vti     5 88.76320    12 0.57213575 3.834637e-116 25.383123</span></span>
+<span><span class="co">## 10 dispersion     5 81.67421    14 0.57213575 3.834637e-116 25.383123</span></span>
+<span><span class="co">## 11        vti     6 82.37548    12 0.83553811  0.000000e+00 60.140951</span></span>
+<span><span class="co">## 12 dispersion     6 85.18519    15 0.83553811  0.000000e+00 60.140951</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -533,12 +533,12 @@ time spent for each trial.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_time</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trial AOI_1 AOI_2 AOI_3</span></span>
-<span><span class="co">## 1  118     1  1584  3254  5292</span></span>
-<span><span class="co">## 2  118     2  1066  1358  3626</span></span>
+<span><span class="co">## 1  118     1  1405  3351  5289</span></span>
+<span><span class="co">## 2  118     2  1076  1327  3755</span></span>
 <span><span class="co">## 3  118     3   733   569  2843</span></span>
-<span><span class="co">## 4  118     4  3438  2420  2346</span></span>
+<span><span class="co">## 4  118     4  3466  2442  2351</span></span>
 <span><span class="co">## 5  118     5  1090   246  2123</span></span>
-<span><span class="co">## 6  118     6   879   783  2356</span></span></code></pre>
+<span><span class="co">## 6  118     6   879   783  2465</span></span></code></pre>
 <p>The returned data show the time in milliseconds on each area of
 interest, per trial. It is also possible to specify names for the
 different areas of interest. Or you can request that the function
@@ -553,29 +553,29 @@ is something contained in the <code>HCL_behavioural</code> obect.</p>
 <span>                          as_prop <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                          trial_time <span class="op">=</span> <span class="va">HCL_behavioural</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span> <span class="co">#vector of trial times</span></span></code></pre></div>
 <pre><code><span><span class="co">##    pNum trial     AOI_1      AOI_2     AOI_3</span></span>
-<span><span class="co">## 1   118     1 0.1176383 0.24166357 0.3930189</span></span>
-<span><span class="co">## 2   118     2 0.1367421 0.17419860 0.4651282</span></span>
+<span><span class="co">## 1   118     1 0.1043446 0.24886743 0.3927961</span></span>
+<span><span class="co">## 2   118     2 0.1380248 0.17022205 0.4816758</span></span>
 <span><span class="co">## 3   118     3 0.1391737 0.10803524 0.5397965</span></span>
-<span><span class="co">## 4   118     4 0.3468838 0.24417068 0.2367043</span></span>
+<span><span class="co">## 4   118     4 0.3497089 0.24639041 0.2372088</span></span>
 <span><span class="co">## 5   118     5 0.2463722 0.05560327 0.4798608</span></span>
-<span><span class="co">## 6   118     6 0.1682554 0.14987941 0.4509781</span></span>
+<span><span class="co">## 6   118     6 0.1682554 0.14987941 0.4718426</span></span>
 <span><span class="co">## 7   119     1 0.1597284 0.34258439 0.2219270</span></span>
 <span><span class="co">## 8   119     2 0.1640896 0.19781477 0.3960240</span></span>
-<span><span class="co">## 9   119     3 0.2519910 0.28038617 0.2931970</span></span>
-<span><span class="co">## 10  119     4 0.2115344 0.44527168 0.1376355</span></span>
-<span><span class="co">## 11  119     5 0.2448598 0.34197819 0.2207165</span></span>
-<span><span class="co">## 12  119     6 0.2206532 0.25228779 0.3526349</span></span></code></pre>
+<span><span class="co">## 9   119     3 0.2570097 0.27748062 0.2881783</span></span>
+<span><span class="co">## 10  119     4 0.2134123 0.44471937 0.1516641</span></span>
+<span><span class="co">## 11  119     5 0.2516355 0.35280374 0.2214953</span></span>
+<span><span class="co">## 12  119     6 0.2243610 0.25205112 0.3718839</span></span></code></pre>
 <p>As mentioned, it also works with raw data too:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_118</span>, data_type <span class="op">=</span> <span class="st">"raw"</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
 <span>         participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trial AOI_1 AOI_2 AOI_3</span></span>
-<span><span class="co">## 1  118     1    15    31    52</span></span>
-<span><span class="co">## 2  118     2    20    23    63</span></span>
-<span><span class="co">## 3  118     3    18    13    69</span></span>
-<span><span class="co">## 4  118     4    45    30    34</span></span>
-<span><span class="co">## 5  118     5    31     9    63</span></span>
-<span><span class="co">## 6  118     6    21    18    62</span></span></code></pre>
+<span><span class="co">## 1  118     1  1666  3573  5872</span></span>
+<span><span class="co">## 2  118     2  1353  1413  4163</span></span>
+<span><span class="co">## 3  118     3   797   593  3063</span></span>
+<span><span class="co">## 4  118     4  3733  2529  2879</span></span>
+<span><span class="co">## 5  118     5  1150   340  2356</span></span>
+<span><span class="co">## 6  118     6   923   817  2743</span></span></code></pre>
 <p>When working with raw data, you can also take advantage of
 <code><a href="../reference/AOI_time_binned.html">AOI_time_binned()</a></code>, which enables data binning based on
 time, and calculating time spent in AOIs as a result. Using
@@ -599,7 +599,7 @@ absolute or proportional time spent.</p>
 <span><span class="co">## 5    118     1     5  0.00  0.00  0.57</span></span>
 <span><span class="co">## 6    118     1     6  0.00  0.00  1.00</span></span>
 <span><span class="co">## 7    118     1     7  0.00  0.00  1.00</span></span>
-<span><span class="co">## 8    118     1     8  0.00  0.13  0.30</span></span>
+<span><span class="co">## 8    118     1     8  0.00  0.13  0.27</span></span>
 <span><span class="co">## 9    118     1     9  0.00  1.00  0.00</span></span>
 <span><span class="co">## 10   118     1    10  0.00  1.00  0.00</span></span>
 <span><span class="co">## 11   118     1    11  0.00  1.00  0.00</span></span>
@@ -667,8 +667,8 @@ absolute or proportional time spent.</p>
 <span><span class="co">## 73   118     4    13  0.00  1.00  0.00</span></span>
 <span><span class="co">## 74   118     4    14  0.00  1.00  0.00</span></span>
 <span><span class="co">## 75   118     4    15  0.00  1.00  0.00</span></span>
-<span><span class="co">## 76   118     4    16  0.00  0.43  0.00</span></span>
-<span><span class="co">## 77   118     4    17  0.90  0.00  0.00</span></span>
+<span><span class="co">## 76   118     4    16  0.00  0.50  0.00</span></span>
+<span><span class="co">## 77   118     4    17  0.63  0.00  0.00</span></span>
 <span><span class="co">## 78   118     4    18  1.00  0.00  0.00</span></span>
 <span><span class="co">## 79   118     4    19  1.00  0.00  0.00</span></span>
 <span><span class="co">## 80   118     4    20  1.00  0.00  0.00</span></span>
@@ -713,23 +713,22 @@ absolute or proportional time spent.</p>
 <span><span class="co">## 119  118     6    19  0.00  0.00  1.00</span></span>
 <span><span class="co">## 120  118     6    20  0.00  0.00  1.00</span></span></code></pre>
 <p>The <code><a href="../reference/AOI_seq.html">AOI_seq()</a></code> function analyses the sequence of entries
-into defined AOI regions across trials. This works with fixation data or
-raw data as the input.</p>
+into defined AOI regions across trials. This works with fixation
+data.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_AOI_sequence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_seq.html">AOI_seq</a></span><span class="op">(</span><span class="va">data_fixations_disp</span>,</span>
 <span>                             <span class="va">AOI_areas</span>,         </span>
 <span>                             AOI_names <span class="op">=</span> <span class="cn">NULL</span>,         </span>
-<span>                             sample_rate <span class="op">=</span> <span class="cn">NULL</span>,         </span>
 <span>                             participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span>   </span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_sequence</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trial AOI start  end duration entry_n</span></span>
 <span><span class="co">## 1  118     1   3   400  653      253       1</span></span>
-<span><span class="co">## 2  118     1   2   803 1067      264       2</span></span>
-<span><span class="co">## 3  118     1   3  1393 2166      773       3</span></span>
-<span><span class="co">## 4  118     1   1  2256 2670      414       4</span></span>
-<span><span class="co">## 5  118     1   3  2760 3653      893       5</span></span>
-<span><span class="co">## 6  118     1   1  3743 4203      460       6</span></span></code></pre>
+<span><span class="co">## 2  118     1   2   803 1083      280       2</span></span>
+<span><span class="co">## 3  118     1   3  1390 2120      730       3</span></span>
+<span><span class="co">## 4  118     1   1  2260 2666      406       4</span></span>
+<span><span class="co">## 5  118     1   3  2760 3646      886       5</span></span>
+<span><span class="co">## 6  118     1   1  3753 4116      363       6</span></span></code></pre>
 <p>The returned data provide a list of the entries into the AOIs, across
 each trial. By default the data is returned in long format, with one row
 per entry.</p>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,12 +57,15 @@
 <h2 class="pkg-version" data-toc-text="development version" id="eyetools-development-version">eyetools (development version)<a class="anchor" aria-label="anchor" href="#eyetools-development-version"></a></h2>
 <ul><li>renamed <code>hdf5_to_csv()</code> to <code><a href="../reference/hdf5_to_df.html">hdf5_to_df()</a></code> to accurately reflect operation</li>
 <li>added <code><a href="../reference/hdf5_get_event.html">hdf5_get_event()</a></code> to access messages stored in the TOBII generated hdf5</li>
+<li>updated the sample_rate estimation code in <code>*_VTI()</code>, <code><a href="../reference/interpolate.html">interpolate()</a></code>, and <code>AOI_time*()</code> functions</li>
+<li>updated plot aesthetics for colour-blindness (using viridis), and improving flexibility of use</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.3" id="eyetools-073">eyetools 0.7.3<a class="anchor" aria-label="anchor" href="#eyetools-073"></a></h2>
 <ul><li>added <code><a href="../reference/plot_AOI_growth.html">plot_AOI_growth()</a></code>
 </li>
 <li>fixed problem with <code><a href="../reference/AOI_seq.html">AOI_seq()</a></code> where it couldn’t handle trials without fixations or entries</li>
+<li>added create_AOI_df() which will create a blank data frame for populating with AOIs</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.2" id="eyetools-072">eyetools 0.7.2<a class="anchor" aria-label="anchor" href="#eyetools-072"></a></h2><p class="text-muted">CRAN release: 2024-10-28</p>
