@@ -119,10 +119,13 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = N
 
   if(type == "abs") {
     plot <- ggplot(data, aes(time, time_diff, colour = in_AOI, group = in_AOI)) +
-      labs(x = "Time", y = "Absolute Time", colour = "Area of Interest")
+      labs(x = "Time in Trial", y = "Cumulative Time on AOI", colour = "Area of Interest")
   }
 
-  plot + scale_colour_discrete() +
-    geom_line()
+  plot +
+    geom_line() +
+    theme_minimal() +
+    theme(legend.position = "bottom") +
+    scale_color_viridis_d()
 }
 

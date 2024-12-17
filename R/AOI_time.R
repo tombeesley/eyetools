@@ -28,8 +28,7 @@
 #' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum")
 #'
 #' #raw data
-#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs,
-#'          sample_rate = 300, participant_ID = "pNum")
+#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_ID = "pNum")
 #' }
 #'
 
