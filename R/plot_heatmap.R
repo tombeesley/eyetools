@@ -1,6 +1,6 @@
 #' Plot heatmap of raw data
 #'
-#' A tool for visualising a heatmap of raw data.
+#' Plots a heatmap of raw data.
 #'
 #' @param data data in standard raw data form (time, x, y, trial)
 #' @param trial_number can be used to select particular trials within the data

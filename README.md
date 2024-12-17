@@ -44,6 +44,7 @@ Available functions in the latest CRAN version:
 | `hdf5_get_event()`        | A function to get the message event files from a TOBII-generated hdf5 files to dataframe             |
 | `interpolate()`           | Interpolates data across gaps; provides a summary report of repair                                   |
 | `plot_AOI_growth()`       | Plots absolute or proportional time spent in AOIs over time                                          |
+| `plot_heatmap()`          | Plots a heatmap of raw data.                                                                         |
 | `plot_seq()`              | provides a 2D plot of raw data for a single trial. Data can be split into time bins                  |
 | `plot_spatial()`          | provides a 2D plot of raw data, fixations, saccades, and AOIs                                        |
 | `saccade_VTI()`           | Velocity threshold algorithm for saccade detection. Provides summary of velocity, location, duration |
