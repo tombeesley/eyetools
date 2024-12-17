@@ -22,7 +22,7 @@
 #' data <- combine_eyes(HCL)
 #' data <- data[data$pNum == 118,]
 #' # plot the raw data
-#' plot_spatial(raw_data = data[data$pNum == 118,])
+#' plot_spatial(raw_data = data)
 #'
 #' # plot both raw and fixation data together
 #' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data))
@@ -33,6 +33,7 @@
 #' }
 #' @import ggplot2
 #' @import ggforce
+#' @import viridis
 #' @importFrom magick image_read
 #'
 
@@ -47,12 +48,48 @@ plot_spatial <- function(raw_data = NULL,
                          show_fix_order = TRUE,
                          plot_header = FALSE) {
 
-  if(!is.null(trial_number) & !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
+  if(!is.null(trial_number) && !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
 
   final_g <- ggplot()
 
+  # setting axes limits and reversing y
+
+  if (is.null(res)==FALSE) {
+    # creates breaks based on quarters. Might look messy with some resolutions
+    breaks_x = round(seq(res[1],res[2],(res[2]-res[1])/4),0)
+    breaks_y = round(seq(res[3],res[4],(res[4]-res[3])/4),0)
+  }
+
+  if (is.null(res)==FALSE && flip_y==FALSE) {
+    final_g <- final_g +
+      scale_x_continuous(limits = res[1:2],
+                         breaks = breaks_x) +
+      scale_y_continuous(limits = res[3:4],
+                         breaks = breaks_y)
+  } else if (is.null(res)==FALSE && flip_y==TRUE) {
+    final_g <- final_g +
+      scale_x_continuous(limits = res[1:2],
+                         breaks = breaks_x) +
+      scale_y_reverse(limits = res[4:3],
+                      breaks = breaks_y)
+  }
+
   # PLOT BACKGROUND IMAGE
   if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
+
+  # PLOT gridlines
+
+  # major gridlines are just the breaks_*
+  # minor are [0:34 + half the diff
+  minor_breaks_x <- breaks_x[0:4] + ((res[2]-res[1])/8)
+  minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
+
+  final_g <-
+    final_g +
+    geom_vline(xintercept = breaks_x, colour = "grey", alpha = .5) +
+    geom_hline(yintercept = breaks_y, colour = "grey", alpha = .5) +
+    geom_vline(xintercept = minor_breaks_x, colour = "lightgrey", alpha = .5) +
+    geom_hline(yintercept = minor_breaks_y, colour = "lightgrey", alpha = .5)
 
   # PLOT AOIs
   if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
@@ -88,7 +125,7 @@ plot_spatial <- function(raw_data = NULL,
       final_g +
       geom_circle(data = fix_data,
                   aes(x0 = x, y0 = y, r = disp_tol/2, fill = duration),
-                  alpha = .2)
+                  alpha = .4)
     if (show_fix_order == TRUE) {
 
       final_g <-
@@ -97,7 +134,10 @@ plot_spatial <- function(raw_data = NULL,
                    aes(x = x, y = y, label = fix_n),
                    hjust = 1,
                    vjust = 1,
-                   size = 4)
+                   size = 4) +
+        scale_fill_viridis(breaks = c(min(duration),
+                                               max(duration)),
+                                    labels = c("low", "high"))
 
     }
 
@@ -130,14 +170,10 @@ plot_spatial <- function(raw_data = NULL,
 
   final_g <-
     final_g +
-    theme_classic(base_size = 16) +
-    theme(panel.background = element_rect(fill = "#E0E0E0"),
-          panel.border = element_rect(colour = "black",
-                                      fill = NA,
-                                      size = 4)) +
-    scale_fill_continuous(low = "yellow", high = "red") +
+    theme_minimal() +
     coord_fixed() +
-    guides(size = "none") +
+    theme(legend.position = "bottom",
+          panel.background = element_rect(fill = NA, colour = NA)) +
     labs(y = "Vertical coordinate (pixels)",
          x = "Horizontal coordinate (pixels)")
 
@@ -147,28 +183,6 @@ plot_spatial <- function(raw_data = NULL,
       final_g +
       labs(title = "eyetools::plot_spatial()",
            subtitle = "Raw data shown as dots; Fixations shown as circles (fill = duration); \nFixation size reflects dispersion of raw data; \nAOIs shown as blue regions")
-  }
-
-  # setting axes limits and reversing y
-
-  if (is.null(res)==FALSE) {
-    # creates breaks based on quarters. Might look messy with some resolutions
-    breaks_x = round(seq(res[1],res[2],(res[2]-res[1])/4),0)
-    breaks_y = round(seq(res[3],res[4],(res[4]-res[3])/4),0)
-  }
-
-  if (is.null(res)==FALSE & flip_y==FALSE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
-                         breaks = breaks_x) +
-      scale_y_continuous(limits = res[3:4],
-                         breaks = breaks_y)
-  } else if (is.null(res)==FALSE & flip_y==TRUE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
-                         breaks = breaks_x) +
-      scale_y_reverse(limits = res[4:3],
-                      breaks = breaks_y)
   }
 
 
@@ -188,7 +202,9 @@ add_raw <- function(dataIn, ggplot_in){
     ggplot_in +
     geom_point(data = dataIn,
                aes(x = x, y = y),
-               size = 1,
+               #size = 1,
+               shape = 4,
+               alpha = .5,
                na.rm = TRUE)
 
   return(ggplot_in)

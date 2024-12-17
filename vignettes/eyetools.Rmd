@@ -29,19 +29,6 @@ You can install eyetools using the following code:
 install.packages('eyetools')
 ```
 
-Or if you like, you can install the latest version from Github:
-
-```{r, eval=FALSE}
-
-if (!require(devtools)) {
-  install.packages("devtools")
-  library(devtools)
-}
-
-install_github("tombeesley/eyetools")
-
-```
-
 A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
 
 ```{r}
@@ -52,7 +39,9 @@ library(eyetools)
 
 ## Data Manipulation and Preprocessing
 
-Eyetools has built in example data that can be used while getting to grips with the package. For the purpose of this tutorial, we will start with a small dataset that contains binocular eye data from two participants (and six trials) from a simple contingency learning task (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015). In this task there are two stimuli that appear simultaneously on each trial (to the left and right in the top half of the screen). Participants look at these cues and then make a decision by selecting an "outcome response" button.
+Eyetools has built in example data that can be used while getting to grips with the package. For the purpose of this tutorial, we will start with a small dataset that contains binocular eye data from two participants (and six trials) from a simple contingency learning task (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015)[^1]. In this task there are two stimuli that appear simultaneously on each trial (to the left and right in the top half of the screen). Participants look at these cues and then make a decision by selecting an "outcome response" button.
+
+[^1]: Beesley, T., Nguyen, K. P., Pearson, D., & Le Pelley, M. E. (2015). Uncertainty and predictiveness determine attention to cues during human associative learning. Quarterly Journal of Experimental Psychology, 68(11), 2175-2199.
 
 [![Screenshot of a trial from Beesley et al. 2015](data/HCL_sample_image.jpg){width="960"}](https://journals.sagepub.com/doi/10.1080/17470218.2015.1009919)
 
@@ -147,7 +136,7 @@ data_smooth <- smoother(data,
 
 Many psychology experiments will position stimuli on the screen in a counterbalanced fashion. For example, in the example data we are using, there are two stimuli, with one of these appearing on the left and one on the right. In our design, one of the cue stimuli is a "target" and one is a "distractor", and the experiment counterbalances whether these are positioned on the left or right across trials.
 
-Eyetools has a built in function which allows us to transform the x (or y) values of the stimuli to take into account a counterbalancing variable: `conditional_transform()`. This function currently allows for a single-dimensional flip across either the horizontal or vertical midline. It can be used on raw data or fixation data. It requires the spatial coordinates (x, y) and a specification of the counterbalancing variable. The result is a normalised set of data, in which the x (and/or y) position is consistent across counterbalanced conditions (e.g., in our example, we can transform the data so that the target cue is always on the left). This transformation is especially useful for future visualisations and calculation of time on areas of interest. Note that `conditional_transform()` is another function that does not discriminate between multi-participant and single-participant data and so no participant_ID parameter is required
+Eyetools has a built in function which allows us to transform the x (or y) values of the stimuli to take into account a counterbalancing variable: `conditional_transform()`. This function currently allows for a single-dimensional flip across either the horizontal or vertical midline. It can be used on raw data or fixation data. It requires the spatial coordinates (x, y) and a specification of the counterbalancing variable. The result is a normalised set of data, in which the x (and/or y) position is consistent across counterbalanced conditions (e.g., in our example, we can transform the data so that the target cue is always on the left). This transformation is especially useful for future visualisations and calculation of time on areas of interest. Note that `conditional_transform()` is another function that does not discriminate between multi-participant and single-participant data and so no participant_ID parameter is required.
 
 The keen-eyed will notice that the present data does not contain a variable to specify the counterbalanced positions. This is contained in a separate dataset that holds the behavioural data, including the response times, the outcome, accuracy, and `cue_order` which tells us whether the target cue was on the left (coded as 1) or on the right (coded as 2).
 
@@ -180,9 +169,9 @@ In this next stage, we can start to explore the functions available for determin
 
 ### Dispersion Algorithm
 
-`fixation_dispersion()` detects fixations by assessing the *dispersion* of the eye position using a method similar to that proposed by Salvucci and Goldberg (1996)[^1]. This evaluates the maximum dispersion (distance) between x/y coordinates across a window of data, and looks for sufficient periods in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks in the data and are not permitted within a valid fixation period. By default, it runs the interpolation algorithm and this can be switched off using the relevant parameter.
+`fixation_dispersion()` detects fixations by assessing the *dispersion* of the eye position using a method similar to that proposed by Salvucci and Goldberg (1996)[^2]. This evaluates the maximum dispersion (distance) between x/y coordinates across a window of data, and looks for sufficient periods in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks in the data and are not permitted within a valid fixation period. By default, it runs the interpolation algorithm and this can be switched off using the relevant parameter.
 
-[^1]: Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
+[^2]: Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
 ```{r}
 data_fixations_disp <- fixation_dispersion(data,
@@ -269,8 +258,8 @@ For the `AOI_` "family" of functions, we need to specify where our AOIs were pre
 AOI_areas <- data.frame(matrix(nrow = 3, ncol = 4))
 colnames(AOI_areas) <- c("x", "y", "width_radius", "height")
 
-AOI_areas[1,] <- c(410, 840, 400, 300) # Left cue
-AOI_areas[2,] <- c(1510, 840, 400, 300) # Right cue
+AOI_areas[1,] <- c(460, 840, 400, 300) # Left cue
+AOI_areas[2,] <- c(1460, 840, 400, 300) # Right cue
 AOI_areas[3,] <- c(960, 270, 300, 500) # outcomes
 
 AOI_areas
@@ -280,7 +269,7 @@ AOI_areas
 
 ```{r}
 
-data_AOI_time <- AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+data_AOI_time <- AOI_time(data = data_fixations_disp, 
                           data_type = "fix",
                           AOIs = AOI_areas,
                           participant_ID = "pNum")
@@ -291,24 +280,43 @@ head(data_AOI_time)
 The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest. Or you can request that the function returns the time spent in AOIs as a proportion of overall time in the trial, which requires an input vector that has the values, luckily this is something contained in the `HCL_behavioural` obect.
 
 ```{r}
-AOI_time(data = data_fixations_disp, # just participant 118, otherwise incorporate into lapply() as above
+AOI_time(data = data_fixations_disp,
                           data_type = "fix",
                           AOIs = AOI_areas,
                           participant_ID = "pNum", 
-                          as_prop = T, 
+                          as_prop = TRUE, 
                           trial_time = HCL_behavioural$RT) #vector of trial times
 ```
 
 
-The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. This works with fixation data or raw data as the input.
+As mentioned, it also works with raw data too:
+
+```{r}
+AOI_time(data = data_118, data_type = "raw", AOIs = AOI_areas,
+         participant_ID = "pNum")
+```
+
+When working with raw data, you can also take advantage of `AOI_time_binned()`, which enables data binning based on time, and calculating time spent in AOIs as a result. Using `bin_length`, you specify a desired length of bin (say 100ms) and splits data into these bins, with ant remaining data being dropped from the analysis (as it does not form a complete bin which could skew analyses). As with `AOI_time()` you can specify either absolute or proportional time spent.
+
+```{r}
+
+AOI_time_binned(data = data_118,
+         AOIs = AOI_areas,
+         participant_ID = "pNum", 
+         bin_length = 100,
+         max_time = 2000,
+         as_prop = TRUE)
+
+```
+
+
+The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. This works with fixation data.
 
 ```{r}  
 
 data_AOI_sequence <- AOI_seq(data_fixations_disp,
                              AOI_areas,         
                              AOI_names = NULL,         
-                             sample_rate = NULL,         
-                             long = TRUE,
                              participant_ID = "pNum")   
 
 head(data_AOI_sequence)
@@ -318,7 +326,7 @@ The returned data provide a list of the entries into the AOIs, across each trial
 
 ## Plotting Functions
 
-Finally, eyetools contains two `plot_*` functions, `plot_seq()` and `plot_spatial()`. These functions are not designed to accommodate multi-participant data and work best with single trials.
+Finally, eyetools contains `plot_*` functions, `plot_seq()` `plot_spatial()`, and `plot_AOI_growth()`. These functions are not designed to accommodate multi-participant data and work best with single trials.
 
 `plot_seq()` is a tool for visualising the timecourse of raw data over a single trial. If data from multiple trials are present, then a single trial will be sampled at random. Alternatively, the `trial_number` can be specified. Data can be plotted across the whole trial, or can be split into bins to present distinct plots for each time window.
 
@@ -336,18 +344,18 @@ But the parameters of `plot_seq()` can help exploration be more informative. We 
 
 plot_seq(data_118, trial_number = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
 
-plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs) # add AOIs
+plot_seq(data_118, trial_number = 1, AOIs = AOI_areas) # add AOIs
 
 ```
 
 You also have the option to split the time into bins to reduce the amount of data plotted
 
 ```{r}
-plot_seq(data_118, trial_number = 1, AOIs = HCL_AOIs, bin_time = 1000)
+plot_seq(data_118, trial_number = 1, AOIs = AOI_areas, bin_time = 1000)
 
 ```
 
-The other plotting function is `plot_spatial()`, which is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
+`plot_spatial()` is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
 
 ```{r}
 plot_spatial(raw_data = data_118, trial_number = 6)
@@ -365,6 +373,20 @@ plot_spatial(raw_data = data_118,
              fix_data = fixation_dispersion(data_118),
              sac_data = saccade_VTI(data_118),
              trial_number = 6)
+
+```
+
+The function `plot_AOI_growth()` helps visualise how attention is directed across the development of a trial. It presents a line graph of the change in proportion of time spent in each AOI region across the trial time.
+
+```{r}
+#standard plot with absolute time
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "abs", trial_number = 1)
+
+#standard plot with proportional time
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "prop", trial_number = 1)
+
+#only keep predictive and non-predictive cues rather than the target AOI
+plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "prop", AOI_names = c("Predictive", "Non Predictive", NA))
 
 ```
 

@@ -32,12 +32,9 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20,
   internal_saccade_VTI <- function(data, sample_rate, threshold, min_dur) {
 
 
-    # sample rate estimation if NULL
-    if (is.null(sample_rate)) {
-      ts <- aggregate(time~trial, data = data, range)
-      total_time <- sum(ts$time[,2]-ts$time[,1])
-      sample_rate <- 1000/(total_time/nrow(data)) # total time taken / samples
-    }
+    # estimate sample rate
+    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
+
 
     data <- split(data, data$trial)
     data_sac <- pbapply::pblapply(data, saccade_VTI_trial, sample_rate, threshold, min_dur)

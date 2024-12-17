@@ -1,7 +1,7 @@
 Type: Package
 Package: eyetools
 Title: Analyse Eye Data
-Version: 0.7.2
+Version: 0.8.0
 Authors@R: c(
     person("Tom", "Beesley", , "t.beesley@lancaster.ac.uk", role = c("aut", "cre")),
     person("Matthew", "Ivory", , "matthew.ivory@lancaster.ac.uk", role = "aut")
@@ -24,6 +24,7 @@ Depends:
 Imports: 
     ggforce,
     ggplot2,
+    viridis,
     glue,
     hdf5r,
     lifecycle,
@@ -44,5 +45,5 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Language: en-GB

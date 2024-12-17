@@ -51,7 +51,7 @@ plot_seq <- function(data = NULL,
   if (!is.null(trial_number)){
     data <- data[data$trial==trial_number,]
     if (nrow(data)==0){
-      stop("Error: trial number error? No data found")
+      stop("With specified trial number no data found.")
     }
 
   } else {
@@ -82,8 +82,43 @@ plot_seq <- function(data = NULL,
 
   final_g <- ggplot(data = data)
 
+  #create breaks based on resolution
+  if (is.null(res)==FALSE) {
+    # creates breaks based on quarters. Might look messy with some resolutions
+    breaks_x = round(seq(res[1],res[2],(res[2]-res[1])/4),0)
+    breaks_y = round(seq(res[3],res[4],(res[4]-res[3])/4),0)
+  }
+
+  if (is.null(res)==FALSE && flip_y==FALSE) {
+    final_g <- final_g +
+      scale_x_continuous(limits = res[1:2],
+                         breaks = breaks_x) +
+      scale_y_continuous(limits = res[3:4],
+                         breaks = breaks_y)
+  } else if (is.null(res)==FALSE && flip_y==TRUE) {
+    final_g <- final_g +
+      scale_x_continuous(limits = res[1:2],
+                         breaks = breaks_x) +
+      scale_y_reverse(limits = res[4:3],
+                      breaks = breaks_y)
+  }
+
   # PLOT BACKGROUND IMAGE
   if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
+
+  # PLOT gridlines
+
+  # major gridlines are just the breaks_*
+  # minor are [0:34 + half the diff
+minor_breaks_x <- breaks_x[0:4] + ((res[2]-res[1])/8)
+minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
+
+  final_g <-
+    final_g +
+    geom_vline(xintercept = breaks_x, colour = "grey", alpha = .5) +
+    geom_hline(yintercept = breaks_y, colour = "grey", alpha = .5) +
+    geom_vline(xintercept = minor_breaks_x, colour = "lightgrey", alpha = .5) +
+    geom_hline(yintercept = minor_breaks_y, colour = "lightgrey", alpha = .5)
 
   # PLOT AOIs
   if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
@@ -93,17 +128,16 @@ plot_seq <- function(data = NULL,
 
   final_g <-
     final_g +
-    theme_classic(base_size = 16) +
-    theme(panel.background = element_rect(fill = "#E0E0E0"),
-          panel.border = element_rect(colour = "black",
-                                      fill = NA,
-                                      size = 4)) +
-    scale_colour_gradient2(low = "light yellow",
-                           mid = "orange",
-                           high = "dark red",
-                           midpoint = median(data$time)) +
+    theme_minimal() +
     coord_fixed() +
-    guides(size = "none") +
+    viridis::scale_colour_viridis(breaks = c(min(final_g$data$time),
+                                             max(final_g$data$time)),
+                                  labels = c("start", "end")) +
+    theme(legend.position = "bottom",
+          #panel.ontop=TRUE,
+          panel.background = element_rect(fill = NA, colour = NA)) +#,
+         # panel.grid.major = element_line(linewidth = .25),
+          #panel.grid.minor = element_line(linewidth = .125)) +
     labs(y = "Vertical coordinate (pixels)",
          x = "Horizontal coordinate (pixels)")
 
@@ -116,26 +150,6 @@ plot_seq <- function(data = NULL,
   }
 
   # setting axes limits and reversing y
-
-  if (is.null(res)==FALSE) {
-    # creates breaks based on quarters. Might look messy with some resolutions
-    breaks_x = round(seq(res[1],res[2],(res[2]-res[1])/4),0)
-    breaks_y = round(seq(res[3],res[4],(res[4]-res[3])/4),0)
-  }
-
-  if (is.null(res)==FALSE & flip_y==FALSE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
-                         breaks = breaks_x) +
-      scale_y_continuous(limits = res[3:4],
-                         breaks = breaks_y)
-  } else if (is.null(res)==FALSE & flip_y==TRUE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
-                         breaks = breaks_x) +
-      scale_y_reverse(limits = res[4:3],
-                      breaks = breaks_y)
-  }
 
   # add facet
   if (is.null(bin_time)==FALSE){
@@ -166,8 +180,9 @@ add_raw_time_seq <- function(dataIn, ggplot_in){
     ggplot_in +
     geom_point(data = dataIn,
                aes(x = x, y = y, colour = time),
-               size = 5,
-               alpha = .4,
+               shape = 4,
+               size = 3,
+               alpha = .5,
                na.rm = TRUE)
 
   return(ggplot_in)

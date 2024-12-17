@@ -1,20 +1,20 @@
-#' hdf5_to_csv
+#' Convert TOBII-generated HDF5 files to dataframe
 #'
-#' A function to convert TOBII-generated hdf5 files to csv
+#' A function to convert TOBII-generated hdf5 files to a dataframe
 #'
 #' @param filename the hdf5 file generated from TOBII
 #'
-#' @return A list of csv files collected from the eyetracker content, if only one eyetracking event is present, return this as a csv file
+#' @return A list of dataframes collected from the eyetracker content, if only one eyetracking event is present, return this as a single dataframe
 #' @export
 #'
 #' @import hdf5r
 #'
 #' @examples
 #' \dontrun{
-#' raw_data <- hdf5_to_csv("example_TOBII.hdf5")
+#' raw_data <- hdf5_to_df("example_TOBII.hdf5")
 #' }
 
-hdf5_to_csv <- function(filename) {
+hdf5_to_df <- function(filename) {
 
   file.h5 <- H5File$new(filename, mode="a") # 'a' mode is open
 

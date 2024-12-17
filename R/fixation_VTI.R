@@ -37,7 +37,7 @@
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
 fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, smooth = FALSE, progress = TRUE, participant_ID = "participant_ID"){
-  if (run_interp == FALSE & sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
+  if (run_interp == FALSE && sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
     stop("No interpolation carried out and NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
   }
 
@@ -49,12 +49,9 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
 
   internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, run_interp, smooth, progress, participant_ID) {
 
-    # sample rate estimation if NULL
-    if (is.null(sample_rate)) {
-      ts <- aggregate(time~trial, data = data, range)
-      total_time <- sum(ts$time[,2]-ts$time[,1])
-      sample_rate <- 1000/(total_time/nrow(data)) # total time taken / samples
-    }
+    # estimate sample rate
+    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
+
 
     data <- split(data, data$trial)
     # either show a progress bar, or not
@@ -270,7 +267,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     data <- data[order(data$time),] # merge throws the ordering off
     # define function to pull out relevant data from fixations
 
-      summarise_fixations <- function(dataIn){
+    summarise_fixations <- function(dataIn){
 
       participant_ID = data[[participant_ID]][1]
       start <- dataIn$time[1]

@@ -6,8 +6,9 @@
 \usage{
 interpolate(
   data,
-  maxgap = 25,
+  maxgap = 150,
   method = "approx",
+  sample_rate = NULL,
   report = FALSE,
   participant_ID = "participant_ID"
 )
@@ -15,9 +16,11 @@ interpolate(
 \arguments{
 \item{data}{dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)}
 
-\item{maxgap}{maximum number of consecutive NAs to fill. Any longer gaps will be left unchanged (see zoo package)}
+\item{maxgap}{maximum time gap of consecutive trackloss to fill (in ms). Any longer gaps will be left unchanged (see zoo package)}
 
 \item{method}{"approx" for linear interpolation or "spline" for cubic spline interpolation}
+
+\item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
 
 \item{report}{default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.}
 
@@ -38,6 +41,6 @@ if not it is handled as single participant data, or the participant_ID needs to 
 }
 \examples{
 data <- combine_eyes(HCL)
-interpolate(data, maxgap = 20, participant_ID = "pNum")
+interpolate(data, maxgap = 150, participant_ID = "pNum")
 
 }

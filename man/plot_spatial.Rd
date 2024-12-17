@@ -50,7 +50,7 @@ in the order they were made. Can overlay areas of interest (AOIs) and customise 
 data <- combine_eyes(HCL)
 data <- data[data$pNum == 118,]
 # plot the raw data
-plot_spatial(raw_data = data[data$pNum == 118,])
+plot_spatial(raw_data = data)
 
 # plot both raw and fixation data together
 plot_spatial(raw_data = data, fix_data = fixation_dispersion(data))

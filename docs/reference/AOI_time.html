@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,7 @@
 
 
 <dt>trial_time</dt>
-<dd><p>a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset</p></dd>
+<dd><p>needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset</p></dd>
 
 
 <dt>participant_ID</dt>
@@ -132,8 +132,8 @@ if not it is handled as single participant data, or the participant_ID needs to 
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1  3500  1671  5886</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     2  1387  1292  3924</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     3   576   743  2932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4  2412  3546  2609</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5     0  1101  2136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4  2563  3546  2609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5   253  1101  2136</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     6   789   886  2380</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7   119     1  3673  1743  2394</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8   119     2   912   880  1944</span>
@@ -146,18 +146,18 @@ if not it is handled as single participant data, or the participant_ID needs to 
 <span class="r-in"><span><span class="fu">AOI_time</span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, data_type <span class="op">=</span> <span class="st">"raw"</span>, AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>,</span></span>
 <span class="r-in"><span>         sample_rate <span class="op">=</span> <span class="fl">120</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    pNum trial AOI_1 AOI_2 AOI_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1  9050  4283 15050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     2  3508  3392 10500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     3  1467  1967  7708</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4  6050  9358  7308</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5   242  2883  5908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     6  2017  2283  6842</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   119     1  9550  4475  6383</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   119     2  2333  2600  5450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   119     3  5008  5792  6100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  119     4 10867  5250  3800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  119     5 12500  9242  8008</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  119     6  8742  7783 12650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1  9133  4292 15050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     2  3525  3433 10500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     3  1475  1992  7708</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4  6442  9417  7308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5   867  2892  5908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     6  2042  2308  6842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   119     1  9575  4517  6383</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   119     2  2383  2617  5450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   119     3  5042  5833  6100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  119     4 10917  5300  3800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  119     5 12558  9308  8008</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  119     6  8767  7842 12650</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

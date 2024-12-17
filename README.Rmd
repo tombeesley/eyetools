@@ -45,13 +45,16 @@ Available functions in the latest CRAN version:
 |---------------------------|------------------------------------------------------------------------------------------------------|
 | `AOI_seq()`               | Detect the sequence in which AOIs were entered in a trial                                            |
 | `AOI_time()`              | Calculate time on AOIs; works with raw and fixation data                                             |
+| `AOI_time_binned()`       | Binned time analysis of area of interest entries                                                     |
 | `combine_eyes()`          | Combines binocular data (i.e., average or “best eye”)  into monocular data                           |
 | `compare_algorithms()`    | Provides a comparison between the dispersion and VTI fixation algorithms with correlations and plot  |
 | `conditional_transform()` | Implements a single-axis flip for specific trials to normalise data with counterbalanced designs     |
 | `fixation_dispersion()`   | Dispersion algorithm for fixation detection                                                          |
 | `fixation_VTI()`          | An algorithm that subtracts saccadic periods for fixation detection                                  |
-| `hdf5_to_csv()`           | converts eyetracking data retrieved from TOBII eyetrackers to csv                                    |
+| `hdf5_to_df()`            | converts eyetracking data retrieved from TOBII eyetrackers to a dataframe                            |
+| `hdf5_get_event()`        | A function to get the message event files from a TOBII-generated hdf5 files to dataframe             |
 | `interpolate()`           | Interpolates data across gaps; provides a summary report of repair                                   |
+| `plot_AOI_growth()`       | Plots absolute or proportional time spent in AOIs over time                                          |
 | `plot_seq()`              | provides a 2D plot of raw data for a single trial. Data can be split into time bins                  |
 | `plot_spatial()`          | provides a 2D plot of raw data, fixations, saccades, and AOIs                                        |
 | `saccade_VTI()`           | Velocity threshold algorithm for saccade detection. Provides summary of velocity, location, duration |
@@ -59,14 +62,12 @@ Available functions in the latest CRAN version:
 
 **Development version:**
 
-The above CRAN version is considered fairly stable and will only be updated every few months. We work on new features in the development version. This 
-version should be considered very experimental and may have bugs. You can install this using `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is the latest version. 
+The above CRAN version is considered fairly stable and will only be updated every few months. We work on new features in the development version. This version should be considered very experimental and may have bugs. You can install this using `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is the latest version. 
 
-The current development version is: 0.7.3
+The current development version is: 0.8.1
 
 Additional functions that are only available in the latest development version:
 
 | Implemented functions     | Description                                                                                          |
 |---------------------------|------------------------------------------------------------------------------------------------------|
-| `plot_AOI_growth()`       | Plots absolute or proportional time spent in AOIs over time                                          |              
-| `AOI_time_binned()`       | Binned time analysis of area of interest entries                                                     |         
+|||

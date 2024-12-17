@@ -28,7 +28,7 @@ AOI_time(
 
 \item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}
 
-\item{trial_time}{a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset}
+\item{trial_time}{needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset}
 
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
@@ -53,8 +53,7 @@ fix_d <- fixation_dispersion(data, participant_ID = "pNum")
 AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum")
 
 #raw data
-AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs,
-         sample_rate = 120, participant_ID = "pNum")
+AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_ID = "pNum")
 }
 
 }

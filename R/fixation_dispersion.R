@@ -55,9 +55,9 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     data_fix <- do.call("rbind", data_fix)
     data_fix <- as.data.frame(data_fix)
 
-    ###if x and y are still all NA, stop
-    if (sum(!is.na(as.numeric(data_fix[['V7']]))) == 0|sum(!is.na(as.numeric(data_fix[['V8']]))) == 0) {
-      stop("Too many NAs present in x and y.")
+    ###if x and y are  all NA, return NA as a fixation
+    if (sum(!is.na(as.numeric(data_fix[['V7']]))) == 0 || sum(!is.na(as.numeric(data_fix[['V8']]))) == 0) {
+      trial_fix_store <- matrix(NA,1,7)
     }
 
 
@@ -79,8 +79,16 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     trial <- data$trial[1]
 
     #if no observations for x or y at all
-    if (sum(!is.na(data$x)) == 0|sum(!is.na(data$y)) == 0) {
-      trial_fix_store <- NULL
+    if (sum(!is.na(data$x)) == 0 || sum(!is.na(data$y)) == 0) {
+      trial_fix_store <- matrix(NA,1,7)
+      trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
+      trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
+      trial_fix_store <- cbind(trial, trial_fix_store) # add trial number
+
+      #trial_fix_store <- cbind(ppt_label, trial_fix_store)
+
+      return(trial_fix_store) # returns the fixations for that trial to the main algorithm
+
     } else {
 
       if (run_interp){data <- eyetools::interpolate(data)}
@@ -147,7 +155,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           # compute the new distances from this new data point
           max_d_new_data <- max(rdist::cdist(data[last_ts, c("x", "y")],win[,c("x", "y")]))
 
-          if (is.na(max_d_new_data) | max_d_new_data >= disp_tol) {
+          if (is.na(max_d_new_data) || max_d_new_data >= disp_tol) {
             # either NA detected, or
             # the addition of data point broke the dispersion threshold
             # so make this last data point the first one for a new window
