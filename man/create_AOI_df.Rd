@@ -4,7 +4,7 @@
 \alias{create_AOI_df}
 \title{Create a blank data frame for populating with AOIs}
 \usage{
-create_AOI_df(num_AOIs)
+create_AOI_df(num_AOIs = 3)
 }
 \arguments{
 \item{num_AOIs}{number of AOIs, setting the number of rows}

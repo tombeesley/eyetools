@@ -33,7 +33,7 @@ plot_heatmap(
 a plot of the raw data
 }
 \description{
-A tool for visualising a heatmap of raw data.
+Plots a heatmap of raw data.
 }
 \examples{
 \donttest{
