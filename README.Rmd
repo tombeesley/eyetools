@@ -18,6 +18,8 @@ knitr::opts_chunk$set(echo = TRUE,
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/eyetools)
+[![CRAN status](https://www.r-pkg.org/badges/version/eyetools)](https://CRAN.R-project.org/package=eyetools)
 <!-- badges: end -->
 
 # **eyetools**

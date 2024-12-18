@@ -7,6 +7,10 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/eyetools)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/eyetools)](https://CRAN.R-project.org/package=eyetools)
 <!-- badges: end -->
 
 # **eyetools**
@@ -38,6 +42,7 @@ Available functions in the latest CRAN version:
 | `combine_eyes()`          | Combines binocular data (i.e., average or “best eye”) into monocular data                            |
 | `compare_algorithms()`    | Provides a comparison between the dispersion and VTI fixation algorithms with correlations and plot  |
 | `conditional_transform()` | Implements a single-axis flip for specific trials to normalise data with counterbalanced designs     |
+| `create_AOI_df()`.        | Create a blank data frame for populating with AOIs                                                   |
 | `fixation_dispersion()`   | Dispersion algorithm for fixation detection                                                          |
 | `fixation_VTI()`          | An algorithm that subtracts saccadic periods for fixation detection                                  |
 | `hdf5_to_df()`            | converts eyetracking data retrieved from TOBII eyetrackers to a dataframe                            |
