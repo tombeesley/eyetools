@@ -57,7 +57,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
     colnames(data_fix) <- c("trial", "fix_n", "start", "end", "duration", "x", "y",
                             "prop_NA", "min_dur", "disp_tol")
 
-    ###if x (V6) and y (V7) are  all NA, return NA as a fixation
+    ###if x and y are  all NA, return NA as a fixation
     if (sum(!is.na(as.numeric(data_fix$x))) == 0 || sum(!is.na(as.numeric(data_fix$y))) == 0) {
       trial_fix_store <- matrix(NA,1,7)
     }
@@ -84,8 +84,6 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
       trial_fix_store <- cbind(trial_fix_store, min_dur) # add param setting
       trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
       trial_fix_store <- cbind(trial, trial_fix_store) # add trial number
-
-      #trial_fix_store <- cbind(ppt_label, trial_fix_store)
 
       return(trial_fix_store) # returns the fixations for that trial to the main algorithm
 
