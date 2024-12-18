@@ -45,7 +45,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
     if (progress) {
       data_fix <- pbapply::pblapply(data, trial_level_process, min_dur, disp_tol, NA_tol)
     } else {
-      data_fix <- lapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
+      data_fix <- lapply(data, trial_level_process, min_dur, disp_tol, NA_tol)
 
     }
 
