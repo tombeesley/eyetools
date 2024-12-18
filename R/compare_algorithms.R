@@ -20,7 +20,8 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' compare_algorithms(data[data$pNum == 118,])
+#' data <- interpolate(data)
+#' compare_algorithms(data[data$pNum == 119,])
 #'}
 #'
 #' @importFrom stats cor.test reshape time

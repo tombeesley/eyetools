@@ -18,6 +18,8 @@
 #' @return a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 #' @export
 #'
+#' @importFrom utils stack
+
 #' @examples
 #'
 #' \donttest{
@@ -72,13 +74,11 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
     }
 
-
     if (is.null(AOI_names)==FALSE) {
       AOI_name_text <- AOI_names
     } else {
       AOI_name_text <- sprintf("AOI_%s",1:nrow(AOIs))
     }
-
 
     data <- data.frame(data)
 
@@ -89,10 +89,15 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
       return(data[,i])
     }))
 
-    data <- cbind(ppt_label, data)
-    colnames(data) <- c(participant_ID, "trial", AOI_name_text)
+    colnames(data) <- c("trial", AOI_name_text)
+    long_data <- stack(data, select = -trial)
+    long_data <- cbind(rep(data$trial, length(AOI_name_text)), long_data)
 
-    return(data)
+    long_data <- cbind(ppt_label, long_data)
+
+    colnames(long_data) <- c(participant_ID, "trial", "time", "AOI")
+
+    return(long_data)
   }
 
   data <- split(data, data[[participant_ID]])
@@ -112,6 +117,8 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
   }
 
+  #reorder
+  out <- out[, c(participant_ID, "trial", "AOI", "time")]
   return(out)
 
 }

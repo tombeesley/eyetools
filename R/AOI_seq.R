@@ -7,6 +7,7 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
+#' @param progress Display a progress bar
 #' @return a dataframe containing the sequence of entries into AOIs on each trial, entry/exit/duration time into AOI
 #' @export
 #'
@@ -18,10 +19,10 @@
 #' AOI_seq(fix_d, AOIs = HCL_AOIs, participant_ID = "pNum")
 #' }
 #'
+#' @import pbapply
 #' @importFrom stats setNames complete.cases
-#' @importFrom utils stack
 
-AOI_seq <- function(data, AOIs, AOI_names = NULL, participant_ID = "participant_ID") {
+AOI_seq <- function(data, AOIs, AOI_names = NULL, participant_ID = "participant_ID", progress = TRUE) {
 
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
 
@@ -52,7 +53,7 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, participant_ID = "participant_
   }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_AOI_seq, AOIs, AOI_names)
+  if(progress) out <- pblapply(data, internal_AOI_seq, AOIs, AOI_names) else out <- lapply(data, internal_AOI_seq, AOIs, AOI_names)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
   out <- .check_ppt_n_out(out)

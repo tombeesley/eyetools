@@ -30,6 +30,7 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
+#' data <- interpolate(data)
 #' fixation_VTI(data, participant_ID = "pNum")
 #' }
 #'
