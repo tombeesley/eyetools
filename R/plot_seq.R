@@ -155,12 +155,7 @@ minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
   if (is.null(bin_time)==FALSE){
     final_g <-
       final_g +
-      facet_wrap(vars(bin_end)) +
-      theme(strip.text.x = element_text(size = 8, margin = unit(c(1,1,1,1), "points")),
-            strip.background = element_rect(size = 0),
-            panel.border = element_rect(size = 0),
-            axis.text.y = element_text(size = 8),
-            axis.text.x = element_text(size = 8))
+      facet_wrap(vars(bin_end))
   }
 
 
