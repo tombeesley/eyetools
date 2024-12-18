@@ -55,17 +55,19 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     data_fix <- do.call("rbind", data_fix)
     data_fix <- as.data.frame(data_fix)
 
-    ###if x and y are  all NA, return NA as a fixation
-    if (sum(!is.na(as.numeric(data_fix[['V7']]))) == 0 || sum(!is.na(as.numeric(data_fix[['V8']]))) == 0) {
+    # tidy columns
+    colnames(data_fix) <- c("trial", "fix_n", "start", "end", "duration", "x", "y",
+                            "prop_NA", "min_dur", "disp_tol")
+
+    ###if x (V6) and y (V7) are  all NA, return NA as a fixation
+    if (sum(!is.na(as.numeric(data_fix$x))) == 0 || sum(!is.na(as.numeric(data_fix$y))) == 0) {
       trial_fix_store <- matrix(NA,1,7)
     }
 
 
     data_fix <- cbind(ppt_label, data_fix)
+    colnames(data_fix)[1] <- participant_ID
 
-    # tidy columns
-    colnames(data_fix) <- c(participant_ID, "trial", "fix_n", "start", "end", "duration", "x", "y",
-                            "prop_NA", "min_dur", "disp_tol")
 
     #row.names(data_fix) <- NULL # remove the row names
 
@@ -125,6 +127,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           win <- data[first_ts:last_ts,] # the window of trials to evaluate
 
           if (mean(is.na(win$x)) < NA_tol) { # if within the tolerance of NA_tol
+
             max_d_win <- max(dist(win[,c("x", "y")]),na.rm = TRUE) # get max dispersion across this new window
             if (is.infinite(max_d_win)) {
               stop("is infinite")
@@ -137,7 +140,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
 
           if(max_d_win <= disp_tol){
             # start of a fixation
-            data[first_ts:last_ts,"fix_num"] <- fix_cnt
+            data$fix_num[first_ts:last_ts] <- fix_cnt
             # print(fix_cnt)
 
             new_window = FALSE # not a new window; look to extend fixation
@@ -153,7 +156,10 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           # increase the size of the window by a single timestamp
           last_ts  <- last_ts + 1
           # compute the new distances from this new data point
-          max_d_new_data <- max(rdist::cdist(data[last_ts, c("x", "y")],win[,c("x", "y")]))
+          xy_data <- data[last_ts,c("x", "y")]
+          xy_win <- win[,c("x", "y")]
+
+          max_d_new_data <- max(sqrt((xy_win$x - xy_data$x)^2 + (xy_win$y - xy_data$y)^2))
 
           if (is.na(max_d_new_data) || max_d_new_data >= disp_tol) {
             # either NA detected, or
@@ -164,7 +170,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
             fix_cnt <- fix_cnt + 1 # next fixation
 
           } else { # otherwise this can be included in last fixation
-            data[last_ts,"fix_num"] <- fix_cnt # add current fixation number to this timestamp
+            data$fix_num[last_ts] <- fix_cnt # add current fixation number to this timestamp
             win <- data[first_ts:last_ts,] # update the window to include this data point
           }
         }
