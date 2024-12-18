@@ -1,8 +1,9 @@
-# eyetools (development version)
+# eyetools 0.8.0
 * renamed `hdf5_to_csv()` to `hdf5_to_df()` to accurately reflect operation
 * added `hdf5_get_event()` to access messages stored in the TOBII generated hdf5
 * updated the sample_rate estimation code in `*_VTI()`, `interpolate()`, and `AOI_time*()` functions 
 * updated plot aesthetics for colour-blindness (using viridis), and improving flexibility of use
+* Added `create_AOI_df()` for generating an empty dataframe of the required column names
 
 # eyetools 0.7.3
 * added `plot_AOI_growth()`
