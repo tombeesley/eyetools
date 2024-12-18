@@ -18,7 +18,6 @@
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-#' @param run_interp include a call to eyetools::interpolate on each trial.
 #' @param smooth include a call to eyetools::smoother on each trial
 #' @param progress Display a progress bar
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
@@ -36,9 +35,9 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, run_interp = TRUE, smooth = FALSE, progress = TRUE, participant_ID = "participant_ID"){
-  if (run_interp == FALSE && sum(is.na(data)) > 0) { # if interpolation not run AND NA present in dataset
-    stop("No interpolation carried out and NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
+fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE, participant_ID = "participant_ID"){
+  if (sum(is.na(data)) > 0) { # if NA present in dataset
+    stop("NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
   }
 
 
@@ -47,7 +46,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
   participant_ID <- test[[1]]
   data <- test[[2]]
 
-  internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, run_interp, smooth, progress, participant_ID) {
+  internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress, participant_ID) {
 
     # estimate sample rate
     if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
@@ -56,9 +55,9 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     data <- split(data, data$trial)
     # either show a progress bar, or not
     if(progress) {
-      data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth, participant_ID)
+      data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_ID)
     } else {
-      data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth, participant_ID)
+      data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_ID)
     }
 
     data_fix <- do.call(rbind.data.frame,data_fix)
@@ -68,13 +67,10 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     return(as.data.frame(data_fix))
   }
 
-  fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, run_interp, disp_tol, smooth, participant_ID){
+  fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_ID){
 
     ppt_label <- data[[participant_ID]][1]
 
-    if (run_interp){
-      data <- interpolate(data)
-    }
 
     if (smooth){
       data <- smoother(data, participant_ID = participant_ID)
@@ -311,7 +307,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
   }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_fixation_VTI, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, run_interp, smooth, progress, participant_ID)
+  out <- lapply(data, internal_fixation_VTI, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress, participant_ID)
 
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL

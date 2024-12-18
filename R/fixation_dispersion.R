@@ -4,7 +4,6 @@
 #' Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods
 #' in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks
 #' in the data and are not permitted within a valid fixation period.
-#' Runs the interpolation algorithm by default to fix small breaks in the data.
 #'
 #' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
 #' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
@@ -13,7 +12,6 @@
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyetools)
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-#' @param run_interp include a call to eyetools::interpolate on each trial
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
 #' @param progress Display a progress bar
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
@@ -30,7 +28,7 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25, progress = TRUE, participant_ID = "participant_ID") {
+fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE, participant_ID = "participant_ID") {
 
   #first check for multiple/single ppt data
   test <- .check_ppt_n_in(participant_ID, data)
@@ -38,14 +36,14 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   data <- test[[2]]
 
 
-  internal_fixation_dispersion <- function(data, min_dur, disp_tol, run_interp, NA_tol, progress) {
+  internal_fixation_dispersion <- function(data, min_dur, disp_tol, NA_tol, progress) {
 
     ppt_label <- data[[participant_ID]][1]
 
     data <- split(data,data$trial) # create list from data by trial
     # present a progress bar, unless set to false
     if (progress) {
-      data_fix <- pbapply::pblapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
+      data_fix <- pbapply::pblapply(data, trial_level_process, min_dur, disp_tol, NA_tol)
     } else {
       data_fix <- lapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
 
@@ -76,7 +74,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   }
 
   # this is the trial level process that runs on the data for a single trial within the main algorithm
-  trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
+  trial_level_process <- function(data, min_dur, disp_tol, NA_tol) {
 
     trial <- data$trial[1]
 
@@ -93,7 +91,6 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
 
     } else {
 
-      if (run_interp){data <- eyetools::interpolate(data)}
       data$time <- data$time - data$time[1] # start trial timestamp values at 0
 
       #get first row number where x and y is NOT NA
@@ -213,7 +210,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_fixation_dispersion, min_dur, disp_tol, run_interp, NA_tol, progress)
+  out <- lapply(data, internal_fixation_dispersion, min_dur, disp_tol, NA_tol, progress)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
