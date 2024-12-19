@@ -1,6 +1,7 @@
-# eyetools (development version)
+# eyetools 0.8.1
 * Improved `fixation_dispersion()` - now runs faster
 * Fixed bug in AOI_seq handling trials with no fixations
+* `AOI_time()` now returns data in long format
 
 # eyetools 0.8.0
 * renamed `hdf5_to_csv()` to `hdf5_to_df()` to accurately reflect operation
