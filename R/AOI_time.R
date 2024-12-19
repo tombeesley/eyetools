@@ -31,8 +31,11 @@
 #'
 #' #raw data
 #' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_ID = "pNum")
-#' }
 #'
+#' #as proportional data
+#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum",
+#'          as_prop = TRUE, trial_time = HCL_behavioural$RT)
+#'}
 
 
 AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL, participant_ID = "participant_ID") {
@@ -90,6 +93,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
     }))
 
     colnames(data) <- c("trial", AOI_name_text)
+    trial <- data$trial
     long_data <- stack(data, select = -trial)
     long_data <- cbind(rep(data$trial, length(AOI_name_text)), long_data)
 
@@ -109,12 +113,17 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
   if (as_prop) {
 
-    if (length(trial_time) != nrow(out)) stop(paste("trial_time is not equal to the number of trials * participants in the data. Expected", nrow(out), "trial_time observations. Received", length(trial_time)))
+    if (length(trial_time) != nrow(out)/nrow(AOIs)) stop(paste("trial_time is not equal to the number of trials * participants in the data. Expected", nrow(out)/nrow(AOIs), "trial_time observations. Received", length(trial_time)))
+
+    trial_time <- data.frame(trial_time)
+    trial_time <- trial_time[rep(seq_len(nrow(trial_time)), each = nrow(AOIs)), ]
+
+    out <- out[order(out$pNum, out$trial),]
 
     out$trial_time <- trial_time
-    out[,3:ncol(out)] <- out[,3:ncol(out)]/trial_time
+    out$time <- out$time/out$trial_time
     out$trial_time <- NULL
-
+    rownames(out) <- NULL
   }
 
   #reorder
