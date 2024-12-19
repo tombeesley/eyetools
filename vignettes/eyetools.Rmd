@@ -88,7 +88,7 @@ head(data) # participant 118
 
 ### Fixing missing data and repairing data
 
-The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum time window of trackloss (NA data) to fill. Any longer gaps will be left unchanged. This is set as default to 150, which is a typical blink duration The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
+The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum time frame of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 150, the typical duration of a blink. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
 
 Note that as the participant identifier column is not "participant_ID" (as eyetools expects as default), it needs to be specified in the function call.
 
@@ -271,7 +271,7 @@ data_AOI_time <- AOI_time(data = data_fixations_disp,
                           AOIs = AOI_areas,
                           participant_ID = "pNum")
 
-head(data_AOI_time)
+head(data_AOI_time, 10)
 ```
 
 The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest. Or you can request that the function returns the time spent in AOIs as a proportion of overall time in the trial, which requires an input vector that has the values, luckily this is something contained in the `HCL_behavioural` obect.

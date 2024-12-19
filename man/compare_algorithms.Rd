@@ -14,7 +14,6 @@ compare_algorithms(
   min_dur_sac = 20,
   disp_tol = 100,
   NA_tol = 0.25,
-  run_interp = TRUE,
   smooth = FALSE
 )
 }
@@ -37,8 +36,6 @@ compare_algorithms(
 
 \item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation. Supplied to the dispersion algorithm}
 
-\item{run_interp}{include a call to eyetools::interpolate on each trial. Supplied to the VTI algorithm}
-
 \item{smooth}{include a call to eyetools::smoother on each trial. Supplied to the VTI algorithm}
 }
 \value{
@@ -51,7 +48,8 @@ The raw data is run through both algorithms (using the same specified dispersion
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-compare_algorithms(data[data$pNum == 118,])
+data <- interpolate(data, participant_ID = "pNum")
+compare_algorithms(data[data$pNum == 119,])
 }
 
 }

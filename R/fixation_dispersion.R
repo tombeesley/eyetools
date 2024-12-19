@@ -4,7 +4,6 @@
 #' Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods
 #' in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks
 #' in the data and are not permitted within a valid fixation period.
-#' Runs the interpolation algorithm by default to fix small breaks in the data.
 #'
 #' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
 #' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
@@ -13,7 +12,6 @@
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyetools)
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-#' @param run_interp include a call to eyetools::interpolate on each trial
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
 #' @param progress Display a progress bar
 #' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
@@ -30,7 +28,7 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp = TRUE, NA_tol = .25, progress = TRUE, participant_ID = "participant_ID") {
+fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE, participant_ID = "participant_ID") {
 
   #first check for multiple/single ppt data
   test <- .check_ppt_n_in(participant_ID, data)
@@ -38,16 +36,16 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   data <- test[[2]]
 
 
-  internal_fixation_dispersion <- function(data, min_dur, disp_tol, run_interp, NA_tol, progress) {
+  internal_fixation_dispersion <- function(data, min_dur, disp_tol, NA_tol, progress) {
 
     ppt_label <- data[[participant_ID]][1]
 
     data <- split(data,data$trial) # create list from data by trial
     # present a progress bar, unless set to false
     if (progress) {
-      data_fix <- pbapply::pblapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
+      data_fix <- pbapply::pblapply(data, trial_level_process, min_dur, disp_tol, NA_tol)
     } else {
-      data_fix <- lapply(data, trial_level_process, min_dur, disp_tol, run_interp, NA_tol)
+      data_fix <- lapply(data, trial_level_process, min_dur, disp_tol, NA_tol)
 
     }
 
@@ -55,17 +53,19 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
     data_fix <- do.call("rbind", data_fix)
     data_fix <- as.data.frame(data_fix)
 
+    # tidy columns
+    colnames(data_fix) <- c("trial", "fix_n", "start", "end", "duration", "x", "y",
+                            "prop_NA", "min_dur", "disp_tol")
+
     ###if x and y are  all NA, return NA as a fixation
-    if (sum(!is.na(as.numeric(data_fix[['V7']]))) == 0 || sum(!is.na(as.numeric(data_fix[['V8']]))) == 0) {
+    if (sum(!is.na(as.numeric(data_fix$x))) == 0 || sum(!is.na(as.numeric(data_fix$y))) == 0) {
       trial_fix_store <- matrix(NA,1,7)
     }
 
 
     data_fix <- cbind(ppt_label, data_fix)
+    colnames(data_fix)[1] <- participant_ID
 
-    # tidy columns
-    colnames(data_fix) <- c(participant_ID, "trial", "fix_n", "start", "end", "duration", "x", "y",
-                            "prop_NA", "min_dur", "disp_tol")
 
     #row.names(data_fix) <- NULL # remove the row names
 
@@ -74,7 +74,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   }
 
   # this is the trial level process that runs on the data for a single trial within the main algorithm
-  trial_level_process <- function(data, min_dur, disp_tol, run_interp, NA_tol) {
+  trial_level_process <- function(data, min_dur, disp_tol, NA_tol) {
 
     trial <- data$trial[1]
 
@@ -85,13 +85,10 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
       trial_fix_store <- cbind(trial_fix_store, disp_tol)  # add param setting
       trial_fix_store <- cbind(trial, trial_fix_store) # add trial number
 
-      #trial_fix_store <- cbind(ppt_label, trial_fix_store)
-
       return(trial_fix_store) # returns the fixations for that trial to the main algorithm
 
     } else {
 
-      if (run_interp){data <- eyetools::interpolate(data)}
       data$time <- data$time - data$time[1] # start trial timestamp values at 0
 
       #get first row number where x and y is NOT NA
@@ -125,6 +122,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           win <- data[first_ts:last_ts,] # the window of trials to evaluate
 
           if (mean(is.na(win$x)) < NA_tol) { # if within the tolerance of NA_tol
+
             max_d_win <- max(dist(win[,c("x", "y")]),na.rm = TRUE) # get max dispersion across this new window
             if (is.infinite(max_d_win)) {
               stop("is infinite")
@@ -137,7 +135,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
 
           if(max_d_win <= disp_tol){
             # start of a fixation
-            data[first_ts:last_ts,"fix_num"] <- fix_cnt
+            data$fix_num[first_ts:last_ts] <- fix_cnt
             # print(fix_cnt)
 
             new_window = FALSE # not a new window; look to extend fixation
@@ -153,7 +151,10 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
           # increase the size of the window by a single timestamp
           last_ts  <- last_ts + 1
           # compute the new distances from this new data point
-          max_d_new_data <- max(rdist::cdist(data[last_ts, c("x", "y")],win[,c("x", "y")]))
+          xy_data <- data[last_ts,c("x", "y")]
+          xy_win <- win[,c("x", "y")]
+
+          max_d_new_data <- max(sqrt((xy_win$x - xy_data$x)^2 + (xy_win$y - xy_data$y)^2))
 
           if (is.na(max_d_new_data) || max_d_new_data >= disp_tol) {
             # either NA detected, or
@@ -164,7 +165,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
             fix_cnt <- fix_cnt + 1 # next fixation
 
           } else { # otherwise this can be included in last fixation
-            data[last_ts,"fix_num"] <- fix_cnt # add current fixation number to this timestamp
+            data$fix_num[last_ts] <- fix_cnt # add current fixation number to this timestamp
             win <- data[first_ts:last_ts,] # update the window to include this data point
           }
         }
@@ -207,7 +208,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   }
 
   data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_fixation_dispersion, min_dur, disp_tol, run_interp, NA_tol, progress)
+  out <- lapply(data, internal_fixation_dispersion, min_dur, disp_tol, NA_tol, progress)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
@@ -216,7 +217,3 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, run_interp 
   return(out)
 
 }
-
-
-
-

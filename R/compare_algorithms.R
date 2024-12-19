@@ -11,7 +11,6 @@
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed. Supplied to both algorithms.
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined. Supplied to the VTI algorithm
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period. Supplied to both algorithms
-#' @param run_interp include a call to eyetools::interpolate on each trial. Supplied to the VTI algorithm
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation. Supplied to the dispersion algorithm
 #' @param smooth include a call to eyetools::smoother on each trial. Supplied to the VTI algorithm
 #'
@@ -21,19 +20,20 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' compare_algorithms(data[data$pNum == 118,])
+#' data <- interpolate(data, participant_ID = "pNum")
+#' compare_algorithms(data[data$pNum == 119,])
 #'}
 #'
 #' @importFrom stats cor.test reshape time
 #' @import ggplot2
 #'
 
-compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, run_interp = TRUE, smooth = FALSE) {
+compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, smooth = FALSE) {
 
   #separate into trials
   data_split <- split(data, data$trial)
 
-  data_list <- pbapply::pblapply(data_split, get_fixations, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth)
+  data_list <- pbapply::pblapply(data_split, get_fixations, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, smooth)
   data_list_temp <- data_list[[1]]
   # get the data from comparing the two algorithms
   dataout <- lapply(data_list, summarise_comparisons)
@@ -76,10 +76,10 @@ return(data_list_out)
 
 }
 
-get_fixations <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, run_interp, smooth) {
+get_fixations <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, smooth) {
 
   # run both algorithms usign the same parameters
-  data_vti <- fixation_VTI(data, sample_rate = sample_rate, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, run_interp = run_interp, smooth = smooth, progress = FALSE)
+  data_vti <- fixation_VTI(data, sample_rate = sample_rate, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, smooth = smooth, progress = FALSE)
   data_disp <- fixation_dispersion(data, min_dur = min_dur, disp_tol = disp_tol, NA_tol = NA_tol, progress = FALSE)
 
   # set time to begin at 0 for each trial

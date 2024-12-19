@@ -11,7 +11,6 @@ fixation_VTI(
   min_dur = 150,
   min_dur_sac = 20,
   disp_tol = 100,
-  run_interp = TRUE,
   smooth = FALSE,
   progress = TRUE,
   participant_ID = "participant_ID"
@@ -29,8 +28,6 @@ fixation_VTI(
 \item{min_dur_sac}{Minimum duration (in milliseconds) for saccades to be determined}
 
 \item{disp_tol}{Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period}
-
-\item{run_interp}{include a call to eyetools::interpolate on each trial.}
 
 \item{smooth}{include a call to eyetools::smoother on each trial}
 
@@ -57,7 +54,8 @@ if not it is handled as single participant data, or the participant_ID needs to 
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-fixation_VTI(data, participant_ID = "pNum")
+data <- interpolate(data, participant_ID = "pNum")
+fixation_VTI(data[data$pNum == 119,], participant_ID = "pNum")
 }
 
 }

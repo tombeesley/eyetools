@@ -32,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -209,10 +209,10 @@ the information is returned.</p>
 <p>The next stage of the process would be to remove missing data within
 continuous streams of eye data which are likely to be caused by
 blinking. We can do this using the <code><a href="../reference/interpolate.html">interpolate()</a></code> function.
-The maxgap parameter specifies the maximum time window of trackloss (NA
-data) to fill. Any longer gaps will be left unchanged. This is set as
-default to 150, which is a typical blink duration The method parameter
-can either be “approx” (default) or “spline” which are both calls to
+The maxgap parameter specifies the maximum time frame of consecutive NAs
+to fill. Any longer gaps will be left unchanged. This is set as default
+to 150, the typical duration of a blink. The method parameter can either
+be “approx” (default) or “spline” which are both calls to
 <code><a href="https://rdrr.io/pkg/zoo/man/na.approx.html" class="external-link">zoo::na.approx</a></code> and <code><a href="https://rdrr.io/pkg/zoo/man/na.approx.html" class="external-link">zoo::na.spline</a></code>
 respectively.</p>
 <p>Note that as the participant identifier column is not
@@ -529,14 +529,18 @@ time spent for each trial.</p>
 <span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
 <span>                          participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_time</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial AOI_1 AOI_2 AOI_3</span></span>
-<span><span class="co">## 1  118     1  1599  3401  5369</span></span>
-<span><span class="co">## 2  118     2  1095  1310  3521</span></span>
-<span><span class="co">## 3  118     3   730   570  2949</span></span>
-<span><span class="co">## 4  118     4  3438  2378  2360</span></span>
-<span><span class="co">## 5  118     5  1090   246  2123</span></span>
-<span><span class="co">## 6  118     6   879   783  2356</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_time</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    pNum trial   AOI time</span></span>
+<span><span class="co">## 1   118     1 AOI_1 1599</span></span>
+<span><span class="co">## 2   118     2 AOI_1 1095</span></span>
+<span><span class="co">## 3   118     3 AOI_1  730</span></span>
+<span><span class="co">## 4   118     4 AOI_1 3438</span></span>
+<span><span class="co">## 5   118     5 AOI_1 1090</span></span>
+<span><span class="co">## 6   118     6 AOI_1  879</span></span>
+<span><span class="co">## 7   118     1 AOI_2 3401</span></span>
+<span><span class="co">## 8   118     2 AOI_2 1310</span></span>
+<span><span class="co">## 9   118     3 AOI_2  570</span></span>
+<span><span class="co">## 10  118     4 AOI_2 2378</span></span></code></pre>
 <p>The returned data show the time in milliseconds on each area of
 interest, per trial. It is also possible to specify names for the
 different areas of interest. Or you can request that the function
@@ -550,30 +554,66 @@ is something contained in the <code>HCL_behavioural</code> obect.</p>
 <span>                          participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, </span>
 <span>                          as_prop <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                          trial_time <span class="op">=</span> <span class="va">HCL_behavioural</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span> <span class="co">#vector of trial times</span></span></code></pre></div>
-<pre><code><span><span class="co">##    pNum trial     AOI_1      AOI_2     AOI_3</span></span>
-<span><span class="co">## 1   118     1 0.1187523 0.25258076 0.3987375</span></span>
-<span><span class="co">## 2   118     2 0.1404620 0.16804136 0.4516592</span></span>
-<span><span class="co">## 3   118     3 0.1386041 0.10822511 0.5599225</span></span>
-<span><span class="co">## 4   118     4 0.3468838 0.23993300 0.2381169</span></span>
-<span><span class="co">## 5   118     5 0.2463722 0.05560327 0.4798608</span></span>
-<span><span class="co">## 6   118     6 0.1682554 0.14987941 0.4509781</span></span>
-<span><span class="co">## 7   119     1 0.1590395 0.32910147 0.2216317</span></span>
-<span><span class="co">## 8   119     2 0.1640896 0.19781477 0.3960240</span></span>
-<span><span class="co">## 9   119     3 0.2519910 0.28091446 0.2921405</span></span>
-<span><span class="co">## 10  119     4 0.2115344 0.44527168 0.1376355</span></span>
-<span><span class="co">## 11  119     5 0.2457165 0.34556075 0.2120717</span></span>
-<span><span class="co">## 12  119     6 0.2206532 0.25228779 0.3526349</span></span></code></pre>
+<pre><code><span><span class="co">##    pNum trial   AOI       time</span></span>
+<span><span class="co">## 1   118     1 AOI_1 0.11875232</span></span>
+<span><span class="co">## 2   118     1 AOI_2 0.25258076</span></span>
+<span><span class="co">## 3   118     1 AOI_3 0.39873747</span></span>
+<span><span class="co">## 4   118     2 AOI_1 0.14046205</span></span>
+<span><span class="co">## 5   118     2 AOI_2 0.16804136</span></span>
+<span><span class="co">## 6   118     2 AOI_3 0.45165925</span></span>
+<span><span class="co">## 7   118     3 AOI_1 0.13860409</span></span>
+<span><span class="co">## 8   118     3 AOI_2 0.10822511</span></span>
+<span><span class="co">## 9   118     3 AOI_3 0.55992253</span></span>
+<span><span class="co">## 10  118     4 AOI_1 0.34688380</span></span>
+<span><span class="co">## 11  118     4 AOI_2 0.23993300</span></span>
+<span><span class="co">## 12  118     4 AOI_3 0.23811686</span></span>
+<span><span class="co">## 13  118     5 AOI_1 0.24637223</span></span>
+<span><span class="co">## 14  118     5 AOI_2 0.05560327</span></span>
+<span><span class="co">## 15  118     5 AOI_3 0.47986077</span></span>
+<span><span class="co">## 16  118     6 AOI_1 0.16825543</span></span>
+<span><span class="co">## 17  118     6 AOI_2 0.14987941</span></span>
+<span><span class="co">## 18  118     6 AOI_3 0.45097814</span></span>
+<span><span class="co">## 19  119     1 AOI_1 0.15903946</span></span>
+<span><span class="co">## 20  119     1 AOI_2 0.32910147</span></span>
+<span><span class="co">## 21  119     1 AOI_3 0.22163173</span></span>
+<span><span class="co">## 22  119     2 AOI_1 0.16408962</span></span>
+<span><span class="co">## 23  119     2 AOI_2 0.19781477</span></span>
+<span><span class="co">## 24  119     2 AOI_3 0.39602398</span></span>
+<span><span class="co">## 25  119     3 AOI_1 0.25199097</span></span>
+<span><span class="co">## 26  119     3 AOI_2 0.28091446</span></span>
+<span><span class="co">## 27  119     3 AOI_3 0.29214047</span></span>
+<span><span class="co">## 28  119     4 AOI_1 0.21153443</span></span>
+<span><span class="co">## 29  119     4 AOI_2 0.44527168</span></span>
+<span><span class="co">## 30  119     4 AOI_3 0.13763545</span></span>
+<span><span class="co">## 31  119     5 AOI_1 0.24571651</span></span>
+<span><span class="co">## 32  119     5 AOI_2 0.34556075</span></span>
+<span><span class="co">## 33  119     5 AOI_3 0.21207165</span></span>
+<span><span class="co">## 34  119     6 AOI_1 0.22065320</span></span>
+<span><span class="co">## 35  119     6 AOI_2 0.25228779</span></span>
+<span><span class="co">## 36  119     6 AOI_3 0.35263490</span></span></code></pre>
 <p>As mentioned, it also works with raw data too:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>, data_type <span class="op">=</span> <span class="st">"raw"</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
 <span>         participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial AOI_1 AOI_2 AOI_3</span></span>
-<span><span class="co">## 1  119     1  1759  3792  2616</span></span>
-<span><span class="co">## 2  119     2   943  1047  2183</span></span>
-<span><span class="co">## 3  119     3  1993  2306  2596</span></span>
-<span><span class="co">## 4  119     4  2156  4309  1533</span></span>
-<span><span class="co">## 5  119     5  3673  4932  3113</span></span>
-<span><span class="co">## 6  119     6  3089  3439  5036</span></span></code></pre>
+<pre><code><span><span class="co">##    pNum trial   AOI time</span></span>
+<span><span class="co">## 1   119     1 AOI_1 1759</span></span>
+<span><span class="co">## 2   119     2 AOI_1  943</span></span>
+<span><span class="co">## 3   119     3 AOI_1 1993</span></span>
+<span><span class="co">## 4   119     4 AOI_1 2156</span></span>
+<span><span class="co">## 5   119     5 AOI_1 3673</span></span>
+<span><span class="co">## 6   119     6 AOI_1 3089</span></span>
+<span><span class="co">## 7   119     1 AOI_2 3792</span></span>
+<span><span class="co">## 8   119     2 AOI_2 1047</span></span>
+<span><span class="co">## 9   119     3 AOI_2 2306</span></span>
+<span><span class="co">## 10  119     4 AOI_2 4309</span></span>
+<span><span class="co">## 11  119     5 AOI_2 4932</span></span>
+<span><span class="co">## 12  119     6 AOI_2 3439</span></span>
+<span><span class="co">## 13  119     1 AOI_3 2616</span></span>
+<span><span class="co">## 14  119     2 AOI_3 2183</span></span>
+<span><span class="co">## 15  119     3 AOI_3 2596</span></span>
+<span><span class="co">## 16  119     4 AOI_3 1533</span></span>
+<span><span class="co">## 17  119     5 AOI_3 3113</span></span>
+<span><span class="co">## 18  119     6 AOI_3 5036</span></span></code></pre>
 <p>When working with raw data, you can also take advantage of
 <code><a href="../reference/AOI_time_binned.html">AOI_time_binned()</a></code>, which enables data binning based on
 time, and calculating time spent in AOIs as a result. Using
@@ -583,21 +623,133 @@ from the analysis (as it does not form a complete bin which could skew
 analyses). As with <code><a href="../reference/AOI_time.html">AOI_time()</a></code> you can specify either
 absolute or proportional time spent.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_time_binned.html">AOI_time_binned</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time_binned.html">AOI_time_binned</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>,</span>
 <span>         AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
 <span>         participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, </span>
 <span>         bin_length <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>         max_time <span class="op">=</span> <span class="fl">2000</span>,</span>
-<span>         as_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">binned_time</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial bin_n AOI_1 AOI_2 AOI_3</span></span>
-<span><span class="co">## 1  119     1     1     0     0  0.00</span></span>
-<span><span class="co">## 2  119     1     2     0     0  0.00</span></span>
-<span><span class="co">## 3  119     1     3     0     0  0.00</span></span>
-<span><span class="co">## 4  119     1     4     0     0  0.00</span></span>
-<span><span class="co">## 5  119     1     5     0     0  0.77</span></span>
-<span><span class="co">## 6  119     1     6     0     0  1.00</span></span></code></pre>
+<span>         as_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     pNum trial bin_n AOI_1 AOI_2 AOI_3</span></span>
+<span><span class="co">## 1    119     1     1  0.00  0.00  0.00</span></span>
+<span><span class="co">## 2    119     1     2  0.00  0.00  0.00</span></span>
+<span><span class="co">## 3    119     1     3  0.00  0.00  0.00</span></span>
+<span><span class="co">## 4    119     1     4  0.00  0.00  0.00</span></span>
+<span><span class="co">## 5    119     1     5  0.00  0.00  0.77</span></span>
+<span><span class="co">## 6    119     1     6  0.00  0.00  1.00</span></span>
+<span><span class="co">## 7    119     1     7  0.00  0.00  1.00</span></span>
+<span><span class="co">## 8    119     1     8  0.00  0.00  1.00</span></span>
+<span><span class="co">## 9    119     1     9  0.00  0.00  1.00</span></span>
+<span><span class="co">## 10   119     1    10  0.00  0.00  0.67</span></span>
+<span><span class="co">## 11   119     1    11  0.00  0.90  0.00</span></span>
+<span><span class="co">## 12   119     1    12  0.00  1.00  0.00</span></span>
+<span><span class="co">## 13   119     1    13  0.00  1.00  0.00</span></span>
+<span><span class="co">## 14   119     1    14  0.00  0.80  0.00</span></span>
+<span><span class="co">## 15   119     1    15  0.00  0.00  0.33</span></span>
+<span><span class="co">## 16   119     1    16  0.00  0.00  0.77</span></span>
+<span><span class="co">## 17   119     1    17  0.00  0.00  1.00</span></span>
+<span><span class="co">## 18   119     1    18  0.00  0.00  1.00</span></span>
+<span><span class="co">## 19   119     1    19  0.00  0.00  0.90</span></span>
+<span><span class="co">## 20   119     1    20  0.00  0.00  0.00</span></span>
+<span><span class="co">## 21   119     2     1  0.00  0.00  0.00</span></span>
+<span><span class="co">## 22   119     2     2  0.20  0.00  0.00</span></span>
+<span><span class="co">## 23   119     2     3  1.00  0.00  0.00</span></span>
+<span><span class="co">## 24   119     2     4  1.00  0.00  0.00</span></span>
+<span><span class="co">## 25   119     2     5  1.00  0.00  0.00</span></span>
+<span><span class="co">## 26   119     2     6  0.73  0.00  0.00</span></span>
+<span><span class="co">## 27   119     2     7  0.00  0.90  0.00</span></span>
+<span><span class="co">## 28   119     2     8  0.00  1.00  0.00</span></span>
+<span><span class="co">## 29   119     2     9  0.00  1.00  0.00</span></span>
+<span><span class="co">## 30   119     2    10  0.00  1.00  0.00</span></span>
+<span><span class="co">## 31   119     2    11  0.00  0.93  0.00</span></span>
+<span><span class="co">## 32   119     2    12  0.00  0.00  0.00</span></span>
+<span><span class="co">## 33   119     2    13  0.00  0.00  0.47</span></span>
+<span><span class="co">## 34   119     2    14  0.00  0.00  1.00</span></span>
+<span><span class="co">## 35   119     2    15  0.00  0.00  1.00</span></span>
+<span><span class="co">## 36   119     2    16  0.00  0.00  1.00</span></span>
+<span><span class="co">## 37   119     2    17  0.00  0.00  1.00</span></span>
+<span><span class="co">## 38   119     2    18  0.00  0.00  1.00</span></span>
+<span><span class="co">## 39   119     2    19  0.00  0.00  1.00</span></span>
+<span><span class="co">## 40   119     2    20  0.00  0.00  1.00</span></span>
+<span><span class="co">## 41   119     3     1  0.00  0.00  0.00</span></span>
+<span><span class="co">## 42   119     3     2  0.00  0.00  0.00</span></span>
+<span><span class="co">## 43   119     3     3  0.93  0.00  0.00</span></span>
+<span><span class="co">## 44   119     3     4  1.00  0.00  0.00</span></span>
+<span><span class="co">## 45   119     3     5  1.00  0.00  0.00</span></span>
+<span><span class="co">## 46   119     3     6  1.00  0.00  0.00</span></span>
+<span><span class="co">## 47   119     3     7  0.70  0.00  0.00</span></span>
+<span><span class="co">## 48   119     3     8  0.00  0.90  0.00</span></span>
+<span><span class="co">## 49   119     3     9  0.00  1.00  0.00</span></span>
+<span><span class="co">## 50   119     3    10  0.00  1.00  0.00</span></span>
+<span><span class="co">## 51   119     3    11  0.00  1.00  0.00</span></span>
+<span><span class="co">## 52   119     3    12  0.00  0.53  0.10</span></span>
+<span><span class="co">## 53   119     3    13  0.00  0.00  1.00</span></span>
+<span><span class="co">## 54   119     3    14  0.00  0.00  1.00</span></span>
+<span><span class="co">## 55   119     3    15  0.00  0.00  1.00</span></span>
+<span><span class="co">## 56   119     3    16  0.00  0.00  1.00</span></span>
+<span><span class="co">## 57   119     3    17  0.00  0.00  1.00</span></span>
+<span><span class="co">## 58   119     3    18  0.00  0.00  1.00</span></span>
+<span><span class="co">## 59   119     3    19  0.00  0.00  1.00</span></span>
+<span><span class="co">## 60   119     3    20  0.00  0.00  1.00</span></span>
+<span><span class="co">## 61   119     4     1  0.00  0.00  0.00</span></span>
+<span><span class="co">## 62   119     4     2  0.00  0.00  0.00</span></span>
+<span><span class="co">## 63   119     4     3  0.00  0.40  0.00</span></span>
+<span><span class="co">## 64   119     4     4  0.00  1.00  0.00</span></span>
+<span><span class="co">## 65   119     4     5  0.00  1.00  0.00</span></span>
+<span><span class="co">## 66   119     4     6  0.00  1.00  0.00</span></span>
+<span><span class="co">## 67   119     4     7  0.00  1.00  0.00</span></span>
+<span><span class="co">## 68   119     4     8  0.00  1.00  0.00</span></span>
+<span><span class="co">## 69   119     4     9  0.00  1.00  0.00</span></span>
+<span><span class="co">## 70   119     4    10  0.00  1.00  0.00</span></span>
+<span><span class="co">## 71   119     4    11  0.00  1.00  0.00</span></span>
+<span><span class="co">## 72   119     4    12  0.00  1.00  0.00</span></span>
+<span><span class="co">## 73   119     4    13  0.00  1.00  0.00</span></span>
+<span><span class="co">## 74   119     4    14  0.00  0.87  0.00</span></span>
+<span><span class="co">## 75   119     4    15  0.67  0.00  0.00</span></span>
+<span><span class="co">## 76   119     4    16  1.00  0.00  0.00</span></span>
+<span><span class="co">## 77   119     4    17  1.00  0.00  0.00</span></span>
+<span><span class="co">## 78   119     4    18  1.00  0.00  0.00</span></span>
+<span><span class="co">## 79   119     4    19  0.67  0.00  0.00</span></span>
+<span><span class="co">## 80   119     4    20  0.00  0.57  0.00</span></span>
+<span><span class="co">## 81   119     5     1  0.00  0.00  0.00</span></span>
+<span><span class="co">## 82   119     5     2  0.00  0.00  0.00</span></span>
+<span><span class="co">## 83   119     5     3  0.00  0.63  0.00</span></span>
+<span><span class="co">## 84   119     5     4  0.00  1.00  0.00</span></span>
+<span><span class="co">## 85   119     5     5  0.00  1.00  0.00</span></span>
+<span><span class="co">## 86   119     5     6  0.00  1.00  0.00</span></span>
+<span><span class="co">## 87   119     5     7  0.00  1.00  0.00</span></span>
+<span><span class="co">## 88   119     5     8  0.00  1.00  0.00</span></span>
+<span><span class="co">## 89   119     5     9  0.00  1.00  0.00</span></span>
+<span><span class="co">## 90   119     5    10  0.00  1.00  0.00</span></span>
+<span><span class="co">## 91   119     5    11  0.00  0.90  0.00</span></span>
+<span><span class="co">## 92   119     5    12  0.50  0.00  0.00</span></span>
+<span><span class="co">## 93   119     5    13  1.00  0.00  0.00</span></span>
+<span><span class="co">## 94   119     5    14  1.00  0.00  0.00</span></span>
+<span><span class="co">## 95   119     5    15  1.00  0.00  0.00</span></span>
+<span><span class="co">## 96   119     5    16  1.00  0.00  0.00</span></span>
+<span><span class="co">## 97   119     5    17  1.00  0.00  0.00</span></span>
+<span><span class="co">## 98   119     5    18  1.00  0.00  0.00</span></span>
+<span><span class="co">## 99   119     5    19  1.00  0.00  0.00</span></span>
+<span><span class="co">## 100  119     5    20  1.00  0.00  0.00</span></span>
+<span><span class="co">## 101  119     6     1  0.00  0.00  0.00</span></span>
+<span><span class="co">## 102  119     6     2  0.00  0.00  0.00</span></span>
+<span><span class="co">## 103  119     6     3  0.00  0.00  0.00</span></span>
+<span><span class="co">## 104  119     6     4  0.00  0.00  0.00</span></span>
+<span><span class="co">## 105  119     6     5  0.00  0.00  0.70</span></span>
+<span><span class="co">## 106  119     6     6  0.00  0.00  0.83</span></span>
+<span><span class="co">## 107  119     6     7  0.00  0.63  0.00</span></span>
+<span><span class="co">## 108  119     6     8  0.00  1.00  0.00</span></span>
+<span><span class="co">## 109  119     6     9  0.00  1.00  0.00</span></span>
+<span><span class="co">## 110  119     6    10  0.00  1.00  0.00</span></span>
+<span><span class="co">## 111  119     6    11  0.00  1.00  0.00</span></span>
+<span><span class="co">## 112  119     6    12  0.00  1.00  0.00</span></span>
+<span><span class="co">## 113  119     6    13  0.00  1.00  0.00</span></span>
+<span><span class="co">## 114  119     6    14  0.00  1.00  0.00</span></span>
+<span><span class="co">## 115  119     6    15  0.00  1.00  0.00</span></span>
+<span><span class="co">## 116  119     6    16  0.00  1.00  0.00</span></span>
+<span><span class="co">## 117  119     6    17  0.00  1.00  0.00</span></span>
+<span><span class="co">## 118  119     6    18  0.00  1.00  0.00</span></span>
+<span><span class="co">## 119  119     6    19  0.00  1.00  0.00</span></span>
+<span><span class="co">## 120  119     6    20  0.00  1.00  0.00</span></span></code></pre>
 <p>The <code><a href="../reference/AOI_seq.html">AOI_seq()</a></code> function analyses the sequence of entries
 into defined AOI regions across trials. This works with fixation
 data.</p>
