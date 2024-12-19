@@ -217,7 +217,3 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
   return(out)
 
 }
-
-
-
-
