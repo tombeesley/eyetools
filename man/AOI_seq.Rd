@@ -4,7 +4,13 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(data, AOIs, AOI_names = NULL, participant_ID = "participant_ID")
+AOI_seq(
+  data,
+  AOIs,
+  AOI_names = NULL,
+  participant_ID = "participant_ID",
+  progress = TRUE
+)
 }
 \arguments{
 \item{data}{A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data}
@@ -14,6 +20,8 @@ AOI_seq(data, AOIs, AOI_names = NULL, participant_ID = "participant_ID")
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 
 \item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
+
+\item{progress}{Display a progress bar}
 }
 \value{
 a dataframe containing the sequence of entries into AOIs on each trial, entry/exit/duration time into AOI

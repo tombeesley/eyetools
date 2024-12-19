@@ -54,6 +54,9 @@ AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNu
 
 #raw data
 AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_ID = "pNum")
-}
 
+#as proportional data
+AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum",
+         as_prop = TRUE, trial_time = HCL_behavioural$RT)
+}
 }

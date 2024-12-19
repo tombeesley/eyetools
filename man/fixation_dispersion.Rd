@@ -8,7 +8,6 @@ fixation_dispersion(
   data,
   min_dur = 150,
   disp_tol = 100,
-  run_interp = TRUE,
   NA_tol = 0.25,
   progress = TRUE,
   participant_ID = "participant_ID"
@@ -20,8 +19,6 @@ fixation_dispersion(
 \item{min_dur}{Minimum duration (in milliseconds) of period over which fixations are assessed}
 
 \item{disp_tol}{Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period}
-
-\item{run_interp}{include a call to eyetools::interpolate on each trial}
 
 \item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation}
 
@@ -37,7 +34,6 @@ Detects fixations by assessing dispersion of the eye position, using a method th
 Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods
 in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks
 in the data and are not permitted within a valid fixation period.
-Runs the interpolation algorithm by default to fix small breaks in the data.
 }
 \details{
 It can take either single participant data or multiple participants where there is a variable for unique participant identification.

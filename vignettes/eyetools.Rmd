@@ -88,19 +88,19 @@ head(data) # participant 118
 
 ### Fixing missing data and repairing data
 
-The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum number of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 25. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
+The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum time frame of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 150, the typical duration of a blink. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
 
 Note that as the participant identifier column is not "participant_ID" (as eyetools expects as default), it needs to be specified in the function call.
 
 ```{r}
-data <- interpolate(data, maxgap = 25, method = "approx", participant_ID = "pNum")
+data <- interpolate(data, maxgap = 150, method = "approx", participant_ID = "pNum")
 ```
 
 You can also request a report of the differences in NA values present before and after the interpolation as well
 
 ```{r}
 
-interpolate_report <- interpolate(data, maxgap = 25, method = "approx", participant_ID = "pNum", report = TRUE)
+interpolate_report <- interpolate(data, maxgap = 150, method = "approx", participant_ID = "pNum", report = TRUE)
 
 interpolate_report[[2]]
 ```
@@ -177,7 +177,6 @@ In this next stage, we can start to explore the functions available for determin
 data_fixations_disp <- fixation_dispersion(data,
                                            min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
                                            disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-                                           run_interp = FALSE, # the default is true, but we have already run interpolate()
                                            NA_tol = 0.25, # the proportion of NAs tolerated within any window of samples evaluated as a fixation
                                            progress = FALSE, # whether to display a progress bar or not
                                            participant_ID = "pNum") 
@@ -199,12 +198,11 @@ The `fixation_VTI()` works best on unsmoothed data (with default settings), as t
 
 ```{r}
 
-data_fixations_VTI <- fixation_VTI(data,
+data_fixations_VTI <- fixation_VTI(data[data$pNum == 119,],
                                    threshold = 80, #smoothed data, so use a lower threshold
                                    min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
                                    min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
                                    disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
-                                   run_interp = TRUE,
                                    smooth = FALSE,
                                    progress = FALSE, # whether to display a progress bar or not, when running multiple participants 
                                    participant_ID = "pNum")
@@ -232,9 +230,9 @@ As mentioned above, a supplementary function exists to compare the two fixation 
 
 ```{r}
 #some functions are best with single-participant data
-data_118 <- data[data$pNum == 118,]
+data_119 <- data[data$pNum == 119,]
 
-comparison <- compare_algorithms(data_118,
+comparison <- compare_algorithms(data_119,
                                  plot_fixations = TRUE,
                                  print_summary = TRUE,
                                  sample_rate = NULL,
@@ -243,7 +241,6 @@ comparison <- compare_algorithms(data_118,
                                  min_dur_sac = 20,
                                  disp_tol = 100,
                                  NA_tol = 0.25,
-                                 run_interp = TRUE,
                                  smooth = FALSE)
 ```
 
@@ -274,7 +271,7 @@ data_AOI_time <- AOI_time(data = data_fixations_disp,
                           AOIs = AOI_areas,
                           participant_ID = "pNum")
 
-head(data_AOI_time)
+head(data_AOI_time, 10)
 ```
 
 The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest. Or you can request that the function returns the time spent in AOIs as a proportion of overall time in the trial, which requires an input vector that has the values, luckily this is something contained in the `HCL_behavioural` obect.
@@ -292,7 +289,7 @@ AOI_time(data = data_fixations_disp,
 As mentioned, it also works with raw data too:
 
 ```{r}
-AOI_time(data = data_118, data_type = "raw", AOIs = AOI_areas,
+AOI_time(data = data_119, data_type = "raw", AOIs = AOI_areas,
          participant_ID = "pNum")
 ```
 
@@ -300,7 +297,7 @@ When working with raw data, you can also take advantage of `AOI_time_binned()`, 
 
 ```{r}
 
-AOI_time_binned(data = data_118,
+AOI_time_binned(data = data_119,
          AOIs = AOI_areas,
          participant_ID = "pNum", 
          bin_length = 100,
@@ -334,7 +331,7 @@ The most simple use is to just pass it raw data:
 
 ```{r}
 
-plot_seq(data_118, trial_number = 1)
+plot_seq(data_119, trial_number = 1)
 
 ```
 
@@ -342,36 +339,36 @@ But the parameters of `plot_seq()` can help exploration be more informative. We 
 
 ```{r}
 
-plot_seq(data_118, trial_number = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
+plot_seq(data_119, trial_number = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
 
-plot_seq(data_118, trial_number = 1, AOIs = AOI_areas) # add AOIs
+plot_seq(data_119, trial_number = 1, AOIs = AOI_areas) # add AOIs
 
 ```
 
 You also have the option to split the time into bins to reduce the amount of data plotted
 
 ```{r}
-plot_seq(data_118, trial_number = 1, AOIs = AOI_areas, bin_time = 1000)
+plot_seq(data_119, trial_number = 1, AOIs = AOI_areas, bin_time = 1000)
 
 ```
 
 `plot_spatial()` is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
 
 ```{r}
-plot_spatial(raw_data = data_118, trial_number = 6)
+plot_spatial(raw_data = data_119, trial_number = 6)
 
-plot_spatial(fix_data = fixation_dispersion(data_118), trial_number = 6)
+plot_spatial(fix_data = fixation_dispersion(data_119), trial_number = 6)
 
-plot_spatial(sac_data = saccade_VTI(data_118), trial_number = 6)
+plot_spatial(sac_data = saccade_VTI(data_119), trial_number = 6)
 
 ```
 
 Or as mentioned, simultaneously:
 
 ```{r}
-plot_spatial(raw_data = data_118,
-             fix_data = fixation_dispersion(data_118),
-             sac_data = saccade_VTI(data_118),
+plot_spatial(raw_data = data_119,
+             fix_data = fixation_dispersion(data_119),
+             sac_data = saccade_VTI(data_119),
              trial_number = 6)
 
 ```
@@ -380,13 +377,13 @@ The function `plot_AOI_growth()` helps visualise how attention is directed acros
 
 ```{r}
 #standard plot with absolute time
-plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "abs", trial_number = 1)
+plot_AOI_growth(data = data_119, AOIs = AOI_areas, type = "abs", trial_number = 1)
 
 #standard plot with proportional time
-plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "prop", trial_number = 1)
+plot_AOI_growth(data = data_119, AOIs = AOI_areas, type = "prop", trial_number = 1)
 
 #only keep predictive and non-predictive cues rather than the target AOI
-plot_AOI_growth(data = data_118, AOIs = AOI_areas, type = "prop", AOI_names = c("Predictive", "Non Predictive", NA))
+plot_AOI_growth(data = data_119, AOIs = AOI_areas, type = "prop", AOI_names = c("Predictive", "Non Predictive", NA))
 
 ```
 

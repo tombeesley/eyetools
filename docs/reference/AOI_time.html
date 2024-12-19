@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,37 +128,125 @@ if not it is handled as single participant data, or the participant_ID needs to 
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fixation data</span></span></span>
 <span class="r-in"><span><span class="fu">AOI_time</span><span class="op">(</span>data <span class="op">=</span> <span class="va">fix_d</span>, data_type <span class="op">=</span> <span class="st">"fix"</span>, AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    pNum trial AOI_1 AOI_2 AOI_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1  3407  1671  5966</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     2  1387  1292  3924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     3   576   743  2932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4  2536  3546  2609</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5   253  1101  2136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     6   789   886  2380</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   119     1  3661  1743  2394</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   119     2   912   880  1944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   119     3  1959  2152  2106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  119     4  4288  2043  1293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  119     5  4805  3270  2983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  119     6  3447  2920  4962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    pNum trial   AOI time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1 AOI_1 3500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     2 AOI_1 1400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     3 AOI_1  576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4 AOI_1 2563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5 AOI_1  253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     6 AOI_1  789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   118     1 AOI_2 1598</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   118     2 AOI_2 1292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   118     3 AOI_2  743</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  118     4 AOI_2 3574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  118     5 AOI_2 1101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  118     6 AOI_2  909</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  118     1 AOI_3 5886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  118     2 AOI_3 3924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  118     3 AOI_3 2932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  118     4 AOI_3 2609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  118     5 AOI_3 2136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  118     6 AOI_3 2380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  119     1 AOI_1 3656</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  119     2 AOI_1  912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  119     3 AOI_1 1959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  119     4 AOI_1 4288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  119     5 AOI_1 4805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  119     6 AOI_1 3447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  119     1 AOI_2 1743</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  119     2 AOI_2  880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  119     3 AOI_2 2152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  119     4 AOI_2 2043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  119     5 AOI_2 3270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  119     6 AOI_2 2920</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  119     1 AOI_3 2394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  119     2 AOI_3 1944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  119     3 AOI_3 2106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  119     4 AOI_3 1293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  119     5 AOI_3 2983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  119     6 AOI_3 4962</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#raw data</span></span></span>
 <span class="r-in"><span><span class="fu">AOI_time</span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, data_type <span class="op">=</span> <span class="st">"raw"</span>, AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    pNum trial AOI_1 AOI_2 AOI_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1  3653  1716  6019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     2  1410  1373  4199</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     3   590   797  3083</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4  2576  3766  2923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5   347  1156  2363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     6   817   923  2736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   119     1  3829  1806  2553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   119     2   953  1047  2180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   119     3  2016  2333  2440</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  119     4  4366  2120  1520</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  119     5  5022  3723  3203</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  119     6  3506  3136  5059</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    pNum trial   AOI time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1 AOI_1 3653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     2 AOI_1 1410</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     3 AOI_1  590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     4 AOI_1 2576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     5 AOI_1  347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     6 AOI_1  817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   118     1 AOI_2 1716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   118     2 AOI_2 1373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   118     3 AOI_2  797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  118     4 AOI_2 3766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  118     5 AOI_2 1156</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  118     6 AOI_2  923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  118     1 AOI_3 6019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  118     2 AOI_3 4199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  118     3 AOI_3 3083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  118     4 AOI_3 2923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  118     5 AOI_3 2363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  118     6 AOI_3 2736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  119     1 AOI_1 3829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  119     2 AOI_1  953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  119     3 AOI_1 2016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  119     4 AOI_1 4366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  119     5 AOI_1 5022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  119     6 AOI_1 3506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  119     1 AOI_2 1806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  119     2 AOI_2 1047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  119     3 AOI_2 2333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  119     4 AOI_2 2120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  119     5 AOI_2 3723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  119     6 AOI_2 3136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  119     1 AOI_3 2553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  119     2 AOI_3 2180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  119     3 AOI_3 2440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  119     4 AOI_3 1520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  119     5 AOI_3 3203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  119     6 AOI_3 5059</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#as proportional data</span></span></span>
+<span class="r-in"><span><span class="fu">AOI_time</span><span class="op">(</span>data <span class="op">=</span> <span class="va">fix_d</span>, data_type <span class="op">=</span> <span class="st">"fix"</span>, AOIs <span class="op">=</span> <span class="va">HCL_AOIs</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span>,</span></span>
+<span class="r-in"><span>         as_prop <span class="op">=</span> <span class="cn">TRUE</span>, trial_time <span class="op">=</span> <span class="va">HCL_behavioural</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    pNum trial   AOI       time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   118     1 AOI_1 0.25993316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   118     1 AOI_2 0.11867805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   118     1 AOI_3 0.43713331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   118     2 AOI_1 0.17958618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   118     2 AOI_2 0.16573239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   118     2 AOI_3 0.50335441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   118     3 AOI_1 0.10936432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   118     3 AOI_2 0.14107238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   118     3 AOI_3 0.55669477</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  118     4 AOI_1 0.25859894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  118     4 AOI_2 0.36060579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  118     4 AOI_3 0.26324021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  118     5 AOI_1 0.05718548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  118     5 AOI_2 0.24885855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  118     5 AOI_3 0.48279915</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  118     6 AOI_1 0.15102791</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  118     6 AOI_2 0.17399793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  118     6 AOI_3 0.45557215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  119     1 AOI_1 0.35980711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  119     1 AOI_2 0.17153823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  119     1 AOI_3 0.23560673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  119     2 AOI_1 0.17986747</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  119     2 AOI_2 0.17355633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  119     2 AOI_3 0.38340170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  119     3 AOI_1 0.25872657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  119     3 AOI_2 0.28421623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  119     3 AOI_3 0.27814097</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  119     4 AOI_1 0.47366037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  119     4 AOI_2 0.22567354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  119     4 AOI_3 0.14282716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  119     5 AOI_1 0.37422118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  119     5 AOI_2 0.25467290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  119     5 AOI_3 0.23232087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  119     6 AOI_1 0.27193121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  119     6 AOI_2 0.23035658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  119     6 AOI_3 0.39144841</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

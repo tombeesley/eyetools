@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,10 +55,16 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="eyetools-development-version">eyetools (development version)<a class="anchor" aria-label="anchor" href="#eyetools-development-version"></a></h2>
+<ul><li>Improved <code><a href="../reference/fixation_dispersion.html">fixation_dispersion()</a></code> - now runs faster</li>
+<li>Fixed bug in AOI_seq handling trials with no fixations</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8.0" id="eyetools-080">eyetools 0.8.0<a class="anchor" aria-label="anchor" href="#eyetools-080"></a></h2><p class="text-muted">CRAN release: 2024-12-18</p>
 <ul><li>renamed <code>hdf5_to_csv()</code> to <code><a href="../reference/hdf5_to_df.html">hdf5_to_df()</a></code> to accurately reflect operation</li>
 <li>added <code><a href="../reference/hdf5_get_event.html">hdf5_get_event()</a></code> to access messages stored in the TOBII generated hdf5</li>
 <li>updated the sample_rate estimation code in <code>*_VTI()</code>, <code><a href="../reference/interpolate.html">interpolate()</a></code>, and <code>AOI_time*()</code> functions</li>
 <li>updated plot aesthetics for colour-blindness (using viridis), and improving flexibility of use</li>
+<li>Added <code><a href="../reference/create_AOI_df.html">create_AOI_df()</a></code> for generating an empty dataframe of the required column names</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.3" id="eyetools-073">eyetools 0.7.3<a class="anchor" aria-label="anchor" href="#eyetools-073"></a></h2>
