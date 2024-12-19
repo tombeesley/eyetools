@@ -46,7 +46,7 @@ smoother <- function(data, span = 0.1, plot = FALSE, participant_ID = "participa
   rownames(out) <- NULL
 
   out <- .check_ppt_n_out(out)
-#browser()
+
   if (plot) {
 
     raw <- test[[2]]
