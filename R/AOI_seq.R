@@ -24,7 +24,7 @@
 
 AOI_seq <- function(data, AOIs, AOI_names = NULL, participant_ID = "participant_ID", progress = TRUE) {
 
-  if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure this is fixation data from eyetools?")
+  if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure you are supplying fixation data from eyetools?")
 
   #first check for multiple/single ppt data
   test <- .check_ppt_n_in(participant_ID, data)
