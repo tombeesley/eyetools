@@ -10,7 +10,7 @@ interpolate(
   method = "approx",
   sample_rate = NULL,
   report = FALSE,
-  participant_ID = "participant_ID"
+  participant_col = "participant_col"
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ interpolate(
 
 \item{report}{default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.}
 
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
+\item{participant_col}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe of the same shape of the input data
@@ -36,11 +36,11 @@ for evaluating the effectiveness of the repair.
 }
 \details{
 It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+The function looks for an identifier named \code{participant_col} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_col needs to be specified
 }
 \examples{
 data <- combine_eyes(HCL)
-interpolate(data, maxgap = 150, participant_ID = "pNum")
+interpolate(data, maxgap = 150, participant_col = "pNum")
 
 }

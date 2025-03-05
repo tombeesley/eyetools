@@ -12,7 +12,7 @@ AOI_time(
   sample_rate = NULL,
   as_prop = FALSE,
   trial_time = NULL,
-  participant_ID = "participant_ID"
+  participant_col = "participant_col"
 )
 }
 \arguments{
@@ -30,7 +30,7 @@ AOI_time(
 
 \item{trial_time}{needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset}
 
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
+\item{participant_col}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
@@ -40,23 +40,23 @@ Analyses total time on defined AOI regions across trials. Works with fixation an
 }
 \details{
 AOI_time can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+The function looks for an identifier named \code{participant_col} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_col needs to be specified
 }
 \examples{
 
 \donttest{
 data <- combine_eyes(HCL)
-fix_d <- fixation_dispersion(data, participant_ID = "pNum")
+fix_d <- fixation_dispersion(data, participant_col = "pNum")
 
 # fixation data
-AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum")
+AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_col = "pNum")
 
 #raw data
-AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_ID = "pNum")
+AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_col = "pNum")
 
 #as proportional data
-AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum",
+AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_col = "pNum",
          as_prop = TRUE, trial_time = HCL_behavioural$RT)
 }
 }

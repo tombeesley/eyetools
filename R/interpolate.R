@@ -5,36 +5,36 @@
 #' for evaluating the effectiveness of the repair.
 #'
 #' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
+#' if not it is handled as single participant data, or the participant_col needs to be specified
 #'
 #' @param data dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)
 #' @param maxgap maximum time gap of consecutive trackloss to fill (in ms). Any longer gaps will be left unchanged (see zoo package)
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param method "approx" for linear interpolation or "spline" for cubic spline interpolation
 #' @param report default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.
-#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
+#' @param participant_col the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe of the same shape of the input data
 #' @export
 #'
 #' @examples
 #' data <- combine_eyes(HCL)
-#' interpolate(data, maxgap = 150, participant_ID = "pNum")
+#' interpolate(data, maxgap = 150, participant_col = "pNum")
 #'
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
 #'
-interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE, participant_ID = "participant_ID") {
+interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE, participant_col = "participant_col") {
 
   if(is.null(data$x) || is.null(data$y)) {
     stop("Columns 'x' or 'y' not found.")
   }
 
   #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_ID, data)
-  participant_ID <- test[[1]]
+  test <- .check_ppt_n_in(participant_col, data)
+  participant_col <- test[[1]]
   data <- test[[2]]
 
   internal_interpolate <- function(data, maxgap, method, sample_rate, report) {
@@ -97,7 +97,7 @@ interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NUL
     }
 
   }
-  data <- split(data, data[[participant_ID]])
+  data <- split(data, data[[participant_col]])
   out <- lapply(data, internal_interpolate, maxgap, method, sample_rate, report)
 
   if (report) {
@@ -108,9 +108,9 @@ interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NUL
 
     }))
 
-    report[[participant_ID]] <- rownames(report)
+    report[[participant_col]] <- rownames(report)
     rownames(report) <- NULL
-    report <- report[,c(participant_ID, "missing_perc_before", "missing_perc_after")]
+    report <- report[,c(participant_col, "missing_perc_before", "missing_perc_after")]
 
     data <- do.call(rbind, lapply(out, function(data, i)
     { data[[1]] }

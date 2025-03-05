@@ -12,7 +12,7 @@ AOI_time_binned(
   bin_length = NULL,
   max_time = NULL,
   as_prop = FALSE,
-  participant_ID = "participant_ID"
+  participant_col = "participant_col"
 )
 }
 \arguments{
@@ -30,7 +30,7 @@ AOI_time_binned(
 
 \item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}
 
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
+\item{participant_col}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
@@ -43,8 +43,8 @@ ensure that bins are of a consistent length
 }
 \details{
 AOI_time_binned can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+The function looks for an identifier named \code{participant_col} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_col needs to be specified
 }
 \examples{
 
@@ -53,7 +53,7 @@ data <- combine_eyes(HCL)
 
 
 #with bins of 100ms each and only for the first 2000ms
-AOI_time_binned(data = data, AOIs = HCL_AOIs, participant_ID = "pNum",
+AOI_time_binned(data = data, AOIs = HCL_AOIs, participant_col = "pNum",
     bin_length = 100, max_time = 2000)
 }
 

@@ -1,3 +1,7 @@
+# eyetools 0.8.2
+* changed parameter `participant_ID` to `participant_col` in all functions
+
+
 # eyetools 0.8.1
 * Improved `fixation_dispersion()` - now runs faster
 * Fixed bug in AOI_seq handling trials with no fixations

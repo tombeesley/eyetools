@@ -9,7 +9,7 @@ saccade_VTI(
   sample_rate = NULL,
   threshold = 150,
   min_dur = 20,
-  participant_ID = "participant_ID"
+  participant_col = "participant_col"
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ saccade_VTI(
 
 \item{min_dur}{minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold}
 
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
+\item{participant_col}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a data frame giving the saccades found by trial
@@ -32,10 +32,10 @@ Returns a summary of the saccades found per trial, including start and end coord
 }
 \details{
 It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+The function looks for an identifier named \code{participant_col} by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_col needs to be specified
 }
 \examples{
 data <- combine_eyes(HCL)
-saccade_VTI(data, participant_ID = "pNum")
+saccade_VTI(data, participant_col = "pNum")
 }

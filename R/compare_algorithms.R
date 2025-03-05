@@ -20,7 +20,7 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' data <- interpolate(data, participant_ID = "pNum")
+#' data <- interpolate(data, participant_col = "pNum")
 #' compare_algorithms(data[data$pNum == 119,])
 #'}
 #'

@@ -6,21 +6,21 @@
 #' in the data and are not permitted within a valid fixation period.
 #'
 #' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
+#' if not it is handled as single participant data, or the participant_col needs to be specified
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyetools)
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
 #' @param progress Display a progress bar
-#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
+#' @param participant_col the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' fixation_dispersion(data, participant_ID = "pNum")
+#' fixation_dispersion(data, participant_col = "pNum")
 #' }
 #'
 #' @importFrom utils tail
@@ -28,17 +28,17 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE, participant_ID = "participant_ID") {
+fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE, participant_col = "participant_col") {
 
   #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_ID, data)
-  participant_ID <- test[[1]]
+  test <- .check_ppt_n_in(participant_col, data)
+  participant_col <- test[[1]]
   data <- test[[2]]
 
 
   internal_fixation_dispersion <- function(data, min_dur, disp_tol, NA_tol, progress) {
 
-    ppt_label <- data[[participant_ID]][1]
+    ppt_label <- data[[participant_col]][1]
 
     data <- split(data,data$trial) # create list from data by trial
     # present a progress bar, unless set to false
@@ -64,7 +64,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
 
 
     data_fix <- cbind(ppt_label, data_fix)
-    colnames(data_fix)[1] <- participant_ID
+    colnames(data_fix)[1] <- participant_col
 
 
     #row.names(data_fix) <- NULL # remove the row names
@@ -207,7 +207,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
     }
   }
 
-  data <- split(data, data[[participant_ID]])
+  data <- split(data, data[[participant_col]])
   out <- lapply(data, internal_fixation_dispersion, min_dur, disp_tol, NA_tol, progress)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL

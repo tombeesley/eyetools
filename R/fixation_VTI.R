@@ -8,8 +8,8 @@
 #' Returns a summary of the fixations found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
 #' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
+#' if not it is handled as single participant data, or the participant_col needs to be specified
 #'
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
@@ -20,7 +20,7 @@
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param smooth include a call to eyetools::smoother on each trial
 #' @param progress Display a progress bar
-#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
+#' @param participant_col the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @importFrom stats dist aggregate na.omit
 #' @importFrom pbapply pblapply
@@ -30,24 +30,24 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' data <- interpolate(data, participant_ID = "pNum")
-#' fixation_VTI(data[data$pNum == 119,], participant_ID = "pNum")
+#' data <- interpolate(data, participant_col = "pNum")
+#' fixation_VTI(data[data$pNum == 119,], participant_col = "pNum")
 #' }
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE, participant_ID = "participant_ID"){
+fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE, participant_col = "participant_col"){
   if (sum(is.na(data)) > 0) { # if NA present in dataset
     stop("NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
   }
 
 
   #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_ID, data)
-  participant_ID <- test[[1]]
+  test <- .check_ppt_n_in(participant_col, data)
+  participant_col <- test[[1]]
   data <- test[[2]]
 
-  internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress, participant_ID) {
+  internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress, participant_col) {
 
     # estimate sample rate
     if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
@@ -56,28 +56,28 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     data <- split(data, data$trial)
     # either show a progress bar, or not
     if(progress) {
-      data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_ID)
+      data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_col)
     } else {
-      data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_ID)
+      data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_col)
     }
 
     data_fix <- do.call(rbind.data.frame,data_fix)
-    data_fix <- data_fix[,c(participant_ID, "trialNumber", "fix_n", "start", "end", "duration", "x", "y", "min_dur", "disp_tol")]
+    data_fix <- data_fix[,c(participant_col, "trialNumber", "fix_n", "start", "end", "duration", "x", "y", "min_dur", "disp_tol")]
     row.names(data_fix) <- NULL # remove the row names
 
     return(as.data.frame(data_fix))
   }
 
-  fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_ID){
+  fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, participant_col){
 
-    ppt_label <- data[[participant_ID]][1]
+    ppt_label <- data[[participant_col]][1]
 
 
     if (smooth){
-      data <- smoother(data, participant_ID = participant_ID)
+      data <- smoother(data, participant_col = participant_col)
     }
 
-    if(is.null(data[[participant_ID]])) data$participant_ID <- ppt_label
+    if(is.null(data[[participant_col]])) data$participant_col <- ppt_label
     #### THIS NEXT CHUNK CALCULATES THE DISTANCES AND VELOCITY OF THE SACCADES ####
     trialNumber <- data$trial[1]
     x <- data$x
@@ -266,14 +266,14 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
 
     summarise_fixations <- function(dataIn){
 
-      participant_ID = data[[participant_ID]][1]
+      participant_col = data[[participant_col]][1]
       start <- dataIn$time[1]
       end <- dataIn$time[nrow(dataIn)]
       x <- mean(dataIn$x)
       y <- mean(dataIn$y)
       duration <- end - start
 
-      return(data.frame(participant_ID, start, end, x, y, duration))
+      return(data.frame(participant_col, start, end, x, y, duration))
 
     }
     # get trial summary of fixations
@@ -284,7 +284,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
       trial_fix_store <- do.call("rbind.data.frame", trial_fix_store)
 
       if (nrow(trial_fix_store[trial_fix_store$duration >= min_dur,]) == 0) { #test for fixations of minimum length
-        trial_fix_store <- data.frame(participant_ID = c(NA), start = c(NA), end = c(NA),
+        trial_fix_store <- data.frame(participant_col = c(NA), start = c(NA), end = c(NA),
                                       x = c(NA), y = c(NA), duration = c(NA))
       } else {
         trial_fix_store <- trial_fix_store[trial_fix_store$duration >= min_dur,]
@@ -293,12 +293,12 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
       trial_fix_store$fix_n <- 1:nrow(trial_fix_store)
 
     } else {
-      trial_fix_store <- data.frame(participant_ID = c(NA), start = c(NA), end = c(NA),
+      trial_fix_store <- data.frame(participant_col = c(NA), start = c(NA), end = c(NA),
                                     x = c(NA), y = c(NA), duration = c(NA))
     }
     # add col headers, trial number and return
 
-    colnames(trial_fix_store)[1] <- c(participant_ID)
+    colnames(trial_fix_store)[1] <- c(participant_col)
 
     trial_fix_store <- cbind(trial_fix_store, trialNumber) # add trial number
     trial_fix_store$min_dur <- min_dur
@@ -307,8 +307,8 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     return(trial_fix_store)
   }
 
-  data <- split(data, data[[participant_ID]])
-  out <- lapply(data, internal_fixation_VTI, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress, participant_ID)
+  data <- split(data, data[[participant_col]])
+  out <- lapply(data, internal_fixation_VTI, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress, participant_col)
 
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL

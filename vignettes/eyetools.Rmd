@@ -65,7 +65,7 @@ head(HCL[HCL$pNum == 118,], 10)
 
 ```
 
-eyetools functions can accept either single-participant data or multi-participant data. By default, most functions assume that data is of a single participant **unless** a participant identifier column called `participant_ID` is present,in which case the data is handled as multi-participant. In cases where participants are identified with a different variable, functions accept a parameter of `participant_ID` that takes a character string of the identifying column. In situations where participant_ID is not declared, and when duplicated non-consecutive trials are detected (that implies multi-participant data being input as single-participant), the function will error. This is a good point to then check your data structure, ensure that it is labelled correctly and ordered by trial and time.
+eyetools functions can accept either single-participant data or multi-participant data. By default, most functions assume that data is of a single participant **unless** a participant identifier column called `participant_col` is present,in which case the data is handled as multi-participant. In cases where participants are identified with a different variable, functions accept a parameter of `participant_col` that takes a character string of the identifying column. In situations where participant_col is not declared, and when duplicated non-consecutive trials are detected (that implies multi-participant data being input as single-participant), the function will error. This is a good point to then check your data structure, ensure that it is labelled correctly and ordered by trial and time.
 
 ### Converting binocular data to monocular data
 
@@ -90,17 +90,17 @@ head(data) # participant 118
 
 The next stage of the process would be to remove missing data within continuous streams of eye data which are likely to be caused by blinking. We can do this using the `interpolate()` function. The maxgap parameter specifies the maximum time frame of consecutive NAs to fill. Any longer gaps will be left unchanged. This is set as default to 150, the typical duration of a blink. The method parameter can either be "approx" (default) or "spline" which are both calls to `zoo::na.approx` and `zoo::na.spline` respectively.
 
-Note that as the participant identifier column is not "participant_ID" (as eyetools expects as default), it needs to be specified in the function call.
+Note that as the participant identifier column is not "participant_col" (as eyetools expects as default), it needs to be specified in the function call.
 
 ```{r}
-data <- interpolate(data, maxgap = 150, method = "approx", participant_ID = "pNum")
+data <- interpolate(data, maxgap = 150, method = "approx", participant_col = "pNum")
 ```
 
 You can also request a report of the differences in NA values present before and after the interpolation as well
 
 ```{r}
 
-interpolate_report <- interpolate(data, maxgap = 150, method = "approx", participant_ID = "pNum", report = TRUE)
+interpolate_report <- interpolate(data, maxgap = 150, method = "approx", participant_col = "pNum", report = TRUE)
 
 interpolate_report[[2]]
 ```
@@ -112,7 +112,7 @@ set.seed(0410) #set seed to show same participant and trials in both chunks
 
 data_smooth <- smoother(data,
                         span = .1, # default setting. This controls the degree of smoothing
-                        participant_ID = "pNum", 
+                        participant_col = "pNum", 
                         plot = TRUE) # whether to plot or not, FALSE as default
 ```
 
@@ -127,7 +127,7 @@ set.seed(0410) #set seed to show same participant and trials in both chunks
 
 data_smooth <- smoother(data, 
                         span = .02,
-                        participant_ID = "pNum",
+                        participant_col = "pNum",
                         plot = TRUE)
 ```
 
@@ -136,7 +136,7 @@ data_smooth <- smoother(data,
 
 Many psychology experiments will position stimuli on the screen in a counterbalanced fashion. For example, in the example data we are using, there are two stimuli, with one of these appearing on the left and one on the right. In our design, one of the cue stimuli is a "target" and one is a "distractor", and the experiment counterbalances whether these are positioned on the left or right across trials.
 
-Eyetools has a built in function which allows us to transform the x (or y) values of the stimuli to take into account a counterbalancing variable: `conditional_transform()`. This function currently allows for a single-dimensional flip across either the horizontal or vertical midline. It can be used on raw data or fixation data. It requires the spatial coordinates (x, y) and a specification of the counterbalancing variable. The result is a normalised set of data, in which the x (and/or y) position is consistent across counterbalanced conditions (e.g., in our example, we can transform the data so that the target cue is always on the left). This transformation is especially useful for future visualisations and calculation of time on areas of interest. Note that `conditional_transform()` is another function that does not discriminate between multi-participant and single-participant data and so no participant_ID parameter is required.
+Eyetools has a built in function which allows us to transform the x (or y) values of the stimuli to take into account a counterbalancing variable: `conditional_transform()`. This function currently allows for a single-dimensional flip across either the horizontal or vertical midline. It can be used on raw data or fixation data. It requires the spatial coordinates (x, y) and a specification of the counterbalancing variable. The result is a normalised set of data, in which the x (and/or y) position is consistent across counterbalanced conditions (e.g., in our example, we can transform the data so that the target cue is always on the left). This transformation is especially useful for future visualisations and calculation of time on areas of interest. Note that `conditional_transform()` is another function that does not discriminate between multi-participant and single-participant data and so no participant_col parameter is required.
 
 The keen-eyed will notice that the present data does not contain a variable to specify the counterbalanced positions. This is contained in a separate dataset that holds the behavioural data, including the response times, the outcome, accuracy, and `cue_order` which tells us whether the target cue was on the left (coded as 1) or on the right (coded as 2).
 
@@ -179,7 +179,7 @@ data_fixations_disp <- fixation_dispersion(data,
                                            disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
                                            NA_tol = 0.25, # the proportion of NAs tolerated within any window of samples evaluated as a fixation
                                            progress = FALSE, # whether to display a progress bar or not
-                                           participant_ID = "pNum") 
+                                           participant_col = "pNum") 
 ```
 
 The resultant data output from `fixation_dispersion()` presents data by trial and fixation. It gives the start and end time for these fixations along with their duration and the x,y coordinates for the entry of the fixation.
@@ -205,7 +205,7 @@ data_fixations_VTI <- fixation_VTI(data[data$pNum == 119,],
                                    disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
                                    smooth = FALSE,
                                    progress = FALSE, # whether to display a progress bar or not, when running multiple participants 
-                                   participant_ID = "pNum")
+                                   participant_col = "pNum")
 ```
 
 ```{r}
@@ -218,7 +218,7 @@ This is also a sensible point to briefly highlight the underlying saccade detect
 
 ```{r}
 
-saccades <- saccade_VTI(data, participant_ID = "pNum")
+saccades <- saccade_VTI(data, participant_col = "pNum")
 
 head(saccades)
 
@@ -269,7 +269,7 @@ AOI_areas
 data_AOI_time <- AOI_time(data = data_fixations_disp, 
                           data_type = "fix",
                           AOIs = AOI_areas,
-                          participant_ID = "pNum")
+                          participant_col = "pNum")
 
 head(data_AOI_time, 10)
 ```
@@ -280,7 +280,7 @@ The returned data show the time in milliseconds on each area of interest, per tr
 AOI_time(data = data_fixations_disp,
                           data_type = "fix",
                           AOIs = AOI_areas,
-                          participant_ID = "pNum", 
+                          participant_col = "pNum", 
                           as_prop = TRUE, 
                           trial_time = HCL_behavioural$RT) #vector of trial times
 ```
@@ -290,7 +290,7 @@ As mentioned, it also works with raw data too:
 
 ```{r}
 AOI_time(data = data_119, data_type = "raw", AOIs = AOI_areas,
-         participant_ID = "pNum")
+         participant_col = "pNum")
 ```
 
 When working with raw data, you can also take advantage of `AOI_time_binned()`, which enables data binning based on time, and calculating time spent in AOIs as a result. Using `bin_length`, you specify a desired length of bin (say 100ms) and splits data into these bins, with ant remaining data being dropped from the analysis (as it does not form a complete bin which could skew analyses). As with `AOI_time()` you can specify either absolute or proportional time spent.
@@ -299,7 +299,7 @@ When working with raw data, you can also take advantage of `AOI_time_binned()`, 
 
 binned_time <- AOI_time_binned(data = data_119,
          AOIs = AOI_areas,
-         participant_ID = "pNum", 
+         participant_col = "pNum", 
          bin_length = 100,
          max_time = 2000,
          as_prop = TRUE)
@@ -315,7 +315,7 @@ The `AOI_seq()` function analyses the sequence of entries into defined AOI regio
 data_AOI_sequence <- AOI_seq(data_fixations_disp,
                              AOI_areas,         
                              AOI_names = NULL,         
-                             participant_ID = "pNum")   
+                             participant_col = "pNum")   
 
 head(data_AOI_sequence)
 ```

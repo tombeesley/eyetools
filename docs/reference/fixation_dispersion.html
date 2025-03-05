@@ -75,7 +75,7 @@ in the data and are not permitted within a valid fixation period.</p>
 <span>  disp_tol <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  NA_tol <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  participant_ID <span class="op">=</span> <span class="st">"participant_ID"</span></span>
+<span>  participant_col <span class="op">=</span> <span class="st">"participant_col"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,7 +101,7 @@ in the data and are not permitted within a valid fixation period.</p>
 <dd><p>Display a progress bar</p></dd>
 
 
-<dt>participant_ID</dt>
+<dt>participant_col</dt>
 <dd><p>the variable that determines the participant identifier. If no column present, assumes a single participant</p></dd>
 
 </dl></div>
@@ -114,8 +114,8 @@ in the data and are not permitted within a valid fixation period.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named <code>participant_ID</code> by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified</p>
+The function looks for an identifier named <code>participant_col</code> by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_col needs to be specified</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -126,7 +126,7 @@ if not it is handled as single participant data, or the participant_ID needs to 
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine_eyes.html">combine_eyes</a></span><span class="op">(</span><span class="va">HCL</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">fixation_dispersion</span><span class="op">(</span><span class="va">data</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">fixation_dispersion</span><span class="op">(</span><span class="va">data</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     pNum trial fix_n start   end duration    x   y prop_NA min_dur disp_tol</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    118     1     1     0   180      180  961 812   0.000     150      100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    118     1     2   190   433      243  959 585   0.000     150      100</span>
