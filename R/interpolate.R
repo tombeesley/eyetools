@@ -13,7 +13,6 @@
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param method "approx" for linear interpolation or "spline" for cubic spline interpolation
 #' @param report default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.
-#' @param participant_col the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe of the same shape of the input data
 #' @export
@@ -26,16 +25,16 @@
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
 #'
-interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE, participant_col = "participant_col") {
+interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE) {
 
   if(is.null(data$x) || is.null(data$y)) {
     stop("Columns 'x' or 'y' not found.")
   }
 
-  #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_col, data)
-  participant_col <- test[[1]]
-  data <- test[[2]]
+  # #first check for multiple/single ppt data
+  # test <- .check_ppt_n_in(participant_col, data)
+  # participant_col <- test[[1]]
+  # data <- test[[2]]
 
   internal_interpolate <- function(data, maxgap, method, sample_rate, report) {
 
@@ -97,7 +96,7 @@ interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NUL
     }
 
   }
-  data <- split(data, data[[participant_col]])
+  data <- split(data, data$pID)
   out <- lapply(data, internal_interpolate, maxgap, method, sample_rate, report)
 
   if (report) {
@@ -108,9 +107,9 @@ interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NUL
 
     }))
 
-    report[[participant_col]] <- rownames(report)
+    report[["pID"]] <- rownames(report)
     rownames(report) <- NULL
-    report <- report[,c(participant_col, "missing_perc_before", "missing_perc_after")]
+    report <- report[,c("pID", "missing_perc_before", "missing_perc_after")]
 
     data <- do.call(rbind, lapply(out, function(data, i)
     { data[[1]] }

@@ -43,7 +43,6 @@ plot_spatial <- function(raw_data = NULL,
                          fix_data = NULL,
                          sac_data = NULL,
                          AOIs = NULL,
-                         participant_col = NULL,
                          participant_ID = NULL,
                          trial_number = NULL,
                          bg_image = NULL,
@@ -101,10 +100,10 @@ plot_spatial <- function(raw_data = NULL,
   # add raw data
   if (is.null(raw_data)==FALSE) {
     
-    # if(!is.null(participant_ID)) {
-    #   raw_data <- raw_data[raw_data[[participant_col]] %in% participant_ID,]
-    #   if(nrow(raw_data) == 0) stop("no participant_ID found for raw data. Check the data has a participant column")
-    # }
+    if(!is.null(participant_ID)) {
+      raw_data <- raw_data[raw_data$pID %in% participant_ID,]
+      if(nrow(raw_data) == 0) stop("no participant_ID found for raw data. Check the data has a participant column")
+    }
 
     if(!is.null(trial_number)) {
       raw_data <- raw_data[raw_data$trial %in% trial_number,]
@@ -118,7 +117,7 @@ plot_spatial <- function(raw_data = NULL,
   if (is.null(fix_data)==FALSE) {
 
     if(!is.null(participant_ID)) {
-      fix_data <- fix_data[fix_data[[participant_col]] %in% participant_ID,]
+      fix_data <- fix_data[fix_data$pID %in% participant_ID,]
       if(nrow(fix_data) == 0) stop("no participant_ID found for fixation data. Check the data has a participant column")
     }
     

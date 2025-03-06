@@ -14,7 +14,6 @@
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation
 #' @param progress Display a progress bar
-#' @param participant_col the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 #' @export
 #' @examples
@@ -28,17 +27,14 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE, participant_col = "participant_col") {
+fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE) {
 
-  #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_col, data)
-  participant_col <- test[[1]]
-  data <- test[[2]]
-
+  # check data format
+  .check_data_format(data)
 
   internal_fixation_dispersion <- function(data, min_dur, disp_tol, NA_tol, progress) {
 
-    ppt_label <- data[[participant_col]][1]
+    ppt_label <- data$pID[1]
 
     data <- split(data,data$trial) # create list from data by trial
     # present a progress bar, unless set to false
@@ -64,7 +60,7 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
 
 
     data_fix <- cbind(ppt_label, data_fix)
-    colnames(data_fix)[1] <- participant_col
+    colnames(data_fix)[1] <- "pID"
 
 
     #row.names(data_fix) <- NULL # remove the row names
@@ -207,12 +203,12 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
     }
   }
 
-  data <- split(data, data[[participant_col]])
+  data <- split(data, data$pID)
   out <- lapply(data, internal_fixation_dispersion, min_dur, disp_tol, NA_tol, progress)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-  out <- .check_ppt_n_out(out)
+  # out <- .check_ppt_n_out(out)
 
   return(out)
 

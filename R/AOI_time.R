@@ -13,7 +13,6 @@
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param as_prop whether to return time in AOI as a proportion of the total time of trial
 #' @param trial_time needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset
-#' @param participant_col the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 #' @export
@@ -38,14 +37,12 @@
 #'}
 
 
-AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL, participant_col = "participant_col") {
+AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL) {
 
-  #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_col, data)
-  participant_col <- test[[1]]
-  data <- test[[2]]
-  # dataframe to hold AOI entry results
-  # columns are trial, AOI time * number of AOIs
+  # #first check for multiple/single ppt data
+  # test <- .check_ppt_n_in(data)
+  # participant_col <- test[[1]]
+  # data <- test[[2]]
 
   internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
     if (is.null(data_type) == TRUE) {
@@ -54,7 +51,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
     } else if (data_type == "fix") {
 
-      ppt_label <- data[[participant_col]][[1]]
+      ppt_label <- data$pID[1]
       # process as fixation data input
       proc_data <- sapply(split(data, data$trial),
                           AOI_time_trial_process_fix,
@@ -63,9 +60,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
       data <- cbind(unique(data$trial), t(proc_data))
 
     } else if(data_type == "raw") {
-      ppt_label <- data[[participant_col]][[1]]
-
-
+      ppt_label <- data$pID[1]
 
       # process as raw data input
       proc_data <- sapply(split(data, data$trial),
@@ -99,12 +94,12 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
     long_data <- cbind(ppt_label, long_data)
 
-    colnames(long_data) <- c(participant_col, "trial", "time", "AOI")
+    colnames(long_data) <- c("pID", "trial", "time", "AOI")
 
     return(long_data)
   }
 
-  data <- split(data, data[[participant_col]])
+  data <- split(data, data$pID)
   out <- lapply(data, internal_AOI_time, data_type, AOIs, AOI_names, sample_rate)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
@@ -127,7 +122,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
   }
 
   #reorder
-  out <- out[, c(participant_col, "trial", "AOI", "time")]
+  out <- out[, c("pID", "trial", "AOI", "time")]
   return(out)
 
 }
