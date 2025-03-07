@@ -7,9 +7,8 @@
 #' @param fix_data data output from fixation function
 #' @param sac_data data output from saccade function
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.
-#' @param participant_col specify the participant column so specific participant data can be selected
-#' @param participant_ID used in combination with participant_col to select data from one participant
-#' @param trial_number can be used to select particular trials within the data
+#' @param pID_values specify particular values within 'pID' to plot data from certain participants
+#' @param trial_values specify particular values within 'trial' to plot data from certain trials
 #' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
@@ -43,16 +42,16 @@ plot_spatial <- function(raw_data = NULL,
                          fix_data = NULL,
                          sac_data = NULL,
                          AOIs = NULL,
-                         participant_ID = NULL,
-                         trial_number = NULL,
+                         pID_values = NULL,
+                         trial_values = NULL,
                          bg_image = NULL,
                          res = c(0,1920,0,1080),
                          flip_y = FALSE,
                          show_fix_order = TRUE,
                          plot_header = FALSE) {
 
-  if(!is.null(trial_number) && !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
-
+  if(!is.null(trial_values) && !is.numeric(trial_values)) stop("trial_values input expected as numeric values")
+  
   final_g <- ggplot()
 
   # setting axes limits and reversing y
@@ -100,14 +99,14 @@ plot_spatial <- function(raw_data = NULL,
   # add raw data
   if (is.null(raw_data)==FALSE) {
     
-    if(!is.null(participant_ID)) {
-      raw_data <- raw_data[raw_data$pID %in% participant_ID,]
-      if(nrow(raw_data) == 0) stop("no participant_ID found for raw data. Check the data has a participant column")
+    if(!is.null(pID_values)) {
+      .check_participant_parameter(raw_data, pID_values)
+      raw_data <- raw_data[raw_data$pID %in% pID_values,]
     }
 
-    if(!is.null(trial_number)) {
-      raw_data <- raw_data[raw_data$trial %in% trial_number,]
-      if(nrow(raw_data) == 0) stop("no trial found for raw data. Check the data has the trials")
+    if(!is.null(trial_values)) {
+      .check_trial_parameter(raw_data, trial_values)
+      raw_data <- raw_data[raw_data$trial %in% trial_values,]
     }
 
     final_g <- add_raw(raw_data, final_g)
@@ -116,14 +115,14 @@ plot_spatial <- function(raw_data = NULL,
   # PLOT FIXATION DATA
   if (is.null(fix_data)==FALSE) {
 
-    if(!is.null(participant_ID)) {
-      fix_data <- fix_data[fix_data$pID %in% participant_ID,]
-      if(nrow(fix_data) == 0) stop("no participant_ID found for fixation data. Check the data has a participant column")
+    if(!is.null(pID_values)) {
+      .check_participant_parameter(fix_data, pID_values)
+      fix_data <- fix_data[fix_data$pID %in% pID_values,]
     }
     
-    if(!is.null(trial_number)) {
-      fix_data <- fix_data[fix_data$trial %in% trial_number,]
-      if(nrow(fix_data) == 0) stop("no trial found for fixation data. Check the data has the trials")
+    if(!is.null(trial_values)) {
+      .check_trial_parameter(fix_data, trial_values)
+      fix_data <- fix_data[fix_data$trial %in% trial_values,]
     }
 
     fix_data$fix_n <- seq_len(nrow(fix_data))
@@ -160,9 +159,14 @@ plot_spatial <- function(raw_data = NULL,
   # PLOT SACCADE DATA
   if (is.null(sac_data)==FALSE){
 
-    if(!is.null(trial_number)) {
-      sac_data <- sac_data[sac_data$trial %in% trial_number,]
-      if(nrow(sac_data) == 0) stop("no trial found for saccade data. Check the data has the trials")
+    if(!is.null(pID_values)) {
+      .check_participant_parameter(sac_data, pID_values)
+      sac_data <- sac_data[sac_data$pID %in% pID_values,]
+    }
+    
+    if(!is.null(trial_values)) {
+      .check_trial_parameter(sac_data, trial_values)
+      sac_data <- sac_data[sac_data$trial %in% trial_values,]
     }
 
     origin_x <- sac_data$origin_x

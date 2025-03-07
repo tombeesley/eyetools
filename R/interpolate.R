@@ -31,11 +31,6 @@ interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NUL
     stop("Columns 'x' or 'y' not found.")
   }
 
-  # #first check for multiple/single ppt data
-  # test <- .check_ppt_n_in(participant_col, data)
-  # participant_col <- test[[1]]
-  # data <- test[[2]]
-
   internal_interpolate <- function(data, maxgap, method, sample_rate, report) {
 
 
