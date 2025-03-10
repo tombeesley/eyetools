@@ -1,8 +1,7 @@
 .check_data_format <- function(data) {
+  
   if (length(intersect(colnames(data), c("pID", "trial", "x", "y", "time"))) < 5) {
-    
     stop("The input data does not have the columns expected by eyetools. These are: pID, trial, x, y, time")
-    
   }
   
 }

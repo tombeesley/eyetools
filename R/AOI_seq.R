@@ -2,7 +2,6 @@
 #'
 #' Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.
 #'
-#'
 #' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
@@ -25,11 +24,6 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, progress = TRUE) {
 
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure you are supplying fixation data from eyetools?")
 
-  # #first check for multiple/single ppt data
-  # test <- .check_ppt_n_in(participant_col, data)
-  # participant_col <- test[[1]]
-  # data <- test[[2]]
-
   #internal_AOI_seq carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
   internal_AOI_seq <- function(data, AOIs, AOI_names) {
 
@@ -40,12 +34,6 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, progress = TRUE) {
                                                     AOIs = AOIs,
                                                     AOI_names))
 
-    # colnames(data)[1] <- participant_col #keep same column as entered
-    # 
-    # 
-    # #RETURN THE DATA TO THE SAME FORMAT IF SINGLE PPT
-    # if (data[[participant_col]][1] == "NOT A VALID ID") data[[participant_col]] <- NULL
-
     return(data)
 
   }
@@ -54,7 +42,6 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, progress = TRUE) {
   if(progress) out <- pblapply(data, internal_AOI_seq, AOIs, AOI_names) else out <- lapply(data, internal_AOI_seq, AOIs, AOI_names)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
-  # out <- .check_ppt_n_out(out)
 
   return(out)
 }

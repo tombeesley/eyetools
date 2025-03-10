@@ -5,8 +5,9 @@
 #' trial, or can be split into bins to present distinct plots for each time window.
 #'
 #' @param data A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.
-#' @param trial_number can be used to select a particular trial within the data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
+#' @param pID_values specify particular values within 'pID' to plot data from certain participants
+#' @param trial_values specify particular values within 'trial' to plot data from certain trials
 #' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
@@ -37,8 +38,9 @@
 #'
 
 plot_seq <- function(data = NULL,
-                     trial_number = NULL,
                      AOIs = NULL,
+                     trial_values = NULL,
+                     pID_values = NULL,
                      bg_image = NULL,
                      res = c(0,1920,0,1080),
                      flip_y = FALSE,
@@ -46,14 +48,24 @@ plot_seq <- function(data = NULL,
                      bin_time = NULL,
                      bin_range = NULL) {
 
-
-  # if there is a particular trial number specified
-  if (!is.null(trial_number)){
-    data <- data[data$trial==trial_number,]
-    if (nrow(data)==0){
-      stop("With specified trial number no data found.")
+  if(!is.null(pID_values)) {
+    .check_participant_parameter(data, pID_values)
+    data <- data[data$pID %in% pID_values,]
+  } else {
+    # get a random sample from the trial list
+    pID_list <- unique(data$pID)
+    
+    if (length(pID_list)>1) {
+      rand_pID <- sample(pID_list,1)
+      message(paste0("Multiple pIDs detected: randomly sampled - pID:", rand_pID))
+      data <- data[data$pID==rand_pID,]
     }
-
+  }
+  
+  
+  if(!is.null(trial_values)) {
+    .check_trial_parameter(data, trial_values)
+    data <- data[data$trial %in% trial_values,]
   } else {
     # get a random sample from the trial list
     trial_list <- unique(data$trial)
@@ -75,9 +87,6 @@ plot_seq <- function(data = NULL,
     }
     bin_end <- data$bin*bin_time
     data$bin_end <- bin_end
-      # data$bin_start <- data$bin_end-bin_time
-      # data$bin_name <- as.factor(paste0(data$bin_start, "-", data$bin_end))
-
   }
 
   final_g <- ggplot(data = data)

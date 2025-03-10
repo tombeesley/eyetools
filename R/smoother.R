@@ -9,7 +9,6 @@
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param span From stats::loess. The parameter alpha which controls the degree of smoothing.
 #' @param plot whether to plot the raw and smoothed plot for inspection
-#' @param participant_col the variable that determines the participant identifier. If no column present, assumes a single participant
 #' @return a dataframe of the same shape as the input data
 #' @export
 #'
@@ -25,12 +24,7 @@
 #' @import ggplot2
 #'
 
-smoother <- function(data, span = 0.1, plot = FALSE, participant_col = "participant_col") {
-
-  #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_col, data)
-  participant_col <- test[[1]]
-  data <- test[[2]]
+smoother <- function(data, span = 0.1, plot = FALSE) {
 
   internal_smooth <- function(data, span) {
 
@@ -40,26 +34,24 @@ smoother <- function(data, span = 0.1, plot = FALSE, participant_col = "particip
     return(flat_trials)
   }
 
-  data <- split(data, data[[participant_col]])
+  data <- split(data, data$pID)
   out <- lapply(data, internal_smooth, span)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-  out <- .check_ppt_n_out(out)
-
   if (plot) {
 
     raw <- test[[2]]
-    raw$participant_col <- raw[,participant_col]
+    raw$pID <- raw[,pID]
     smooth <- out
-    smooth$participant_col <- smooth[,participant_col]
+    smooth$pID <- smooth[,pID]
 
-    ppt <- sample(unique(raw$participant_col), 1) #sample one participant
+    ppt <- sample(unique(raw$pID), 1) #sample one participant
     trials <- sample(unique(raw$trial), 2) #sample two trials
 
-    raw <- raw[raw$participant_col == ppt,]
+    raw <- raw[raw$pID == ppt,]
     raw <- raw[raw$trial %in% trials,]
-    smooth <- smooth[smooth$participant_col == ppt,]
+    smooth <- smooth[smooth$pID == ppt,]
     smooth <- smooth[smooth$trial %in% trials,]
 
     ####
@@ -100,8 +92,6 @@ smoother_trial <- function(data, span){
 
   data$x <- predict(loess_x)
   data$y <- predict(loess_y)
-
-  data <- .check_ppt_n_out(data)
 
   return(data)
 
