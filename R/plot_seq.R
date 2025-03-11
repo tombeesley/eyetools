@@ -1,8 +1,8 @@
 #' Plot of raw data over time
 #'
-#' A tool for visualising the timecourse of raw data over a single trial. If data from multiple trials are present, then
-#' a single trial will be sampled at random. Alternatively, the trial_number can be specified. Data can be plotted across the whole
-#' trial, or can be split into bins to present distinct plots for each time window.
+#' A tool for visualising the timecourse of raw data over a single trial. Participant and trial values can be selected from the data. 
+#' If values for these parameters are not provided then a single participant and a single trial will be sampled at random. 
+#' Data can be split into bins by time or by the number of bins.
 #'
 #' @param data A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
@@ -48,36 +48,13 @@ plot_seq <- function(data = NULL,
                      bin_time = NULL,
                      bin_range = NULL) {
 
-  if(!is.null(pID_values)) {
-    .check_participant_parameter(data, pID_values)
-    data <- data[data$pID %in% pID_values,]
-  } else {
-    # get a random sample from the trial list
-    pID_list <- unique(data$pID)
-    
-    if (length(pID_list)>1) {
-      rand_pID <- sample(pID_list,1)
-      message(paste0("Multiple pIDs detected: randomly sampled - pID:", rand_pID))
-      data <- data[data$pID==rand_pID,]
-    }
-  }
+  # check pID_values or select random pID
+  data <- .select_pID_values(data, pID_values, allow_random = TRUE, allow_multiple = FALSE)
   
-  
-  if(!is.null(trial_values)) {
-    .check_trial_parameter(data, trial_values)
-    data <- data[data$trial %in% trial_values,]
-  } else {
-    # get a random sample from the trial list
-    trial_list <- unique(data$trial)
+  # check trial_values or select random trial
+  data <- .select_trial_values(data, trial_values, allow_random = TRUE, allow_multiple = FALSE)
 
-    if (length(trial_list)>1) {
-      rand_trial <- sample(trial_list,1)
-      message(paste0("Multiple trials detected: randomly sampled - trial:", rand_trial))
-      data <- data[data$trial==rand_trial,]
-    }
-  }
-
-  data$time <- data$time - data$time[1] # start trial timestamps at 0
+  data$time <- data$time - data$time[1] # start timestamps at 0
 
   if (is.null(bin_time)==FALSE){
     data$bin <- ceiling(data$time/bin_time)
@@ -143,10 +120,7 @@ minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
                                              max(final_g$data$time)),
                                   labels = c("start", "end")) +
     theme(legend.position = "bottom",
-          #panel.ontop=TRUE,
-          panel.background = element_rect(fill = NA, colour = NA)) +#,
-         # panel.grid.major = element_line(linewidth = .25),
-          #panel.grid.minor = element_line(linewidth = .125)) +
+          panel.background = element_rect(fill = NA, colour = NA)) +
     labs(y = "Vertical coordinate (pixels)",
          x = "Horizontal coordinate (pixels)")
 
@@ -155,7 +129,7 @@ minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
     final_g <-
       final_g +
       labs(title = "eyetools::plot_seq()",
-           subtitle = "Raw data shown as dots; \nAOIs shown as blue regions")
+           subtitle = "Raw data shown as X; \nAOIs shown as blue regions")
   }
 
   # setting axes limits and reversing y

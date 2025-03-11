@@ -3,7 +3,8 @@
 #' Plots a heatmap of raw data.
 #'
 #' @param data data in standard raw data form (time, x, y, trial)
-#' @param trial_number can be used to select particular trials within the data
+#' @param pID_values specify particular values within 'pID' to plot data from certain participants
+#' @param trial_values specify particular values within 'trial' to plot data from certain trials
 #' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
@@ -30,7 +31,8 @@
 #'
 
 plot_heatmap <- function(data = NULL,
-                         trial_number = NULL,
+                         pID_values = NULL,
+                         trial_values = NULL,
                          bg_image = NULL,
                          res = c(0,1920,0,1080),
                          flip_y = FALSE,
@@ -39,13 +41,11 @@ plot_heatmap <- function(data = NULL,
 
   if(alpha_control > 1 || alpha_control < 0) stop("alpha_control must be between 0 and 1")
 
-  if(!is.null(trial_number) && !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
-
-
-  if(!is.null(trial_number)) {
-    data <- data[data$trial %in% trial_number,]
-    if(nrow(data) == 0) stop("no trial found for fixation data. Check the data has the trials requested")
-  }
+  # check pID_values or select random pID
+  data <- .select_pID_values(data, pID_values, allow_random = FALSE, allow_multiple = TRUE)
+  
+  # check trial_values or select random trial
+  data <- .select_trial_values(data, trial_values, allow_random = FALSE, allow_multiple = TRUE)
 
   #mitigate undefined global functions note
   x <- data$x
