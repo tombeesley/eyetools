@@ -109,8 +109,8 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
     colnames(trial_sac_store) <- c("start", "end", "origin_x", "origin_y", "terminal_x", "terminal_y",
                                    "mean_velocity", "peak_velocity", "duration", "sac_n")
     # add participant_col and trial number
-    trial_sac_store$trial <- trialNumber
-    trial_sac_store$pID <- ppt_label
+    trial_sac_store["trial"] <- trialNumber
+    trial_sac_store["pID"] <- ppt_label
     return(trial_sac_store)
   }
 
