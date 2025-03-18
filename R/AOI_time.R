@@ -104,7 +104,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-  out <- .check_ppt_n_out(out)
+  #out <- .check_ppt_n_out(out)
 
   if (as_prop) {
 
