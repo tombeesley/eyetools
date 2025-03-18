@@ -8,7 +8,7 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values specify particular values within 'trial' to plot data from certain trials
-#' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
+#' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param plot_header display the header title text which explains graphical features of the plot.
@@ -49,10 +49,10 @@ plot_seq <- function(data = NULL,
                      bin_range = NULL) {
 
   # check pID_values or select random pID
-  data <- .select_pID_values(data, pID_values, allow_random = TRUE, allow_multiple = FALSE)
+  data <- .select_pID_values(data, pID_values, allow_random = TRUE)
   
   # check trial_values or select random trial
-  data <- .select_trial_values(data, trial_values, allow_random = TRUE, allow_multiple = FALSE)
+  data <- .select_trial_values(data, trial_values, allow_random = TRUE)
 
   data$time <- data$time - data$time[1] # start timestamps at 0
 
@@ -150,7 +150,7 @@ minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
 
 # function to add raw data
 add_raw_time_seq <- function(dataIn, ggplot_in){
-
+  
   x <- dataIn$x
   y <- dataIn$y
 
@@ -158,7 +158,7 @@ add_raw_time_seq <- function(dataIn, ggplot_in){
     ggplot_in +
     geom_point(data = dataIn,
                aes(x = x, y = y, colour = time),
-               shape = 4,
+               shape = 16,
                size = 3,
                alpha = .5,
                na.rm = TRUE)

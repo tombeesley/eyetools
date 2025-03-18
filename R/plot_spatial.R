@@ -9,7 +9,7 @@
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values specify particular values within 'trial' to plot data from certain trials
-#' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
+#' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param show_fix_order label the fixations in the order they were made
@@ -99,31 +99,17 @@ plot_spatial <- function(raw_data = NULL,
   # add raw data
   if (is.null(raw_data)==FALSE) {
     
-    if(!is.null(pID_values)) {
-      .check_participant_parameter(raw_data, pID_values)
-      raw_data <- raw_data[raw_data$pID %in% pID_values,]
-    }
-
-    if(!is.null(trial_values)) {
-      .check_trial_parameter(raw_data, trial_values)
-      raw_data <- raw_data[raw_data$trial %in% trial_values,]
-    }
-
+    raw_data <- .select_pID_values(raw_data, pID_values, allow_random = FALSE)
+    raw_data <- .select_trial_values(raw_data, trial_values, allow_random = FALSE)
+    
     final_g <- add_raw(raw_data, final_g)
   }
 
   # PLOT FIXATION DATA
   if (is.null(fix_data)==FALSE) {
 
-    if(!is.null(pID_values)) {
-      .check_participant_parameter(fix_data, pID_values)
-      fix_data <- fix_data[fix_data$pID %in% pID_values,]
-    }
-    
-    if(!is.null(trial_values)) {
-      .check_trial_parameter(fix_data, trial_values)
-      fix_data <- fix_data[fix_data$trial %in% trial_values,]
-    }
+    fix_data <- .select_pID_values(fix_data, pID_values, allow_random = FALSE)
+    fix_data <- .select_trial_values(fix_data, trial_values, allow_random = FALSE)
 
     fix_data$fix_n <- seq_len(nrow(fix_data))
 
@@ -159,15 +145,8 @@ plot_spatial <- function(raw_data = NULL,
   # PLOT SACCADE DATA
   if (is.null(sac_data)==FALSE){
 
-    if(!is.null(pID_values)) {
-      .check_participant_parameter(sac_data, pID_values)
-      sac_data <- sac_data[sac_data$pID %in% pID_values,]
-    }
-    
-    if(!is.null(trial_values)) {
-      .check_trial_parameter(sac_data, trial_values)
-      sac_data <- sac_data[sac_data$trial %in% trial_values,]
-    }
+    sac_data <- .select_pID_values(sac_data, pID_values, allow_random = FALSE)
+    sac_data <- .select_trial_values(sac_data, trial_values, allow_random = FALSE)
 
     origin_x <- sac_data$origin_x
     origin_y <- sac_data$origin_y
@@ -219,8 +198,8 @@ add_raw <- function(dataIn, ggplot_in){
     ggplot_in +
     geom_point(data = dataIn,
                aes(x = x, y = y),
-               #size = 1,
-               shape = 4,
+               shape = 16,
+               size = 3,
                alpha = .5,
                na.rm = TRUE)
 
@@ -260,20 +239,6 @@ add_AOIs <- function(AOIs, ggplot_in){
                   alpha = .1)
   }
 
-  return(ggplot_in)
-
-}
-
-# function to add background image
-add_BGimg <- function(bg_image_in, res, ggplot_in){
-  img <- magick::image_read(bg_image_in)
-  ggplot_in <-
-    ggplot_in +
-    annotation_raster(img,
-                      xmin = res[1],
-                      xmax = res[2],
-                      ymin = res[3],
-                      ymax = res[4])
   return(ggplot_in)
 
 }

@@ -115,12 +115,12 @@ interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NUL
     rownames(data) <- NULL
 
     out <- list(data, report)
-    out[[1]] <- .check_ppt_n_out(out[[1]])
+    # out[[1]] <- .check_ppt_n_out(out[[1]])
 
   } else {
     out <- do.call("rbind.data.frame", out)
     rownames(out) <- NULL
-    out <- .check_ppt_n_out(out)
+    # out <- .check_ppt_n_out(out)
   }
 
   return(out)

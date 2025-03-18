@@ -3,10 +3,11 @@
 #' A visualisation tool for plotting the changes in defined AOI regions across a single trial time.
 #'
 #' @param data raw data in standard raw data form (time, x, y, trial)
+#' @param pID_values specify particular values within 'pID' to plot data from certain participants
+#' @param trial_values can be used to select particular trials within the data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height)
 #' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc. To omit AOIs from the plot, use NA in relevant vector position
 #' @param type either "abs" (absolute) or "prop" (proportion)
-#' @param trial_number can be used to select particular trials within the data
 #' @param plot_time_not_in_AOI boolean as to whether to include proportion of time spent outside AOIs
 #'
 #' @return a plot of the raw data
@@ -29,12 +30,12 @@
 #' @importFrom stats ave
 
 
-plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = NULL, trial_number = NULL, plot_time_not_in_AOI = FALSE) {
+plot_AOI_growth <- function(data = NULL, pID_values = NULL, trial_values = NULL, AOIs = NULL, AOI_names = NULL, type = "abs", plot_time_not_in_AOI = FALSE) {
 
   #error catches
-  if(!is.null(trial_number) && !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
+  if(!is.null(trial_values) && !is.numeric(trial_values)) stop("trial_number input expected as numeric values")
+  
   if(is.null(data[['x']]) || is.null(data[['y']])) stop("No x or y variables detected")
-  if(missing(type)) stop("Argument 'type' missing")
   if(!(type %in% c("abs", "prop"))) stop("type should be 'abs' or 'prop'.")
   if(is.null(AOIs)) {stop("Dataframe of Areas of Interest must be specified using AOIs =") }
   else {
@@ -43,23 +44,13 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = N
     }
   }
 
-  # if there is a particular trial number specified
-  if (!is.null(trial_number)){
-    data <- data[data$trial==trial_number,]
-    if (nrow(data)==0){
-      stop("With specified trial number no data found.")
-    }
-
-  } else {
-    # get a random sample from the trial list
-    trial_list <- unique(data$trial)
-
-    if (length(trial_list)>1) {
-      rand_trial <- sample(trial_list,1)
-      message(paste0("Multiple trials detected: randomly sampled - trial:", rand_trial))
-      data <- data[data$trial==rand_trial,]
-    }
-  }
+  # check pID_values or select random pID
+  data <- .select_pID_values(data, pID_values, allow_random = TRUE)
+  
+  # check trial_values or select random trial
+  data <- .select_trial_values(data, trial_values, allow_random = TRUE)
+  
+  
   in_AOI <- NULL
   data$in_AOI <- apply(data, 1, function(row) {
     x <- as.numeric(row["x"])
@@ -92,12 +83,12 @@ plot_AOI_growth <- function(data = NULL, AOIs = NULL, AOI_names = NULL, type = N
   data <- data[order(data$in_AOI, data$time), ]  # Ensure data is ordered correctly for cumulative sum
   data$time_diff <- ave(data$time_diff, data$in_AOI, FUN = cumsum)
 
-  # Fill in missing combinations of (pNum, time, trial, in_AOI)
-  all_combinations <- expand.grid(pNum = unique(data$pNum),
+  # Fill in missing combinations of (pID, time, trial, in_AOI)
+  all_combinations <- expand.grid(pID = unique(data$pID),
                                   time = unique(data$time),
                                   trial = unique(data$trial),
                                   in_AOI = unique(data$in_AOI))
-  data <- merge(all_combinations, data, by = c("pNum", "time", "trial", "in_AOI"), all.x = TRUE)
+  data <- merge(all_combinations, data, by = c("pID", "time", "trial", "in_AOI"), all.x = TRUE)
 
 
   # Fill missing time_diff values

@@ -5,10 +5,11 @@
 #' @param data data in standard raw data form (time, x, y, trial)
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values specify particular values within 'trial' to plot data from certain trials
-#' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
+#' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
-#' @param alpha_control a single value to determine how much of the heatmap to obscure. Between 0 and 1. Lower values include more data in the heatmap
+#' @param plot_type Specify the nature of the data displayed. Either "density" (default) or "hex" 
+#' @param alpha_range a pair of values between 0 and 1. The first is a cut off, whereby lower values are not displayed. The second value sets the transparancy of the visible poitns. 
 #' @param plot_header display the header title text which explains graphical features of the plot.
 #'
 #' @return a plot of the raw data
@@ -36,16 +37,18 @@ plot_heatmap <- function(data = NULL,
                          bg_image = NULL,
                          res = c(0,1920,0,1080),
                          flip_y = FALSE,
-                         alpha_control = 0.1,
+                         plot_type = "density",
+                         alpha_range = c(0.1,0.8),
                          plot_header = FALSE) {
 
-  if(alpha_control > 1 || alpha_control < 0) stop("alpha_control must be between 0 and 1")
+  if(max(alpha_range) > 1 || min(alpha_range) < 0) stop("alpha_control values must be between 0 and 1")
+  if(length(alpha_range))
 
   # check pID_values or select random pID
-  data <- .select_pID_values(data, pID_values, allow_random = FALSE, allow_multiple = TRUE)
+  data <- .select_pID_values(data, pID_values, allow_random = FALSE)
   
   # check trial_values or select random trial
-  data <- .select_trial_values(data, trial_values, allow_random = FALSE, allow_multiple = TRUE)
+  data <- .select_trial_values(data, trial_values, allow_random = FALSE)
 
   #mitigate undefined global functions note
   x <- data$x
@@ -95,17 +98,24 @@ plot_heatmap <- function(data = NULL,
     geom_hline(yintercept = minor_breaks_y, colour = "lightgrey", alpha = .5)
 
   #plot data on top
-  final_g <- final_g +
-    stat_density2d(geom="tile",
-                   aes(x, y, fill = after_stat(ndensity),
-                       #alpha=cut(after_stat(density),breaks=c(0,1e-6,Inf))),
-                       alpha=ifelse(after_stat(ndensity) < alpha_control, 0, 1)),
-                   contour = FALSE) +
-    scale_alpha_continuous(range=c(0,1),guide="none") +
-    scale_fill_viridis_b()
+  if (plot_type == "density") {
+    final_g <- final_g +
+      stat_density2d(geom="tile", 
+                     aes(x, y, fill = after_stat(ndensity), alpha=ifelse(after_stat(ndensity) < alpha_range[1], 0, 1)),
+                     contour = FALSE) 
+    
+  } else if (plot_type == "hex") {
+  
+    final_g <- final_g +
+      stat_bin_hex(aes(x, y, alpha=ifelse(after_stat(ndensity) < alpha_range[1], 0, 1)), 
+                   bins = 40)
+
+  }
 
   final_g <-
     final_g +
+    scale_alpha_continuous(range=c(0,alpha_range[2]),guide="none") +
+    scale_fill_viridis(option = "B") +
     theme_minimal() +
     coord_fixed() +
     theme(legend.position = "bottom",
@@ -128,16 +138,4 @@ plot_heatmap <- function(data = NULL,
 }
 
 
-# function to add background image
-add_BGimg <- function(bg_image_in, res, ggplot_in){
-  img <- magick::image_read(bg_image_in)
-  ggplot_in <-
-    ggplot_in +
-    annotation_raster(img,
-                      xmin = res[1],
-                      xmax = res[2],
-                      ymin = res[3],
-                      ymax = res[4])
-  return(ggplot_in)
 
-}

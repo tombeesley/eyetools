@@ -61,7 +61,7 @@ By default eyetools assumes that the resolution of eye data is in pixels (and a 
 
 ```{r}
 
-head(HCL[HCL$pNum == 118,], 10)
+head(HCL, 10)
 
 ```
 
@@ -73,7 +73,7 @@ We need to combine the left and right eye x and y coordinates to get a single pa
 
 `combine_eyes()` is one of the few core eyetools functions that doesn't handle multi-participant/single-participant data differently. Primarily because of the function's construction and its intended useage, it does not need to do so.
 
-```{r}
+```{r combine}
 
 data <- combine_eyes(HCL)
 
@@ -81,7 +81,7 @@ data <- combine_eyes(HCL)
 
 The above code returns a flattened list of all participants data, and if we take a look at just one participant, we are returned with a dataframe that has x and y variables in place of the left\_\* and right\_\* variables. This is the data format needed by many of the other eyetools functions: time, x, y, and trial. The ordering of the variables should not matter, however most of the functions will impose an ordering in how the information is returned.
 
-```{r}
+```{r show_data}
 head(data) # participant 118
 ```
 
@@ -92,15 +92,15 @@ The next stage of the process would be to remove missing data within continuous 
 
 Note that as the participant identifier column is not "participant_col" (as eyetools expects as default), it needs to be specified in the function call.
 
-```{r}
-data <- interpolate(data, maxgap = 150, method = "approx", participant_col = "pNum")
+```{r interpolate}
+data <- interpolate(data, maxgap = 150, method = "approx")
 ```
 
 You can also request a report of the differences in NA values present before and after the interpolation as well
 
-```{r}
+```{r interpolate_report}
 
-interpolate_report <- interpolate(data, maxgap = 150, method = "approx", participant_col = "pNum", report = TRUE)
+interpolate_report <- interpolate(data, maxgap = 150, method = "approx", report = TRUE)
 
 interpolate_report[[2]]
 ```
@@ -112,7 +112,6 @@ set.seed(0410) #set seed to show same participant and trials in both chunks
 
 data_smooth <- smoother(data,
                         span = .1, # default setting. This controls the degree of smoothing
-                        participant_col = "pNum", 
                         plot = TRUE) # whether to plot or not, FALSE as default
 ```
 
@@ -127,7 +126,6 @@ set.seed(0410) #set seed to show same participant and trials in both chunks
 
 data_smooth <- smoother(data, 
                         span = .02,
-                        participant_col = "pNum",
                         plot = TRUE)
 ```
 
@@ -178,8 +176,7 @@ data_fixations_disp <- fixation_dispersion(data,
                                            min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
                                            disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
                                            NA_tol = 0.25, # the proportion of NAs tolerated within any window of samples evaluated as a fixation
-                                           progress = FALSE, # whether to display a progress bar or not
-                                           participant_col = "pNum") 
+                                           progress = FALSE) # whether to display a progress bar or not
 ```
 
 The resultant data output from `fixation_dispersion()` presents data by trial and fixation. It gives the start and end time for these fixations along with their duration and the x,y coordinates for the entry of the fixation.
@@ -198,14 +195,14 @@ The `fixation_VTI()` works best on unsmoothed data (with default settings), as t
 
 ```{r}
 
-data_fixations_VTI <- fixation_VTI(data[data$pNum == 119,],
+data_fixations_VTI <- fixation_VTI(data,
                                    threshold = 80, #smoothed data, so use a lower threshold
                                    min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
                                    min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
                                    disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
                                    smooth = FALSE,
-                                   progress = FALSE, # whether to display a progress bar or not, when running multiple participants 
-                                   participant_col = "pNum")
+                                   progress = FALSE) # whether to display a progress bar or not, when running multiple participants 
+
 ```
 
 ```{r}
@@ -218,7 +215,7 @@ This is also a sensible point to briefly highlight the underlying saccade detect
 
 ```{r}
 
-saccades <- saccade_VTI(data, participant_col = "pNum")
+saccades <- saccade_VTI(data)
 
 head(saccades)
 
@@ -268,8 +265,7 @@ AOI_areas
 
 data_AOI_time <- AOI_time(data = data_fixations_disp, 
                           data_type = "fix",
-                          AOIs = AOI_areas,
-                          participant_col = "pNum")
+                          AOIs = AOI_areas)
 
 head(data_AOI_time, 10)
 ```
@@ -278,19 +274,17 @@ The returned data show the time in milliseconds on each area of interest, per tr
 
 ```{r}
 AOI_time(data = data_fixations_disp,
-                          data_type = "fix",
-                          AOIs = AOI_areas,
-                          participant_col = "pNum", 
-                          as_prop = TRUE, 
-                          trial_time = HCL_behavioural$RT) #vector of trial times
+         data_type = "fix",
+         AOIs = AOI_areas, 
+         as_prop = TRUE, 
+         trial_time = HCL_behavioural$RT) #vector of trial times
 ```
 
 
 As mentioned, it also works with raw data too:
 
 ```{r}
-AOI_time(data = data_119, data_type = "raw", AOIs = AOI_areas,
-         participant_col = "pNum")
+AOI_time(data = data, data_type = "raw", AOIs = AOI_areas)
 ```
 
 When working with raw data, you can also take advantage of `AOI_time_binned()`, which enables data binning based on time, and calculating time spent in AOIs as a result. Using `bin_length`, you specify a desired length of bin (say 100ms) and splits data into these bins, with ant remaining data being dropped from the analysis (as it does not form a complete bin which could skew analyses). As with `AOI_time()` you can specify either absolute or proportional time spent.
@@ -298,11 +292,10 @@ When working with raw data, you can also take advantage of `AOI_time_binned()`, 
 ```{r}
 
 binned_time <- AOI_time_binned(data = data_119,
-         AOIs = AOI_areas,
-         participant_col = "pNum", 
-         bin_length = 100,
-         max_time = 2000,
-         as_prop = TRUE)
+                               AOIs = AOI_areas, 
+                               bin_length = 100,
+                               max_time = 2000,
+                               as_prop = TRUE)
 
 head(binned_time)
 ```
@@ -314,8 +307,7 @@ The `AOI_seq()` function analyses the sequence of entries into defined AOI regio
 
 data_AOI_sequence <- AOI_seq(data_fixations_disp,
                              AOI_areas,         
-                             AOI_names = NULL,         
-                             participant_col = "pNum")   
+                             AOI_names = NULL)   
 
 head(data_AOI_sequence)
 ```
@@ -332,7 +324,7 @@ The most simple use is to just pass it raw data:
 
 ```{r}
 
-plot_seq(data_119, trial_number = 1)
+plot_seq(data, pID_values = 119, trial_values = 1)
 
 ```
 
@@ -340,27 +332,27 @@ But the parameters of `plot_seq()` can help exploration be more informative. We 
 
 ```{r}
 
-plot_seq(data_119, trial_number = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
+plot_seq(data, pID_values = 119, trial_values = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
 
-plot_seq(data_119, trial_number = 1, AOIs = AOI_areas) # add AOIs
+plot_seq(data, pID_values = 119, trial_values = 1, AOIs = AOI_areas) # add AOIs
 
 ```
 
 You also have the option to split the time into bins to reduce the amount of data plotted
 
 ```{r}
-plot_seq(data_119, trial_number = 1, AOIs = AOI_areas, bin_time = 1000)
+plot_seq(data, pID_values = 119, trial_values = 1, AOIs = AOI_areas, bin_time = 1000)
 
 ```
 
 `plot_spatial()` is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
 
 ```{r}
-plot_spatial(raw_data = data_119, trial_number = 6)
+plot_spatial(raw_data = data, pID_values = 119, trial_values = 6, trial_number = 6)
 
-plot_spatial(fix_data = fixation_dispersion(data_119), trial_number = 6)
+plot_spatial(fix_data = fixation_dispersion(data), pID_values = 119, trial_values = 6)
 
-plot_spatial(sac_data = saccade_VTI(data_119), trial_number = 6)
+plot_spatial(sac_data = saccade_VTI(data), pID_values = 119, trial_values = 6)
 
 ```
 
@@ -370,7 +362,8 @@ Or as mentioned, simultaneously:
 plot_spatial(raw_data = data_119,
              fix_data = fixation_dispersion(data_119),
              sac_data = saccade_VTI(data_119),
-             trial_number = 6)
+             pID_values = 119, 
+             trial_values = 6)
 
 ```
 
@@ -378,13 +371,24 @@ The function `plot_AOI_growth()` helps visualise how attention is directed acros
 
 ```{r}
 #standard plot with absolute time
-plot_AOI_growth(data = data_119, AOIs = AOI_areas, type = "abs", trial_number = 1)
+plot_AOI_growth(data = data, 
+                pID_values = 119, 
+                trial_values = 1, 
+                AOIs = AOI_areas, 
+                type = "abs")
 
 #standard plot with proportional time
-plot_AOI_growth(data = data_119, AOIs = AOI_areas, type = "prop", trial_number = 1)
+plot_AOI_growth(data = data, 
+                pID_values = 119, 
+                trial_values = 1, 
+                AOIs = AOI_areas, 
+                type = "prop")
 
 #only keep predictive and non-predictive cues rather than the target AOI
-plot_AOI_growth(data = data_119, AOIs = AOI_areas, type = "prop", AOI_names = c("Predictive", "Non Predictive", NA))
+plot_AOI_growth(data = data, pID_values = 119, trial_values = 1, 
+                AOIs = AOI_areas, 
+                type = "prop", 
+                AOI_names = c("Predictive", "Non Predictive", NA))
 
 ```
 
