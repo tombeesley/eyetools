@@ -7,7 +7,7 @@
 #'
 #' @format A dataframe of 31,041 observations and seven variables
 #' \describe{
-#'   \item{pNum}{participant number}
+#'   \item{pID}{participant ID}
 #'   \item{time}{timestamp of the sample (milliseconds)}
 #'   \item{left_x}{x coordinate of the left eye}
 #'   \item{left_y}{y coordinate of the left eye}
@@ -25,7 +25,7 @@
 #'
 #' @format A dataframe of 12 observations and eight variables
 #' \describe{
-#'   \item{pNum}{participant number}
+#'   \item{pID}{participant ID}
 #'   \item{trial}{trial number}
 #'   \item{P_cue}{Are these necessary columns?}
 #'   \item{NP_cue}{Are these necessary columns?}

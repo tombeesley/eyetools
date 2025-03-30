@@ -123,7 +123,10 @@ plot_spatial <- function(raw_data = NULL,
       final_g +
       geom_circle(data = fix_data,
                   aes(x0 = x, y0 = y, r = disp_tol/2, fill = duration),
-                  alpha = .4)
+                  alpha = .4) + 
+      scale_fill_viridis(breaks = c(min(duration),
+                                    max(duration)),
+                         labels = c("low", "high"))
     if (show_fix_order == TRUE) {
 
       final_g <-
@@ -132,10 +135,7 @@ plot_spatial <- function(raw_data = NULL,
                    aes(x = x, y = y, label = fix_n),
                    hjust = 1,
                    vjust = 1,
-                   size = 4) +
-        scale_fill_viridis(breaks = c(min(duration),
-                                               max(duration)),
-                                    labels = c("low", "high"))
+                   size = 4)
 
     }
 
@@ -206,39 +206,3 @@ add_raw <- function(dataIn, ggplot_in){
   return(ggplot_in)
 }
 
-# function to add AOIs
-add_AOIs <- function(AOIs, ggplot_in){
-
-  x <- AOIs$x
-  y <- AOIs$y
-  width_radius <- AOIs$width_radius
-  height <- AOIs$height
-
-  rect_AOIs <- AOIs[!is.na(AOIs$height),]
-  circle_AOIs <- AOIs[is.na(AOIs$height),] # those with NAs in height column
-
-  # add any rectangle AOIs
-  if (is.null(rect_AOIs)==FALSE) {
-    ggplot_in <-
-      ggplot_in +
-      geom_tile(data = rect_AOIs,
-                aes(x = x, y = y, width = width_radius, height = height),
-                colour = "dark blue",
-                fill = "blue",
-                alpha = .1)
-  }
-
-  # add any circle AOIs
-  if (is.null(circle_AOIs)==FALSE) {
-    ggplot_in <-
-      ggplot_in +
-      geom_circle(data = circle_AOIs,
-                  aes(x0 = x, y0 = y, r = width_radius),
-                  colour = "dark blue",
-                  fill = "blue",
-                  alpha = .1)
-  }
-
-  return(ggplot_in)
-
-}

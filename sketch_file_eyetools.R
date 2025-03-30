@@ -38,4 +38,16 @@ data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel") # conv
 
 packageurl <- "https://cran.r-project.org/src/contrib/Archive/eyetools/eyetools_0.7.2.tar.gz"
 install.packages(packageurl, repos=NULL, type="source")
-li
+
+
+# checking stable version from CRAN 0.8.1
+d <- combine_eyes(HCL)
+
+sac <- saccade_VTI(d)
+fix <- fixation_dispersion(d)
+
+plot_spatial(fix_data = fix, sac_data = sac, trial_values = 6, pID_values = 118)
+
+fixation_VTI(d)
+
+

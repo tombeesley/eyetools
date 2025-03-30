@@ -1,61 +1,35 @@
-.check_data_format <- function(data) {
-  
-  if (length(intersect(colnames(data), c("pID", "trial", "x", "y", "time"))) < 5) {
-    stop("The input data does not have the columns expected by eyetools. These are: pID, trial, x, y, time")
-  }
-  
-}
 
-.check_pID_values <- function(data, pID_values) {
-  
-  if (length(intersect(data$pID,pID_values)) != length(pID_values)){
-    stop("At least one value supplied to parameter 'participant_values' was not found in column 'pID'")
-  }
-}
+.check_ppt_n_in <- function(participant_ID, data) {
 
-.check_trial_values <- function(data, trial_values) {
-  
-  if (length(intersect(data$trial,trial_values)) != length(trial_values)){
-    stop("At least one value supplied to parameter 'trial_values' was not found in column 'trial'")
-  }
-}
+  if (participant_ID == 'participant_ID') {
 
-.select_pID_values <- function(data, pID_values = NULL, allow_random = TRUE) {
+    if(is.null(data[['participant_ID']])) {
 
-  if(!is.null(pID_values)) {
-    .check_pID_values(data, pID_values)
-    data <- data[data$pID %in% pID_values,]
-  } else if (allow_random == TRUE) {
-    # get a random sample from the trial list
-    pID_list <- unique(data$pID)
-    
-    if (length(pID_list)>1) {
-      rand_pID <- sample(pID_list,1)
-      message(paste0("Multiple pIDs detected: randomly sampled - pID:", rand_pID))
-      data <- data[data$pID==rand_pID,]
+      #this checks for repeated non-consecutive values of trial or time. If they are non-consecutive, error because it is likely
+      #it should have the participant_ID specified
+
+      trial_rep <- duplicated(rle(data$trial)$values)
+      #time_rep <- duplicated(rle(data$time)$values)
+
+      if (sum(trial_rep) > 0) stop("multiple duplicated trials detected. Have you forgotten to specify the participant_ID?")
+
+      participant_ID = "participant_ID"
+      data <- cbind(data, participant_ID = c("NOT A VALID ID")) # just assign a value
     }
   } else {
-    return(data) # no selection made - return data as is. 
+    if(is.null(data[[participant_ID]])) stop(paste0("No participant identifier column called '", participant_ID, "' detected"))
   }
+
+  return(list(participant_ID, data))
 }
 
-.select_trial_values <- function(data, trial_values = NULL, allow_random = TRUE) {
+.check_ppt_n_out <- function(data) {
+  if(!is.null(data[['participant_ID']])) {
 
-  if(!is.null(trial_values) && !is.numeric(trial_values)) stop("'trial_values' parameter expects numeric values")
-  
-  if(!is.null(trial_values)) {
-    .check_trial_values(data, trial_values)
-    data <- data[data$trial %in% trial_values,]
-  } else if (allow_random == TRUE) {
-    # get a random sample from the trial list
-    trial_list <- unique(data$trial)
-    
-    if (length(trial_list)>1) {
-      rand_trial <- sample(trial_list,1)
-      message(paste0("Multiple trials detected: randomly sampled - trial:", rand_trial))
-      data <- data[data$trial==rand_trial,]
+    if(data[['participant_ID']][1] == "NOT A VALID ID") {
+      data[['participant_ID']] <- NULL
     }
-  } else {
-    return(data) # no selection made - return data as is. 
   }
+
+  return(data)
 }
