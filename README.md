@@ -64,7 +64,14 @@ have bugs. You can install this using
 `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is
 the latest version.
 
-The current development version is: 0.8.1
+The current development version is: 0.9.0
+
+# eyetools 0.9.0
+* removed the need to specify a name for the participant column. eyetools now expects the column 'pID' in all input data
+* all 'plot_' functions now have a 'pID_values' parameter to enable selection of certain participant data to plot
+* renamed 'trial_number' to 'trial_values' for consistency with the above changes
+* fixed an issue where colour scale for fixations was dependent on showing fixation label
+* cosmetic changes made to plotting of AOIs 
 
 Additional functions that are only available in the latest development
 version:
