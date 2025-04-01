@@ -21,15 +21,14 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' data <- data[data$pNum == 118,]
 #' # plot the raw data
-#' plot_spatial(raw_data = data)
+#' plot_spatial(raw_data = data, pID_values = 118)
 #'
 #' # plot both raw and fixation data together
-#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data))
+#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), pID_values = 118)
 #'
 #' #plot one trial
-#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_number = 1)
+#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_values = 6)
 #'
 #' }
 #' @import ggplot2

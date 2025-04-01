@@ -9,8 +9,7 @@ fixation_dispersion(
   min_dur = 150,
   disp_tol = 100,
   NA_tol = 0.25,
-  progress = TRUE,
-  participant_col = "participant_col"
+  progress = TRUE
 )
 }
 \arguments{
@@ -23,27 +22,23 @@ fixation_dispersion(
 \item{NA_tol}{the proportion of NAs tolerated within any window of samples that is evaluated as a fixation}
 
 \item{progress}{Display a progress bar}
-
-\item{participant_col}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 }
 \description{
-Detects fixations by assessing dispersion of the eye position, using a method that is similar to that proposed by Salvucci & Goldberg (1996).
+Detects fixations by assessing dispersion of the eye position, using a method that is similar to that proposed by Salvucci & Goldberg (2000).
 Evaluates the maximum dispersion (distance) between x/y coordinates across a window of data. Looks for sufficient periods
 in which this maximum dispersion is below the specified dispersion tolerance. NAs are considered breaks
 in the data and are not permitted within a valid fixation period.
 }
 \details{
-It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_col} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_col needs to be specified
+It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 }
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-fixation_dispersion(data, participant_col = "pNum")
+fixation_dispersion(data)
 }
 
 }

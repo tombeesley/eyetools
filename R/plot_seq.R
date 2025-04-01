@@ -23,13 +23,13 @@
 #' data <- combine_eyes(HCL)
 #'
 #' # plot the raw data
-#' plot_seq(data = data[data$pNum == 118,])
+#' plot_seq(data)
 #'
 #' # with AOIs
-#' plot_seq(data = data[data$pNum == 118,], AOIs = HCL_AOIs)
+#' plot_seq(data, AOIs = HCL_AOIs)
 #'
 #' # plot raw data with bins
-#' plot_seq(data = data[data$pNum == 118,], bin_time = 500)
+#' plot_seq(data, bin_time = 500)
 #'
 #' @import ggplot2
 #' @importFrom utils head

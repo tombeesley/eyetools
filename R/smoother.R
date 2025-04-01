@@ -15,17 +15,19 @@
 #' @examples
 #' data <- combine_eyes(HCL)
 #'
-#' smoother(data, participant_col = "pNum")
+#' smoother(data)
 #'
 #' #with an inspection plot
-#' smoother(data, span = .02, participant_col = "pNum", plot = TRUE)
+#' smoother(data, span = .02, plot = TRUE)
 #'
 #' @importFrom stats loess predict na.exclude
 #' @import ggplot2
 #'
 
-smoother <- function(data, span = 0.1, plot = FALSE) {
-
+smoother <- function(data, span = 0.05, plot = FALSE) {
+  
+  raw <- data
+  
   internal_smooth <- function(data, span) {
 
     data_s <- split(data, data$trial)
@@ -36,15 +38,12 @@ smoother <- function(data, span = 0.1, plot = FALSE) {
 
   data <- split(data, data$pID)
   out <- lapply(data, internal_smooth, span)
-  out <- do.call("rbind.data.frame", out)
+  out <- do.call(rbind.data.frame, out)
   rownames(out) <- NULL
 
   if (plot) {
 
-    raw <- test[[2]]
-    raw$pID <- raw[,pID]
     smooth <- out
-    smooth$pID <- smooth[,pID]
 
     ppt <- sample(unique(raw$pID), 1) #sample one participant
     trials <- sample(unique(raw$trial), 2) #sample two trials

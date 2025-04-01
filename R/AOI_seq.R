@@ -12,9 +12,9 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' fix_d <- fixation_dispersion(data, participant_col = "pNum")
+#' fix_d <- fixation_dispersion(data)
 #'
-#' AOI_seq(fix_d, AOIs = HCL_AOIs, participant_col = "pNum")
+#' AOI_seq(fix_d, AOIs = HCL_AOIs)
 #' }
 #'
 #' @import pbapply

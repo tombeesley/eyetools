@@ -2,12 +2,10 @@
 #'
 #' Analyses total time on defined AOI regions across trials separated into bins. Works with raw data as the input.
 #' Data can be separated into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
-#' consistent across varying lengths of trial. Any r=data that cannot fill a bin (tpyically the last few milliseconds of the trial) are dropped to
+#' consistent across varying lengths of trial. Any data that cannot fill a bin (typically the last few milliseconds of the trial) are dropped to
 #' ensure that bins are of a consistent length
 #'
-#' AOI_time_binned can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_col needs to be specified
+#' AOI_time_binned can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 #'
 #' @param data A dataframe of raw data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
@@ -27,7 +25,7 @@
 #'
 #'
 #' #with bins of 100ms each and only for the first 2000ms
-#' AOI_time_binned(data = data, AOIs = HCL_AOIs, participant_col = "pNum",
+#' AOI_time_binned(data = data, AOIs = HCL_AOIs, 
 #'     bin_length = 100, max_time = 2000)
 #' }
 #'

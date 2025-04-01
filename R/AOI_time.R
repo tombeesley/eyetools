@@ -23,16 +23,16 @@
 #'
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' fix_d <- fixation_dispersion(data, participant_col = "pNum")
+#' fix_d <- fixation_dispersion(data)
 #'
 #' # fixation data
-#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_col = "pNum")
+#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs)
 #'
 #' #raw data
-#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_col = "pNum")
+#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs)
 #'
 #' #as proportional data
-#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_col = "pNum",
+#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs,
 #'          as_prop = TRUE, trial_time = HCL_behavioural$RT)
 #'}
 
@@ -113,7 +113,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
     trial_time <- data.frame(trial_time)
     trial_time <- trial_time[rep(seq_len(nrow(trial_time)), each = nrow(AOIs)), ]
 
-    out <- out[order(out$pNum, out$trial),]
+    out <- out[order(out$pID, out$trial),]
 
     out$trial_time <- trial_time
     out$time <- out$time/out$trial_time

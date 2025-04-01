@@ -18,12 +18,11 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' data <- data[data$pNum == 118,]
 #' # plot all trials data
-#' plot_heatmap(data, alpha_control = .01)
+#' plot_heatmap(data, pID_values = 118, alpha_range = c(0.3,0.8))
 #'
 #' #plot one trial
-#' plot_heatmap(data, trial_number = 1)
+#' plot_heatmap(data, trial_values = 1)
 #'
 #' }
 #' @import ggplot2

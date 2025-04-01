@@ -7,7 +7,7 @@
 \format{
 A dataframe of 12 observations and eight variables
 \describe{
-\item{pNum}{participant number}
+\item{pID}{participant ID}
 \item{trial}{trial number}
 \item{P_cue}{Are these necessary columns?}
 \item{NP_cue}{Are these necessary columns?}

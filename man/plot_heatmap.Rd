@@ -6,26 +6,32 @@
 \usage{
 plot_heatmap(
   data = NULL,
-  trial_number = NULL,
+  pID_values = NULL,
+  trial_values = NULL,
   bg_image = NULL,
   res = c(0, 1920, 0, 1080),
   flip_y = FALSE,
-  alpha_control = 0.1,
+  plot_type = "density",
+  alpha_range = c(0.1, 0.8),
   plot_header = FALSE
 )
 }
 \arguments{
 \item{data}{data in standard raw data form (time, x, y, trial)}
 
-\item{trial_number}{can be used to select particular trials within the data}
+\item{pID_values}{specify particular values within 'pID' to plot data from certain participants}
 
-\item{bg_image}{The filepath of an image to be added to the plot, for example to show a screenshot of the task.}
+\item{trial_values}{specify particular values within 'trial' to plot data from certain trials}
+
+\item{bg_image}{The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.}
 
 \item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 
 \item{flip_y}{reverse the y axis coordinates (useful if origin is top of the screen)}
 
-\item{alpha_control}{a single value to determine how much of the heatmap to obscure. Between 0 and 1. Lower values include more data in the heatmap}
+\item{plot_type}{Specify the nature of the data displayed. Either "density" (default) or "hex"}
+
+\item{alpha_range}{a pair of values between 0 and 1. The first is a cut off, whereby lower values are not displayed. The second value sets the transparancy of the visible poitns.}
 
 \item{plot_header}{display the header title text which explains graphical features of the plot.}
 }
@@ -38,12 +44,11 @@ Plots a heatmap of raw data.
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-data <- data[data$pNum == 118,]
 # plot all trials data
-plot_heatmap(data, alpha_control = .01)
+plot_heatmap(data, pID_values = 118, alpha_range = c(0.3,0.8))
 
 #plot one trial
-plot_heatmap(data, trial_number = 1)
+plot_heatmap(data, trial_values = 1)
 
 }
 }

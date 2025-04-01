@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' data <- combine_eyes(HCL)
-#' interpolate(data, maxgap = 150, participant_col = "pNum")
+#' interpolate(data, maxgap = 150)
 #'
 #' @importFrom zoo na.approx
 #' @importFrom zoo na.spline

@@ -60,19 +60,16 @@
   }
 }
 
-
 # function to add background image
+#' @import png
 add_BGimg <- function(bg_image_in, res, ggplot_in){
   
-  library(png)
-  library(grid)
-  
-  im <- readPNG(bg_image_in)
+  im <- png::readPNG(bg_image_in)
   im2 <- matrix(rgb(im[,,1],im[,,2],im[,,3], im[,,4] * 0.5), nrow=dim(im)[1]) ## you can change 0.5 to change the alpa
   
   ggplot_in <-
     ggplot_in +
-    annotation_custom(rasterGrob(im2),
+    annotation_custom(grid::rasterGrob(im2),
                       xmin = res[1],
                       xmax = res[2],
                       ymin = res[3],

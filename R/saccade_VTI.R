@@ -1,11 +1,9 @@
 #' Velocity threshold identification of saccades
 #'
-#' Use the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements.
+#' Use the velocity threshold algorithm from Salvucci & Goldberg (2000) to determine saccadic eye movements.
 #' Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
-#' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_col needs to be specified
+#' It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
@@ -19,7 +17,9 @@
 #'
 #' @examples
 #' data <- combine_eyes(HCL)
-#' saccade_VTI(data, participant_col = "pNum")
+#' saccade_VTI(data)
+#' 
+#' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
 saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
 
@@ -36,7 +36,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
 
     data_sac <- data_sac[,c("pID", "trial", "sac_n", "start", "end", "duration",
                             "origin_x", "origin_y", "terminal_x", "terminal_y", "mean_velocity", "peak_velocity")]
-    #data_sac <- data_sac[,c(11,10,1,2,9,3:8)] # reorder cols
+
     row.names(data_sac) <- NULL # remove the row names
     return(as.data.frame(data_sac))
 

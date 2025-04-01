@@ -9,8 +9,7 @@ interpolate(
   maxgap = 150,
   method = "approx",
   sample_rate = NULL,
-  report = FALSE,
-  participant_col = "participant_col"
+  report = FALSE
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ interpolate(
 \item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
 
 \item{report}{default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.}
-
-\item{participant_col}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe of the same shape of the input data
@@ -41,6 +38,6 @@ if not it is handled as single participant data, or the participant_col needs to
 }
 \examples{
 data <- combine_eyes(HCL)
-interpolate(data, maxgap = 150, participant_col = "pNum")
+interpolate(data, maxgap = 150)
 
 }

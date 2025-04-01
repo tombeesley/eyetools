@@ -1,16 +1,13 @@
 #' Fixation detection using a velocity threshold identification method
 #'
-#' Determine fixations by assessing the velocity of eye-movements, using a method that is similar to that proposed by Salvucci & Goldberg (1996).
+#' Determine fixations by assessing the velocity of eye-movements, using a method that is similar to that proposed by Salvucci & Goldberg (2000).
 #' Applies the algorithm used in VTI_saccade and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance.
 #' If they are outside of this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them.
 #' Compared to fixation_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and the resulting data is
 #' treated as a continued fixation (assuming it is within the pixel tolerance set by disp_tol).
 #' Returns a summary of the fixations found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
-#' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_col needs to be specified
-#'
+#' It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
@@ -29,16 +26,16 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' data <- interpolate(data, participant_col = "pNum")
-#' fixation_VTI(data[data$pNum == 119,], participant_col = "pNum")
+#' data <- interpolate(data)
+#' fixation_VTI(data)
 #' }
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
 fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE){
-  if (sum(is.na(data)) > 0) { # if NA present in dataset
-    stop("NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
-  }
+  # if (sum(is.na(data)) > 0) { # if NA present in dataset
+  #   stop("NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
+  # }
 
   .check_data_format(data)
 

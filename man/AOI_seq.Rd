@@ -4,13 +4,7 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(
-  data,
-  AOIs,
-  AOI_names = NULL,
-  participant_col = "participant_col",
-  progress = TRUE
-)
+AOI_seq(data, AOIs, AOI_names = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data}
@@ -18,8 +12,6 @@ AOI_seq(
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
-
-\item{participant_col}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 
 \item{progress}{Display a progress bar}
 }
@@ -32,9 +24,9 @@ Analyses the sequence of entries into defined AOI regions across trials. Can onl
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-fix_d <- fixation_dispersion(data, participant_col = "pNum")
+fix_d <- fixation_dispersion(data)
 
-AOI_seq(fix_d, AOIs = HCL_AOIs, participant_col = "pNum")
+AOI_seq(fix_d, AOIs = HCL_AOIs)
 }
 
 }

@@ -25,13 +25,13 @@ The eyetools package is designed to provide a consistent set of functions that h
 
 You can install eyetools using the following code:
 
-```{r, eval=FALSE}
+```{r install, eval=FALSE}
 install.packages('eyetools')
 ```
 
 A quick note before starting: the following tutorial is written using only the dependencies contained within eyetools, so that means that if you are planning on following this tutorial through, you only need to install eyetools.
 
-```{r}
+```{r library_eyetools}
 
 library(eyetools)
 
@@ -47,7 +47,7 @@ Eyetools has built in example data that can be used while getting to grips with 
 
 Let's load in this binocular data and explore the format. As we can see, the dataset is formed of 31,041 rows and 7 variables
 
-```{r}
+```{r get_data}
 data(HCL, package = "eyetools")
 
 dim(HCL)
@@ -55,11 +55,11 @@ dim(HCL)
 
 To get a basic idea of the contents of the data, we can look at the first 10 observations in the data
 
-We can see that our seven variables contain the participant identifier (`pNum`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`). 
+We can see that our seven variables contain the participant identifier (`pID`), the timepoint of the trial (`time`), the left eye x and y coordinates (`left_x` and `left_y`), the right eye coordinates (`right_x` and `right_y`), as well as a trial identifier (`trial`). 
 
 By default eyetools assumes that the resolution of eye data is in pixels (and a default screen size of 1920x1080), however the functions should work with any units (with no guarantee as it is not tested with units other than pixels).
 
-```{r}
+```{r show_data}
 
 head(HCL, 10)
 
@@ -81,7 +81,7 @@ data <- combine_eyes(HCL)
 
 The above code returns a flattened list of all participants data, and if we take a look at just one participant, we are returned with a dataframe that has x and y variables in place of the left\_\* and right\_\* variables. This is the data format needed by many of the other eyetools functions: time, x, y, and trial. The ordering of the variables should not matter, however most of the functions will impose an ordering in how the information is returned.
 
-```{r show_data}
+```{r show_data_combined}
 head(data) # participant 118
 ```
 
@@ -107,7 +107,7 @@ interpolate_report[[2]]
 
 An additional step that can be beneficial is to pass the eye data through the `smoother()` function. This removes particularly jerky transitions between samples and is critical for the analysis of velocities in the eye-movements. For now, let's store the smoothed data in a new object. We can also ask for a plot of the data so that we can visually inspect it to see how well it fits the data.
 
-```{r}  
+```{r smooth}  
 set.seed(0410) #set seed to show same participant and trials in both chunks
 
 data_smooth <- smoother(data,
@@ -121,7 +121,7 @@ The plot above shows the difference between the raw and smoothed data for a rand
 
 With the default smoothing setting, we can see that the smoothed data does not track the actual data as closely as it could. The lower the value of `span`, the closer the smoothed data represents the raw data. A visual inspection of the plot suggests that a span of .02 is a good value for this data example. It is important that the fixations and saccades are matched closely to ensure data quality. Oversmooth and you end up with significant data loss, undersmooth and all the jerky eye movement is preserved rendering the use of `smoother()` meaningless, so a good inspection and testing of values can be useful.
 
-```{r}
+```{r smooth_2}
 set.seed(0410) #set seed to show same participant and trials in both chunks
 
 data_smooth <- smoother(data, 
@@ -138,7 +138,7 @@ Eyetools has a built in function which allows us to transform the x (or y) value
 
 The keen-eyed will notice that the present data does not contain a variable to specify the counterbalanced positions. This is contained in a separate dataset that holds the behavioural data, including the response times, the outcome, accuracy, and `cue_order` which tells us whether the target cue was on the left (coded as 1) or on the right (coded as 2).
 
-```{r}
+```{r view_beh_data}
 
 data_behavioural <- HCL_behavioural # behavioural data
 
@@ -149,7 +149,7 @@ head(data_behavioural)
 First we need to combine the two datasets based upon the participant identifier. Once the data has been joined we can use `conditional_transform()` to transform the x coordinates across the midline.
 
 
-```{r}
+```{r merge_data}
 
 data <- merge(data_smooth, data_behavioural) # merges with the common variables pNum and trial
 
@@ -171,7 +171,7 @@ In this next stage, we can start to explore the functions available for determin
 
 [^2]: Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-```{r}
+```{r fix_disp}
 data_fixations_disp <- fixation_dispersion(data,
                                            min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
                                            disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
@@ -181,7 +181,7 @@ data_fixations_disp <- fixation_dispersion(data,
 
 The resultant data output from `fixation_dispersion()` presents data by trial and fixation. It gives the start and end time for these fixations along with their duration and the x,y coordinates for the entry of the fixation.
 
-```{r}
+```{r show_fix_disp}
 head(data_fixations_disp) # show sample of output data
 ```
 
@@ -193,7 +193,7 @@ In simple terms, `fixation_VTI()` calculates the saccades within the data and id
 
 The `fixation_VTI()` works best on unsmoothed data (with default settings), as the smoothing process alters the velocity of the eye movement. When working with smoothed data, lowering the default threshold parameter is recommended as the "jerky" saccadic starts are less sudden and so the entry point of a saccade is sooner.
 
-```{r}
+```{r fix_vti}
 
 data_fixations_VTI <- fixation_VTI(data,
                                    threshold = 80, #smoothed data, so use a lower threshold
@@ -205,7 +205,7 @@ data_fixations_VTI <- fixation_VTI(data,
 
 ```
 
-```{r}
+```{r show_fix_vti}
 head(data_fixations_VTI) # show sample of output data for participant 118
 ```
 
@@ -213,7 +213,7 @@ head(data_fixations_VTI) # show sample of output data for participant 118
 
 This is also a sensible point to briefly highlight the underlying saccade detection process. This can be accessed directly using `saccade_VTI()`. This uses the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements. It calculates the length of a saccade based on the velocity of the eye being above a certain threshold.
 
-```{r}
+```{r saccade_VTI}
 
 saccades <- saccade_VTI(data)
 
@@ -225,9 +225,9 @@ head(saccades)
 
 As mentioned above, a supplementary function exists to compare the two fixation algorithms, the imaginatively named `compare_algorithms()`. To demonstrate this, we apply it against a reduced dataset of just one participant. It takes a combination of the parameters from both the fixation algorithms, and by default  prints a summary table that is also stored in the returned list. It is recommended to store this in an object as the output can be quite long depending on the number of trials.
 
-```{r}
+```{r compare_fix_alg}
 #some functions are best with single-participant data
-data_119 <- data[data$pNum == 119,]
+data_119 <- data[data$pID == 119,]
 
 comparison <- compare_algorithms(data_119,
                                  plot_fixations = TRUE,
@@ -247,7 +247,7 @@ Once we have collected our fixation data (we will proceed using the `fixations_d
 
 For the `AOI_` "family" of functions, we need to specify where our AOIs were presented on the screen. This will enable us to determine when a participant enters or exits these areas.
 
-```{r}
+```{r set_AOIs}
 # set areas of interest
 AOI_areas <- data.frame(matrix(nrow = 3, ncol = 4))
 colnames(AOI_areas) <- c("x", "y", "width_radius", "height")
@@ -261,7 +261,7 @@ AOI_areas
 
 `AOI_time()` analyses the total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both). This gives a cumulative total time spent for each trial.
 
-```{r}
+```{r AOI_time}
 
 data_AOI_time <- AOI_time(data = data_fixations_disp, 
                           data_type = "fix",
@@ -272,7 +272,7 @@ head(data_AOI_time, 10)
 
 The returned data show the time in milliseconds on each area of interest, per trial. It is also possible to specify names for the different areas of interest. Or you can request that the function returns the time spent in AOIs as a proportion of overall time in the trial, which requires an input vector that has the values, luckily this is something contained in the `HCL_behavioural` obect.
 
-```{r}
+```{r AOI_time_2}
 AOI_time(data = data_fixations_disp,
          data_type = "fix",
          AOIs = AOI_areas, 
@@ -283,13 +283,13 @@ AOI_time(data = data_fixations_disp,
 
 As mentioned, it also works with raw data too:
 
-```{r}
+```{r AOI_time_3}
 AOI_time(data = data, data_type = "raw", AOIs = AOI_areas)
 ```
 
 When working with raw data, you can also take advantage of `AOI_time_binned()`, which enables data binning based on time, and calculating time spent in AOIs as a result. Using `bin_length`, you specify a desired length of bin (say 100ms) and splits data into these bins, with ant remaining data being dropped from the analysis (as it does not form a complete bin which could skew analyses). As with `AOI_time()` you can specify either absolute or proportional time spent.
 
-```{r}
+```{r binned_time}
 
 binned_time <- AOI_time_binned(data = data_119,
                                AOIs = AOI_areas, 
@@ -303,7 +303,7 @@ head(binned_time)
 
 The `AOI_seq()` function analyses the sequence of entries into defined AOI regions across trials. This works with fixation data.
 
-```{r}  
+```{r AOI_seq}  
 
 data_AOI_sequence <- AOI_seq(data_fixations_disp,
                              AOI_areas,         
@@ -322,7 +322,7 @@ Finally, eyetools contains `plot_*` functions, `plot_seq()` `plot_spatial()`, an
 
 The most simple use is to just pass it raw data:
 
-```{r}
+```{r plot_seq}
 
 plot_seq(data, pID_values = 119, trial_values = 1)
 
@@ -330,9 +330,9 @@ plot_seq(data, pID_values = 119, trial_values = 1)
 
 But the parameters of `plot_seq()` can help exploration be more informative. We can also add a background image and/or the AOIs we have defined:
 
-```{r}
+```{r plot_seq_2}
 
-plot_seq(data, pID_values = 119, trial_values = 1, bg_image = "data/HCL_sample_image.jpg") # add background image
+plot_seq(data, pID_values = 119, trial_values = 1, bg_image = "data/HCL_sample_image.png") # add background image
 
 plot_seq(data, pID_values = 119, trial_values = 1, AOIs = AOI_areas) # add AOIs
 
@@ -340,15 +340,15 @@ plot_seq(data, pID_values = 119, trial_values = 1, AOIs = AOI_areas) # add AOIs
 
 You also have the option to split the time into bins to reduce the amount of data plotted
 
-```{r}
+```{r plot_seq_3}
 plot_seq(data, pID_values = 119, trial_values = 1, AOIs = AOI_areas, bin_time = 1000)
 
 ```
 
 `plot_spatial()` is a tool for visualising raw eye-data, processed fixations, and saccades. Fixations can be labeled in the order they were made. You can also overlay areas of interest (AOIs) and customise the resolution. It takes separate parameters for fixations, raw data, and saccades so they can be plotted simultaneously. You can also specify the trial_number to plot.
 
-```{r}
-plot_spatial(raw_data = data, pID_values = 119, trial_values = 6, trial_number = 6)
+```{r plot_spatial}
+plot_spatial(raw_data = data, pID_values = 119, trial_values = 6)
 
 plot_spatial(fix_data = fixation_dispersion(data), pID_values = 119, trial_values = 6)
 
@@ -358,7 +358,7 @@ plot_spatial(sac_data = saccade_VTI(data), pID_values = 119, trial_values = 6)
 
 Or as mentioned, simultaneously:
 
-```{r}
+```{r plot_spatial_2}
 plot_spatial(raw_data = data_119,
              fix_data = fixation_dispersion(data_119),
              sac_data = saccade_VTI(data_119),
@@ -369,7 +369,7 @@ plot_spatial(raw_data = data_119,
 
 The function `plot_AOI_growth()` helps visualise how attention is directed across the development of a trial. It presents a line graph of the change in proportion of time spent in each AOI region across the trial time.
 
-```{r}
+```{r plot_AOI_growth}
 #standard plot with absolute time
 plot_AOI_growth(data = data, 
                 pID_values = 119, 
