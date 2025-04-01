@@ -1,3 +1,5 @@
+# eyetools 0.9.0
+
 # eyetools 0.8.2
 * removed the need to specify a name for the participant column. eyetools now expects the column 'pID' in all input data
 * all 'plot_' functions now have a 'pID_values' parameter to enable selection of certain participant data to plot
