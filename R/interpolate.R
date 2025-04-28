@@ -4,9 +4,7 @@
 #' the proportion of missing data before and after the interpolation process. This is handy
 #' for evaluating the effectiveness of the repair.
 #'
-#' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_col needs to be specified
+#' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
 #' @param data dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)
 #' @param maxgap maximum time gap of consecutive trackloss to fill (in ms). Any longer gaps will be left unchanged (see zoo package)

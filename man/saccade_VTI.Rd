@@ -23,7 +23,7 @@ Use the velocity threshold algorithm from Salvucci & Goldberg (2000) to determin
 Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \details{
-It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}.
 }
 \examples{
 data <- combine_eyes(HCL)

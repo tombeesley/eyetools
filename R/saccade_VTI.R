@@ -3,7 +3,7 @@
 #' Use the velocity threshold algorithm from Salvucci & Goldberg (2000) to determine saccadic eye movements.
 #' Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
-#' It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
+#' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
@@ -108,7 +108,8 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
     # add col headers, trial number and return
     colnames(trial_sac_store) <- c("start", "end", "origin_x", "origin_y", "terminal_x", "terminal_y",
                                    "mean_velocity", "peak_velocity", "duration", "sac_n")
-    # add participant_col and trial number
+    
+    # add pID and trial number
     trial_sac_store["trial"] <- trialNumber
     trial_sac_store["pID"] <- ppt_label
     return(trial_sac_store)

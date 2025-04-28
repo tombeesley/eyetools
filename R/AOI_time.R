@@ -1,10 +1,8 @@
-#' Time analysis of area of interest entries
+#' Analysis of time spent in areas of interest
 #'
 #' Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
-#'
-#' AOI_time can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_col` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_col needs to be specified
+#' 
+#' Analyses data separately for each unique combination of values in `pID` and `trial`. Returned values can be absolute time or proportion of time over the period.
 #'
 #' @param data A dataframe  of either fixation data (from fix_dispersion) or raw data
 #' @param data_type Whether data is a fixation ("fix") or raw data ("raw")
@@ -38,11 +36,6 @@
 
 
 AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL) {
-
-  # #first check for multiple/single ppt data
-  # test <- .check_ppt_n_in(data)
-  # participant_col <- test[[1]]
-  # data <- test[[2]]
 
   internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
     if (is.null(data_type) == TRUE) {

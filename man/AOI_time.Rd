@@ -2,7 +2,7 @@
 % Please edit documentation in R/AOI_time.R
 \name{AOI_time}
 \alias{AOI_time}
-\title{Time analysis of area of interest entries}
+\title{Analysis of time spent in areas of interest}
 \usage{
 AOI_time(
   data,
@@ -36,9 +36,7 @@ a dataframe containing the time on the passed AOIs for each trial. One column fo
 Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
 }
 \details{
-AOI_time can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_col} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_col needs to be specified
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}. Returned values can be absolute time or proportion of time over the period.
 }
 \examples{
 

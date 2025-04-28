@@ -1,6 +1,8 @@
 #' Sequence analysis of area of interest entries
 #'
-#' Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.
+#' Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events. 
+#' Assumes that AOIs are non-overlapping and hasn't been tested with overlapping AOIs. Consecutive fixations within an AOI are grouped together as a single entry.
+#' Non-consecutive fixations in the same AOI (i.e., with an intervening fixation in no AOI) are treated as two separate entries. 
 #'
 #' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
@@ -91,7 +93,7 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
 
   # this gives unique values in each row of which AOI had a hit
   aoi_entries <- as.data.frame(as.matrix(aoi_entries)%*%diag(c(1:nrow(AOIs))))
-
+  
   aoi_entries$string <- Reduce(paste0, aoi_entries) # get a string to check for duplicates
 
   aoi_entries$start <- trial_data$start
@@ -109,7 +111,9 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
   #next section removes duplicate consecutive AOI entries
   aoi_entries <- aoi_entries[!duplicated(with(rle(aoi_entries$string),rep(seq_along(values), lengths))),]
   #remove non AOI region fixations
-  aoi_entries <- aoi_entries[aoi_entries$string != "000",]
+  
+  
+  aoi_entries <- aoi_entries[aoi_entries$string != strrep("0", nrow(AOIs)),]
 
   aoi_entries$AOI <- rowSums(aoi_entries[, -((ncol(aoi_entries) - 3):ncol(aoi_entries))]) # just the AOIs, remove all others
 

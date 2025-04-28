@@ -1,4 +1,5 @@
 # eyetools 0.9.1
+* fixed issue with AOI_seq() not working with more than 3 AOIs
 
 # eyetools 0.9.0
 * removed the need to specify a name for the participant column. eyetools now expects the column 'pID' in all input data

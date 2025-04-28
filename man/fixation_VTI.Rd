@@ -44,7 +44,7 @@ treated as a continued fixation (assuming it is within the pixel tolerance set b
 Returns a summary of the fixations found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \details{
-It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}.
 }
 \examples{
 \donttest{

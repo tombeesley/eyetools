@@ -7,7 +7,7 @@
 #' treated as a continued fixation (assuming it is within the pixel tolerance set by disp_tol).
 #' Returns a summary of the fixations found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
-#' It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
+#' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
@@ -69,7 +69,6 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
       data <- smoother(data)
     }
 
-    #if(is.null(data[[participant_col]])) data$participant_col <- ppt_label
     #### THIS NEXT CHUNK CALCULATES THE DISTANCES AND VELOCITY OF THE SACCADES ####
     trialNumber <- data$trial[1]
     x <- data$x

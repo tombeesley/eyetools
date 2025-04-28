@@ -20,6 +20,8 @@ a dataframe containing the sequence of entries into AOIs on each trial, entry/ex
 }
 \description{
 Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.
+Assumes that AOIs are non-overlapping and hasn't been tested with overlapping AOIs. Consecutive fixations within an AOI are grouped together as a single entry.
+Non-consecutive fixations in the same AOI (i.e., with an intervening fixation in no AOI) are treated as two separate entries.
 }
 \examples{
 \donttest{

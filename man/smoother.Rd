@@ -20,9 +20,7 @@ a dataframe of the same shape as the input data
 A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
 }
 \details{
-It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_col} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_col needs to be specified
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}.
 }
 \examples{
 data <- combine_eyes(HCL)
