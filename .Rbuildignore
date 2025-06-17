@@ -9,3 +9,5 @@
 ^_config\.yml$
 ^README\.Rmd$
 ^inst/extdata$
+^CRAN-SUBMISSION$
+^cran-comments\.md$
