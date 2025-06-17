@@ -1,3 +1,5 @@
+# eyetools 0.9.2
+
 # eyetools 0.9.1
 * fixed issue with AOI_seq() not working with more than 3 AOIs
 
