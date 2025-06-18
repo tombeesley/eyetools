@@ -32,6 +32,15 @@ It is free to use under the GNU General Public Licence.
 
 **To install use `install.packages("eyetools")`**
 
+FOR USERS OF VERSIONS PRIOR TO 0.9.2, please note the following changes that will probably break older code:
+
+- We have removed the need to specify a name for the participant column.
+  eyetools now expects the column ‘pID’ in all input data
+- all ‘plot\_’ functions now have a ‘pID_values’ parameter to enable
+  selection of certain participant data to plot
+- renamed ‘trial_number’ to ‘trial_values’ in all relevant functions,
+  for consistency with the above change to pID_values
+  
 Available functions in the latest CRAN version:
 
 | Implemented functions | Description |
@@ -65,15 +74,3 @@ have bugs. You can install this using
 the latest version.
 
 The current development version is: 0.9.1
-
-The main changes are:
-
-- removed the need to specify a name for the participant column.
-  eyetools now expects the column ‘pID’ in all input data
-- all ‘plot\_’ functions now have a ‘pID_values’ parameter to enable
-  selection of certain participant data to plot
-- renamed ‘trial_number’ to ‘trial_values’ in all relevant functions,
-  for consistency with the above change to pID_values
-- fixed an issue where colour scale for fixations was dependent on
-  showing fixation label
-- cosmetic changes made to plotting of AOIs
