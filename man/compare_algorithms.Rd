@@ -48,8 +48,8 @@ The raw data is run through both algorithms (using the same specified dispersion
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-data <- interpolate(data, participant_ID = "pNum")
-compare_algorithms(data[data$pNum == 119,])
+data <- interpolate(data)
+compare_algorithms(data[data$pID == 119,])
 }
 
 }

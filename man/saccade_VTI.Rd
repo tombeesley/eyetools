@@ -4,13 +4,7 @@
 \alias{saccade_VTI}
 \title{Velocity threshold identification of saccades}
 \usage{
-saccade_VTI(
-  data,
-  sample_rate = NULL,
-  threshold = 150,
-  min_dur = 20,
-  participant_ID = "participant_ID"
-)
+saccade_VTI(data, sample_rate = NULL, threshold = 150, min_dur = 20)
 }
 \arguments{
 \item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
@@ -20,22 +14,22 @@ saccade_VTI(
 \item{threshold}{velocity threshold (degrees of VA / sec) to be used for identifying saccades}
 
 \item{min_dur}{minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold}
-
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a data frame giving the saccades found by trial
 }
 \description{
-Use the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements.
+Use the velocity threshold algorithm from Salvucci & Goldberg (2000) to determine saccadic eye movements.
 Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \details{
-It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}.
 }
 \examples{
 data <- combine_eyes(HCL)
-saccade_VTI(data, participant_ID = "pNum")
+saccade_VTI(data)
+
+}
+\references{
+Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 }

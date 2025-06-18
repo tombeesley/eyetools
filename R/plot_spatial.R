@@ -7,8 +7,9 @@
 #' @param fix_data data output from fixation function
 #' @param sac_data data output from saccade function
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.
-#' @param trial_number can be used to select particular trials within the data
-#' @param bg_image The filepath of an image to be added to the plot, for example to show a screenshot of the task.
+#' @param pID_values specify particular values within 'pID' to plot data from certain participants
+#' @param trial_values specify particular values within 'trial' to plot data from certain trials
+#' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
 #' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param show_fix_order label the fixations in the order they were made
@@ -20,15 +21,14 @@
 #' @examples
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' data <- data[data$pNum == 118,]
 #' # plot the raw data
-#' plot_spatial(raw_data = data)
+#' plot_spatial(raw_data = data, pID_values = 118)
 #'
 #' # plot both raw and fixation data together
-#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data))
+#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), pID_values = 118)
 #'
 #' #plot one trial
-#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_number = 1)
+#' plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_values = 6)
 #'
 #' }
 #' @import ggplot2
@@ -41,15 +41,16 @@ plot_spatial <- function(raw_data = NULL,
                          fix_data = NULL,
                          sac_data = NULL,
                          AOIs = NULL,
-                         trial_number = NULL,
+                         pID_values = NULL,
+                         trial_values = NULL,
                          bg_image = NULL,
                          res = c(0,1920,0,1080),
                          flip_y = FALSE,
                          show_fix_order = TRUE,
                          plot_header = FALSE) {
 
-  if(!is.null(trial_number) && !is.numeric(trial_number)) stop("trial_number input expected as numeric values")
-
+  if(!is.null(trial_values) && !is.numeric(trial_values)) stop("trial_values input expected as numeric values")
+  
   final_g <- ggplot()
 
   # setting axes limits and reversing y
@@ -96,22 +97,18 @@ plot_spatial <- function(raw_data = NULL,
 
   # add raw data
   if (is.null(raw_data)==FALSE) {
-
-    if(!is.null(trial_number)) {
-      raw_data <- raw_data[raw_data$trial %in% trial_number,]
-      if(nrow(raw_data) == 0) stop("no trial found for raw data. Check the data has the trials")
-    }
-
+    
+    raw_data <- .select_pID_values(raw_data, pID_values, allow_random = FALSE)
+    raw_data <- .select_trial_values(raw_data, trial_values, allow_random = FALSE)
+    
     final_g <- add_raw(raw_data, final_g)
   }
 
   # PLOT FIXATION DATA
   if (is.null(fix_data)==FALSE) {
 
-    if(!is.null(trial_number)) {
-      fix_data <- fix_data[fix_data$trial %in% trial_number,]
-      if(nrow(fix_data) == 0) stop("no trial found for fixation data. Check the data has the trials")
-    }
+    fix_data <- .select_pID_values(fix_data, pID_values, allow_random = FALSE)
+    fix_data <- .select_trial_values(fix_data, trial_values, allow_random = FALSE)
 
     fix_data$fix_n <- seq_len(nrow(fix_data))
 
@@ -125,7 +122,10 @@ plot_spatial <- function(raw_data = NULL,
       final_g +
       geom_circle(data = fix_data,
                   aes(x0 = x, y0 = y, r = disp_tol/2, fill = duration),
-                  alpha = .4)
+                  alpha = .4) + 
+      scale_fill_viridis(breaks = c(min(duration),
+                                    max(duration)),
+                         labels = c("low", "high"))
     if (show_fix_order == TRUE) {
 
       final_g <-
@@ -134,10 +134,7 @@ plot_spatial <- function(raw_data = NULL,
                    aes(x = x, y = y, label = fix_n),
                    hjust = 1,
                    vjust = 1,
-                   size = 4) +
-        scale_fill_viridis(breaks = c(min(duration),
-                                               max(duration)),
-                                    labels = c("low", "high"))
+                   size = 4)
 
     }
 
@@ -147,10 +144,8 @@ plot_spatial <- function(raw_data = NULL,
   # PLOT SACCADE DATA
   if (is.null(sac_data)==FALSE){
 
-    if(!is.null(trial_number)) {
-      sac_data <- sac_data[sac_data$trial %in% trial_number,]
-      if(nrow(sac_data) == 0) stop("no trial found for saccade data. Check the data has the trials")
-    }
+    sac_data <- .select_pID_values(sac_data, pID_values, allow_random = FALSE)
+    sac_data <- .select_trial_values(sac_data, trial_values, allow_random = FALSE)
 
     origin_x <- sac_data$origin_x
     origin_y <- sac_data$origin_y
@@ -202,61 +197,11 @@ add_raw <- function(dataIn, ggplot_in){
     ggplot_in +
     geom_point(data = dataIn,
                aes(x = x, y = y),
-               #size = 1,
-               shape = 4,
+               shape = 16,
+               size = 3,
                alpha = .5,
                na.rm = TRUE)
 
   return(ggplot_in)
 }
 
-# function to add AOIs
-add_AOIs <- function(AOIs, ggplot_in){
-
-  x <- AOIs$x
-  y <- AOIs$y
-  width_radius <- AOIs$width_radius
-  height <- AOIs$height
-
-  rect_AOIs <- AOIs[!is.na(AOIs$height),]
-  circle_AOIs <- AOIs[is.na(AOIs$height),] # those with NAs in height column
-
-  # add any rectangle AOIs
-  if (is.null(rect_AOIs)==FALSE) {
-    ggplot_in <-
-      ggplot_in +
-      geom_tile(data = rect_AOIs,
-                aes(x = x, y = y, width = width_radius, height = height),
-                colour = "dark blue",
-                fill = "blue",
-                alpha = .1)
-  }
-
-  # add any circle AOIs
-  if (is.null(circle_AOIs)==FALSE) {
-    ggplot_in <-
-      ggplot_in +
-      geom_circle(data = circle_AOIs,
-                  aes(x0 = x, y0 = y, r = width_radius),
-                  colour = "dark blue",
-                  fill = "blue",
-                  alpha = .1)
-  }
-
-  return(ggplot_in)
-
-}
-
-# function to add background image
-add_BGimg <- function(bg_image_in, res, ggplot_in){
-  img <- magick::image_read(bg_image_in)
-  ggplot_in <-
-    ggplot_in +
-    annotation_raster(img,
-                      xmin = res[1],
-                      xmax = res[2],
-                      ymin = res[3],
-                      ymax = res[4])
-  return(ggplot_in)
-
-}

@@ -1,17 +1,14 @@
 #' Velocity threshold identification of saccades
 #'
-#' Use the velocity threshold algorithm from Salvucci & Goldberg (1996) to determine saccadic eye movements.
+#' Use the velocity threshold algorithm from Salvucci & Goldberg (2000) to determine saccadic eye movements.
 #' Returns a summary of the saccades found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 #'
-#' It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
 #' @param min_dur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold
-#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @importFrom stats dist aggregate
 #' @importFrom pbapply pblapply
@@ -20,14 +17,11 @@
 #'
 #' @examples
 #' data <- combine_eyes(HCL)
-#' saccade_VTI(data, participant_ID = "pNum")
+#' saccade_VTI(data)
+#' 
+#' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20, participant_ID = "participant_ID"){
-
-  #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_ID, data)
-  participant_ID <- test[[1]]
-  data <- test[[2]]
+saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
 
   internal_saccade_VTI <- function(data, sample_rate, threshold, min_dur) {
 
@@ -40,9 +34,9 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20,
     data_sac <- pbapply::pblapply(data, saccade_VTI_trial, sample_rate, threshold, min_dur)
     data_sac <- do.call(rbind.data.frame,data_sac)
 
-    data_sac <- data_sac[,c(participant_ID, "trial", "sac_n", "start", "end", "duration",
+    data_sac <- data_sac[,c("pID", "trial", "sac_n", "start", "end", "duration",
                             "origin_x", "origin_y", "terminal_x", "terminal_y", "mean_velocity", "peak_velocity")]
-    #data_sac <- data_sac[,c(11,10,1,2,9,3:8)] # reorder cols
+
     row.names(data_sac) <- NULL # remove the row names
     return(as.data.frame(data_sac))
 
@@ -50,7 +44,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20,
 
   saccade_VTI_trial <- function(data, sample_rate, threshold, min_dur){
 
-    ppt_label <- data[[participant_ID]][1]
+    ppt_label <- data$pID[1]
 
     trialNumber <- data$trial[1]
     x <- data$x
@@ -114,18 +108,17 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20,
     # add col headers, trial number and return
     colnames(trial_sac_store) <- c("start", "end", "origin_x", "origin_y", "terminal_x", "terminal_y",
                                    "mean_velocity", "peak_velocity", "duration", "sac_n")
-    # add participant_ID and trial number
+    
+    # add pID and trial number
     trial_sac_store["trial"] <- trialNumber
-    trial_sac_store[participant_ID] <- ppt_label
+    trial_sac_store["pID"] <- ppt_label
     return(trial_sac_store)
   }
 
-  data <- split(data, data[[participant_ID]])
+  data <- split(data, data$pID)
   out <- lapply(data, internal_saccade_VTI, sample_rate, threshold, min_dur)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
-
-  out <- .check_ppt_n_out(out)
 
   return(out)
 

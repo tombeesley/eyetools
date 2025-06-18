@@ -9,7 +9,8 @@ plot_spatial(
   fix_data = NULL,
   sac_data = NULL,
   AOIs = NULL,
-  trial_number = NULL,
+  pID_values = NULL,
+  trial_values = NULL,
   bg_image = NULL,
   res = c(0, 1920, 0, 1080),
   flip_y = FALSE,
@@ -26,9 +27,11 @@ plot_spatial(
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.}
 
-\item{trial_number}{can be used to select particular trials within the data}
+\item{pID_values}{specify particular values within 'pID' to plot data from certain participants}
 
-\item{bg_image}{The filepath of an image to be added to the plot, for example to show a screenshot of the task.}
+\item{trial_values}{specify particular values within 'trial' to plot data from certain trials}
+
+\item{bg_image}{The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.}
 
 \item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 
@@ -48,15 +51,14 @@ in the order they were made. Can overlay areas of interest (AOIs) and customise 
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-data <- data[data$pNum == 118,]
 # plot the raw data
-plot_spatial(raw_data = data)
+plot_spatial(raw_data = data, pID_values = 118)
 
 # plot both raw and fixation data together
-plot_spatial(raw_data = data, fix_data = fixation_dispersion(data))
+plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), pID_values = 118)
 
 #plot one trial
-plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_number = 1)
+plot_spatial(raw_data = data, fix_data = fixation_dispersion(data), trial_values = 6)
 
 }
 }

@@ -4,7 +4,7 @@
 \alias{smoother}
 \title{Smoothing of raw data}
 \usage{
-smoother(data, span = 0.1, plot = FALSE, participant_ID = "participant_ID")
+smoother(data, span = 0.05, plot = FALSE)
 }
 \arguments{
 \item{data}{A dataframe with raw data (time, x, y, trial) for one participant}
@@ -12,8 +12,6 @@ smoother(data, span = 0.1, plot = FALSE, participant_ID = "participant_ID")
 \item{span}{From stats::loess. The parameter alpha which controls the degree of smoothing.}
 
 \item{plot}{whether to plot the raw and smoothed plot for inspection}
-
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe of the same shape as the input data
@@ -22,16 +20,14 @@ a dataframe of the same shape as the input data
 A wrapper for the stats::loess function, with default parameters suitable for smoothing raw eye data
 }
 \details{
-It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}.
 }
 \examples{
 data <- combine_eyes(HCL)
 
-smoother(data, participant_ID = "pNum")
+smoother(data)
 
 #with an inspection plot
-smoother(data, span = .02, participant_ID = "pNum", plot = TRUE)
+smoother(data, span = .02, plot = TRUE)
 
 }

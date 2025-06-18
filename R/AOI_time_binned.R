@@ -2,12 +2,10 @@
 #'
 #' Analyses total time on defined AOI regions across trials separated into bins. Works with raw data as the input.
 #' Data can be separated into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
-#' consistent across varying lengths of trial. Any r=data that cannot fill a bin (tpyically the last few milliseconds of the trial) are dropped to
+#' consistent across varying lengths of trial. Any data that cannot fill a bin (typically the last few milliseconds of the trial) are dropped to
 #' ensure that bins are of a consistent length
 #'
-#' AOI_time_binned can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#' AOI_time_binned can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 #'
 #' @param data A dataframe of raw data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
@@ -16,7 +14,6 @@
 #' @param bin_length the time duration to be used for each bin.
 #' @param max_time maximum length of time to use, default is total trial length
 #' @param as_prop whether to return time in AOI as a proportion of the total time of trial
-#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 #' @export
@@ -28,26 +25,19 @@
 #'
 #'
 #' #with bins of 100ms each and only for the first 2000ms
-#' AOI_time_binned(data = data, AOIs = HCL_AOIs, participant_ID = "pNum",
+#' AOI_time_binned(data = data, AOIs = HCL_AOIs, 
 #'     bin_length = 100, max_time = 2000)
 #' }
 #'
 
 
-AOI_time_binned <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, bin_length = NULL, max_time = NULL, as_prop = FALSE, participant_ID = "participant_ID") {
+AOI_time_binned <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, bin_length = NULL, max_time = NULL, as_prop = FALSE) {
 
   if(missing(bin_length)) stop("Requires bin_length")
 
-  #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_ID, data)
-  participant_ID <- test[[1]]
-  data <- test[[2]]
-  # dataframe to hold AOI entry results
-  # columns are trial, AOI time * number of AOIs
-
   internal_AOI_time_binned <- function(data, AOIs, AOI_names, sample_rate, bin_length, max_time) {
 
-    ppt_label <- data[[participant_ID]][[1]]
+    ppt_label <- data$pID[1]
 
     # process as raw data input
     proc_data <- lapply(split(data, data$trial),
@@ -67,17 +57,16 @@ data <- do.call('rbind.data.frame', proc_data)
 
     data <- cbind(ppt_label, data)
 
-    colnames(data) <- c(participant_ID, AOI_name_text)
+    colnames(data) <- c("pID", AOI_name_text)
 
     return(data)
   }
 
-  data <- split(data, data[[participant_ID]])
+  data <- split(data, data$pID)
   out <- lapply(data, internal_AOI_time_binned, AOIs, AOI_names, sample_rate, bin_length, max_time)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-  out <- .check_ppt_n_out(out)
   if (as_prop) {
 
     #calculate prop

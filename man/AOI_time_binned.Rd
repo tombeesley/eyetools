@@ -11,8 +11,7 @@ AOI_time_binned(
   sample_rate = NULL,
   bin_length = NULL,
   max_time = NULL,
-  as_prop = FALSE,
-  participant_ID = "participant_ID"
+  as_prop = FALSE
 )
 }
 \arguments{
@@ -29,8 +28,6 @@ AOI_time_binned(
 \item{max_time}{maximum length of time to use, default is total trial length}
 
 \item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}
-
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
@@ -38,13 +35,11 @@ a dataframe containing the time on the passed AOIs for each trial. One column fo
 \description{
 Analyses total time on defined AOI regions across trials separated into bins. Works with raw data as the input.
 Data can be separated into bins of a given length of time and the number of bins per trial is calculated automatically, keeping the bin length
-consistent across varying lengths of trial. Any r=data that cannot fill a bin (tpyically the last few milliseconds of the trial) are dropped to
+consistent across varying lengths of trial. Any data that cannot fill a bin (typically the last few milliseconds of the trial) are dropped to
 ensure that bins are of a consistent length
 }
 \details{
-AOI_time_binned can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+AOI_time_binned can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 }
 \examples{
 
@@ -53,7 +48,7 @@ data <- combine_eyes(HCL)
 
 
 #with bins of 100ms each and only for the first 2000ms
-AOI_time_binned(data = data, AOIs = HCL_AOIs, participant_ID = "pNum",
+AOI_time_binned(data = data, AOIs = HCL_AOIs, 
     bin_length = 100, max_time = 2000)
 }
 

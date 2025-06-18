@@ -84,7 +84,7 @@ Returns a summary of the fixations found per trial, including start and end coor
 <span>  disp_tol <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  smooth <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  participant_ID <span class="op">=</span> <span class="st">"participant_ID"</span></span>
+<span>  participant_col <span class="op">=</span> <span class="st">"participant_col"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -122,7 +122,7 @@ Returns a summary of the fixations found per trial, including start and end coor
 <dd><p>Display a progress bar</p></dd>
 
 
-<dt>participant_ID</dt>
+<dt>participant_col</dt>
 <dd><p>the variable that determines the participant identifier. If no column present, assumes a single participant</p></dd>
 
 </dl></div>
@@ -135,8 +135,8 @@ Returns a summary of the fixations found per trial, including start and end coor
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named <code>participant_ID</code> by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified</p>
+The function looks for an identifier named <code>participant_col</code> by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_col needs to be specified</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -147,8 +147,8 @@ if not it is handled as single participant data, or the participant_ID needs to 
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine_eyes.html">combine_eyes</a></span><span class="op">(</span><span class="va">HCL</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">fixation_VTI</span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">119</span>,<span class="op">]</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">fixation_VTI</span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">119</span>,<span class="op">]</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     pNum trialNumber fix_n start   end duration         x        y min_dur</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    119           1     1     0   223      223  972.1103 765.7244     150</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    119           1     2   240   419      179  937.0440 643.6233     150</span>

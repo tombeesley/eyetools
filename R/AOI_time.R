@@ -1,10 +1,8 @@
-#' Time analysis of area of interest entries
+#' Analysis of time spent in areas of interest
 #'
 #' Analyses total time on defined AOI regions across trials. Works with fixation and raw data as the input (must use one or the other, not both).
-#'
-#' AOI_time can take either single participant data or multiple participants where there is a variable for unique participant identification.
-#' The function looks for an identifier named `participant_ID` by default and will treat this as multiple-participant data as default,
-#' if not it is handled as single participant data, or the participant_ID needs to be specified
+#' 
+#' Analyses data separately for each unique combination of values in `pID` and `trial`. Returned values can be absolute time or proportion of time over the period.
 #'
 #' @param data A dataframe  of either fixation data (from fix_dispersion) or raw data
 #' @param data_type Whether data is a fixation ("fix") or raw data ("raw")
@@ -13,7 +11,6 @@
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param as_prop whether to return time in AOI as a proportion of the total time of trial
 #' @param trial_time needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset
-#' @param participant_ID the variable that determines the participant identifier. If no column present, assumes a single participant
 #'
 #' @return a dataframe containing the time on the passed AOIs for each trial. One column for each AOI separated by trial.
 #' @export
@@ -24,28 +21,21 @@
 #'
 #' \donttest{
 #' data <- combine_eyes(HCL)
-#' fix_d <- fixation_dispersion(data, participant_ID = "pNum")
+#' fix_d <- fixation_dispersion(data)
 #'
 #' # fixation data
-#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum")
+#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs)
 #'
 #' #raw data
-#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs, participant_ID = "pNum")
+#' AOI_time(data = data, data_type = "raw", AOIs = HCL_AOIs)
 #'
 #' #as proportional data
-#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs, participant_ID = "pNum",
+#' AOI_time(data = fix_d, data_type = "fix", AOIs = HCL_AOIs,
 #'          as_prop = TRUE, trial_time = HCL_behavioural$RT)
 #'}
 
 
-AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL, participant_ID = "participant_ID") {
-
-  #first check for multiple/single ppt data
-  test <- .check_ppt_n_in(participant_ID, data)
-  participant_ID <- test[[1]]
-  data <- test[[2]]
-  # dataframe to hold AOI entry results
-  # columns are trial, AOI time * number of AOIs
+AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL) {
 
   internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
     if (is.null(data_type) == TRUE) {
@@ -54,7 +44,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
     } else if (data_type == "fix") {
 
-      ppt_label <- data[[participant_ID]][[1]]
+      ppt_label <- data$pID[1]
       # process as fixation data input
       proc_data <- sapply(split(data, data$trial),
                           AOI_time_trial_process_fix,
@@ -63,9 +53,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
       data <- cbind(unique(data$trial), t(proc_data))
 
     } else if(data_type == "raw") {
-      ppt_label <- data[[participant_ID]][[1]]
-
-
+      ppt_label <- data$pID[1]
 
       # process as raw data input
       proc_data <- sapply(split(data, data$trial),
@@ -99,17 +87,17 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
 
     long_data <- cbind(ppt_label, long_data)
 
-    colnames(long_data) <- c(participant_ID, "trial", "time", "AOI")
+    colnames(long_data) <- c("pID", "trial", "time", "AOI")
 
     return(long_data)
   }
 
-  data <- split(data, data[[participant_ID]])
+  data <- split(data, data$pID)
   out <- lapply(data, internal_AOI_time, data_type, AOIs, AOI_names, sample_rate)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
-  out <- .check_ppt_n_out(out)
+  #out <- .check_ppt_n_out(out)
 
   if (as_prop) {
 
@@ -118,7 +106,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
     trial_time <- data.frame(trial_time)
     trial_time <- trial_time[rep(seq_len(nrow(trial_time)), each = nrow(AOIs)), ]
 
-    out <- out[order(out$pNum, out$trial),]
+    out <- out[order(out$pID, out$trial),]
 
     out$trial_time <- trial_time
     out$time <- out$time/out$trial_time
@@ -127,7 +115,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
   }
 
   #reorder
-  out <- out[, c(participant_ID, "trial", "AOI", "time")]
+  out <- out[, c("pID", "trial", "AOI", "time")]
   return(out)
 
 }

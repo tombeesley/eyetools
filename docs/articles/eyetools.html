@@ -158,11 +158,11 @@ units other than pixels).</p>
 <p>eyetools functions can accept either single-participant data or
 multi-participant data. By default, most functions assume that data is
 of a single participant <strong>unless</strong> a participant identifier
-column called <code>participant_ID</code> is present,in which case the
+column called <code>participant_col</code> is present,in which case the
 data is handled as multi-participant. In cases where participants are
 identified with a different variable, functions accept a parameter of
-<code>participant_ID</code> that takes a character string of the
-identifying column. In situations where participant_ID is not declared,
+<code>participant_col</code> that takes a character string of the
+identifying column. In situations where participant_col is not declared,
 and when duplicated non-consecutive trials are detected (that implies
 multi-participant data being input as single-participant), the function
 will error. This is a good point to then check your data structure,
@@ -216,14 +216,14 @@ be “approx” (default) or “spline” which are both calls to
 <code><a href="https://rdrr.io/pkg/zoo/man/na.approx.html" class="external-link">zoo::na.approx</a></code> and <code><a href="https://rdrr.io/pkg/zoo/man/na.approx.html" class="external-link">zoo::na.spline</a></code>
 respectively.</p>
 <p>Note that as the participant identifier column is not
-“participant_ID” (as eyetools expects as default), it needs to be
+“participant_col” (as eyetools expects as default), it needs to be
 specified in the function call.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
 <p>You can also request a report of the differences in NA values present
 before and after the interpolation as well</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">interpolate_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, report <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">interpolate_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span>, report <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">interpolate_report</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum missing_perc_before missing_perc_after</span></span>
@@ -240,7 +240,7 @@ visually inspect it to see how well it fits the data.</p>
 <span></span>
 <span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>                        span <span class="op">=</span> <span class="fl">.1</span>, <span class="co"># default setting. This controls the degree of smoothing</span></span>
-<span>                        participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, </span>
+<span>                        participant_col <span class="op">=</span> <span class="st">"pNum"</span>, </span>
 <span>                        plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># whether to plot or not, FALSE as default</span></span></code></pre></div>
 <pre><code><span><span class="co">## Showing trials: 4, 6 for participant 119</span></span></code></pre>
 <p><img src="../reference/figures/unnamed-chunk-9-1.png" width="700"></p>
@@ -263,7 +263,7 @@ useful.</p>
 <span></span>
 <span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>, </span>
 <span>                        span <span class="op">=</span> <span class="fl">.02</span>,</span>
-<span>                        participant_ID <span class="op">=</span> <span class="st">"pNum"</span>,</span>
+<span>                        participant_col <span class="op">=</span> <span class="st">"pNum"</span>,</span>
 <span>                        plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Showing trials: 4, 6 for participant 119</span></span></code></pre>
 <p><img src="../reference/figures/unnamed-chunk-10-1.png" width="700"></p>
@@ -290,7 +290,7 @@ target cue is always on the left). This transformation is especially
 useful for future visualisations and calculation of time on areas of
 interest. Note that <code><a href="../reference/conditional_transform.html">conditional_transform()</a></code> is another
 function that does not discriminate between multi-participant and
-single-participant data and so no participant_ID parameter is
+single-participant data and so no participant_col parameter is
 required.</p>
 <p>The keen-eyed will notice that the present data does not contain a
 variable to specify the counterbalanced positions. This is contained in
@@ -357,7 +357,7 @@ off using the relevant parameter.</p>
 <span>                                           disp_tol <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period</span></span>
 <span>                                           NA_tol <span class="op">=</span> <span class="fl">0.25</span>, <span class="co"># the proportion of NAs tolerated within any window of samples evaluated as a fixation</span></span>
 <span>                                           progress <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># whether to display a progress bar or not</span></span>
-<span>                                           participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span> </span></code></pre></div>
+<span>                                           participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span> </span></code></pre></div>
 <p>The resultant data output from <code><a href="../reference/fixation_dispersion.html">fixation_dispersion()</a></code>
 presents data by trial and fixation. It gives the start and end time for
 these fixations along with their duration and the x,y coordinates for
@@ -409,7 +409,7 @@ less sudden and so the entry point of a saccade is sooner.</p>
 <span>                                   disp_tol <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period</span></span>
 <span>                                   smooth <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                                   progress <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># whether to display a progress bar or not, when running multiple participants </span></span>
-<span>                                   participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
+<span>                                   participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_fixations_VTI</span><span class="op">)</span> <span class="co"># show sample of output data for participant 118</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trialNumber fix_n start  end duration         x        y min_dur</span></span>
@@ -436,7 +436,7 @@ from Salvucci &amp; Goldberg (1996) to determine saccadic eye movements.
 It calculates the length of a saccade based on the velocity of the eye
 being above a certain threshold.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">saccades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">saccades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">saccades</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trial sac_n start   end duration  origin_x origin_y terminal_x</span></span>
@@ -527,7 +527,7 @@ time spent for each trial.</p>
 <code class="sourceCode R"><span><span class="va">data_AOI_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_fixations_disp</span>, </span>
 <span>                          data_type <span class="op">=</span> <span class="st">"fix"</span>,</span>
 <span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>                          participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
+<span>                          participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_time</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    pNum trial   AOI time</span></span>
@@ -551,7 +551,7 @@ is something contained in the <code>HCL_behavioural</code> obect.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_fixations_disp</span>,</span>
 <span>                          data_type <span class="op">=</span> <span class="st">"fix"</span>,</span>
 <span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>                          participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, </span>
+<span>                          participant_col <span class="op">=</span> <span class="st">"pNum"</span>, </span>
 <span>                          as_prop <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                          trial_time <span class="op">=</span> <span class="va">HCL_behavioural</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span> <span class="co">#vector of trial times</span></span></code></pre></div>
 <pre><code><span><span class="co">##    pNum trial   AOI       time</span></span>
@@ -594,7 +594,7 @@ is something contained in the <code>HCL_behavioural</code> obect.</p>
 <p>As mentioned, it also works with raw data too:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>, data_type <span class="op">=</span> <span class="st">"raw"</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>         participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
+<span>         participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    pNum trial   AOI time</span></span>
 <span><span class="co">## 1   119     1 AOI_1 1759</span></span>
 <span><span class="co">## 2   119     2 AOI_1  943</span></span>
@@ -625,7 +625,7 @@ absolute or proportional time spent.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_time_binned.html">AOI_time_binned</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>,</span>
 <span>         AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>         participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, </span>
+<span>         participant_col <span class="op">=</span> <span class="st">"pNum"</span>, </span>
 <span>         bin_length <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>         max_time <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>         as_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -645,7 +645,7 @@ data.</p>
 <code class="sourceCode R"><span><span class="va">data_AOI_sequence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_seq.html">AOI_seq</a></span><span class="op">(</span><span class="va">data_fixations_disp</span>,</span>
 <span>                             <span class="va">AOI_areas</span>,         </span>
 <span>                             AOI_names <span class="op">=</span> <span class="cn">NULL</span>,         </span>
-<span>                             participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span>   </span>
+<span>                             participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span>   </span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_sequence</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   pNum trial AOI start  end duration entry_n</span></span>

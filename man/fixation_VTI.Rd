@@ -12,8 +12,7 @@ fixation_VTI(
   min_dur_sac = 20,
   disp_tol = 100,
   smooth = FALSE,
-  progress = TRUE,
-  participant_ID = "participant_ID"
+  progress = TRUE
 )
 }
 \arguments{
@@ -32,14 +31,12 @@ fixation_VTI(
 \item{smooth}{include a call to eyetools::smoother on each trial}
 
 \item{progress}{Display a progress bar}
-
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
 }
 \description{
-Determine fixations by assessing the velocity of eye-movements, using a method that is similar to that proposed by Salvucci & Goldberg (1996).
+Determine fixations by assessing the velocity of eye-movements, using a method that is similar to that proposed by Salvucci & Goldberg (2000).
 Applies the algorithm used in VTI_saccade and removes the identified saccades before assessing whether separated fixations are outside of the dispersion tolerance.
 If they are outside of this tolerance, the fixation is treated as a new fixation regardless of the length of saccade separating them.
 Compared to fixation_dispersion(), fixation_VTI() is more conservative in determining a fixation as smaller saccades are discounted and the resulting data is
@@ -47,15 +44,13 @@ treated as a continued fixation (assuming it is within the pixel tolerance set b
 Returns a summary of the fixations found per trial, including start and end coordinates, timing, duration, mean velocity, and peak velocity.
 }
 \details{
-It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}.
 }
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-data <- interpolate(data, participant_ID = "pNum")
-fixation_VTI(data[data$pNum == 119,], participant_ID = "pNum")
+data <- interpolate(data)
+fixation_VTI(data)
 }
 
 }

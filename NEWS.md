@@ -1,3 +1,16 @@
+# eyetools 0.9.2
+* updated CRAN version
+
+# eyetools 0.9.1
+* fixed issue with AOI_seq() not working with more than 3 AOIs
+
+# eyetools 0.9.0
+* removed the need to specify a name for the participant column. eyetools now expects the column 'pID' in all input data
+* all 'plot_' functions now have a 'pID_values' parameter to enable selection of certain participant data to plot
+* renamed 'trial_number' to 'trial_values' for consistency with the above changes
+* fixed an issue where colour scale for fixations was dependent on showing fixation label
+* cosmetic changes made to plotting of AOIs 
+
 # eyetools 0.8.1
 * Improved `fixation_dispersion()` - now runs faster
 * Fixed bug in AOI_seq handling trials with no fixations

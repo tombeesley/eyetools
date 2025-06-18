@@ -9,8 +9,7 @@ interpolate(
   maxgap = 150,
   method = "approx",
   sample_rate = NULL,
-  report = FALSE,
-  participant_ID = "participant_ID"
+  report = FALSE
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ interpolate(
 \item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
 
 \item{report}{default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.}
-
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
 }
 \value{
 a dataframe of the same shape of the input data
@@ -35,12 +32,10 @@ the proportion of missing data before and after the interpolation process. This 
 for evaluating the effectiveness of the repair.
 }
 \details{
-It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named \code{participant_ID} by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified
+Analyses data separately for each unique combination of values in \code{pID} and \code{trial}.
 }
 \examples{
 data <- combine_eyes(HCL)
-interpolate(data, maxgap = 150, participant_ID = "pNum")
+interpolate(data, maxgap = 150)
 
 }

@@ -4,13 +4,7 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(
-  data,
-  AOIs,
-  AOI_names = NULL,
-  participant_ID = "participant_ID",
-  progress = TRUE
-)
+AOI_seq(data, AOIs, AOI_names = NULL, progress = TRUE)
 }
 \arguments{
 \item{data}{A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data}
@@ -19,8 +13,6 @@ AOI_seq(
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
 
-\item{participant_ID}{the variable that determines the participant identifier. If no column present, assumes a single participant}
-
 \item{progress}{Display a progress bar}
 }
 \value{
@@ -28,13 +20,15 @@ a dataframe containing the sequence of entries into AOIs on each trial, entry/ex
 }
 \description{
 Analyses the sequence of entries into defined AOI regions across trials. Can only be used with fixation data with a "fix_n" column denoting fixation events.
+Assumes that AOIs are non-overlapping and hasn't been tested with overlapping AOIs. Consecutive fixations within an AOI are grouped together as a single entry.
+Non-consecutive fixations in the same AOI (i.e., with an intervening fixation in no AOI) are treated as two separate entries.
 }
 \examples{
 \donttest{
 data <- combine_eyes(HCL)
-fix_d <- fixation_dispersion(data, participant_ID = "pNum")
+fix_d <- fixation_dispersion(data)
 
-AOI_seq(fix_d, AOIs = HCL_AOIs, participant_ID = "pNum")
+AOI_seq(fix_d, AOIs = HCL_AOIs)
 }
 
 }

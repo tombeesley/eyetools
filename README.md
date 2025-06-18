@@ -64,7 +64,7 @@ have bugs. You can install this using
 `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is
 the latest version.
 
-#### The current development version is: 0.9.1
+The current development version is: 0.9.1
 
 The main changes are:
 

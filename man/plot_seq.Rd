@@ -6,8 +6,9 @@
 \usage{
 plot_seq(
   data = NULL,
-  trial_number = NULL,
   AOIs = NULL,
+  trial_values = NULL,
+  pID_values = NULL,
   bg_image = NULL,
   res = c(0, 1920, 0, 1080),
   flip_y = FALSE,
@@ -19,11 +20,13 @@ plot_seq(
 \arguments{
 \item{data}{A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.}
 
-\item{trial_number}{can be used to select a particular trial within the data}
-
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
 
-\item{bg_image}{The filepath of an image to be added to the plot, for example to show a screenshot of the task.}
+\item{trial_values}{specify particular values within 'trial' to plot data from certain trials}
+
+\item{pID_values}{specify particular values within 'pID' to plot data from certain participants}
+
+\item{bg_image}{The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.}
 
 \item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 
@@ -39,20 +42,20 @@ plot_seq(
 a plot of the raw data representing changes over time
 }
 \description{
-A tool for visualising the timecourse of raw data over a single trial. If data from multiple trials are present, then
-a single trial will be sampled at random. Alternatively, the trial_number can be specified. Data can be plotted across the whole
-trial, or can be split into bins to present distinct plots for each time window.
+A tool for visualising the timecourse of raw data over a single trial. Participant and trial values can be selected from the data.
+If values for these parameters are not provided then a single participant and a single trial will be sampled at random.
+Data can be split into bins by time or by the number of bins.
 }
 \examples{
 data <- combine_eyes(HCL)
 
 # plot the raw data
-plot_seq(data = data[data$pNum == 118,])
+plot_seq(data)
 
 # with AOIs
-plot_seq(data = data[data$pNum == 118,], AOIs = HCL_AOIs)
+plot_seq(data, AOIs = HCL_AOIs)
 
 # plot raw data with bins
-plot_seq(data = data[data$pNum == 118,], bin_time = 500)
+plot_seq(data, bin_time = 500)
 
 }

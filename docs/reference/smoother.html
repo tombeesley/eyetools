@@ -60,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">smoother</span><span class="op">(</span><span class="va">data</span>, span <span class="op">=</span> <span class="fl">0.1</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, participant_ID <span class="op">=</span> <span class="st">"participant_ID"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">smoother</span><span class="op">(</span><span class="va">data</span>, span <span class="op">=</span> <span class="fl">0.1</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, participant_col <span class="op">=</span> <span class="st">"participant_col"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,7 +77,7 @@
 <dd><p>whether to plot the raw and smoothed plot for inspection</p></dd>
 
 
-<dt>participant_ID</dt>
+<dt>participant_col</dt>
 <dd><p>the variable that determines the participant identifier. If no column present, assumes a single participant</p></dd>
 
 </dl></div>
@@ -90,15 +90,15 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>It can take either single participant data or multiple participants where there is a variable for unique participant identification.
-The function looks for an identifier named <code>participant_ID</code> by default and will treat this as multiple-participant data as default,
-if not it is handled as single participant data, or the participant_ID needs to be specified</p>
+The function looks for an identifier named <code>participant_col</code> by default and will treat this as multiple-participant data as default,
+if not it is handled as single participant data, or the participant_col needs to be specified</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine_eyes.html">combine_eyes</a></span><span class="op">(</span><span class="va">HCL</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">smoother</span><span class="op">(</span><span class="va">data</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">smoother</span><span class="op">(</span><span class="va">data</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       pNum  time trial         x        y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      118     0     1  913.2159 915.5356</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      118     3     1  914.7964 910.8196</span>
@@ -20102,7 +20102,7 @@ if not it is handled as single participant data, or the participant_ID needs to 
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [ reached 'max' / getOption("max.print") -- omitted 11042 rows ]</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#with an inspection plot</span></span></span>
-<span class="r-in"><span><span class="fu">smoother</span><span class="op">(</span><span class="va">data</span>, span <span class="op">=</span> <span class="fl">.02</span>, participant_ID <span class="op">=</span> <span class="st">"pNum"</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">smoother</span><span class="op">(</span><span class="va">data</span>, span <span class="op">=</span> <span class="fl">.02</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Showing trials: 4, 1 for participant 119</span>
 <span class="r-plt img"><img src="smoother-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       pNum  time trial         x         y</span>

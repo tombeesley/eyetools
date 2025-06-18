@@ -6,23 +6,26 @@
 \usage{
 plot_AOI_growth(
   data = NULL,
+  pID_values = NULL,
+  trial_values = NULL,
   AOIs = NULL,
   AOI_names = NULL,
-  type = NULL,
-  trial_number = NULL,
+  type = "abs",
   plot_time_not_in_AOI = FALSE
 )
 }
 \arguments{
 \item{data}{raw data in standard raw data form (time, x, y, trial)}
 
+\item{pID_values}{specify particular values within 'pID' to plot data from certain participants}
+
+\item{trial_values}{can be used to select particular trials within the data}
+
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height)}
 
 \item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc. To omit AOIs from the plot, use NA in relevant vector position}
 
 \item{type}{either "abs" (absolute) or "prop" (proportion)}
-
-\item{trial_number}{can be used to select particular trials within the data}
 
 \item{plot_time_not_in_AOI}{boolean as to whether to include proportion of time spent outside AOIs}
 }
@@ -36,7 +39,6 @@ A visualisation tool for plotting the changes in defined AOI regions across a si
 
 \donttest{
 data <- combine_eyes(HCL)
-data <- data[data$pNum == 118 & data$trial == 1,]
 data <- interpolate(data)
 # plot absolute and then proportional
 plot_AOI_growth(data = data, AOIs = HCL_AOIs, type = "abs")
