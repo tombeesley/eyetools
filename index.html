@@ -70,6 +70,12 @@
 <p>For an indepth guide to using eyetools, see the <a href="https://tombeesley.github.io/eyetools/articles/eyetools.html">Get Started page</a>.</p>
 <p>It is free to use under the GNU General Public Licence.</p>
 <p><strong>To install use <code>install.packages("eyetools")</code></strong></p>
+<p>FOR USERS OF VERSIONS PRIOR TO 0.9.2, please note the following changes that will probably break older code:</p>
+<ul>
+<li>We have removed the need to specify a name for the participant column. eyetools now expects the column ‘pID’ in all input data</li>
+<li>all ‘plot_’ functions now have a ‘pID_values’ parameter to enable selection of certain participant data to plot</li>
+<li>renamed ‘trial_number’ to ‘trial_values’ in all relevant functions, for consistency with the above change to pID_values</li>
+</ul>
 <p>Available functions in the latest CRAN version:</p>
 <table class="table">
 <colgroup>
@@ -159,14 +165,6 @@
 <p><strong>Development version:</strong></p>
 <p>The above CRAN version is considered fairly stable and will only be updated every few months. We work on new features in the development version. This version should be considered very experimental and may have bugs. You can install this using <code>devtools::install_github("tombeesley/eyetools@0.X.X")</code> where 0.X.X is the latest version.</p>
 <p>The current development version is: 0.9.1</p>
-<p>The main changes are:</p>
-<ul>
-<li>removed the need to specify a name for the participant column. eyetools now expects the column ‘pID’ in all input data</li>
-<li>all ‘plot_’ functions now have a ‘pID_values’ parameter to enable selection of certain participant data to plot</li>
-<li>renamed ‘trial_number’ to ‘trial_values’ in all relevant functions, for consistency with the above change to pID_values</li>
-<li>fixed an issue where colour scale for fixations was dependent on showing fixation label</li>
-<li>cosmetic changes made to plotting of AOIs</li>
-</ul>
 </div>
 </div>
 
