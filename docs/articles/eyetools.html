@@ -32,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">eyetools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,7 +131,7 @@ see, the dataset is formed of 31,041 rows and 7 variables</p>
 <p>To get a basic idea of the contents of the data, we can look at the
 first 10 observations in the data</p>
 <p>We can see that our seven variables contain the participant
-identifier (<code>pNum</code>), the timepoint of the trial
+identifier (<code>pID</code>), the timepoint of the trial
 (<code>time</code>), the left eye x and y coordinates
 (<code>left_x</code> and <code>left_y</code>), the right eye coordinates
 (<code>right_x</code> and <code>right_y</code>), as well as a trial
@@ -141,9 +141,9 @@ pixels (and a default screen size of 1920x1080), however the functions
 should work with any units (with no guarantee as it is not tested with
 units other than pixels).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">HCL</span><span class="op">[</span><span class="va">HCL</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">118</span>,<span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">HCL</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 7</span></span></span>
-<span><span class="co">##    pNum   time left_x left_y right_x right_y trial</span></span>
+<span><span class="co">##    pID    time left_x left_y right_x right_y trial</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 118       0   909.   826.   <span style="text-decoration: underline;">1</span>003.    808.     1</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 118       3   912.   829.   <span style="text-decoration: underline;">1</span>001.    812.     1</span></span>
@@ -195,13 +195,13 @@ not matter, however most of the functions will impose an ordering in how
 the information is returned.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># participant 118</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum time trial        x        y</span></span>
-<span><span class="co">## 1  118    0     1 955.8583 816.5646</span></span>
-<span><span class="co">## 2  118    3     1 956.5178 820.6221</span></span>
-<span><span class="co">## 3  118    7     1 960.7383 819.7616</span></span>
-<span><span class="co">## 4  118   10     1 956.9727 815.3331</span></span>
-<span><span class="co">## 5  118   13     1 958.6214 814.0815</span></span>
-<span><span class="co">## 6  118   17     1 956.0035 814.1564</span></span></code></pre>
+<pre><code><span><span class="co">##   pID time trial        x        y</span></span>
+<span><span class="co">## 1 118    0     1 955.8583 816.5646</span></span>
+<span><span class="co">## 2 118    3     1 956.5178 820.6221</span></span>
+<span><span class="co">## 3 118    7     1 960.7383 819.7616</span></span>
+<span><span class="co">## 4 118   10     1 956.9727 815.3331</span></span>
+<span><span class="co">## 5 118   13     1 958.6214 814.0815</span></span>
+<span><span class="co">## 6 118   17     1 956.0035 814.1564</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="fixing-missing-data-and-repairing-data">Fixing missing data and repairing data<a class="anchor" aria-label="anchor" href="#fixing-missing-data-and-repairing-data"></a>
@@ -219,16 +219,16 @@ respectively.</p>
 “participant_col” (as eyetools expects as default), it needs to be
 specified in the function call.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span><span class="op">)</span></span></code></pre></div>
 <p>You can also request a report of the differences in NA values present
 before and after the interpolation as well</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">interpolate_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span>, report <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">interpolate_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interpolate.html">interpolate</a></span><span class="op">(</span><span class="va">data</span>, maxgap <span class="op">=</span> <span class="fl">150</span>, method <span class="op">=</span> <span class="st">"approx"</span>, report <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">interpolate_report</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum missing_perc_before missing_perc_after</span></span>
-<span><span class="co">## 1  118         0.001157156        0.001157156</span></span>
-<span><span class="co">## 2  119         0.000000000        0.000000000</span></span></code></pre>
+<pre><code><span><span class="co">##   pID missing_perc_before missing_perc_after</span></span>
+<span><span class="co">## 1 118         0.001157156        0.001157156</span></span>
+<span><span class="co">## 2 119         0.000000000        0.000000000</span></span></code></pre>
 <p>An additional step that can be beneficial is to pass the eye data
 through the <code><a href="../reference/smoother.html">smoother()</a></code> function. This removes particularly
 jerky transitions between samples and is critical for the analysis of
@@ -240,10 +240,9 @@ visually inspect it to see how well it fits the data.</p>
 <span></span>
 <span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>                        span <span class="op">=</span> <span class="fl">.1</span>, <span class="co"># default setting. This controls the degree of smoothing</span></span>
-<span>                        participant_col <span class="op">=</span> <span class="st">"pNum"</span>, </span>
 <span>                        plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># whether to plot or not, FALSE as default</span></span></code></pre></div>
 <pre><code><span><span class="co">## Showing trials: 4, 6 for participant 119</span></span></code></pre>
-<p><img src="../reference/figures/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="../reference/figures/smooth-1.png" width="700"></p>
 <p>The plot above shows the difference between the raw and smoothed data
 for a randomly selected participant and two random trials (simply for
 visualisation purposes and to keep the amount of plotting to a
@@ -263,10 +262,9 @@ useful.</p>
 <span></span>
 <span><span class="va">data_smooth</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/smoother.html">smoother</a></span><span class="op">(</span><span class="va">data</span>, </span>
 <span>                        span <span class="op">=</span> <span class="fl">.02</span>,</span>
-<span>                        participant_col <span class="op">=</span> <span class="st">"pNum"</span>,</span>
 <span>                        plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Showing trials: 4, 6 for participant 119</span></span></code></pre>
-<p><img src="../reference/figures/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="../reference/figures/smooth_2-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="counterbalancing-positions">Counterbalancing positions<a class="anchor" aria-label="anchor" href="#counterbalancing-positions"></a>
@@ -303,7 +301,7 @@ right (coded as 2).</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_behavioural</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 8</span></span></span>
-<span><span class="co">##   pNum  trial P_cue NP_cue cue_order correct_out accuracy     RT</span></span>
+<span><span class="co">##   pID   trial P_cue NP_cue cue_order correct_out accuracy     RT</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> 118       1     2      5         2           2        0 <span style="text-decoration: underline;">13</span>465 </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> 118       2     2      6         2           2        0  <span style="text-decoration: underline;">7</span>796.</span></span>
@@ -356,21 +354,20 @@ off using the relevant parameter.</p>
 <span>                                           min_dur <span class="op">=</span> <span class="fl">150</span>, <span class="co"># Minimum duration (in milliseconds) of period over which fixations are assessed</span></span>
 <span>                                           disp_tol <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period</span></span>
 <span>                                           NA_tol <span class="op">=</span> <span class="fl">0.25</span>, <span class="co"># the proportion of NAs tolerated within any window of samples evaluated as a fixation</span></span>
-<span>                                           progress <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># whether to display a progress bar or not</span></span>
-<span>                                           participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span> </span></code></pre></div>
+<span>                                           progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># whether to display a progress bar or not</span></span></code></pre></div>
 <p>The resultant data output from <code><a href="../reference/fixation_dispersion.html">fixation_dispersion()</a></code>
 presents data by trial and fixation. It gives the start and end time for
 these fixations along with their duration and the x,y coordinates for
 the entry of the fixation.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_fixations_disp</span><span class="op">)</span> <span class="co"># show sample of output data</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial fix_n start  end duration    x   y prop_NA min_dur disp_tol</span></span>
-<span><span class="co">## 1  118     1     1     0  173      173  959 810       0     150      100</span></span>
-<span><span class="co">## 2  118     1     2   197  393      196  961 592       0     150      100</span></span>
-<span><span class="co">## 3  118     1     3   397  643      246  958 492       0     150      100</span></span>
-<span><span class="co">## 4  118     1     4   806 1063      257 1370 839       0     150      100</span></span>
-<span><span class="co">## 5  118     1     5  1236 1386      150  997 545       0     150      100</span></span>
-<span><span class="co">## 6  118     1     6  1390 1700      310  969 477       0     150      100</span></span></code></pre>
+<pre><code><span><span class="co">##   pID trial fix_n start  end duration    x   y prop_NA min_dur disp_tol</span></span>
+<span><span class="co">## 1 118     1     1     0  173      173  959 810       0     150      100</span></span>
+<span><span class="co">## 2 118     1     2   197  393      196  961 592       0     150      100</span></span>
+<span><span class="co">## 3 118     1     3   397  643      246  958 492       0     150      100</span></span>
+<span><span class="co">## 4 118     1     4   806 1063      257 1370 839       0     150      100</span></span>
+<span><span class="co">## 5 118     1     5  1236 1386      150  997 545       0     150      100</span></span>
+<span><span class="co">## 6 118     1     6  1390 1700      310  969 477       0     150      100</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="vti-algorithm">VTI Algorithm<a class="anchor" aria-label="anchor" href="#vti-algorithm"></a>
@@ -402,30 +399,22 @@ eye movement. When working with smoothed data, lowering the default
 threshold parameter is recommended as the “jerky” saccadic starts are
 less sudden and so the entry point of a saccade is sooner.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_fixations_VTI</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixation_VTI.html">fixation_VTI</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">119</span>,<span class="op">]</span>,</span>
+<code class="sourceCode R"><span><span class="va">data_fixations_VTI</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixation_VTI.html">fixation_VTI</a></span><span class="op">(</span><span class="va">data</span>,</span>
 <span>                                   threshold <span class="op">=</span> <span class="fl">80</span>, <span class="co">#smoothed data, so use a lower threshold</span></span>
 <span>                                   min_dur <span class="op">=</span> <span class="fl">150</span>, <span class="co"># Minimum duration (in milliseconds) of period over which fixations are assessed</span></span>
 <span>                                   min_dur_sac <span class="op">=</span> <span class="fl">20</span>, <span class="co"># Minimum duration (in milliseconds) for saccades to be determined</span></span>
 <span>                                   disp_tol <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period</span></span>
 <span>                                   smooth <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                                   progress <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># whether to display a progress bar or not, when running multiple participants </span></span>
-<span>                                   participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
+<span>                                   progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># whether to display a progress bar or not, when running multiple participants </span></span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_fixations_VTI</span><span class="op">)</span> <span class="co"># show sample of output data for participant 118</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trialNumber fix_n start  end duration         x        y min_dur</span></span>
-<span><span class="co">## 1  119           1     1     0  399      399  963.1249 714.6547     150</span></span>
-<span><span class="co">## 2  119           1     2   433  943      510  945.0272 420.3980     150</span></span>
-<span><span class="co">## 3  119           1     3  1033 1363      330 1515.3877 756.8082     150</span></span>
-<span><span class="co">## 4  119           1     4  1583 1843      260  950.9069 307.5185     150</span></span>
-<span><span class="co">## 5  119           1     5  2116 3006      890  418.1360 766.0350     150</span></span>
-<span><span class="co">## 6  119           1     6  3106 3262      156 1488.1993 738.7671     150</span></span>
-<span><span class="co">##   disp_tol</span></span>
-<span><span class="co">## 1      100</span></span>
-<span><span class="co">## 2      100</span></span>
-<span><span class="co">## 3      100</span></span>
-<span><span class="co">## 4      100</span></span>
-<span><span class="co">## 5      100</span></span>
-<span><span class="co">## 6      100</span></span></code></pre>
+<pre><code><span><span class="co">##   pID trialNumber fix_n start  end duration         x        y min_dur disp_tol</span></span>
+<span><span class="co">## 1 118           1     1     0  723      723  958.9797 598.9772     150      100</span></span>
+<span><span class="co">## 2 118           1     2   810 1160      350 1379.8363 837.3056     150      100</span></span>
+<span><span class="co">## 3 118           1     3  1250 1696      446  977.0969 497.9093     150      100</span></span>
+<span><span class="co">## 4 118           1     4  1703 2156      453  958.3357 179.0800     150      100</span></span>
+<span><span class="co">## 5 118           1     5  2270 2670      400  377.8732 831.8053     150      100</span></span>
+<span><span class="co">## 6 118           1     6  2780 3116      336  966.0428 397.5553     150      100</span></span></code></pre>
 <div class="section level4">
 <h4 id="saccades">Saccades<a class="anchor" aria-label="anchor" href="#saccades"></a>
 </h4>
@@ -436,23 +425,23 @@ from Salvucci &amp; Goldberg (1996) to determine saccadic eye movements.
 It calculates the length of a saccade based on the velocity of the eye
 being above a certain threshold.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">saccades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data</span>, participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">saccades</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">saccades</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial sac_n start   end duration  origin_x origin_y terminal_x</span></span>
-<span><span class="co">## 1  118     1     1  2170  2260       90  882.6673 239.5014   407.7372</span></span>
-<span><span class="co">## 2  118     1     2  2690  2730       40  500.7881 705.4664   750.8695</span></span>
-<span><span class="co">## 3  118     1     3  3659  3733       74  930.7806 195.9004   522.4383</span></span>
-<span><span class="co">## 4  118     1     4  4213  4256       43  463.0039 721.5722   725.4624</span></span>
-<span><span class="co">## 5  118     1     5 10429 10469       40 1046.7707 226.6985  1202.6984</span></span>
-<span><span class="co">## 6  118     1     6 10475 10502       27 1221.5729 523.9163  1313.1192</span></span>
-<span><span class="co">##   terminal_y mean_velocity peak_velocity</span></span>
-<span><span class="co">## 1   799.6982      207.0041      279.4394</span></span>
-<span><span class="co">## 2   493.8955      206.6130      273.4517</span></span>
-<span><span class="co">## 3   697.4420      220.6035      330.3718</span></span>
-<span><span class="co">## 4   495.3391      201.3317      267.9775</span></span>
-<span><span class="co">## 5   489.9631      194.7090      250.8300</span></span>
-<span><span class="co">## 6   697.7792      183.0823      228.7045</span></span></code></pre>
+<pre><code><span><span class="co">##   pID trial sac_n start   end duration  origin_x origin_y terminal_x terminal_y</span></span>
+<span><span class="co">## 1 118     1     1  2170  2260       90  882.6673 239.5014   407.7372   799.6982</span></span>
+<span><span class="co">## 2 118     1     2  2690  2730       40  500.7881 705.4664   750.8695   493.8955</span></span>
+<span><span class="co">## 3 118     1     3  3659  3733       74  930.7806 195.9004   522.4383   697.4420</span></span>
+<span><span class="co">## 4 118     1     4  4213  4256       43  463.0039 721.5722   725.4624   495.3391</span></span>
+<span><span class="co">## 5 118     1     5 10429 10469       40 1046.7707 226.6985  1202.6984   489.9631</span></span>
+<span><span class="co">## 6 118     1     6 10475 10502       27 1221.5729 523.9163  1313.1192   697.7792</span></span>
+<span><span class="co">##   mean_velocity peak_velocity</span></span>
+<span><span class="co">## 1      207.0041      279.4394</span></span>
+<span><span class="co">## 2      206.6130      273.4517</span></span>
+<span><span class="co">## 3      220.6035      330.3718</span></span>
+<span><span class="co">## 4      201.3317      267.9775</span></span>
+<span><span class="co">## 5      194.7090      250.8300</span></span>
+<span><span class="co">## 6      183.0823      228.7045</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -468,7 +457,7 @@ It is recommended to store this in an object as the output can be quite
 long depending on the number of trials.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#some functions are best with single-participant data</span></span>
-<span><span class="va">data_119</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pNum</span> <span class="op">==</span> <span class="fl">119</span>,<span class="op">]</span></span>
+<span><span class="va">data_119</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="va">data</span><span class="op">$</span><span class="va">pID</span> <span class="op">==</span> <span class="fl">119</span>,<span class="op">]</span></span>
 <span></span>
 <span><span class="va">comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_algorithms.html">compare_algorithms</a></span><span class="op">(</span><span class="va">data_119</span>,</span>
 <span>                                 plot_fixations <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -480,7 +469,7 @@ long depending on the number of trials.</p>
 <span>                                 disp_tol <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>                                 NA_tol <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>                                 smooth <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="../reference/figures/compare_fix_alg-1.png" width="700"></p>
 <pre><code><span><span class="co">##     algorithm trial  percent fix_n    corr.r        corr.p   corr.t</span></span>
 <span><span class="co">## 1         vti     1 81.95538    16 0.7422902  0.000000e+00 61.13824</span></span>
 <span><span class="co">## 2  dispersion     1 82.02100    25 0.7422902  0.000000e+00 61.13824</span></span>
@@ -526,21 +515,20 @@ time spent for each trial.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_AOI_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_fixations_disp</span>, </span>
 <span>                          data_type <span class="op">=</span> <span class="st">"fix"</span>,</span>
-<span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>                          participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span>
+<span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_time</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    pNum trial   AOI time</span></span>
-<span><span class="co">## 1   118     1 AOI_1 1599</span></span>
-<span><span class="co">## 2   118     2 AOI_1 1095</span></span>
-<span><span class="co">## 3   118     3 AOI_1  730</span></span>
-<span><span class="co">## 4   118     4 AOI_1 3438</span></span>
-<span><span class="co">## 5   118     5 AOI_1 1090</span></span>
-<span><span class="co">## 6   118     6 AOI_1  879</span></span>
-<span><span class="co">## 7   118     1 AOI_2 3401</span></span>
-<span><span class="co">## 8   118     2 AOI_2 1310</span></span>
-<span><span class="co">## 9   118     3 AOI_2  570</span></span>
-<span><span class="co">## 10  118     4 AOI_2 2378</span></span></code></pre>
+<pre><code><span><span class="co">##    pID trial   AOI time</span></span>
+<span><span class="co">## 1  118     1 AOI_1 1599</span></span>
+<span><span class="co">## 2  118     2 AOI_1 1095</span></span>
+<span><span class="co">## 3  118     3 AOI_1  730</span></span>
+<span><span class="co">## 4  118     4 AOI_1 3438</span></span>
+<span><span class="co">## 5  118     5 AOI_1 1090</span></span>
+<span><span class="co">## 6  118     6 AOI_1  879</span></span>
+<span><span class="co">## 7  118     1 AOI_2 3401</span></span>
+<span><span class="co">## 8  118     2 AOI_2 1310</span></span>
+<span><span class="co">## 9  118     3 AOI_2  570</span></span>
+<span><span class="co">## 10 118     4 AOI_2 2378</span></span></code></pre>
 <p>The returned data show the time in milliseconds on each area of
 interest, per trial. It is also possible to specify names for the
 different areas of interest. Or you can request that the function
@@ -549,71 +537,87 @@ trial, which requires an input vector that has the values, luckily this
 is something contained in the <code>HCL_behavioural</code> obect.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_fixations_disp</span>,</span>
-<span>                          data_type <span class="op">=</span> <span class="st">"fix"</span>,</span>
-<span>                          AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>                          participant_col <span class="op">=</span> <span class="st">"pNum"</span>, </span>
-<span>                          as_prop <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                          trial_time <span class="op">=</span> <span class="va">HCL_behavioural</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span> <span class="co">#vector of trial times</span></span></code></pre></div>
-<pre><code><span><span class="co">##    pNum trial   AOI       time</span></span>
-<span><span class="co">## 1   118     1 AOI_1 0.11875232</span></span>
-<span><span class="co">## 2   118     1 AOI_2 0.25258076</span></span>
-<span><span class="co">## 3   118     1 AOI_3 0.39873747</span></span>
-<span><span class="co">## 4   118     2 AOI_1 0.14046205</span></span>
-<span><span class="co">## 5   118     2 AOI_2 0.16804136</span></span>
-<span><span class="co">## 6   118     2 AOI_3 0.45165925</span></span>
-<span><span class="co">## 7   118     3 AOI_1 0.13860409</span></span>
-<span><span class="co">## 8   118     3 AOI_2 0.10822511</span></span>
-<span><span class="co">## 9   118     3 AOI_3 0.55992253</span></span>
-<span><span class="co">## 10  118     4 AOI_1 0.34688380</span></span>
-<span><span class="co">## 11  118     4 AOI_2 0.23993300</span></span>
-<span><span class="co">## 12  118     4 AOI_3 0.23811686</span></span>
-<span><span class="co">## 13  118     5 AOI_1 0.24637223</span></span>
-<span><span class="co">## 14  118     5 AOI_2 0.05560327</span></span>
-<span><span class="co">## 15  118     5 AOI_3 0.47986077</span></span>
-<span><span class="co">## 16  118     6 AOI_1 0.16825543</span></span>
-<span><span class="co">## 17  118     6 AOI_2 0.14987941</span></span>
-<span><span class="co">## 18  118     6 AOI_3 0.45097814</span></span>
-<span><span class="co">## 19  119     1 AOI_1 0.15903946</span></span>
-<span><span class="co">## 20  119     1 AOI_2 0.32910147</span></span>
-<span><span class="co">## 21  119     1 AOI_3 0.22163173</span></span>
-<span><span class="co">## 22  119     2 AOI_1 0.16408962</span></span>
-<span><span class="co">## 23  119     2 AOI_2 0.19781477</span></span>
-<span><span class="co">## 24  119     2 AOI_3 0.39602398</span></span>
-<span><span class="co">## 25  119     3 AOI_1 0.25199097</span></span>
-<span><span class="co">## 26  119     3 AOI_2 0.28091446</span></span>
-<span><span class="co">## 27  119     3 AOI_3 0.29214047</span></span>
-<span><span class="co">## 28  119     4 AOI_1 0.21153443</span></span>
-<span><span class="co">## 29  119     4 AOI_2 0.44527168</span></span>
-<span><span class="co">## 30  119     4 AOI_3 0.13763545</span></span>
-<span><span class="co">## 31  119     5 AOI_1 0.24571651</span></span>
-<span><span class="co">## 32  119     5 AOI_2 0.34556075</span></span>
-<span><span class="co">## 33  119     5 AOI_3 0.21207165</span></span>
-<span><span class="co">## 34  119     6 AOI_1 0.22065320</span></span>
-<span><span class="co">## 35  119     6 AOI_2 0.25228779</span></span>
-<span><span class="co">## 36  119     6 AOI_3 0.35263490</span></span></code></pre>
+<span>         data_type <span class="op">=</span> <span class="st">"fix"</span>,</span>
+<span>         AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, </span>
+<span>         as_prop <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>         trial_time <span class="op">=</span> <span class="va">HCL_behavioural</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span> <span class="co">#vector of trial times</span></span></code></pre></div>
+<pre><code><span><span class="co">##    pID trial   AOI       time</span></span>
+<span><span class="co">## 1  118     1 AOI_1 0.11875232</span></span>
+<span><span class="co">## 2  118     1 AOI_2 0.25258076</span></span>
+<span><span class="co">## 3  118     1 AOI_3 0.39873747</span></span>
+<span><span class="co">## 4  118     2 AOI_1 0.14046205</span></span>
+<span><span class="co">## 5  118     2 AOI_2 0.16804136</span></span>
+<span><span class="co">## 6  118     2 AOI_3 0.45165925</span></span>
+<span><span class="co">## 7  118     3 AOI_1 0.13860409</span></span>
+<span><span class="co">## 8  118     3 AOI_2 0.10822511</span></span>
+<span><span class="co">## 9  118     3 AOI_3 0.55992253</span></span>
+<span><span class="co">## 10 118     4 AOI_1 0.34688380</span></span>
+<span><span class="co">## 11 118     4 AOI_2 0.23993300</span></span>
+<span><span class="co">## 12 118     4 AOI_3 0.23811686</span></span>
+<span><span class="co">## 13 118     5 AOI_1 0.24637223</span></span>
+<span><span class="co">## 14 118     5 AOI_2 0.05560327</span></span>
+<span><span class="co">## 15 118     5 AOI_3 0.47986077</span></span>
+<span><span class="co">## 16 118     6 AOI_1 0.16825543</span></span>
+<span><span class="co">## 17 118     6 AOI_2 0.14987941</span></span>
+<span><span class="co">## 18 118     6 AOI_3 0.45097814</span></span>
+<span><span class="co">## 19 119     1 AOI_1 0.15903946</span></span>
+<span><span class="co">## 20 119     1 AOI_2 0.32910147</span></span>
+<span><span class="co">## 21 119     1 AOI_3 0.22163173</span></span>
+<span><span class="co">## 22 119     2 AOI_1 0.16408962</span></span>
+<span><span class="co">## 23 119     2 AOI_2 0.19781477</span></span>
+<span><span class="co">## 24 119     2 AOI_3 0.39602398</span></span>
+<span><span class="co">## 25 119     3 AOI_1 0.25199097</span></span>
+<span><span class="co">## 26 119     3 AOI_2 0.28091446</span></span>
+<span><span class="co">## 27 119     3 AOI_3 0.29214047</span></span>
+<span><span class="co">## 28 119     4 AOI_1 0.21153443</span></span>
+<span><span class="co">## 29 119     4 AOI_2 0.44527168</span></span>
+<span><span class="co">## 30 119     4 AOI_3 0.13763545</span></span>
+<span><span class="co">## 31 119     5 AOI_1 0.24571651</span></span>
+<span><span class="co">## 32 119     5 AOI_2 0.34556075</span></span>
+<span><span class="co">## 33 119     5 AOI_3 0.21207165</span></span>
+<span><span class="co">## 34 119     6 AOI_1 0.22065320</span></span>
+<span><span class="co">## 35 119     6 AOI_2 0.25228779</span></span>
+<span><span class="co">## 36 119     6 AOI_3 0.35263490</span></span></code></pre>
 <p>As mentioned, it also works with raw data too:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>, data_type <span class="op">=</span> <span class="st">"raw"</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>         participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    pNum trial   AOI time</span></span>
-<span><span class="co">## 1   119     1 AOI_1 1759</span></span>
-<span><span class="co">## 2   119     2 AOI_1  943</span></span>
-<span><span class="co">## 3   119     3 AOI_1 1993</span></span>
-<span><span class="co">## 4   119     4 AOI_1 2156</span></span>
-<span><span class="co">## 5   119     5 AOI_1 3673</span></span>
-<span><span class="co">## 6   119     6 AOI_1 3089</span></span>
-<span><span class="co">## 7   119     1 AOI_2 3792</span></span>
-<span><span class="co">## 8   119     2 AOI_2 1047</span></span>
-<span><span class="co">## 9   119     3 AOI_2 2306</span></span>
-<span><span class="co">## 10  119     4 AOI_2 4309</span></span>
-<span><span class="co">## 11  119     5 AOI_2 4932</span></span>
-<span><span class="co">## 12  119     6 AOI_2 3439</span></span>
-<span><span class="co">## 13  119     1 AOI_3 2616</span></span>
-<span><span class="co">## 14  119     2 AOI_3 2183</span></span>
-<span><span class="co">## 15  119     3 AOI_3 2596</span></span>
-<span><span class="co">## 16  119     4 AOI_3 1533</span></span>
-<span><span class="co">## 17  119     5 AOI_3 3113</span></span>
-<span><span class="co">## 18  119     6 AOI_3 5036</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/AOI_time.html">AOI_time</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, data_type <span class="op">=</span> <span class="st">"raw"</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    pID trial   AOI time</span></span>
+<span><span class="co">## 1  118     1 AOI_1 1743</span></span>
+<span><span class="co">## 2  118     2 AOI_1 1353</span></span>
+<span><span class="co">## 3  118     3 AOI_1  793</span></span>
+<span><span class="co">## 4  118     4 AOI_1 3776</span></span>
+<span><span class="co">## 5  118     5 AOI_1 1150</span></span>
+<span><span class="co">## 6  118     6 AOI_1  946</span></span>
+<span><span class="co">## 7  118     1 AOI_2 3676</span></span>
+<span><span class="co">## 8  118     2 AOI_2 1476</span></span>
+<span><span class="co">## 9  118     3 AOI_2  593</span></span>
+<span><span class="co">## 10 118     4 AOI_2 2546</span></span>
+<span><span class="co">## 11 118     5 AOI_2  340</span></span>
+<span><span class="co">## 12 118     6 AOI_2  817</span></span>
+<span><span class="co">## 13 118     1 AOI_3 6026</span></span>
+<span><span class="co">## 14 118     2 AOI_3 4226</span></span>
+<span><span class="co">## 15 118     3 AOI_3 3070</span></span>
+<span><span class="co">## 16 118     4 AOI_3 2876</span></span>
+<span><span class="co">## 17 118     5 AOI_3 2356</span></span>
+<span><span class="co">## 18 118     6 AOI_3 2763</span></span>
+<span><span class="co">## 19 119     1 AOI_1 1759</span></span>
+<span><span class="co">## 20 119     2 AOI_1  943</span></span>
+<span><span class="co">## 21 119     3 AOI_1 1993</span></span>
+<span><span class="co">## 22 119     4 AOI_1 2156</span></span>
+<span><span class="co">## 23 119     5 AOI_1 3673</span></span>
+<span><span class="co">## 24 119     6 AOI_1 3089</span></span>
+<span><span class="co">## 25 119     1 AOI_2 3792</span></span>
+<span><span class="co">## 26 119     2 AOI_2 1047</span></span>
+<span><span class="co">## 27 119     3 AOI_2 2306</span></span>
+<span><span class="co">## 28 119     4 AOI_2 4309</span></span>
+<span><span class="co">## 29 119     5 AOI_2 4932</span></span>
+<span><span class="co">## 30 119     6 AOI_2 3439</span></span>
+<span><span class="co">## 31 119     1 AOI_3 2616</span></span>
+<span><span class="co">## 32 119     2 AOI_3 2183</span></span>
+<span><span class="co">## 33 119     3 AOI_3 2596</span></span>
+<span><span class="co">## 34 119     4 AOI_3 1533</span></span>
+<span><span class="co">## 35 119     5 AOI_3 3113</span></span>
+<span><span class="co">## 36 119     6 AOI_3 5036</span></span></code></pre>
 <p>When working with raw data, you can also take advantage of
 <code><a href="../reference/AOI_time_binned.html">AOI_time_binned()</a></code>, which enables data binning based on
 time, and calculating time spent in AOIs as a result. Using
@@ -624,37 +628,35 @@ analyses). As with <code><a href="../reference/AOI_time.html">AOI_time()</a></co
 absolute or proportional time spent.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_time_binned.html">AOI_time_binned</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>,</span>
-<span>         AOIs <span class="op">=</span> <span class="va">AOI_areas</span>,</span>
-<span>         participant_col <span class="op">=</span> <span class="st">"pNum"</span>, </span>
-<span>         bin_length <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>         max_time <span class="op">=</span> <span class="fl">2000</span>,</span>
-<span>         as_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>                               AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, </span>
+<span>                               bin_length <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>                               max_time <span class="op">=</span> <span class="fl">2000</span>,</span>
+<span>                               as_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">binned_time</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial bin_n AOI_1 AOI_2 AOI_3</span></span>
-<span><span class="co">## 1  119     1     1     0     0  0.00</span></span>
-<span><span class="co">## 2  119     1     2     0     0  0.00</span></span>
-<span><span class="co">## 3  119     1     3     0     0  0.00</span></span>
-<span><span class="co">## 4  119     1     4     0     0  0.00</span></span>
-<span><span class="co">## 5  119     1     5     0     0  0.77</span></span>
-<span><span class="co">## 6  119     1     6     0     0  1.00</span></span></code></pre>
+<pre><code><span><span class="co">##   pID trial bin_n AOI_1 AOI_2 AOI_3</span></span>
+<span><span class="co">## 1 119     1     1     0     0  0.00</span></span>
+<span><span class="co">## 2 119     1     2     0     0  0.00</span></span>
+<span><span class="co">## 3 119     1     3     0     0  0.00</span></span>
+<span><span class="co">## 4 119     1     4     0     0  0.00</span></span>
+<span><span class="co">## 5 119     1     5     0     0  0.77</span></span>
+<span><span class="co">## 6 119     1     6     0     0  1.00</span></span></code></pre>
 <p>The <code><a href="../reference/AOI_seq.html">AOI_seq()</a></code> function analyses the sequence of entries
 into defined AOI regions across trials. This works with fixation
 data.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_AOI_sequence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AOI_seq.html">AOI_seq</a></span><span class="op">(</span><span class="va">data_fixations_disp</span>,</span>
 <span>                             <span class="va">AOI_areas</span>,         </span>
-<span>                             AOI_names <span class="op">=</span> <span class="cn">NULL</span>,         </span>
-<span>                             participant_col <span class="op">=</span> <span class="st">"pNum"</span><span class="op">)</span>   </span>
+<span>                             AOI_names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>   </span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_AOI_sequence</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   pNum trial AOI start  end duration entry_n</span></span>
-<span><span class="co">## 1  118     1   3   397  643      246       1</span></span>
-<span><span class="co">## 2  118     1   2   806 1063      257       2</span></span>
-<span><span class="co">## 3  118     1   3  1390 2166      776       3</span></span>
-<span><span class="co">## 4  118     1   1  2256 2666      410       4</span></span>
-<span><span class="co">## 5  118     1   3  2766 3646      880       5</span></span>
-<span><span class="co">## 6  118     1   1  3749 4199      450       6</span></span></code></pre>
+<pre><code><span><span class="co">##   pID trial AOI start  end duration entry_n</span></span>
+<span><span class="co">## 1 118     1   3   397  643      246       1</span></span>
+<span><span class="co">## 2 118     1   2   806 1063      257       2</span></span>
+<span><span class="co">## 3 118     1   3  1390 2166      776       3</span></span>
+<span><span class="co">## 4 118     1   1  2256 2666      410       4</span></span>
+<span><span class="co">## 5 118     1   3  2766 3646      880       5</span></span>
+<span><span class="co">## 6 118     1   1  3749 4199      450       6</span></span></code></pre>
 <p>The returned data provide a list of the entries into the AOIs, across
 each trial. By default the data is returned in long format, with one row
 per entry.</p>
@@ -674,22 +676,22 @@ the whole trial, or can be split into bins to present distinct plots for
 each time window.</p>
 <p>The most simple use is to just pass it raw data:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_119</span>, trial_number <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-25-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_seq-1.png" width="700"></p>
 <p>But the parameters of <code><a href="../reference/plot_seq.html">plot_seq()</a></code> can help exploration be
 more informative. We can also add a background image and/or the AOIs we
 have defined:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_119</span>, trial_number <span class="op">=</span> <span class="fl">1</span>, bg_image <span class="op">=</span> <span class="st">"data/HCL_sample_image.jpg"</span><span class="op">)</span> <span class="co"># add background image</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-26-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">1</span>, bg_image <span class="op">=</span> <span class="st">"data/HCL_sample_image.png"</span><span class="op">)</span> <span class="co"># add background image</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_seq_2-1.png" width="700"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_119</span>, trial_number <span class="op">=</span> <span class="fl">1</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span><span class="op">)</span> <span class="co"># add AOIs</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-26-2.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">1</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span><span class="op">)</span> <span class="co"># add AOIs</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_seq_2-2.png" width="700"></p>
 <p>You also have the option to split the time into bins to reduce the
 amount of data plotted</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data_119</span>, trial_number <span class="op">=</span> <span class="fl">1</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, bin_time <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-27-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_seq.html">plot_seq</a></span><span class="op">(</span><span class="va">data</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">1</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, bin_time <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_seq_3-1.png" width="700"></p>
 <p><code><a href="../reference/plot_spatial.html">plot_spatial()</a></code> is a tool for visualising raw eye-data,
 processed fixations, and saccades. Fixations can be labeled in the order
 they were made. You can also overlay areas of interest (AOIs) and
@@ -697,38 +699,49 @@ customise the resolution. It takes separate parameters for fixations,
 raw data, and saccades so they can be plotted simultaneously. You can
 also specify the trial_number to plot.</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>raw_data <span class="op">=</span> <span class="va">data_119</span>, trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-28-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>raw_data <span class="op">=</span> <span class="va">data</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_spatial-1.png" width="700"></p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>fix_data <span class="op">=</span> <span class="fu"><a href="../reference/fixation_dispersion.html">fixation_dispersion</a></span><span class="op">(</span><span class="va">data_119</span><span class="op">)</span>, trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-28-2.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>fix_data <span class="op">=</span> <span class="fu"><a href="../reference/fixation_dispersion.html">fixation_dispersion</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_spatial-2.png" width="700"></p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>sac_data <span class="op">=</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data_119</span><span class="op">)</span>, trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-28-3.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>sac_data <span class="op">=</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_spatial-3.png" width="700"></p>
 <p>Or as mentioned, simultaneously:</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_spatial.html">plot_spatial</a></span><span class="op">(</span>raw_data <span class="op">=</span> <span class="va">data_119</span>,</span>
 <span>             fix_data <span class="op">=</span> <span class="fu"><a href="../reference/fixation_dispersion.html">fixation_dispersion</a></span><span class="op">(</span><span class="va">data_119</span><span class="op">)</span>,</span>
 <span>             sac_data <span class="op">=</span> <span class="fu"><a href="../reference/saccade_VTI.html">saccade_VTI</a></span><span class="op">(</span><span class="va">data_119</span><span class="op">)</span>,</span>
-<span>             trial_number <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-29-1.png" width="700"></p>
+<span>             pID_values <span class="op">=</span> <span class="fl">119</span>, </span>
+<span>             trial_values <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_spatial_2-1.png" width="700"></p>
 <p>The function <code><a href="../reference/plot_AOI_growth.html">plot_AOI_growth()</a></code> helps visualise how
 attention is directed across the development of a trial. It presents a
 line graph of the change in proportion of time spent in each AOI region
 across the trial time.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#standard plot with absolute time</span></span>
-<span><span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, type <span class="op">=</span> <span class="st">"abs"</span>, trial_number <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-30-1.png" width="700"></p>
+<span><span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, </span>
+<span>                pID_values <span class="op">=</span> <span class="fl">119</span>, </span>
+<span>                trial_values <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, </span>
+<span>                type <span class="op">=</span> <span class="st">"abs"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_AOI_growth-1.png" width="700"></p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#standard plot with proportional time</span></span>
-<span><span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, type <span class="op">=</span> <span class="st">"prop"</span>, trial_number <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../reference/figures/unnamed-chunk-30-2.png" width="700"></p>
+<span><span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, </span>
+<span>                pID_values <span class="op">=</span> <span class="fl">119</span>, </span>
+<span>                trial_values <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, </span>
+<span>                type <span class="op">=</span> <span class="st">"prop"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_AOI_growth-2.png" width="700"></p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#only keep predictive and non-predictive cues rather than the target AOI</span></span>
-<span><span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_119</span>, AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, type <span class="op">=</span> <span class="st">"prop"</span>, AOI_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Predictive"</span>, <span class="st">"Non Predictive"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Multiple trials detected: randomly sampled - trial:3</span></span></code></pre>
-<p><img src="../reference/figures/unnamed-chunk-30-3.png" width="700"></p>
+<span><span class="fu"><a href="../reference/plot_AOI_growth.html">plot_AOI_growth</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, pID_values <span class="op">=</span> <span class="fl">119</span>, trial_values <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                AOIs <span class="op">=</span> <span class="va">AOI_areas</span>, </span>
+<span>                type <span class="op">=</span> <span class="st">"prop"</span>, </span>
+<span>                AOI_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Predictive"</span>, <span class="st">"Non Predictive"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../reference/figures/plot_AOI_growth-3.png" width="700"></p>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
