@@ -130,11 +130,12 @@ plot_spatial <- function(raw_data = NULL,
 
       final_g <-
         final_g +
-        geom_label(data = fix_data,
-                   aes(x = x, y = y, label = fix_n),
-                   hjust = 1,
-                   vjust = 1,
-                   size = 4)
+        ggrepel::geom_label_repel(data = fix_data,
+                                  aes(x = x, y = y, label = fix_n),
+                                  size = 4,
+                                  force = 15,
+                                  min.segment.length = 0,
+                                  max.overlaps = Inf)
 
     }
 
