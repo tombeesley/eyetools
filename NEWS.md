@@ -1,7 +1,8 @@
 # eyetools 0.9.3
 * added a on_attach "welcome" message when the package is loaded
 * added ggrepel::geom_label_repel to spatial_plot, to avoid overlapping labels for fixations
-
+* fixed issue using a colour scale in plot_spatial with only a single fixation
+* fixed an issue with displaying a background image without alpha transparency layer
 
 # eyetools 0.9.2
 * updated CRAN version

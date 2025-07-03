@@ -36,7 +36,8 @@ Imports:
     zoo,
     png,
     grid,
-    ggrepel
+    ggrepel,
+    abind
 Suggests: 
     knitr,
     rmarkdown,

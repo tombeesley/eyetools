@@ -122,10 +122,17 @@ plot_spatial <- function(raw_data = NULL,
       final_g +
       geom_circle(data = fix_data,
                   aes(x0 = x, y0 = y, r = disp_tol/2, fill = duration),
-                  alpha = .4) + 
-      scale_fill_viridis(breaks = c(min(duration),
-                                    max(duration)),
-                         labels = c("low", "high"))
+                  alpha = .4)
+    
+    # if multiple fixations, add scale (fixes issue with plotting single fixation)
+    if (nrow(fix_data)>1) {
+      final_g <- 
+        final_g + 
+        scale_fill_viridis(breaks = c(min(duration),
+                                      max(duration)),
+                           labels = c("low", "high"))
+    }
+    
     if (show_fix_order == TRUE) {
 
       final_g <-
