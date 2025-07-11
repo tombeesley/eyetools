@@ -36,10 +36,10 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
   # if (sum(is.na(data)) > 0) { # if NA present in dataset
   #   stop("NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
   # }
+
   .check_data_format(data)
 
   internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress) {
-
 
     # estimate sample rate
     if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
@@ -74,7 +74,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     x <- data$x
     y <- data$y
 
-    data['time'] <- data['time'] - data[['time']][1] # start trial timestamps at 0
+    data['time'] <- data['time'] - data['time'][1,] # start trial timestamps at 0
     d <- as.matrix(dist(cbind(x,y)))
     d_diag <- diag(d[2:nrow(d),])
     data <- cbind(data, distance = c(NA,d_diag))
