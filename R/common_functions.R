@@ -62,10 +62,12 @@
 
 # function to add background image
 #' @import png
+#' @import abind
 add_BGimg <- function(bg_image_in, res, ggplot_in){
   
   im <- png::readPNG(bg_image_in)
-  im2 <- matrix(grDevices::rgb(im[,,1],im[,,2],im[,,3], im[,,4] * 0.5), nrow=dim(im)[1]) ## you can change 0.5 to change the alpa
+  if (dim(im)[3] == 3) im <- abind::abind(im, matrix(1, ncol=ncol(im), nrow=nrow(im)))
+  im2 <- matrix(grDevices::rgb(im[,,1],im[,,2],im[,,3], im[,,4] * 0.5), nrow=dim(im)[1]) ## you can change 0.5 to change the alpha
   
   ggplot_in <-
     ggplot_in +
