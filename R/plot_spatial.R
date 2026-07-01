@@ -76,7 +76,7 @@ plot_spatial <- function(raw_data = NULL,
   }
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, flip_y, final_g)
 
   # PLOT gridlines
 
