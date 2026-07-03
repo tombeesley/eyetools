@@ -26,7 +26,7 @@
 dist_to_visual_angle <- function(vector,
                                  dist_type = "cm",
                                  view_dist_cm = 60,
-                                 screen_width_cm = 51,
+                                 screen_width_cm = 53,
                                  screen_width_pixels = 1920) {
 
   if (dist_type == "pixel") {

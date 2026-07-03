@@ -7,7 +7,7 @@
 #'
 #' It can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 #'
-#' @param data A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyetools)
+#' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param NA_tol the proportion of NAs tolerated within any window of samples that is evaluated as a fixation

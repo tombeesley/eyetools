@@ -5,6 +5,7 @@
 * fixed an issue with displaying a background image without alpha transparency layer
 * fixed bug with `fixation_VTI()`
 * fixed an issue with screenshot not displaying on plots when flip_y parameter is TRUE
+* changed the default screen width to 53cm (24 inch monitor)
 
 # eyetools 0.9.2
 * updated CRAN version

@@ -9,7 +9,7 @@
 #'
 #' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
-#' @param data A dataframe with raw data (time, x, y, trial) for one participant
+#' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades.
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed

@@ -6,9 +6,8 @@
 #'
 #' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
-#' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
+#' @param data dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)
 #' @param maxgap maximum time gap of consecutive trackloss to fill (in ms). Any longer gaps will be left unchanged (see zoo package)
-#' @param vel_threshold the maximum velocity that is tolerated between start and end points of periods of missing data
 #' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param method "approx" for linear interpolation or "spline" for cubic spline interpolation
 #' @param report default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.
@@ -24,7 +23,7 @@
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
 #'
-interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE) {
+interpolate <- function(data, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE) {
 
   if(is.null(data$x) || is.null(data$y)) {
     stop("Columns 'x' or 'y' not found.")
@@ -49,45 +48,19 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
 
     if (method %in% c("approx", "spline")) {
 
-      # Split the data by pID and trial
-      data_split <- split(data, ~ pID + trial)
+      # Split the data by 'trial'
+      data_split <- split(data, data$trial)
 
       # Function to apply na interpolation on both x and y columns
       interpolate_na <- function(df) {
-        
-        # add a column that identifies periods of NA
-        df$is_na <- as.integer(is.na(df$x))
-        
         if (method == "approx") {
-          df$x_i <- na.approx(df$x, maxgap = maxgap, na.rm = FALSE)
-          df$y_i <- na.approx(df$y, maxgap = maxgap, na.rm = FALSE)
+          df$x <- na.approx(df$x, maxgap = maxgap, na.rm = FALSE)
+          df$y <- na.approx(df$y, maxgap = maxgap, na.rm = FALSE)
         }
         if (method == "spline") {
-          df$x_i <- na.spline(df$x, maxgap = maxgap, na.rm = FALSE) + 0*na.approx(df$x, maxgap = maxgap, na.rm = FALSE) #suppress extrapolation behaviour
-          df$y_i  <- na.spline(df$y, maxgap = maxgap, na.rm = FALSE) + 0*na.approx(df$y, maxgap = maxgap, na.rm = FALSE)
+          df$x <- na.spline(df$x, maxgap = maxgap, na.rm = FALSE) + 0*na.approx(df$x, maxgap = maxgap, na.rm = FALSE) #suppress extrapolation behaviour
+          df$y <- na.spline(df$y, maxgap = maxgap, na.rm = FALSE) + 0*na.approx(df$y, maxgap = maxgap, na.rm = FALSE)
         }
-        
-        # for each NA period calculate max velocity 
-        # Create a grouping variable for consecutive TRUE runs
-        df$run_id <- cumsum(!df$is_na)
-        df$run_id[df$is_na==0] <- 0 # make all the non NA periods 0, to make the next split much quicker
-        
-        # Split the dataframe into a list of 
-        na_periods <- split(df, ~run_id)
-        
-        # for each element of the list, if the is.na is 1, calculate the velocity
-        # if velocity is below threshold, make x = x_i and y = y_i
-        # put the df back together and remove unnecessary columns
-        
-        vel_check <- function(na_df) {
-          
-          if (sum(df$is_na) > 0) {
-            df$vel <- df$x_i
-            
-          }
-          
-        }
-        
         return(df)
 
       }
