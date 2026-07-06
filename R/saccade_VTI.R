@@ -9,7 +9,8 @@
 #' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
 #' @param min_dur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold
-#'
+#' @param view_dist Viewing distance in cm. Default of 60cm. Internal call to dist_to_visual angle. 
+#' 
 #' @importFrom stats dist aggregate
 #' @importFrom pbapply pblapply
 #' @return a data frame giving the saccades found by trial
@@ -21,9 +22,9 @@
 #' 
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
+saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20, view_dist = 60){
 
-  internal_saccade_VTI <- function(data, sample_rate, threshold, min_dur) {
+  internal_saccade_VTI <- function(data, sample_rate, threshold, min_dur, view_dist) {
 
 
     # estimate sample rate
@@ -31,7 +32,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
 
 
     data <- split(data, data$trial)
-    data_sac <- pbapply::pblapply(data, saccade_VTI_trial, sample_rate, threshold, min_dur)
+    data_sac <- pbapply::pblapply(data, saccade_VTI_trial, sample_rate, threshold, min_dur, view_dist)
     data_sac <- do.call(rbind.data.frame,data_sac)
 
     data_sac <- data_sac[,c("pID", "trial", "sac_n", "start", "end", "duration",
@@ -42,7 +43,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
 
   }
 
-  saccade_VTI_trial <- function(data, sample_rate, threshold, min_dur){
+  saccade_VTI_trial <- function(data, sample_rate, threshold, min_dur, view_dist){
 
     ppt_label <- data$pID[1]
 
@@ -58,7 +59,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
     data <- cbind(data,
                   distance = c(NA,d_diag))
 
-    data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel") # convert to VisAng
+    data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel", view_dist_cm = view_dist) # convert to VisAng
 
     data$vel <- data$distance*sample_rate # visual angle per second
 
