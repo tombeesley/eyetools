@@ -24,7 +24,7 @@
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
 #'
-interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx", sample_rate = NULL, report = FALSE) {
+interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx", report = FALSE) {
 
   if(is.null(data$x) || is.null(data$y)) {
     stop("Columns 'x' or 'y' not found.")
@@ -40,15 +40,16 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
 
     # interpolation process
     # estimate sample rate
-    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
-    sample_rate <- 1000/sample_rate
+    if (is.null(the$eyetracker_properties$sample_frequency==TRUE)) .estimate_sample_rate(data)
 
-    maxgap <- maxgap/sample_rate #expressed in rows rather than time
+    maxgap <- maxgap/(1000/the$eyetracker_properties$sample_frequency) #expressed in rows rather than time
     maxgap <- ceiling(maxgap) #round up to nearest integer
 
 
     if (method %in% c("approx", "spline")) {
 
+      
+      
       # Split the data by pID and trial
       data_split <- split(data, ~ pID + trial)
 
