@@ -16,8 +16,9 @@
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param smooth include a call to eyetools::smoother on each trial
+#' @param view_dist Viewing distance in cm. Default of 60cm. Internal call to dist_to_visual angle. 
 #' @param progress Display a progress bar
-#'
+
 #' @importFrom stats dist aggregate na.omit
 #' @importFrom pbapply pblapply
 #' @return a dataframe containing each detected fixation by trial, with mean x/y position in pixel, start and end times, and duration.
@@ -32,13 +33,13 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE){
+fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, view_dist = 60, progress = TRUE){
   # if (sum(is.na(data)) > 0) { # if NA present in dataset
   #   stop("NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
   # }
   .check_data_format(data)
 
-  internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress) {
+  internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist, progress) {
 
 
     # estimate sample rate
@@ -48,9 +49,9 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     data <- split(data, data$trial)
     # either show a progress bar, or not
     if(progress) {
-      data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth)
+      data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist)
     } else {
-      data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth)
+      data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist)
     }
 
     data_fix <- do.call(rbind.data.frame,data_fix)
@@ -60,7 +61,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     return(as.data.frame(data_fix))
   }
 
-  fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth){
+  fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist){
 
     ppt_label <- data$pID[1]
 
@@ -79,7 +80,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     d_diag <- diag(d[2:nrow(d),])
     data <- cbind(data, distance = c(NA,d_diag))
 
-    data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel") # convert to VisAng
+    data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel", view_dist_cm = view_dist) # convert to VisAng
     data$vel <- data$distance*sample_rate # visual angle per second
     data$saccade_detected <- ifelse(data$vel > threshold, 2, 1) # saccade 2, otherwise 1
     data$saccade_detected[is.na(data$saccade_detected)] <- 0 # convert NA to 0
