@@ -88,12 +88,21 @@ read_eyelink_samples <- function(file,
   samples[samples == "."] <- NA
 
   
+  detected <- if (ncol(samples) >= 7) "binocular" else if (ncol(samples) >= 4) "monocular" else NA
+  
+  if (is.na(detected)) {
+    stop("Unrecognized sample format: found ", ncol(samples), " columns")
+  }
+  
+  if (detected != recording) {
+    stop(
+      "Data appears to be ", detected,
+      " but recording = \"", recording, "\" was specified."
+    )
+  }
+  
   # Assign column names
   if (recording == "binocular") {
-    
-    if (ncol(samples) < 7) {
-      stop("Expected binocular data with 7 columns, found ", ncol(samples))
-    }
     
     samples <- samples[, 1:7]
     
@@ -108,10 +117,6 @@ read_eyelink_samples <- function(file,
     )
     
   } else {
-    
-    if (ncol(samples) < 4) {
-      stop("Expected monocular data with 4 columns, found ", ncol(samples))
-    }
     
     samples <- samples[, 1:4]
     
