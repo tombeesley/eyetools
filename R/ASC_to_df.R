@@ -51,10 +51,10 @@
 #' @export
 
 
-read_eyelink_samples <- function(file,
-                                 recording = c("binocular", "monocular"),
-                                 pID = NA,
-                                 frequency = NA) {
+ASC_to_df <- function(file,
+                      recording = c("binocular", "monocular"),
+                      pID = NA,
+                      frequency = NA) {
   
   # Validate arguments
   recording <- match.arg(recording)

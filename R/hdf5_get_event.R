@@ -1,4 +1,4 @@
-#' Get messgaes stored in TOBII-generated HDF5 files
+#' Get messages stored in TOBII-generated HDF5 files
 #'
 #' A function to get the message event files from a TOBII-generated hdf5 file to dataframe.
 #' Used when a Psychopy experiment uses the io.sendMessageEvent() to record events

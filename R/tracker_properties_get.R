@@ -1,6 +1,6 @@
 #' Get Current Eyetracker Properties
 #'
-#' Returns a list containing all the current global eyetracker settings.
+#' Returns a list containing the current global eyetracker settings.
 #'
 #' @return A named list of the current tracker parameters.
 #' @export

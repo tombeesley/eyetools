@@ -31,8 +31,13 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
   }
 
   internal_interpolate <- function(data, maxgap, method, sample_rate, report) {
-
-
+    
+    # find samples with NA in either x or y
+    samples_with_na <- is.na(data[,'x']) | is.na(data[, 'y'])
+    
+    # make both x and y NA, since true coordinates are used to interpolate values
+    data[samples_with_na,c('x','y')] <- NA
+    
     # PRE-INTERP summary of missing data
     if (report) {
       pre_missing <- mean((is.na(data$x) | is.na(data$y)))
@@ -40,7 +45,7 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
 
     # interpolation process
     # estimate sample rate
-    if (is.null(the$eyetracker_properties$sample_frequency==TRUE)) .estimate_sample_rate(data)
+    if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(data)
 
     maxgap <- maxgap/(1000/the$eyetracker_properties$sample_frequency) #expressed in rows rather than time
     maxgap <- ceiling(maxgap) #round up to nearest integer
@@ -48,13 +53,19 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
 
     if (method %in% c("approx", "spline")) {
 
-      
-      
       # Split the data by pID and trial
       data_split <- split(data, ~ pID + trial)
 
       # Function to apply na interpolation on both x and y columns
       interpolate_na <- function(df) {
+        
+        # create lag and lead values, which will be used for interpolation periods
+        lead_lag <- function(v, n) { # https://stackoverflow.com/questions/56807120/lag-and-lead-in-base-r
+          if (n > 0) c(rep(NA, n), head(v, length(v) - n))
+          else c(tail(v, length(v) - abs(n)), rep(NA, abs(n)))
+        }
+        
+        df[,c('prev_x', 'prev_y', 'next_x', 'next_y')] <- c(lead_lag(df$x,1), lead_lag(df$y,1), lead_lag(df$x,-1), lead_lag(df$y,-1))
         
         # add a column that identifies periods of NA
         df$is_na <- as.integer(is.na(df$x))
@@ -82,13 +93,32 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
         
         vel_check <- function(na_df) {
           
-          if (sum(df$is_na) > 0) {
-            df$vel <- df$x_i
-            
+          #print(sum(na_df$is_na))
+          if (sum(na_df$is_na) > 0 & !is.na(na_df[1,'x_i'])) {
+            p1 <- c(na_df[1,'prev_x'], na_df[1,'prev_y']) # start point of interpolation
+            p2 <- c(na_df[nrow(na_df),'next_x'], na_df[nrow(na_df),'next_y']) # end point of interpolation
+            na_distance <- sqrt(sum((p1 - p2)^2)) # Euclidean pixel distance
+            na_distance <- dist_to_visual_angle(na_distance, dist_type = "pixel") # visual angle of distance
+            na_duration <- na_df[nrow(na_df), 'time'] - na_df[1,'time'] # duration of na period in ms
+            na_vel <- na_distance*(1000/na_duration) # degrees per second
+            if (is.na(na_vel)){
+              browser()
+            }
+            if (na_vel<vel_threshold) { # TRUE if velocity of na period is below threshold
+              na_df[,c('x', 'y')] <- na_df[,c('x_i', 'y_i')] 
+            } 
           }
+          
+          na_df <- na_df[,c('pID', 'time', 'trial', 'x', 'y')] # return the 5 standard columns
+          
+          return(na_df)
           
         }
         
+        df <- lapply(na_periods, vel_check)
+        df <- do.call(rbind, df) # recombine
+        df <- df[order(df$time),] # sort the data by time
+
         return(df)
 
       }
