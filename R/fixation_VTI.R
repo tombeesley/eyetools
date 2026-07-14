@@ -10,13 +10,11 @@
 #' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
 #' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
-#' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades.
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
 #' @param smooth include a call to eyetools::smoother on each trial
-#' @param view_dist Viewing distance in cm. Default of 60cm. Internal call to dist_to_visual angle. 
 #' @param progress Display a progress bar
 
 #' @importFrom stats dist aggregate na.omit
@@ -33,25 +31,21 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, view_dist = 60, progress = TRUE){
-  # if (sum(is.na(data)) > 0) { # if NA present in dataset
-  #   stop("NAs detected in your data. Cannot compute inverse saccades with NAs present.", call. = FALSE)
-  # }
+fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE){
+
   .check_data_format(data)
 
-  internal_fixation_VTI <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist, progress) {
-
-
+  internal_fixation_VTI <- function(data, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress) {
+    
     # estimate sample rate
-    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
-
+    if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(data)
 
     data <- split(data, data$trial)
     # either show a progress bar, or not
     if(progress) {
-      data_fix <- pbapply::pblapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist)
+      data_fix <- pbapply::pblapply(data, fixation_by_trial, threshold, min_dur, min_dur_sac, disp_tol, smooth)
     } else {
-      data_fix <- lapply(data, fixation_by_trial, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist)
+      data_fix <- lapply(data, fixation_by_trial, threshold, min_dur, min_dur_sac, disp_tol, smooth)
     }
 
     data_fix <- do.call(rbind.data.frame,data_fix)
@@ -61,7 +55,7 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     return(as.data.frame(data_fix))
   }
 
-  fixation_by_trial <- function(data, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, view_dist){
+  fixation_by_trial <- function(data, threshold, min_dur, min_dur_sac, disp_tol, smooth){
 
     ppt_label <- data$pID[1]
 
@@ -80,8 +74,8 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
     d_diag <- diag(d[2:nrow(d),])
     data <- cbind(data, distance = c(NA,d_diag))
 
-    data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel", view_dist_cm = view_dist) # convert to VisAng
-    data$vel <- data$distance*sample_rate # visual angle per second
+    data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel") # convert to VisAng
+    data$vel <- data$distance*the$eyetracker_properties$sample_frequency # visual angle per second
     data$saccade_detected <- ifelse(data$vel > threshold, 2, 1) # saccade 2, otherwise 1
     data$saccade_detected[is.na(data$saccade_detected)] <- 0 # convert NA to 0
 
@@ -300,7 +294,8 @@ fixation_VTI <- function(data, sample_rate = NULL, threshold = 100, min_dur = 15
   }
 
   data <- split(data, data$pID)
-  out <- lapply(data, internal_fixation_VTI, sample_rate, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress)
+  #browser()
+  out <- lapply(data, internal_fixation_VTI, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress)
 
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
