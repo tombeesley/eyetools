@@ -26,9 +26,8 @@
 #'
 interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx", report = FALSE) {
 
-  if(is.null(data$x) || is.null(data$y)) {
-    stop("Columns 'x' or 'y' not found.")
-  }
+  # check data format
+  .check_monocular_data_format(data)
 
   internal_interpolate <- function(data, maxgap, method, sample_rate, report) {
     

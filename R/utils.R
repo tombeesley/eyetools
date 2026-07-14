@@ -1,8 +1,34 @@
-.check_data_format <- function(data) {
+.check_binocular_data_format <- function(data) {
+  
+  if (length(intersect(colnames(data), c("pID", "trial", "left_x", "left_y", "right_x", "right_y", "time"))) < 5) {
+    stop("The input data does not have the columns expected by eyetools. These are: pID, trial, x, y, time")
+  }
+  .check_time_column(data)
+  
+}
+
+.check_monocular_data_format <- function(data) {
   
   if (length(intersect(colnames(data), c("pID", "trial", "x", "y", "time"))) < 5) {
     stop("The input data does not have the columns expected by eyetools. These are: pID, trial, x, y, time")
   }
+  .check_time_column(data)
+  
+}
+
+.check_time_column <- function(data) {
+  
+  check_time_increments <- function(d) {
+    sample_intervals <- diff(d$time)
+    mean_sample_time <- mean(sample_intervals)
+    if (min(sample_intervals)<0) {
+      stop("The input data contains adjacent timestamps that are not consecutive")
+    }
+
+  }
+  
+  data_split <- split(data, ~ pID + trial)
+  lapply(data_split, check_time_increments)
   
 }
 

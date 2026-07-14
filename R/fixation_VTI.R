@@ -33,7 +33,7 @@
 
 fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE){
 
-  .check_data_format(data)
+  .check_monocular_data_format(data)
 
   internal_fixation_VTI <- function(data, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress) {
     
@@ -294,13 +294,11 @@ fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20,
   }
 
   data <- split(data, data$pID)
-  #browser()
+
   out <- lapply(data, internal_fixation_VTI, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress)
 
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
-
-  #out <- .check_ppt_n_out(out)
 
   return(out)
 }

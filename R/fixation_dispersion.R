@@ -28,7 +28,7 @@
 fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE) {
 
   # check data format
-  .check_data_format(data)
+  .check_monocular_data_format(data)
 
   internal_fixation_dispersion <- function(data, min_dur, disp_tol, NA_tol, progress) {
 

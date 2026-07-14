@@ -15,6 +15,10 @@
 #'
 
 combine_eyes <- function(data, method = "average", progress = TRUE) {
+  
+  # check data format
+  .check_binocular_data_format(data)
+  
   if (!method %in% c("average", "best_eye")) {
     stop("Unexpected input to parameter 'method'. Use 'average' or 'best_eye'.")
   }

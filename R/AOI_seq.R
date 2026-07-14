@@ -6,7 +6,6 @@
 #'
 #' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
-#' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
 #' @param progress Display a progress bar
 #' @return a dataframe containing the sequence of entries into AOIs on each trial, entry/exit/duration time into AOI
 #' @export
@@ -22,26 +21,25 @@
 #' @import pbapply
 #' @importFrom stats setNames complete.cases
 
-AOI_seq <- function(data, AOIs, AOI_names = NULL, progress = TRUE) {
+AOI_seq <- function(data, AOIs, progress = TRUE) {
 
   if(is.null(data[["fix_n"]])) stop("column 'fix_n' not detected. Are you sure you are supplying fixation data from eyetools?")
 
   #internal_AOI_seq carries the per-participant functionality to be wrapped in the lapply for ppt+ setup
-  internal_AOI_seq <- function(data, AOIs, AOI_names) {
+  internal_AOI_seq <- function(data, AOIs) {
 
 
     # split data by trial
     data <- do.call("rbind.data.frame", lapply(split(data, data$trial),
                                                     AOI_seq_trial_process,
-                                                    AOIs = AOIs,
-                                                    AOI_names))
+                                                    AOIs = AOIs))
 
     return(data)
 
   }
 
   data <- split(data, data$pID)
-  if(progress) out <- pblapply(data, internal_AOI_seq, AOIs, AOI_names) else out <- lapply(data, internal_AOI_seq, AOIs, AOI_names)
+  if(progress) out <- pblapply(data, internal_AOI_seq, AOIs) else out <- lapply(data, internal_AOI_seq, AOIs)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
@@ -49,7 +47,7 @@ AOI_seq <- function(data, AOIs, AOI_names = NULL, progress = TRUE) {
 }
 
 
-AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
+AOI_seq_trial_process <- function(trial_data, AOIs) {
 
   trial_val <- trial_data$trial[[1]]
   ppt_val <- trial_data$pID[1]
@@ -60,16 +58,16 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
 
   for (a in 1:nrow(AOIs)) {
 
-    if (sum(!is.na(AOIs[a,])) == 4) {
+    if (!is.na(AOIs[a,"height"])) {
       # square AOI
-      aoi_entries[,a] <- ((trial_data$x >= as.numeric(AOIs[a,1]-AOIs[a,3]/2) & trial_data$x <= as.numeric(AOIs[a,1]+AOIs[a,3]/2)) &
-                            (trial_data$y >= as.numeric(AOIs[a,2]-AOIs[a,4]/2) & trial_data$y <= as.numeric(AOIs[a,2]+AOIs[a,4]/2)))
-    } else if (sum(!is.na(AOIs[a,])) == 3) {
+      aoi_entries[,a] <- ((trial_data$x >= as.numeric(AOIs[a,"x"]-AOIs[a,"width_radius"]/2) & trial_data$x <= as.numeric(AOIs[a,"x"]+AOIs[a,"width_radius"]/2)) &
+                            (trial_data$y >= as.numeric(AOIs[a,"y"]-AOIs[a,"height"]/2) & trial_data$y <= as.numeric(AOIs[a,"y"]+AOIs[a,"height"]/2)))
+    } else if (is.na(AOIs[a,"height"]) & !is.na(AOIs[a,"width_radius"])) {
       # circle AOI
-      aoi_entries[,a] <- sqrt((as.numeric(AOIs[a,1])-trial_data$x)^2+(as.numeric(AOIs[a,2])-trial_data$y)^2) < as.numeric(AOIs[a,3])
+      aoi_entries[,a] <- sqrt((as.numeric(AOIs[a,"x"])-trial_data$x)^2+(as.numeric(AOIs[a,"y"])-trial_data$y)^2) < as.numeric(AOIs[a,"width_radius"])
     } else {
       # report error message of bad AOI definition
-      stop("bad definition of AOI. Cannot identify AOI region")
+      stop("Bad AOI definition. Consider using function create_AOI_df()")
 
     }
   }
@@ -128,10 +126,7 @@ AOI_seq_trial_process <- function(trial_data, AOIs, AOI_names) {
   aoi_trial_out$entry_n <- as.numeric(rownames(aoi_trial_out))
 
   #replace values with AOI names if given
-  if(!is.null(AOI_names)) {
-    aoi_trial_out$AOI <- AOI_names[aoi_trial_out$AOI]
-
-  }
+  aoi_trial_out$AOI <- AOIs$name[aoi_trial_out$AOI]
 
   rownames(aoi_trial_out) <- NULL
 
