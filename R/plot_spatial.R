@@ -183,11 +183,11 @@ plot_spatial <- function(raw_data = NULL,
   }
 
   if (flip_y==TRUE) {
-    final_g +
-      scale_y_reverse()
-  } 
+    return(final_g +
+      scale_y_reverse())
+  } else { return(final_g) }
 
-  return(final_g)
+  
 
 
 }
