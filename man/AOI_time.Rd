@@ -4,26 +4,14 @@
 \alias{AOI_time}
 \title{Analysis of time spent in areas of interest}
 \usage{
-AOI_time(
-  data,
-  data_type = NULL,
-  AOIs,
-  AOI_names = NULL,
-  sample_rate = NULL,
-  as_prop = FALSE,
-  trial_time = NULL
-)
+AOI_time(data, data_type = NULL, AOIs, as_prop = FALSE, trial_time = NULL)
 }
 \arguments{
 \item{data}{A dataframe  of either fixation data (from fix_dispersion) or raw data}
 
 \item{data_type}{Whether data is a fixation ("fix") or raw data ("raw")}
 
-\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
-
-\item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
-
-\item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).}
 
 \item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}
 

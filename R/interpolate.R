@@ -9,9 +9,9 @@
 #' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
 #' @param maxgap maximum time gap of consecutive trackloss to fill (in ms). Any longer gaps will be left unchanged (see zoo package)
 #' @param vel_threshold the maximum velocity that is tolerated between start and end points of periods of missing data
-#' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
 #' @param method "approx" for linear interpolation or "spline" for cubic spline interpolation
 #' @param report default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.
+#' @param progress Display a progress bar
 #'
 #' @return a dataframe of the same shape of the input data
 #' @export
@@ -24,12 +24,12 @@
 #' @importFrom zoo na.spline
 #' @importFrom rlang .data
 #'
-interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx", report = FALSE) {
+interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx", report = FALSE, progress = TRUE) {
 
   # check data format
   .check_monocular_data_format(data)
 
-  internal_interpolate <- function(data, maxgap, method, sample_rate, report) {
+  internal_interpolate <- function(data, maxgap, method, report) {
     
     # find samples with NA in either x or y
     samples_with_na <- is.na(data[,'x']) | is.na(data[, 'y'])
@@ -147,7 +147,13 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
 
   }
   data <- split(data, data$pID)
-  out <- lapply(data, internal_interpolate, maxgap, method, sample_rate, report)
+  
+  if(progress) {
+    out <- pbapply::pblapply(data, internal_interpolate, maxgap, method, report)
+  } else {
+    out <- lapply(data, internal_interpolate, maxgap, method, report)
+  }
+  
 
   if (report) {
 

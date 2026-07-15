@@ -10,7 +10,6 @@
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values specify particular values within 'trial' to plot data from certain trials
 #' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
-#' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param show_fix_order label the fixations in the order they were made
 #' @param plot_header display the header title text which explains graphical features of the plot.
@@ -44,7 +43,6 @@ plot_spatial <- function(raw_data = NULL,
                          pID_values = NULL,
                          trial_values = NULL,
                          bg_image = NULL,
-                         res = c(0,1920,0,1080),
                          flip_y = FALSE,
                          show_fix_order = TRUE,
                          plot_header = FALSE) {
@@ -54,36 +52,32 @@ plot_spatial <- function(raw_data = NULL,
   final_g <- ggplot()
 
   # setting axes limits and reversing y
+  res_x <- the$eyetracker_properties$screen_width_pixels
+  res_y <- the$eyetracker_properties$screen_height_pixels
+  
+  # creates breaks based on quarters. Might look messy with some resolutions
+  breaks_x = round(seq(0,res_x,res_x/4),0)
+  breaks_y = round(seq(0,res_y,res_y/4),0)
 
-  if (is.null(res)==FALSE) {
-    # creates breaks based on quarters. Might look messy with some resolutions
-    breaks_x = round(seq(res[1],res[2],(res[2]-res[1])/4),0)
-    breaks_y = round(seq(res[3],res[4],(res[4]-res[3])/4),0)
-  }
-
-  if (is.null(res)==FALSE && flip_y==FALSE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
+  final_g <- final_g +
+      scale_x_continuous(limits = c(0,res_x),
                          breaks = breaks_x) +
-      scale_y_continuous(limits = res[3:4],
+      scale_y_continuous(limits = c(0,res_y),
                          breaks = breaks_y)
-  } else if (is.null(res)==FALSE && flip_y==TRUE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
-                         breaks = breaks_x) +
-      scale_y_reverse(limits = res[4:3],
-                      breaks = breaks_y)
-  }
+  # if (flip_y==TRUE) {
+  #   final_g +
+  #     scale_y_reverse()
+  # } 
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, flip_y, final_g)
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, c(0,res_x,0,res_y), flip_y, final_g)
 
   # PLOT gridlines
 
   # major gridlines are just the breaks_*
   # minor are [0:34 + half the diff
-  minor_breaks_x <- breaks_x[0:4] + ((res[2]-res[1])/8)
-  minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
+  minor_breaks_x <- breaks_x[0:4] + (res_x/8)
+  minor_breaks_y <- breaks_y[0:4] + (res_y/8)
 
   final_g <-
     final_g +
@@ -188,7 +182,10 @@ plot_spatial <- function(raw_data = NULL,
            subtitle = "Raw data shown as dots; Fixations shown as circles (fill = duration); \nFixation size reflects dispersion of raw data; \nAOIs shown as blue regions")
   }
 
-
+  if (flip_y==TRUE) {
+    final_g +
+      scale_y_reverse()
+  } 
 
   return(final_g)
 

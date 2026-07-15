@@ -2,7 +2,7 @@
 % Please edit documentation in R/hdf5_get_event.R
 \name{hdf5_get_event}
 \alias{hdf5_get_event}
-\title{Get messgaes stored in TOBII-generated HDF5 files}
+\title{Get messages stored in TOBII-generated HDF5 files}
 \usage{
 hdf5_get_event(filename)
 }

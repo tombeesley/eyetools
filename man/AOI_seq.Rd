@@ -4,14 +4,12 @@
 \alias{AOI_seq}
 \title{Sequence analysis of area of interest entries}
 \usage{
-AOI_seq(data, AOIs, AOI_names = NULL, progress = TRUE)
+AOI_seq(data, AOIs, progress = TRUE)
 }
 \arguments{
 \item{data}{A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data}
 
-\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
-
-\item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).}
 
 \item{progress}{Display a progress bar}
 }

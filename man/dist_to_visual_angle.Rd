@@ -4,24 +4,12 @@
 \alias{dist_to_visual_angle}
 \title{Compute visual angle from distance metrics}
 \usage{
-dist_to_visual_angle(
-  vector,
-  dist_type = "cm",
-  view_dist_cm = 60,
-  screen_width_cm = 51,
-  screen_width_pixels = 1920
-)
+dist_to_visual_angle(vector, dist_type = "cm")
 }
 \arguments{
 \item{vector}{vector of distances (or single distance)}
 
 \item{dist_type}{default is "cm". Specify "pixel" for conversion from pixel values.}
-
-\item{view_dist_cm}{viewing distance in cm. Default of 60cm.}
-
-\item{screen_width_cm}{used in conversion of pixel values. Default is 51 cm (24" monitor).}
-
-\item{screen_width_pixels}{used in conversion of pixel values. Default is 1920 pixels.}
 }
 \value{
 an equivalent-sized object to the input
@@ -33,8 +21,8 @@ Takes a single value or vector of distances and returns the visual angle equival
 # calculate visual angle for stimulus of 5cm
 dist_to_visual_angle(5)
 
-# calculate visual angle of stimuli 2 and 10cm width at 50 cm viewing angle
-dist_to_visual_angle(c(2,10), view_dist_cm = 50)
+# calculate visual angle of stimuli 2cm and 10cm width
+dist_to_visual_angle(c(2,10))
 
 # calculate visual angle of 150 pixel wide
 dist_to_visual_angle(150, dist_type = "pixels")

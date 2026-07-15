@@ -5,7 +5,7 @@
 #' Non-consecutive fixations in the same AOI (i.e., with an intervening fixation in no AOI) are treated as two separate entries. 
 #'
 #' @param data A dataframe with fixation data (from fixation_dispersion). Either single or multi participant data
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).
 #' @param progress Display a progress bar
 #' @return a dataframe containing the sequence of entries into AOIs on each trial, entry/exit/duration time into AOI
 #' @export

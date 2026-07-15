@@ -7,8 +7,6 @@
 AOI_time_binned(
   data,
   AOIs,
-  AOI_names = NULL,
-  sample_rate = NULL,
   bin_length = NULL,
   max_time = NULL,
   as_prop = FALSE
@@ -17,13 +15,7 @@ AOI_time_binned(
 \arguments{
 \item{data}{A dataframe of raw data}
 
-\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
-
-\item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.}
-
-\item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
-
-\item{bin_length}{the time duration to be used for each bin.}
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).}
 
 \item{max_time}{maximum length of time to use, default is total trial length}
 

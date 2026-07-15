@@ -21,7 +21,6 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Tom Beesley \email{t.beesley@lancaster.ac.uk}
   \item Matthew Ivory \email{matthew.ivory@lancaster.ac.uk}
 }
 
