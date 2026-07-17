@@ -17,15 +17,9 @@ It is free to use under the GNU General Public Licence.
 
 **To install use `install.packages("eyetools")`**
 
-FOR USERS OF VERSIONS PRIOR TO 0.9.2, please note the following changes
-that will probably break older code:
-
-- We have removed the need to specify a name for the participant column.
-  eyetools now expects the column ‘pID’ in all input data
-- all ‘plot\_’ functions now have a ‘pID_values’ parameter to enable
-  selection of certain participant data to plot
-- renamed ‘trial_number’ to ‘trial_values’ in all relevant functions,
-  for consistency with the above change to pID_values
+Changes are fairly significant between 0.9.x and 0.10.0, and likely to
+break old code. See the changes in
+[NEWS.md](https://github.com/tombeesley/eyetools/blob/master/NEWS.md)
 
 Available functions in the latest CRAN version:
 
@@ -34,14 +28,17 @@ Available functions in the latest CRAN version:
 | [`AOI_seq()`](https://tombeesley.github.io/eyetools/reference/AOI_seq.md) | Detect the sequence in which AOIs were entered in a trial |
 | [`AOI_time()`](https://tombeesley.github.io/eyetools/reference/AOI_time.md) | Calculate time on AOIs; works with raw and fixation data |
 | [`AOI_time_binned()`](https://tombeesley.github.io/eyetools/reference/AOI_time_binned.md) | Binned time analysis of area of interest entries |
+| `ASC_todf()` | Converts eyetracking data from EyeLink ASC files to a “eyetools ready” dataframe |
 | [`combine_eyes()`](https://tombeesley.github.io/eyetools/reference/combine_eyes.md) | Combines binocular data (i.e., average or “best eye”) into monocular data |
 | [`compare_algorithms()`](https://tombeesley.github.io/eyetools/reference/compare_algorithms.md) | Provides a comparison between the dispersion and VTI fixation algorithms with correlations and plot |
 | [`conditional_transform()`](https://tombeesley.github.io/eyetools/reference/conditional_transform.md) | Implements a single-axis flip for specific trials to normalise data with counterbalanced designs |
-| [`create_AOI_df()`](https://tombeesley.github.io/eyetools/reference/create_AOI_df.md). | Create a blank data frame for populating with AOIs |
+| [`create_AOI_df()`](https://tombeesley.github.io/eyetools/reference/create_AOI_df.md). | Create and populate a data frame for specifying AOIs |
+| [`dist_to_visual_angle()`](https://tombeesley.github.io/eyetools/reference/dist_to_visual_angle.md) | Convert pixel or cm distances into visual angle |
+| `estimate_sample_rate()` | Estimate the sample rate of the tracker based on timestamps in the data |
 | [`fixation_dispersion()`](https://tombeesley.github.io/eyetools/reference/fixation_dispersion.md) | Dispersion algorithm for fixation detection |
 | [`fixation_VTI()`](https://tombeesley.github.io/eyetools/reference/fixation_VTI.md) | An algorithm that subtracts saccadic periods for fixation detection |
-| [`hdf5_to_df()`](https://tombeesley.github.io/eyetools/reference/hdf5_to_df.md) | converts eyetracking data retrieved from TOBII eyetrackers to a dataframe |
-| [`hdf5_get_event()`](https://tombeesley.github.io/eyetools/reference/hdf5_get_event.md) | A function to get the message event files from a TOBII-generated hdf5 files to dataframe |
+| [`hdf5_get_event()`](https://tombeesley.github.io/eyetools/reference/hdf5_get_event.md) | Extracts message event files from a TOBII-generated hdf5 files to dataframe |
+| [`hdf5_to_df()`](https://tombeesley.github.io/eyetools/reference/hdf5_to_df.md) | Converts eyetracking data from Tobii hdf5 files to a “eyetools ready” dataframe |
 | [`interpolate()`](https://tombeesley.github.io/eyetools/reference/interpolate.md) | Interpolates data across gaps; provides a summary report of repair |
 | [`plot_AOI_growth()`](https://tombeesley.github.io/eyetools/reference/plot_AOI_growth.md) | Plots absolute or proportional time spent in AOIs over time |
 | [`plot_heatmap()`](https://tombeesley.github.io/eyetools/reference/plot_heatmap.md) | Plots a heatmap of raw data. |
@@ -49,6 +46,8 @@ Available functions in the latest CRAN version:
 | [`plot_spatial()`](https://tombeesley.github.io/eyetools/reference/plot_spatial.md) | provides a 2D plot of raw data, fixations, saccades, and AOIs |
 | [`saccade_VTI()`](https://tombeesley.github.io/eyetools/reference/saccade_VTI.md) | Velocity threshold algorithm for saccade detection. Provides summary of velocity, location, duration |
 | [`smoother()`](https://tombeesley.github.io/eyetools/reference/smoother.md) | smooths data for use in saccade algorithms |
+| [`tracker_properties_get()`](https://tombeesley.github.io/eyetools/reference/tracker_properties_get.md) | Retrieves the current eye-tracker properties (used for data collection) |
+| [`tracker_properties_set()`](https://tombeesley.github.io/eyetools/reference/tracker_properties_set.md) | Sets the current eye-tracker properties (used for data collection) |
 
 **Development version:**
 
@@ -59,4 +58,6 @@ have bugs. You can install this using
 `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is
 the latest version.
 
-The current development version is: 0.9.3
+#### The current development version is: 0.10.1
+
+The main changes are:
