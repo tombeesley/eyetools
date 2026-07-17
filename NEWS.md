@@ -1,3 +1,6 @@
+# eyetools 0.10.0
+* stable version merged from 0.9.3
+
 # eyetools 0.9.3
 * added a on_attach "welcome" message when the package is loaded
 * added ggrepel::geom_label_repel to `plot_spatial()`, to avoid overlapping labels for fixations
@@ -8,6 +11,9 @@
 * Added two functions to "set" and "get" the tracker properties, for storing global settings used by many functions
 * updated the default screen width to 53cm (24 inch monitor)
 * added ASC_to_df() function which will import the raw data from an EyeLink SR ASC file and convert to eyetools-ready data format. 
+* removed AOI_names argument from all AOI_ functions. **The name of each AOI should be added to the AOI dataframe**. See the updated `create_AOI_df()`
+* added a velocity threshold to the interpolate function, such that interpolation only occurs when there are no large changes in velocity detected.
+
 
 # eyetools 0.9.2
 * updated CRAN version
