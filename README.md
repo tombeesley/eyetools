@@ -3,6 +3,7 @@
 &#10;README.md is generated from README.Rmd. Please edit README.Rmd 
 &#10;If you use index.Rmd or README.Rmd it's your responsibility to knit the document to create the corresponding .md. pkgdown does not do this for you because it only touches files in the doc/ directory.
 &#10;-->
+
 <!-- badges: start -->
 
 [![Lifecycle:
@@ -11,6 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/eyetools)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/eyetools)](https://CRAN.R-project.org/package=eyetools)
+
 <!-- badges: end -->
 
 # **eyetools**
@@ -32,15 +34,10 @@ It is free to use under the GNU General Public Licence.
 
 **To install use `install.packages("eyetools")`**
 
-FOR USERS OF VERSIONS PRIOR TO 0.9.2, please note the following changes that will probably break older code:
+Changes are fairly significant between 0.9.x and 0.10.0, and likely to
+break old code. See the changes in
+[NEWS.md](https://github.com/tombeesley/eyetools/blob/master/NEWS.md)
 
-- We have removed the need to specify a name for the participant column.
-  eyetools now expects the column ‘pID’ in all input data
-- all ‘plot\_’ functions now have a ‘pID_values’ parameter to enable
-  selection of certain participant data to plot
-- renamed ‘trial_number’ to ‘trial_values’ in all relevant functions,
-  for consistency with the above change to pID_values
-  
 Available functions in the latest CRAN version:
 
 | Implemented functions | Description |
@@ -48,14 +45,17 @@ Available functions in the latest CRAN version:
 | `AOI_seq()` | Detect the sequence in which AOIs were entered in a trial |
 | `AOI_time()` | Calculate time on AOIs; works with raw and fixation data |
 | `AOI_time_binned()` | Binned time analysis of area of interest entries |
+| `ASC_todf()` | Converts eyetracking data from EyeLink ASC files to a “eyetools ready” dataframe |
 | `combine_eyes()` | Combines binocular data (i.e., average or “best eye”) into monocular data |
 | `compare_algorithms()` | Provides a comparison between the dispersion and VTI fixation algorithms with correlations and plot |
 | `conditional_transform()` | Implements a single-axis flip for specific trials to normalise data with counterbalanced designs |
-| `create_AOI_df()`. | Create a blank data frame for populating with AOIs |
+| `create_AOI_df()`. | Create and populate a data frame for specifying AOIs |
+| `dist_to_visual_angle()` | Convert pixel or cm distances into visual angle |
+| `estimate_sample_rate()` | Estimate the sample rate of the tracker based on timestamps in the data |
 | `fixation_dispersion()` | Dispersion algorithm for fixation detection |
 | `fixation_VTI()` | An algorithm that subtracts saccadic periods for fixation detection |
-| `hdf5_to_df()` | converts eyetracking data retrieved from TOBII eyetrackers to a dataframe |
-| `hdf5_get_event()` | A function to get the message event files from a TOBII-generated hdf5 files to dataframe |
+| `hdf5_get_event()` | Extracts message event files from a TOBII-generated hdf5 files to dataframe |
+| `hdf5_to_df()` | Converts eyetracking data from Tobii hdf5 files to a “eyetools ready” dataframe |
 | `interpolate()` | Interpolates data across gaps; provides a summary report of repair |
 | `plot_AOI_growth()` | Plots absolute or proportional time spent in AOIs over time |
 | `plot_heatmap()` | Plots a heatmap of raw data. |
@@ -63,6 +63,8 @@ Available functions in the latest CRAN version:
 | `plot_spatial()` | provides a 2D plot of raw data, fixations, saccades, and AOIs |
 | `saccade_VTI()` | Velocity threshold algorithm for saccade detection. Provides summary of velocity, location, duration |
 | `smoother()` | smooths data for use in saccade algorithms |
+| `tracker_properties_get()` | Retrieves the current eye-tracker properties (used for data collection) |
+| `tracker_properties_set()` | Sets the current eye-tracker properties (used for data collection) |
 
 **Development version:**
 
@@ -73,4 +75,6 @@ have bugs. You can install this using
 `devtools::install_github("tombeesley/eyetools@0.X.X")` where 0.X.X is
 the latest version.
 
-The current development version is: 0.9.3
+#### The current development version is: 0.10.1
+
+The main changes are:
