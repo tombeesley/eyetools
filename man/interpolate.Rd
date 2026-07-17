@@ -6,22 +6,25 @@
 \usage{
 interpolate(
   data,
+  vel_threshold = 35,
   maxgap = 150,
   method = "approx",
-  sample_rate = NULL,
-  report = FALSE
+  report = FALSE,
+  progress = TRUE
 )
 }
 \arguments{
-\item{data}{dataframe with columns time, x, y, trial (the standardised raw data form for eyeproc)}
+\item{data}{A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools}
+
+\item{vel_threshold}{the maximum velocity that is tolerated between start and end points of periods of missing data}
 
 \item{maxgap}{maximum time gap of consecutive trackloss to fill (in ms). Any longer gaps will be left unchanged (see zoo package)}
 
 \item{method}{"approx" for linear interpolation or "spline" for cubic spline interpolation}
 
-\item{sample_rate}{Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.}
-
 \item{report}{default is FALSE. If TRUE, then the return value is a list containing the returned data frame and the report.}
+
+\item{progress}{Display a progress bar}
 }
 \value{
 a dataframe of the same shape of the input data

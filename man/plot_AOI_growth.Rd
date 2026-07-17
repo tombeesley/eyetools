@@ -9,7 +9,6 @@ plot_AOI_growth(
   pID_values = NULL,
   trial_values = NULL,
   AOIs = NULL,
-  AOI_names = NULL,
   type = "abs",
   plot_time_not_in_AOI = FALSE
 )
@@ -21,9 +20,7 @@ plot_AOI_growth(
 
 \item{trial_values}{can be used to select particular trials within the data}
 
-\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height)}
-
-\item{AOI_names}{An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc. To omit AOIs from the plot, use NA in relevant vector position}
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height)}
 
 \item{type}{either "abs" (absolute) or "prop" (proportion)}
 

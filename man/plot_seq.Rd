@@ -10,7 +10,6 @@ plot_seq(
   trial_values = NULL,
   pID_values = NULL,
   bg_image = NULL,
-  res = c(0, 1920, 0, 1080),
   flip_y = FALSE,
   plot_header = FALSE,
   bin_time = NULL,
@@ -20,15 +19,13 @@ plot_seq(
 \arguments{
 \item{data}{A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.}
 
-\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).}
+\item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).}
 
 \item{trial_values}{specify particular values within 'trial' to plot data from certain trials}
 
 \item{pID_values}{specify particular values within 'pID' to plot data from certain participants}
 
 \item{bg_image}{The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.}
-
-\item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 
 \item{flip_y}{reverse the y axis coordinates (useful if origin is top of the screen)}
 

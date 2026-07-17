@@ -37,6 +37,26 @@ library(eyetools)
 
 ```
 
+## Specifying eye-tracker properties 
+
+To ensure accurate computation within eyetools, it is important for users to specify the properties of the data and the recording device. This can be done using the function `tracker_properties_set()`. Calling this without arguments will provide a list of the parameters that can be specified:
+
+```{r}
+tracker_properties_set()
+```
+
+For example, we can set the sampling frequency:
+
+```{r}
+tracker_properties_set(sample_frequency = 300)
+```
+
+This overides the default value, which is purposefully left NULL. If a function detects a NULL sampling frequency it will estimate the sampling frequency from the timestamps in the data. The current tracker properties can be revealed using:
+
+```{r}
+tracker_properties_get()
+```
+
 ## Data Manipulation and Preprocessing
 
 Eyetools has built in example data that can be used while getting to grips with the package. For the purpose of this tutorial, we will start with a small dataset that contains binocular eye data from two participants (and six trials) from a simple contingency learning task (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015)[^1]. In this task there are two stimuli that appear simultaneously on each trial (to the left and right in the top half of the screen). Participants look at these cues and then make a decision by selecting an "outcome response" button.
@@ -232,7 +252,6 @@ data_119 <- data[data$pID == 119,]
 comparison <- compare_algorithms(data_119,
                                  plot_fixations = TRUE,
                                  print_summary = TRUE,
-                                 sample_rate = NULL,
                                  threshold = 80, #lowering the default threshold produces a better result when using smoothed data
                                  min_dur = 150,
                                  min_dur_sac = 20,
@@ -245,16 +264,17 @@ comparison <- compare_algorithms(data_119,
 
 Once we have collected our fixation data (we will proceed using the `fixations_disp` dataset), we can start looking at Areas of Interest (AOIs) and then plots of the fixations.
 
-For the `AOI_` "family" of functions, we need to specify where our AOIs were presented on the screen. This will enable us to determine when a participant enters or exits these areas.
+For the `AOI_` "family" of functions, we need to specify where our AOIs were presented on the screen. This will enable us to determine when a participant enters or exits these areas. The best way to do this is using the `create_AOI_df()` function, populating the AOI object with coordinates relevant to the AOIs and a set of names:
 
 ```{r set_AOIs}
-# set areas of interest
-AOI_areas <- data.frame(matrix(nrow = 3, ncol = 4))
-colnames(AOI_areas) <- c("x", "y", "width_radius", "height")
+# define areas of interest
+a1 <- c(460, 840, 400, 300) # Left cue
+a2 <- c(1460, 840, 400, 300) # Right cue
+a3 <- c(960, 270, 300, 500) # outcomes
 
-AOI_areas[1,] <- c(460, 840, 400, 300) # Left cue
-AOI_areas[2,] <- c(1460, 840, 400, 300) # Right cue
-AOI_areas[3,] <- c(960, 270, 300, 500) # outcomes
+AOI_areas <- create_AOI_df(num_AOIs = 3, 
+                           AOI_data = list(a1, a2, a3), 
+                           AOI_names = c("left", "right", "centre"))
 
 AOI_areas
 ```
@@ -306,8 +326,7 @@ The `AOI_seq()` function analyses the sequence of entries into defined AOI regio
 ```{r AOI_seq}  
 
 data_AOI_sequence <- AOI_seq(data_fixations_disp,
-                             AOI_areas,         
-                             AOI_names = NULL)   
+                             AOI_areas)   
 
 head(data_AOI_sequence)
 ```
@@ -383,12 +402,6 @@ plot_AOI_growth(data = data,
                 trial_values = 1, 
                 AOIs = AOI_areas, 
                 type = "prop")
-
-#only keep predictive and non-predictive cues rather than the target AOI
-plot_AOI_growth(data = data, pID_values = 119, trial_values = 1, 
-                AOIs = AOI_areas, 
-                type = "prop", 
-                AOI_names = c("Predictive", "Non Predictive", NA))
 
 ```
 

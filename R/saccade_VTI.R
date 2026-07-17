@@ -5,11 +5,10 @@
 #'
 #' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
-#' @param data A dataframe with raw data (time, x, y, trial) for one participant
-#' @param sample_rate sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples
+#' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
 #' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
 #' @param min_dur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold
-#'
+#' 
 #' @importFrom stats dist aggregate
 #' @importFrom pbapply pblapply
 #' @return a data frame giving the saccades found by trial
@@ -21,17 +20,16 @@
 #' 
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20){
+saccade_VTI <- function(data, threshold = 150, min_dur = 20){
 
-  internal_saccade_VTI <- function(data, sample_rate, threshold, min_dur) {
+  internal_saccade_VTI <- function(data, threshold, min_dur) {
 
 
     # estimate sample rate
-    if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(data)
-
-
+    if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(data)
+    
     data <- split(data, data$trial)
-    data_sac <- pbapply::pblapply(data, saccade_VTI_trial, sample_rate, threshold, min_dur)
+    data_sac <- pbapply::pblapply(data, saccade_VTI_trial, threshold, min_dur)
     data_sac <- do.call(rbind.data.frame,data_sac)
 
     data_sac <- data_sac[,c("pID", "trial", "sac_n", "start", "end", "duration",
@@ -42,7 +40,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
 
   }
 
-  saccade_VTI_trial <- function(data, sample_rate, threshold, min_dur){
+  saccade_VTI_trial <- function(data, threshold, min_dur){
 
     ppt_label <- data$pID[1]
 
@@ -60,7 +58,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
 
     data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel") # convert to VisAng
 
-    data$vel <- data$distance*sample_rate # visual angle per second
+    data$vel <- data$distance*the$eyetracker_properties$sample_frequency # visual angle per second
 
     data$saccade_detected <- ifelse(data$vel > threshold, 2, 1) # saccade 2, otherwise 1
 
@@ -116,7 +114,7 @@ saccade_VTI <- function(data, sample_rate = NULL, threshold = 150, min_dur = 20)
   }
 
   data <- split(data, data$pID)
-  out <- lapply(data, internal_saccade_VTI, sample_rate, threshold, min_dur)
+  out <- lapply(data, internal_saccade_VTI, threshold, min_dur)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 

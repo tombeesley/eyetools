@@ -1,8 +1,13 @@
 # eyetools 0.9.3
 * added a on_attach "welcome" message when the package is loaded
-* added ggrepel::geom_label_repel to spatial_plot, to avoid overlapping labels for fixations
-* fixed issue using a colour scale in plot_spatial with only a single fixation
+* added ggrepel::geom_label_repel to `plot_spatial()`, to avoid overlapping labels for fixations
+* fixed issue using a colour scale in `plot_spatial()` with only a single fixation
 * fixed an issue with displaying a background image without alpha transparency layer
+* fixed bug with `fixation_VTI()`
+* fixed an issue with screenshot not displaying on plots when flip_y parameter is TRUE
+* Added two functions to "set" and "get" the tracker properties, for storing global settings used by many functions
+* updated the default screen width to 53cm (24 inch monitor)
+* added ASC_to_df() function which will import the raw data from an EyeLink SR ASC file and convert to eyetools-ready data format. 
 
 # eyetools 0.9.2
 * updated CRAN version

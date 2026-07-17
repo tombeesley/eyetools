@@ -13,7 +13,7 @@ fixation_dispersion(
 )
 }
 \arguments{
-\item{data}{A dataframe with raw data (time, x, y, trial) for one participant (the standardised raw data form for eyetools)}
+\item{data}{A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools}
 
 \item{min_dur}{Minimum duration (in milliseconds) of period over which fixations are assessed}
 

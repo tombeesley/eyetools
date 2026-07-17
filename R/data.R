@@ -1,7 +1,8 @@
 #' Example dataset from that contains binocular eye data from two participants from a simple contingency learning task
 #' (the data are from Beesley, Nguyen, Pearson, & Le Pelley, 2015). In this task there are two stimuli that appear simultaneously
-#' on each trial (to the left and right of the screen).
+#' on each trial (to the left and right of the screen). 
 #' Participants look at these cues and then make a decision by selecting an "outcome response" button.
+#' Data was recorded with a Tobii TX300 sampling at 300Hz. Participant sat approximately 60 cm from the screen. The screen resolution was 1920 x 1080.
 #'
 #' The dataset contains data from two participants and the first six trials of the study.
 #'
@@ -40,10 +41,12 @@
 #' Example AOIs for use with HCL
 #'
 #' This dataframe contains three rectangular areas of interest (AOIs), set out for use with the HCL dataset.
-#' Values are in pixels.
+#' Values are in pixels. This is the standard AOI format required by many functions in the package. A template dataframe
+#' can be created using create_AOI_df()
 #'
-#' @format A data frame with 3 rows and 4 variables:
+#' @format A data frame with 3 rows and 5 variables:
 #' \describe{
+#'   \item{name}{custom name for the AOI}
 #'   \item{x}{centred x coordinate of the AOI}
 #'   \item{y}{centred y coordinate of the AOI}
 #'   \item{width_radius}{either the width of the AOI, or the radius for circular AOIs}

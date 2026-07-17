@@ -6,9 +6,7 @@
 #'
 #' @param data A dataframe  of either fixation data (from fix_dispersion) or raw data
 #' @param data_type Whether data is a fixation ("fix") or raw data ("raw")
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
-#' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
-#' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).
 #' @param as_prop whether to return time in AOI as a proportion of the total time of trial
 #' @param trial_time needed if as_prop is set to TRUE. a vector of the time taken in each trial. Equal to the length of x trials by y participants in the dataset
 #'
@@ -35,9 +33,9 @@
 #'}
 
 
-AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate = NULL, as_prop = FALSE, trial_time = NULL) {
+AOI_time <- function(data, data_type = NULL, AOIs, as_prop = FALSE, trial_time = NULL) {
 
-  internal_AOI_time <- function(data, data_type, AOIs, AOI_names, sample_rate) {
+  internal_AOI_time <- function(data, data_type, AOIs) {
     if (is.null(data_type) == TRUE) {
       # input data for both fixations and raw data
       stop("Type of data not specified. Use `data_type = 'fix'` for fixations or `data_type = 'raw'` for raw data")
@@ -58,17 +56,10 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
       # process as raw data input
       proc_data <- sapply(split(data, data$trial),
                           AOI_time_trial_process_raw,
-                          AOIs = AOIs,
-                          sample_rate = sample_rate)
+                          AOIs = AOIs)
 
       data <- cbind(unique(data$trial), t(proc_data))
 
-    }
-
-    if (is.null(AOI_names)==FALSE) {
-      AOI_name_text <- AOI_names
-    } else {
-      AOI_name_text <- sprintf("AOI_%s",1:nrow(AOIs))
     }
 
     data <- data.frame(data)
@@ -80,10 +71,10 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
       return(data[,i])
     }))
 
-    colnames(data) <- c("trial", AOI_name_text)
+    colnames(data) <- c("trial", AOIs$name)
     trial <- data$trial
     long_data <- stack(data, select = -trial)
-    long_data <- cbind(rep(data$trial, length(AOI_name_text)), long_data)
+    long_data <- cbind(rep(data$trial, length(AOIs$name)), long_data)
 
     long_data <- cbind(ppt_label, long_data)
 
@@ -93,7 +84,7 @@ AOI_time <- function(data, data_type = NULL, AOIs, AOI_names = NULL, sample_rate
   }
 
   data <- split(data, data$pID)
-  out <- lapply(data, internal_AOI_time, data_type, AOIs, AOI_names, sample_rate)
+  out <- lapply(data, internal_AOI_time, data_type, AOIs)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
@@ -127,17 +118,19 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
 
   for (a in 1:nrow(AOIs)) {
 
-    if (sum(!is.na(AOIs[a,])) == 4) {
+    if (!is.na(AOIs[a,"height"])) {
       # square AOI
-      xy_hits <- (trial_data$x >= as.numeric(AOIs[a,1] - AOIs[a,3]/2) & trial_data$x <= as.numeric(AOIs[a,1] + AOIs[a,3]/2)) &
-        (trial_data$y >= as.numeric(AOIs[a,2] - AOIs[a,4]/2) & trial_data$y <= as.numeric(AOIs[a,2] + AOIs[a,4]/2))
+      xy_hits <- 
+        (trial_data$x >= as.numeric(AOIs[a,"x"] - AOIs[a,"width_radius"]/2) &
+           trial_data$x <= as.numeric(AOIs[a,"x"] + AOIs[a,"width_radius"]/2)) &
+        (trial_data$y >= as.numeric(AOIs[a,"y"] - AOIs[a,"height"]/2) & trial_data$y <= as.numeric(AOIs[a,"y"] + AOIs[a,"height"]/2))
 
-    } else if (sum(!is.na(AOIs[a,])) == 3) {
+    } else if (is.na(AOIs[a,"height"]) & !is.na(AOIs[a,"width_radius"])) {
       # circle AOI
-      xy_hits <- sqrt(as.numeric(AOIs[a,1]-trial_data$x)^2+as.numeric(AOIs[a,2]-trial_data$y)^2) < as.numeric(AOIs[a,3])
+      xy_hits <- sqrt(as.numeric(AOIs[a,"x"]-trial_data$x)^2+as.numeric(AOIs[a,"y"]-trial_data$y)^2) < as.numeric(AOIs[a,"width_radius"])
     } else {
       # report error message of bad AOI definition
-
+      stop("Bad AOI definition. Consider using function create_AOI_df()")
     }
 
     # convert hits into data on time and entries
@@ -150,31 +143,31 @@ AOI_time_trial_process_fix <- function(trial_data, AOIs) {
 
 }
 
-AOI_time_trial_process_raw <- function(trial_data, AOIs, sample_rate) {
+AOI_time_trial_process_raw <- function(trial_data, AOIs) {
 
 
-  if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(trial_data)
-  sample_rate <- 1000/sample_rate
+  if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(trial_data)
+  time_per_sample <- 1000/the$eyetracker_properties$sample_frequency
 
   aoi_time_sums <- data.frame(matrix(nrow = 1, ncol = nrow(AOIs)))
 
   for (a in 1:nrow(AOIs)) {
 
-    if (sum(!is.na(AOIs[a,])) == 4) {
+    if (!is.na(AOIs[a,"height"])) {
       # square AOI
-      xy_hits <- ((trial_data$x >= AOIs[a,1]-AOIs[a,3]/2 & trial_data$x <= AOIs[a,1]+AOIs[a,3]/2) &
-                    (trial_data$y >= AOIs[a,2]-AOIs[a,4]/2 & trial_data$y <= AOIs[a,2]+AOIs[a,4]/2))
+      xy_hits <- ((trial_data$x >= AOIs[a,"x"]-AOIs[a,"width_radius"]/2 & trial_data$x <= AOIs[a,"x"]+AOIs[a,"width_radius"]/2) &
+                    (trial_data$y >= AOIs[a,"y"]-AOIs[a,"height"]/2 & trial_data$y <= AOIs[a,"y"]+AOIs[a,"height"]/2))
     } else if (sum(!is.na(AOIs[a,])) == 3) {
       # circle AOI
-      xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
+      xy_hits <- sqrt((AOIs[a,"x"]-trial_data$x)^2+(AOIs[a,"y"]-trial_data$y)^2) < AOIs[a,"width_radius"]
     } else {
       # report error message of bad AOI definition
-      stop("Bad AOI definition")
+      stop("Bad AOI definition. Consider using function create_AOI_df()")
 
     }
 
     # convert hits into data on time and entries
-    aoi_time_sums[a] <- round(sum(xy_hits*sample_rate,
+    aoi_time_sums[a] <- round(sum(xy_hits*time_per_sample,
                                   na.rm = TRUE),0) # sum the valid AOI hits - multiply by sample rate
 
   }

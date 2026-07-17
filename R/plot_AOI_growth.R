@@ -5,8 +5,7 @@
 #' @param data raw data in standard raw data form (time, x, y, trial)
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values can be used to select particular trials within the data
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height)
-#' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc. To omit AOIs from the plot, use NA in relevant vector position
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height)
 #' @param type either "abs" (absolute) or "prop" (proportion)
 #' @param plot_time_not_in_AOI boolean as to whether to include proportion of time spent outside AOIs
 #'
@@ -29,19 +28,14 @@
 #' @importFrom stats ave
 
 
-plot_AOI_growth <- function(data = NULL, pID_values = NULL, trial_values = NULL, AOIs = NULL, AOI_names = NULL, type = "abs", plot_time_not_in_AOI = FALSE) {
+plot_AOI_growth <- function(data = NULL, pID_values = NULL, trial_values = NULL, AOIs = NULL, type = "abs", plot_time_not_in_AOI = FALSE) {
 
   #error catches
   if(!is.null(trial_values) && !is.numeric(trial_values)) stop("trial_number input expected as numeric values")
   
   if(is.null(data[['x']]) || is.null(data[['y']])) stop("No x or y variables detected")
   if(!(type %in% c("abs", "prop"))) stop("type should be 'abs' or 'prop'.")
-  if(is.null(AOIs)) {stop("Dataframe of Areas of Interest must be specified using AOIs =") }
-  else {
-    if(!is.null(AOI_names)) {
-      if(nrow(AOIs) != length(AOI_names)) stop("AOI_names is not the same length as the number of AOIs detected")
-    }
-  }
+  if(is.null(AOIs)) stop("Dataframe of Areas of Interest must be specified using AOIs =")
 
   # check pID_values or select random pID
   data <- .select_pID_values(data, pID_values, allow_random = TRUE)
@@ -67,8 +61,8 @@ plot_AOI_growth <- function(data = NULL, pID_values = NULL, trial_values = NULL,
       # Check if x and y fall within the AOI range
       if (x >= x_range[1] && x <= x_range[2] &&
           y >= y_range[1] && y <= y_range[2]) {
-        if(is.null(AOI_names)) return(paste0("AOI_", i))
-        else return(AOI_names[i])
+      
+        return(AOIs$name[i])
       }
     }
     # Return "out of AOI" if no AOI matches
@@ -94,7 +88,7 @@ plot_AOI_growth <- function(data = NULL, pID_values = NULL, trial_values = NULL,
   data$time_diff[is.na(data$time_diff) & data$time == 0] <- 0
   data <- data[order(data$in_AOI, data$time), ]  # Ensure data is ordered for filling
   data$time_diff <- ave(data$time_diff, data$in_AOI, FUN = function(x) zoo::na.locf(x, na.rm = FALSE))
-#browser()
+
   # Calculate proportion
   prop <- data$time_diff / data$time
   data$prop <- prop

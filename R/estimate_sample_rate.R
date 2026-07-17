@@ -1,7 +1,7 @@
 # This is a utility function for estimating the sample_rate in Hz based off the timestamps given.
 
 
-.estimate_sample_rate <- function(data) {
+.estimate_sample_rate_old_redundant <- function(data) {
 
   # estimate sample rate
 
@@ -16,5 +16,6 @@
     })
     #average sample rate across all trials
     sample_rate <- 1000/mean(sample_rates)
-    sample_rate
+    the$eyetracker_properties$sample_frequency <- sample_rate
+    warning()
   }

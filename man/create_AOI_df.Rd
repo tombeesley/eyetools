@@ -4,29 +4,27 @@
 \alias{create_AOI_df}
 \title{Create a blank data frame for populating with AOIs}
 \usage{
-create_AOI_df(num_AOIs = 3, shape = "rect", AOI_data = NULL)
+create_AOI_df(num_AOIs = 3, AOI_data = NULL, AOI_names = NULL)
 }
 \arguments{
 \item{num_AOIs}{number of AOIs, setting the number of rows}
 
-\item{shape}{whether the AOI is rectangular ("rect") or circular ("circ")}
+\item{AOI_data}{a list containing data for each AOI, ordered by x, y, width_radius, and height (NA if circular)}
 
-\item{AOI_data}{a list of data for each AOI, ordered by x, y, width_radius, and height}
+\item{AOI_names}{a vector of names for the AOIs specified in AOI_data}
 }
 \value{
-a dataframe in the standard format required for eyetools
+an AOI dataframe in the format required for several AOI functions in eyetools
 }
 \description{
-Create a blank data frame for populating with AOIs
+Used to define a set of AOIs for use across various functions within the eyetools package.
 }
 \examples{
-# create an empty data frame with 3 rectangular shaped AOIs
-create_AOI_df(3, shape = "rect")
+# create an empty data frame with 3 AOIs
+create_AOI_df(3)
 
-# create an AOI dataframe with data
-create_AOI_df(3, shape = "rect",
-              AOI_data = list(c(460,840,400,300), c(1460,840,400,300), c(960,270,300,500)))
-# creating data for circular AOIs
-create_AOI_df(3, shape = "circ",
-              AOI_data = list(c(460,840,400), c(1460,840,400), c(960,270,300)))
+# create an AOI dataframe with data, the second of which is circular, with names
+create_AOI_df(num_AOIs = 3, 
+              AOI_data = list(c(460,840,400,300), c(1460,840,400,NA), c(960,270,300,500)),
+              AOI_names = c("AOI_1", "AOI_2", "AOI_3"))
 }

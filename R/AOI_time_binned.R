@@ -8,9 +8,7 @@
 #' AOI_time_binned can take either single participant data or multiple participants, where participants are demarcated by values in the "pID" column.
 #'
 #' @param data A dataframe of raw data
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
-#' @param AOI_names An optional vector of AOI names to replace the default "AOI_1", "AOI_2", etc.
-#' @param sample_rate Optional sample rate of the eye-tracker (Hz) for use with data. If not supplied, the sample rate will be estimated from the time column and the number of samples.
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).
 #' @param bin_length the time duration to be used for each bin.
 #' @param max_time maximum length of time to use, default is total trial length
 #' @param as_prop whether to return time in AOI as a proportion of the total time of trial
@@ -31,11 +29,11 @@
 #'
 
 
-AOI_time_binned <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, bin_length = NULL, max_time = NULL, as_prop = FALSE) {
+AOI_time_binned <- function(data, AOIs, bin_length = NULL, max_time = NULL, as_prop = FALSE) {
 
   if(missing(bin_length)) stop("Requires bin_length")
 
-  internal_AOI_time_binned <- function(data, AOIs, AOI_names, sample_rate, bin_length, max_time) {
+  internal_AOI_time_binned <- function(data, AOIs, bin_length, max_time) {
 
     ppt_label <- data$pID[1]
 
@@ -43,17 +41,12 @@ AOI_time_binned <- function(data, AOIs, AOI_names = NULL, sample_rate = NULL, bi
     proc_data <- lapply(split(data, data$trial),
                         AOI_binned_time_trial_process_raw,
                         AOIs = AOIs,
-                        sample_rate = sample_rate,
                         bin_length,
                         max_time)
 
 data <- do.call('rbind.data.frame', proc_data)
 
-    if (is.null(AOI_names)==FALSE) {
-      AOI_name_text <- c("trial", "bin_n", AOI_names)
-    } else {
-      AOI_name_text <- c("trial", "bin_n", sprintf("AOI_%s",1:nrow(AOIs)))
-    }
+    AOI_name_text <- c("trial", "bin_n", AOIs$name)
 
     data <- cbind(ppt_label, data)
 
@@ -63,7 +56,7 @@ data <- do.call('rbind.data.frame', proc_data)
   }
 
   data <- split(data, data$pID)
-  out <- lapply(data, internal_AOI_time_binned, AOIs, AOI_names, sample_rate, bin_length, max_time)
+  out <- lapply(data, internal_AOI_time_binned, AOIs, bin_length, max_time)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
@@ -82,10 +75,11 @@ data <- do.call('rbind.data.frame', proc_data)
 }
 
 
-AOI_binned_time_trial_process_raw <- function(trial_data, AOIs, sample_rate, bin_length, max_time) {
+AOI_binned_time_trial_process_raw <- function(trial_data, AOIs, bin_length, max_time) {
 
-  if (is.null(sample_rate)==TRUE) sample_rate <- .estimate_sample_rate(trial_data)
-  sample_rate <- 1000/sample_rate
+  # estimate sample rate
+  if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(trial_data)
+  time_per_sample <- 1000/the$eyetracker_properties$sample_frequency
 
   if (is.null(max_time)) max_time <- max(trial_data$time) #set as the total trial time
 
@@ -105,28 +99,30 @@ AOI_binned_time_trial_process_raw <- function(trial_data, AOIs, sample_rate, bin
 
   data_binned <- split(trial_data, trial_data$bin)
 
-  AOI_bin_process <- function(trial_data, AOIs, sample_rate, bin_length, max_time) {
+  AOI_bin_process <- function(trial_data, AOIs, bin_length, max_time) {
 
     aoi_time_sums <- data.frame(matrix(nrow = 1, ncol = nrow(AOIs)))
 
     for (a in 1:nrow(AOIs)) {
 
-      if (sum(!is.na(AOIs[a,])) == 4) {
+      if (!is.na(AOIs[a,"height"])) {
         # square AOI
-        xy_hits <- ((trial_data$x >= AOIs[a,1]-AOIs[a,3]/2 & trial_data$x <= AOIs[a,1]+AOIs[a,3]/2) &
-                      (trial_data$y >= AOIs[a,2]-AOIs[a,4]/2 & trial_data$y <= AOIs[a,2]+AOIs[a,4]/2))
-      } else if (sum(!is.na(AOIs[a,])) == 3) {
+        xy_hits <- 
+          (trial_data$x >= as.numeric(AOIs[a,"x"] - AOIs[a,"width_radius"]/2) &
+             trial_data$x <= as.numeric(AOIs[a,"x"] + AOIs[a,"width_radius"]/2)) &
+          (trial_data$y >= as.numeric(AOIs[a,"y"] - AOIs[a,"height"]/2) & trial_data$y <= as.numeric(AOIs[a,"y"] + AOIs[a,"height"]/2))
+        
+      } else if (is.na(AOIs[a,"height"]) & !is.na(AOIs[a,"width_radius"])) {
         # circle AOI
-        xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
+        xy_hits <- sqrt(as.numeric(AOIs[a,"x"]-trial_data$x)^2+as.numeric(AOIs[a,"y"]-trial_data$y)^2) < as.numeric(AOIs[a,"width_radius"])
       } else {
         # report error message of bad AOI definition
-        stop("Bad AOI definition")
-
+        stop("Bad AOI definition. Consider using function create_AOI_df()")
       }
 
       # convert hits into data on time and entries
-      aoi_time_sums[a] <- round(sum(xy_hits*sample_rate,
-                                    na.rm = TRUE),0) # sum the valid AOI hits - multiply by sample rate
+      aoi_time_sums[a] <- round(sum(xy_hits*time_per_sample,
+                                    na.rm = TRUE),0) # sum the valid AOI hits - multiply by duration of a sample
 
     }
 
@@ -137,7 +133,7 @@ AOI_binned_time_trial_process_raw <- function(trial_data, AOIs, sample_rate, bin
     return(out)
   }
 
-  data_out <- lapply(data_binned, AOI_bin_process, AOIs, sample_rate,  bin_length, max_time)
+  data_out <- lapply(data_binned, AOI_bin_process, AOIs, bin_length, max_time)
   data_out <- do.call('rbind.data.frame', data_out)
 
   return(data_out)
