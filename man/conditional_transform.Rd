@@ -9,8 +9,6 @@ conditional_transform(
   flip = c("x", "y"),
   cond_column,
   cond_values,
-  resolution_x = 1920,
-  resolution_y = 1080,
   message = TRUE
 )
 }
@@ -23,10 +21,6 @@ conditional_transform(
 
 \item{cond_values}{a single value or vector stating which values in con_column result in a flip}
 
-\item{resolution_x}{screen size in pixels for the x axis}
-
-\item{resolution_y}{screen size in pixels for the y axis}
-
 \item{message}{whether to output messages during function. Useful to turn off when using in a vectorised fashion where it is running multiple times}
 }
 \value{
@@ -36,6 +30,7 @@ a dataframe of the equivalent format as the input data
 A function to perform conditional transformations of the x/y raw data.
 The function takes the dataframe and performs a single axis flip based on the values specified in the cond_column.
 The primary use of this function is to correct or normalise the data when counterbalancing stimulus placement within experiments (e.g., having a target stimulus appear on the left and right equally often)
+The screen width and height in pixels can be set using tracker_properties_set().
 }
 \examples{
 data <- combine_eyes(HCL)

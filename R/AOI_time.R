@@ -153,13 +153,13 @@ AOI_time_trial_process_raw <- function(trial_data, AOIs) {
 
   for (a in 1:nrow(AOIs)) {
 
-    if (sum(!is.na(AOIs[a,])) == 4) {
+    if (!is.na(AOIs[a,"height"])) {
       # square AOI
-      xy_hits <- ((trial_data$x >= AOIs[a,1]-AOIs[a,3]/2 & trial_data$x <= AOIs[a,1]+AOIs[a,3]/2) &
-                    (trial_data$y >= AOIs[a,2]-AOIs[a,4]/2 & trial_data$y <= AOIs[a,2]+AOIs[a,4]/2))
+      xy_hits <- ((trial_data$x >= AOIs[a,"x"]-AOIs[a,"width_radius"]/2 & trial_data$x <= AOIs[a,"x"]+AOIs[a,"width_radius"]/2) &
+                    (trial_data$y >= AOIs[a,"y"]-AOIs[a,"height"]/2 & trial_data$y <= AOIs[a,"y"]+AOIs[a,"height"]/2))
     } else if (sum(!is.na(AOIs[a,])) == 3) {
       # circle AOI
-      xy_hits <- sqrt((AOIs[a,1]-trial_data$x)^2+(AOIs[a,2]-trial_data$y)^2) < AOIs[a,3]
+      xy_hits <- sqrt((AOIs[a,"x"]-trial_data$x)^2+(AOIs[a,"y"]-trial_data$y)^2) < AOIs[a,"width_radius"]
     } else {
       # report error message of bad AOI definition
       stop("Bad AOI definition. Consider using function create_AOI_df()")

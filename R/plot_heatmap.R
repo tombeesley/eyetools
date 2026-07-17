@@ -6,7 +6,6 @@
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values specify particular values within 'trial' to plot data from certain trials
 #' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
-#' @param res resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)
 #' @param flip_y reverse the y axis coordinates (useful if origin is top of the screen)
 #' @param plot_type Specify the nature of the data displayed. Either "density" (default) or "hex" 
 #' @param alpha_range a pair of values between 0 and 1. The first is a cut off, whereby lower values are not displayed. The second value sets the transparancy of the visible poitns. 
@@ -34,7 +33,6 @@ plot_heatmap <- function(data = NULL,
                          pID_values = NULL,
                          trial_values = NULL,
                          bg_image = NULL,
-                         res = c(0,1920,0,1080),
                          flip_y = FALSE,
                          plot_type = "density",
                          alpha_range = c(0.1,0.8),
@@ -58,36 +56,37 @@ plot_heatmap <- function(data = NULL,
   final_g <- ggplot(data)
 
   # setting axes limits and reversing y
+  res_x <- the$eyetracker_properties$screen_width_pixels
+  res_y <- the$eyetracker_properties$screen_height_pixels
+  
+  # creates breaks based on quarters. Might look messy with some resolutions
+  breaks_x <- round(seq(0,res_x,res_x/4),0)
+  breaks_y <- round(seq(0,res_y,res_y/4),0)
 
-  if (is.null(res)==FALSE) {
-    # creates breaks based on quarters. Might look messy with some resolutions
-    breaks_x = round(seq(res[1],res[2],(res[2]-res[1])/4),0)
-    breaks_y = round(seq(res[3],res[4],(res[4]-res[3])/4),0)
-  }
-
-  if (is.null(res)==FALSE && flip_y==FALSE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
-                         breaks = breaks_x) +
-      scale_y_continuous(limits = res[3:4],
+  final_g <- final_g +
+    scale_x_continuous(limits = c(0,res_x),
+                       breaks = breaks_x)
+  if (flip_y==TRUE) {
+    final_g <- 
+      final_g +
+      scale_y_reverse(limits = c(res_y,0),
+                      breaks = rev(breaks_y)) 
+  } else {
+    final_g <- 
+      final_g +
+      scale_y_continuous(limits = c(0,res_y),
                          breaks = breaks_y)
-  } else if (is.null(res)==FALSE && flip_y==TRUE) {
-    final_g <- final_g +
-      scale_x_continuous(limits = res[1:2],
-                         breaks = breaks_x) +
-      scale_y_reverse(limits = res[4:3],
-                      breaks = breaks_y)
   }
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
-
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, flip_y, final_g)
+  
   # PLOT gridlines
-
+  
   # major gridlines are just the breaks_*
   # minor are [0:34 + half the diff
-  minor_breaks_x <- breaks_x[0:4] + ((res[2]-res[1])/8)
-  minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
+  minor_breaks_x <- breaks_x[0:4] + (res_x/8)
+  minor_breaks_y <- breaks_y[0:4] + (res_y/8)
 
   final_g <-
     final_g +

@@ -110,7 +110,9 @@
 # function to add background image
 #' @import png
 #' @import abind
-add_BGimg <- function(bg_image_in, res, flip_y, ggplot_in){
+add_BGimg <- function(bg_image_in, flip_y, ggplot_in){
+  
+  res <- c(0, the$eyetracker_properties$screen_width_pixels, 0, the$eyetracker_properties$screen_height_pixels)
   
   im <- png::readPNG(bg_image_in)
   if (dim(im)[3] == 3) im <- abind::abind(im, matrix(1, ncol=ncol(im), nrow=nrow(im)))

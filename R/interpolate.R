@@ -98,12 +98,9 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
             p2 <- c(na_df[nrow(na_df),'next_x'], na_df[nrow(na_df),'next_y']) # end point of interpolation
             na_distance <- sqrt(sum((p1 - p2)^2)) # Euclidean pixel distance
             na_distance <- dist_to_visual_angle(na_distance, dist_type = "pixel") # visual angle of distance
-            na_duration <- na_df[nrow(na_df), 'time'] - na_df[1,'time'] # duration of na period in ms
+            na_duration <- nrow(na_df)*(1000/the$eyetracker_properties$sample_frequency) # duration of na period in ms
             na_vel <- na_distance*(1000/na_duration) # degrees per second
-            if (is.na(na_vel)){
-              browser()
-            }
-            if (na_vel<vel_threshold) { # TRUE if velocity of na period is below threshold
+            if ((na_vel<vel_threshold) == TRUE) { # TRUE if velocity of na period is below threshold
               na_df[,c('x', 'y')] <- na_df[,c('x_i', 'y_i')] 
             } 
           }

@@ -9,6 +9,7 @@
 #'
 #' @param data A dataframe of raw data
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).
+#' @param bin_length the time duration to be used for each bin.
 #' @param max_time maximum length of time to use, default is total trial length
 #' @param as_prop whether to return time in AOI as a proportion of the total time of trial
 #'
@@ -77,7 +78,7 @@ data <- do.call('rbind.data.frame', proc_data)
 AOI_binned_time_trial_process_raw <- function(trial_data, AOIs, bin_length, max_time) {
 
   # estimate sample rate
-  if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(data)
+  if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(trial_data)
   time_per_sample <- 1000/the$eyetracker_properties$sample_frequency
 
   if (is.null(max_time)) max_time <- max(trial_data$time) #set as the total trial time

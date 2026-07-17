@@ -17,6 +17,8 @@ AOI_time_binned(
 
 \item{AOIs}{A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).}
 
+\item{bin_length}{the time duration to be used for each bin.}
+
 \item{max_time}{maximum length of time to use, default is total trial length}
 
 \item{as_prop}{whether to return time in AOI as a proportion of the total time of trial}

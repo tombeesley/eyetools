@@ -9,7 +9,6 @@ plot_heatmap(
   pID_values = NULL,
   trial_values = NULL,
   bg_image = NULL,
-  res = c(0, 1920, 0, 1080),
   flip_y = FALSE,
   plot_type = "density",
   alpha_range = c(0.1, 0.8),
@@ -24,8 +23,6 @@ plot_heatmap(
 \item{trial_values}{specify particular values within 'trial' to plot data from certain trials}
 
 \item{bg_image}{The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.}
-
-\item{res}{resolution of the display to be shown, as a vector (xmin, xmax, ymin, ymax)}
 
 \item{flip_y}{reverse the y axis coordinates (useful if origin is top of the screen)}
 

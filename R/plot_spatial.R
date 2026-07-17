@@ -6,7 +6,7 @@
 #' @param raw_data data in standard raw data form (time, x, y, trial)
 #' @param fix_data data output from fixation function
 #' @param sac_data data output from saccade function
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height). If using circular AOIs, then the 3rd column is used for the radius and the height should be set to NA.
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height). If using circular AOIs, then the column width_radius is used for the radius and the height should be set to NA.
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values specify particular values within 'trial' to plot data from certain trials
 #' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
@@ -56,21 +56,26 @@ plot_spatial <- function(raw_data = NULL,
   res_y <- the$eyetracker_properties$screen_height_pixels
   
   # creates breaks based on quarters. Might look messy with some resolutions
-  breaks_x = round(seq(0,res_x,res_x/4),0)
-  breaks_y = round(seq(0,res_y,res_y/4),0)
-
+  breaks_x <- round(seq(0,res_x,res_x/4),0)
+  breaks_y <- round(seq(0,res_y,res_y/4),0)
+  
   final_g <- final_g +
       scale_x_continuous(limits = c(0,res_x),
-                         breaks = breaks_x) +
+                         breaks = breaks_x)
+  if (flip_y==TRUE) {
+    final_g <- 
+      final_g +
+      scale_y_reverse(limits = c(res_y,0),
+                      breaks = rev(breaks_y)) 
+  } else {
+    final_g <- 
+      final_g +
       scale_y_continuous(limits = c(0,res_y),
                          breaks = breaks_y)
-  # if (flip_y==TRUE) {
-  #   final_g +
-  #     scale_y_reverse()
-  # } 
+  }
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, c(0,res_x,0,res_y), flip_y, final_g)
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, flip_y, final_g)
 
   # PLOT gridlines
 
@@ -95,7 +100,14 @@ plot_spatial <- function(raw_data = NULL,
     raw_data <- .select_pID_values(raw_data, pID_values, allow_random = FALSE)
     raw_data <- .select_trial_values(raw_data, trial_values, allow_random = FALSE)
     
-    final_g <- add_raw(raw_data, final_g)
+    final_g <- 
+      final_g +
+      geom_point(data = raw_data,
+                 aes(x = x, y = y),
+                 shape = 16,
+                 size = 3,
+                 alpha = .5,
+                 na.rm = TRUE)
   }
 
   # PLOT FIXATION DATA
@@ -182,31 +194,7 @@ plot_spatial <- function(raw_data = NULL,
            subtitle = "Raw data shown as dots; Fixations shown as circles (fill = duration); \nFixation size reflects dispersion of raw data; \nAOIs shown as blue regions")
   }
 
-  if (flip_y==TRUE) {
-    return(final_g +
-      scale_y_reverse())
-  } else { return(final_g) }
-
   
-
-
-}
-
-# function to add raw data
-add_raw <- function(dataIn, ggplot_in){
-
-  x <- dataIn$x
-  y <- dataIn$y
-
-  ggplot_in <-
-    ggplot_in +
-    geom_point(data = dataIn,
-               aes(x = x, y = y),
-               shape = 16,
-               size = 3,
-               alpha = .5,
-               na.rm = TRUE)
-
-  return(ggplot_in)
+  return(final_g)
 }
 

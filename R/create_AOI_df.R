@@ -1,5 +1,6 @@
 #' Create a blank data frame for populating with AOIs
-#'
+#' 
+#' Used to define a set of AOIs for use across various functions within the eyetools package. 
 #'
 #' @param num_AOIs number of AOIs, setting the number of rows
 #' @param AOI_data a list containing data for each AOI, ordered by x, y, width_radius, and height (NA if circular)
@@ -15,7 +16,7 @@
 #' # create an AOI dataframe with data, the second of which is circular, with names
 #' create_AOI_df(num_AOIs = 3, 
 #'               AOI_data = list(c(460,840,400,300), c(1460,840,400,NA), c(960,270,300,500)),
-#'               AOI_names = "AOI_1", "AOI_2", "AOI_3")
+#'               AOI_names = c("AOI_1", "AOI_2", "AOI_3"))
 
 create_AOI_df <- function(num_AOIs = 3, AOI_data = NULL, AOI_names = NULL) {
 

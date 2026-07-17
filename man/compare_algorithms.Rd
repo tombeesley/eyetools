@@ -8,7 +8,6 @@ compare_algorithms(
   data,
   plot_fixations = TRUE,
   print_summary = TRUE,
-  sample_rate = NULL,
   threshold = 100,
   min_dur = 150,
   min_dur_sac = 20,
@@ -23,8 +22,6 @@ compare_algorithms(
 \item{plot_fixations}{Whether to plot the detected fixations. default as TRUE}
 
 \item{print_summary}{Whether to print the summary table. default as TRUE}
-
-\item{sample_rate}{sample rate of the eye-tracker. If default of NULL, then it will be computed from the timestamp data and the number of samples. Supplied to the VTI algorithm}
 
 \item{threshold}{velocity threshold (degrees of VA / sec) to be used for identifying saccades. Supplied to the VTI algorithm}
 

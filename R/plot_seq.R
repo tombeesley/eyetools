@@ -5,7 +5,7 @@
 #' Data can be split into bins by time or by the number of bins.
 #'
 #' @param data A dataframe with raw data. If multiple trials are used, then one trial is sampled at random.
-#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (x, y, width_radius, height).
+#' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).
 #' @param pID_values specify particular values within 'pID' to plot data from certain participants
 #' @param trial_values specify particular values within 'trial' to plot data from certain trials
 #' @param bg_image The filepath of a PNG image to be added to the plot, for example to show a screenshot of the task.
@@ -71,31 +71,33 @@ plot_seq <- function(data = NULL,
   res_y <- the$eyetracker_properties$screen_height_pixels
   
   # creates breaks based on quarters. Might look messy with some resolutions
-  breaks_x = round(seq(0,res_x,res_x/4),0)
-  breaks_y = round(seq(0,res_y,res_y/4),0)
-
+  breaks_x <- round(seq(0,res_x,res_x/4),0)
+  breaks_y <- round(seq(0,res_y,res_y/4),0)
+  
   final_g <- final_g +
     scale_x_continuous(limits = c(0,res_x),
                        breaks = breaks_x)
   if (flip_y==TRUE) {
-    final_g +
+    final_g <- 
+      final_g +
       scale_y_reverse(limits = c(res_y,0),
-                      breaks = round(seq(res_y,res_y/4,0),0))
+                      breaks = rev(breaks_y)) 
   } else {
-    final_g +
+    final_g <- 
+      final_g +
       scale_y_continuous(limits = c(0,res_y),
                          breaks = breaks_y)
   }
 
   # PLOT BACKGROUND IMAGE
-  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, res, final_g)
+  if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, flip_y, final_g)
 
   # PLOT gridlines
 
   # major gridlines are just the breaks_*
   # minor are [0:34 + half the diff
-minor_breaks_x <- breaks_x[0:4] + ((res[2]-res[1])/8)
-minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
+  minor_breaks_x <- breaks_x[0:4] + (res_x/8)
+  minor_breaks_y <- breaks_y[0:4] + (res_y/8)
 
   final_g <-
     final_g +
@@ -108,7 +110,14 @@ minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
   if (is.null(AOIs)==FALSE) final_g <- add_AOIs(AOIs, final_g)
 
   # add raw data
-  if (is.null(data)==FALSE) final_g <- add_raw_time_seq(data, final_g)
+  final_g <- 
+    final_g + 
+    geom_point(data = data,
+               aes(x = data$x, y = data$y, colour = data$time),
+               shape = 16,
+               size = 3,
+               alpha = .5,
+               na.rm = TRUE)
 
   final_g <-
     final_g +
@@ -146,20 +155,20 @@ minor_breaks_y <- breaks_y[0:4] + ((res[4]-res[3])/8)
 
 }
 
-# function to add raw data
-add_raw_time_seq <- function(dataIn, ggplot_in){
-  
-  x <- dataIn$x
-  y <- dataIn$y
-
-  ggplot_in <-
-    ggplot_in +
-    geom_point(data = dataIn,
-               aes(x = x, y = y, colour = time),
-               shape = 16,
-               size = 3,
-               alpha = .5,
-               na.rm = TRUE)
-
-  return(ggplot_in)
-}
+# # function to add raw data
+# add_raw_time_seq <- function(dataIn, ggplot_in){
+#   
+#   x <- dataIn$x
+#   y <- dataIn$y
+# 
+#   ggplot_in <-
+#     ggplot_in +
+#     geom_point(data = dataIn,
+#                aes(x = x, y = y, colour = time),
+#                shape = 16,
+#                size = 3,
+#                alpha = .5,
+#                na.rm = TRUE)
+# 
+#   return(ggplot_in)
+# }
