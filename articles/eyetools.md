@@ -23,7 +23,7 @@ install eyetools.
 library(eyetools)
 ```
 
-    ## Successfully loaded eyetools version 0.9.3
+    ## Successfully loaded eyetools version 0.10.0
     ##  If you use this package, we would love to hear from you: t.beesley@lancaster.ac.uk
     ##  See NEWS for details of all changes.
 
