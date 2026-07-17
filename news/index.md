@@ -2,6 +2,8 @@
 
 ## eyetools 0.10.0
 
+CRAN release: 2026-07-17
+
 - stable version merged from 0.9.3
 
 ## eyetools 0.9.3
