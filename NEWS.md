@@ -1,4 +1,6 @@
 # eyetools 0.10.1
+* added distance, angle, and AOI information to the saccade output
+* added a check to utils for unique NA values in a sample, which is corrected to NA for both x and y. This check is called in interpolate, and all fix/sac algorithms. 
 
 # eyetools 0.10.0
 * stable version merged from 0.9.3
@@ -15,7 +17,6 @@
 * added ASC_to_df() function which will import the raw data from an EyeLink SR ASC file and convert to eyetools-ready data format. 
 * removed AOI_names argument from all AOI_ functions. **The name of each AOI should be added to the AOI dataframe**. See the updated `create_AOI_df()`
 * added a velocity threshold to the interpolate function, such that interpolation only occurs when there are no large changes in velocity detected.
-
 
 # eyetools 0.9.2
 * updated CRAN version
@@ -98,7 +99,6 @@
 
 * added a progress bar (pbapply) to `fix_dispersion()`.
 * fixed a bug in `VTI_saccade()` where it couldn't handle trials without saccades 
-
 
 # eyetools 0.4.0
 
