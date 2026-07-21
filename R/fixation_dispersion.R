@@ -29,7 +29,8 @@ fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .2
 
   # check data format
   .check_monocular_data_format(data)
-
+  data <- .make_NA_consistent(data)
+  
   internal_fixation_dispersion <- function(data, min_dur, disp_tol, NA_tol, progress) {
 
     ppt_label <- data$pID[1]

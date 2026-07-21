@@ -32,6 +32,23 @@
   
 }
 
+.make_NA_consistent <- function(data, interpolation_running = FALSE) {
+  
+  # find samples with NA in either x or y
+  samples_with_na <- xor(is.na(data[,'x']), is.na(data[, 'y']))
+  
+  if (interpolation_running) {
+    message(paste0("Found ", sum(samples_with_na), " samples where x OR y were missing (xor). Setting both values to NA."))
+  } else if (sum(samples_with_na)>0) {
+    message(paste0("Found ", sum(samples_with_na), " samples where x OR y were missing (xor). Setting both values to NA. Run interpolate() to repair data."))
+  }
+  
+  # make both x and y NA, since true coordinates are used to interpolate values
+  data[samples_with_na,c('x','y')] <- NA
+  
+  return(data)
+}
+
 .check_pID_values <- function(data, pID_values) {
   
   if (length(intersect(data$pID,pID_values)) != length(pID_values)){
@@ -63,7 +80,7 @@
   #average sample rate across all trials
   sample_rate <- 1000/mean(sample_rates)
   the$eyetracker_properties$sample_frequency <- sample_rate
-  message(paste0("Eye tracker frequency estimated at:", sample_rate, "Hz"))
+  message(paste0("Eye tracker frequency estimated at:", round(sample_rate,3), "Hz"))
 }
 
 

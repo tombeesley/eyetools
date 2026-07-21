@@ -28,15 +28,11 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
 
   # check data format
   .check_monocular_data_format(data)
+  
+  data <- .make_NA_consistent(data, interpolation_running = TRUE)
 
   internal_interpolate <- function(data, maxgap, method, report) {
-    
-    # find samples with NA in either x or y
-    samples_with_na <- is.na(data[,'x']) | is.na(data[, 'y'])
-    
-    # make both x and y NA, since true coordinates are used to interpolate values
-    data[samples_with_na,c('x','y')] <- NA
-    
+
     # PRE-INTERP summary of missing data
     if (report) {
       pre_missing <- mean((is.na(data$x) | is.na(data$y)))

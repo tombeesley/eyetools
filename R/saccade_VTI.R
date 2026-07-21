@@ -24,7 +24,9 @@
 
 saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
 
-  internal_saccade_VTI <- function(data, threshold, min_dur, AOIs) {
+  data <- .make_NA_consistent(data)
+  
+    internal_saccade_VTI <- function(data, threshold, min_dur, AOIs) {
 
 
     # estimate sample rate
@@ -76,7 +78,7 @@ saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
       first_ts <- dataIn$time[1]
       last_ts <- dataIn$time[nrow(dataIn)]
       fpos <- dataIn[colnames(data) %in% c("x", "y")][1,] # x and y of FIRST time stamp
-      lpos <- dataIn[colnames(data) %in% c("x", "y")][nrow(dataIn),] #dataIn[nrow(dataIn),2:3] # x and y of LAST time stamp
+      lpos <- dataIn[colnames(data) %in% c("x", "y")][nrow(dataIn),] # x and y of LAST time stamp
       meanVel <- mean(dataIn$vel) # mean velocity
       peakVel <- max(dataIn$vel) # peak velocity during saccade
       duration <- dataIn$time[nrow(dataIn)] - dataIn$time[1]
@@ -174,12 +176,6 @@ sac_direction <- function(A, B) {
   # Direction angle using atan2(y, x)
   rad <- atan2(as.double(delta[2]), as.double(delta[1]))
   deg <- rad * (180 / pi)
-  
-  print(A)
-  print(B)
-  print(distance)
-  print(rad)
-  print(deg)
   
   # Normalize negative angles to 0-360 degrees
   if (deg < 0) deg <- deg + 360

@@ -34,6 +34,7 @@
 fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE){
 
   .check_monocular_data_format(data)
+  data <- .make_NA_consistent(data)
 
   internal_fixation_VTI <- function(data, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress) {
     
