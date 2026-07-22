@@ -7,7 +7,8 @@
 #' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
 #' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
-#' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
+#' @param vel_threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades
+#' @param min_amplitude minimum distance that the saccade must travel to be classified in visual angle. 
 #' @param min_dur minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold
 #' @param AOIs A dataframe of areas of interest (AOIs), with one row per AOI (name, x, y, width_radius, height).
 #' 
@@ -22,29 +23,29 @@
 #' 
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
+saccade_VTI <- function(data, vel_threshold = 30, min_amplitude = .2, min_dur = 20, AOIs = NULL){
 
   data <- .make_NA_consistent(data)
   
-    internal_saccade_VTI <- function(data, threshold, min_dur, AOIs) {
+    internal_saccade_VTI <- function(data, vel_threshold, min_amplitude, min_dur, AOIs) {
 
 
     # estimate sample rate
     if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(data)
     
     data <- split(data, data$trial)
-    data_sac <- pbapply::pblapply(data, saccade_VTI_trial, threshold, min_dur, AOIs)
+    data_sac <- pbapply::pblapply(data, saccade_VTI_trial, vel_threshold, min_amplitude, min_dur, AOIs)
     data_sac <- do.call(rbind.data.frame,data_sac)
 
     data_sac <- data_sac[,c("pID", "trial", "sac_n", "start", "end", "duration",
-                            "origin_x", "origin_y", "origin_AOI", "terminal_x", "terminal_y", "terminal_AOI", "distance", "angle", "mean_velocity", "peak_velocity")]
+                            "origin_x", "origin_y", "origin_AOI", "terminal_x", "terminal_y", "terminal_AOI", "amplitude", "direction", "mean_velocity", "peak_velocity")]
 
     row.names(data_sac) <- NULL # remove the row names
     return(as.data.frame(data_sac))
 
   }
 
-  saccade_VTI_trial <- function(data, threshold, min_dur, AOIs){
+  saccade_VTI_trial <- function(data, vel_threshold, min_amplitude, min_dur, AOIs){
 
     ppt_label <- data$pID[1]
 
@@ -64,8 +65,8 @@ saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
 
     data$vel <- data$distance*the$eyetracker_properties$sample_frequency # visual angle per second
 
-    data$saccade_detected <- ifelse(data$vel > threshold, 2, 1) # saccade 2, otherwise 1
-
+    data$saccade_detected <- ifelse(data$vel > vel_threshold, 2, 1) # saccade 2, otherwise 1
+    
     data$saccade_detected[is.na(data$saccade_detected)] <- 0 # convert NA to 0
 
     data$event_n <- c(NA,cumsum(abs(diff(data$saccade_detected)))) # get event numbers
@@ -81,7 +82,7 @@ saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
       lpos <- dataIn[colnames(data) %in% c("x", "y")][nrow(dataIn),] # x and y of LAST time stamp
       meanVel <- mean(dataIn$vel) # mean velocity
       peakVel <- max(dataIn$vel) # peak velocity during saccade
-      duration <- dataIn$time[nrow(dataIn)] - dataIn$time[1]
+      duration <- nrow(dataIn)*(1000/the$eyetracker_properties$sample_frequency)
       if (!is.null(AOIs)) {
         fpos_AOI <- check_sac_AOI(fpos, AOIs)
         lpos_AOI <- check_sac_AOI(lpos, AOIs)
@@ -89,9 +90,9 @@ saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
         fpos_AOI <- NA
         lpos_AOI <- NA
       }
-      dist_angle <- sac_direction(fpos, lpos) # get distance and angle
+      amp_direction <- sac_direction(fpos, lpos) # get amplitude and directional angle
       
-      return(data.frame(first_ts, last_ts, fpos, fpos_AOI, lpos, lpos_AOI, dist_angle[1], dist_angle[2], meanVel, peakVel, duration))
+      return(data.frame(first_ts, last_ts, fpos, fpos_AOI, lpos, lpos_AOI, amp_direction, meanVel, peakVel, duration))
 
     }
 
@@ -101,24 +102,33 @@ saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
       events <- split(data, data$event_n) # split into the different events
       trial_sac_store <- lapply(events, summarise_saccades, AOIs)
       trial_sac_store <- do.call(rbind.data.frame,trial_sac_store)
-
-      if (nrow(trial_sac_store[trial_sac_store$duration >= min_dur,]) == 0) { #test for saccades of minimum length
-        trial_sac_store <- matrix(NA,1,10)
+      
+      # check duration
+      if (nrow(trial_sac_store)>0) {
+        trial_sac_store <- trial_sac_store[trial_sac_store$duration >= min_dur,]
+      }
+      
+      # check amplitude
+      if (nrow(trial_sac_store)>0) {
+        trial_sac_store <- trial_sac_store[trial_sac_store$amplitude >= min_amplitude,]
+      }
+      
+      if (nrow(trial_sac_store) == 0) { #test for saccades of minimum length
+        trial_sac_store <- matrix(NA,1,14)
 
       } else {
-        trial_sac_store <- trial_sac_store[trial_sac_store$duration >= min_dur,]
         trial_sac_store$sac_n <- 1:nrow(trial_sac_store)
 
       }
 
 
     } else {
-      trial_sac_store <- matrix(NA,1,10)
+      trial_sac_store <- matrix(NA,1,14)
 
     }
     # add col headers, trial number and return
     colnames(trial_sac_store) <- c("start", "end", "origin_x", "origin_y", "origin_AOI", "terminal_x", "terminal_y", "terminal_AOI",
-                                   "distance", "angle", "mean_velocity", "peak_velocity", "duration", "sac_n")
+                                   "amplitude", "direction", "mean_velocity", "peak_velocity", "duration", "sac_n")
     
     # add pID and trial number
     trial_sac_store["trial"] <- trialNumber
@@ -127,7 +137,7 @@ saccade_VTI <- function(data, threshold = 150, min_dur = 20, AOIs = NULL){
   }
 
   data <- split(data, data$pID)
-  out <- lapply(data, internal_saccade_VTI, threshold, min_dur, AOIs)
+  out <- lapply(data, internal_saccade_VTI, vel_threshold, min_amplitude, min_dur, AOIs)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
 
@@ -180,7 +190,7 @@ sac_direction <- function(A, B) {
   # Normalize negative angles to 0-360 degrees
   if (deg < 0) deg <- deg + 360
   
-  return(list(distance = distance, angle_degrees = deg))
+  return(list(amplitude = distance, direction = deg))
 }  
   
 
