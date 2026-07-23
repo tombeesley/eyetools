@@ -25,7 +25,7 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_dispersion <- function(data, min_dur = 150, disp_tol = 100, NA_tol = .25, progress = TRUE) {
+fixation_dispersion <- function(data, min_dur = 100, disp_tol = 75, NA_tol = .25, progress = TRUE) {
 
   # check data format
   .check_monocular_data_format(data)

@@ -6,8 +6,8 @@
 \usage{
 fixation_dispersion(
   data,
-  min_dur = 150,
-  disp_tol = 100,
+  min_dur = 100,
+  disp_tol = 75,
   NA_tol = 0.25,
   progress = TRUE
 )

@@ -7,7 +7,7 @@
 fixation_VTI(
   data,
   vel_threshold = 30,
-  min_dur = 150,
+  min_dur = 100,
   min_dur_sac = 20,
   disp_tol = 100,
   smooth = FALSE,
