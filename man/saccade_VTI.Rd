@@ -4,12 +4,20 @@
 \alias{saccade_VTI}
 \title{Velocity threshold identification of saccades}
 \usage{
-saccade_VTI(data, threshold = 150, min_dur = 20, AOIs = NULL)
+saccade_VTI(
+  data,
+  vel_threshold = 30,
+  min_amplitude = 0.2,
+  min_dur = 20,
+  AOIs = NULL
+)
 }
 \arguments{
 \item{data}{A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools}
 
-\item{threshold}{velocity threshold (degrees of VA / sec) to be used for identifying saccades}
+\item{vel_threshold}{velocity threshold (degrees of VA / sec) to be used for identifying saccades}
+
+\item{min_amplitude}{minimum distance that the saccade must travel to be classified in visual angle.}
 
 \item{min_dur}{minimum duration (ms) expected for saccades. This helps to avoid identification of very short saccades occurring at the boundary of velocity threshold}
 

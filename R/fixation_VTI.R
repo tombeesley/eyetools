@@ -10,7 +10,7 @@
 #' Analyses data separately for each unique combination of values in `pID` and `trial`.
 #'
 #' @param data A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools
-#' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades.
+#' @param vel_threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades.
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
@@ -31,12 +31,12 @@
 #'
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE){
+fixation_VTI <- function(data, vel_threshold = 30, min_dur = 150, min_dur_sac = 20, disp_tol = 100, smooth = FALSE, progress = TRUE){
 
   .check_monocular_data_format(data)
   data <- .make_NA_consistent(data)
 
-  internal_fixation_VTI <- function(data, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress) {
+  internal_fixation_VTI <- function(data, vel_threshold, min_dur, min_dur_sac, disp_tol, smooth, progress) {
     
     # estimate sample rate
     if (is.null(the$eyetracker_properties$sample_frequency)) .estimate_sample_rate(data)
@@ -44,9 +44,9 @@ fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20,
     data <- split(data, data$trial)
     # either show a progress bar, or not
     if(progress) {
-      data_fix <- pbapply::pblapply(data, fixation_by_trial, threshold, min_dur, min_dur_sac, disp_tol, smooth)
+      data_fix <- pbapply::pblapply(data, fixation_by_trial, vel_threshold, min_dur, min_dur_sac, disp_tol, smooth)
     } else {
-      data_fix <- lapply(data, fixation_by_trial, threshold, min_dur, min_dur_sac, disp_tol, smooth)
+      data_fix <- lapply(data, fixation_by_trial, vel_threshold, min_dur, min_dur_sac, disp_tol, smooth)
     }
 
     data_fix <- do.call(rbind.data.frame,data_fix)
@@ -56,7 +56,7 @@ fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20,
     return(as.data.frame(data_fix))
   }
 
-  fixation_by_trial <- function(data, threshold, min_dur, min_dur_sac, disp_tol, smooth){
+  fixation_by_trial <- function(data, vel_threshold, min_dur, min_dur_sac, disp_tol, smooth){
 
     ppt_label <- data$pID[1]
 
@@ -77,7 +77,7 @@ fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20,
 
     data$distance <- dist_to_visual_angle(data$distance, dist_type = "pixel") # convert to VisAng
     data$vel <- data$distance*the$eyetracker_properties$sample_frequency # visual angle per second
-    data$saccade_detected <- ifelse(data$vel > threshold, 2, 1) # saccade 2, otherwise 1
+    data$saccade_detected <- ifelse(data$vel > vel_threshold, 2, 1) # saccade 2, otherwise 1
     data$saccade_detected[is.na(data$saccade_detected)] <- 0 # convert NA to 0
 
     #first row will always be a non-event due to no preceding data, so set as a fixation
@@ -296,7 +296,7 @@ fixation_VTI <- function(data, threshold = 100, min_dur = 150, min_dur_sac = 20,
 
   data <- split(data, data$pID)
 
-  out <- lapply(data, internal_fixation_VTI, threshold, min_dur, min_dur_sac, disp_tol, smooth, progress)
+  out <- lapply(data, internal_fixation_VTI, vel_threshold, min_dur, min_dur_sac, disp_tol, smooth, progress)
 
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL

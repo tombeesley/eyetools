@@ -6,7 +6,7 @@
 #' @param data A dataframe with raw data (time, x, y, trial) for one participant
 #' @param plot_fixations Whether to plot the detected fixations. default as TRUE
 #' @param print_summary Whether to print the summary table. default as TRUE
-#' @param threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades. Supplied to the VTI algorithm
+#' @param vel_threshold velocity threshold (degrees of VA / sec) to be used for identifying saccades. Supplied to the VTI algorithm
 #' @param min_dur Minimum duration (in milliseconds) of period over which fixations are assessed. Supplied to both algorithms.
 #' @param min_dur_sac Minimum duration (in milliseconds) for saccades to be determined. Supplied to the VTI algorithm
 #' @param disp_tol Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period. Supplied to both algorithms
@@ -27,12 +27,12 @@
 #' @import ggplot2
 #'
 
-compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, threshold = 100, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, smooth = FALSE) {
+compare_algorithms <- function(data, plot_fixations = TRUE, print_summary = TRUE, vel_threshold = 30, min_dur = 150, min_dur_sac = 20, disp_tol = 100, NA_tol = .25, smooth = FALSE) {
 
   #separate into trials
   data_split <- split(data, data$trial)
 
-  data_list <- pbapply::pblapply(data_split, get_fixations, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, smooth)
+  data_list <- pbapply::pblapply(data_split, get_fixations, vel_threshold, min_dur, min_dur_sac, disp_tol, NA_tol, smooth)
   data_list_temp <- data_list[[1]]
   # get the data from comparing the two algorithms
   dataout <- lapply(data_list, summarise_comparisons)
@@ -75,10 +75,10 @@ return(data_list_out)
 
 }
 
-get_fixations <- function(data, threshold, min_dur, min_dur_sac, disp_tol, NA_tol, smooth) {
+get_fixations <- function(data, vel_threshold, min_dur, min_dur_sac, disp_tol, NA_tol, smooth) {
 
   # run both algorithms usign the same parameters
-  data_vti <- fixation_VTI(data, threshold = threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, smooth = smooth, progress = FALSE)
+  data_vti <- fixation_VTI(data, vel_threshold = vel_threshold, min_dur = min_dur, min_dur_sac = min_dur_sac, disp_tol = disp_tol, smooth = smooth, progress = FALSE)
   data_disp <- fixation_dispersion(data, min_dur = min_dur, disp_tol = disp_tol, NA_tol = NA_tol, progress = FALSE)
 
   # set time to begin at 0 for each trial

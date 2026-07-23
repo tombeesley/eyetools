@@ -216,7 +216,7 @@ The `fixation_VTI()` works best on unsmoothed data (with default settings), as t
 ```{r fix_vti}
 
 data_fixations_VTI <- fixation_VTI(data,
-                                   threshold = 80, #smoothed data, so use a lower threshold
+                                   vel_threshold = 80, #smoothed data, so use a lower threshold
                                    min_dur = 150, # Minimum duration (in milliseconds) of period over which fixations are assessed
                                    min_dur_sac = 20, # Minimum duration (in milliseconds) for saccades to be determined
                                    disp_tol = 100, # Maximum tolerance (in pixels) for the dispersion of values allowed over fixation period
@@ -252,7 +252,7 @@ data_119 <- data[data$pID == 119,]
 comparison <- compare_algorithms(data_119,
                                  plot_fixations = TRUE,
                                  print_summary = TRUE,
-                                 threshold = 80, #lowering the default threshold produces a better result when using smoothed data
+                                 vel_threshold = 80, #lowering the default threshold produces a better result when using smoothed data
                                  min_dur = 150,
                                  min_dur_sac = 20,
                                  disp_tol = 100,

@@ -6,7 +6,7 @@
 \usage{
 fixation_VTI(
   data,
-  threshold = 100,
+  vel_threshold = 30,
   min_dur = 150,
   min_dur_sac = 20,
   disp_tol = 100,
@@ -17,7 +17,7 @@ fixation_VTI(
 \arguments{
 \item{data}{A dataframe with raw data (pID, time, x, y, trial), the standardised raw data form for eyetools}
 
-\item{threshold}{velocity threshold (degrees of VA / sec) to be used for identifying saccades.}
+\item{vel_threshold}{velocity threshold (degrees of VA / sec) to be used for identifying saccades.}
 
 \item{min_dur}{Minimum duration (in milliseconds) of period over which fixations are assessed}
 
