@@ -60,7 +60,11 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
           else c(tail(v, length(v) - abs(n)), rep(NA, abs(n)))
         }
         
-        df[,c('prev_x', 'prev_y', 'next_x', 'next_y')] <- c(lead_lag(df$x,1), lead_lag(df$y,1), lead_lag(df$x,-1), lead_lag(df$y,-1))
+        df[,'prev_x'] <- lead_lag(df$x,1)
+        df[,'prev_y'] <- lead_lag(df$y,1)
+        df[,'next_x'] <- lead_lag(df$x,-1)
+        df[,'next_y'] <- lead_lag(df$y,-1)
+        
         
         # add a column that identifies periods of NA
         df$is_na <- as.integer(is.na(df$x))
@@ -90,8 +94,8 @@ interpolate <- function(data, vel_threshold = 35, maxgap = 150, method = "approx
           
           #print(sum(na_df$is_na))
           if (sum(na_df$is_na) > 0 & !is.na(na_df[1,'x_i'])) {
-            p1 <- c(na_df[1,'prev_x'], na_df[1,'prev_y']) # start point of interpolation
-            p2 <- c(na_df[nrow(na_df),'next_x'], na_df[nrow(na_df),'next_y']) # end point of interpolation
+            p1 <- as.double(c(na_df[1,'prev_x'], na_df[1,'prev_y'])) # start point of interpolation
+            p2 <- as.double(c(na_df[nrow(na_df),'next_x'], na_df[nrow(na_df),'next_y'])) # end point of interpolation
             na_distance <- sqrt(sum((p1 - p2)^2)) # Euclidean pixel distance
             na_distance <- dist_to_visual_angle(na_distance, dist_type = "pixel") # visual angle of distance
             na_duration <- nrow(na_df)*(1000/the$eyetracker_properties$sample_frequency) # duration of na period in ms
