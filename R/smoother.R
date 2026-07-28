@@ -42,8 +42,12 @@ smoother <- function(data, span = 0.05, plot = FALSE) {
   if (plot) {
 
     smooth <- out
+    
+    if (length(unique(raw$pID)) > 1) { 
+      ppt <- sample(x = unique(raw$pID), 1)  #sample one participant
+    } else if (length(unique(raw$pID)) == 1)  {ppt <- unique(raw$pID) }
 
-    ppt <- sample(unique(raw$pID), 1) #sample one participant
+    
 
     unique_trials <- unique(raw$trial)
     
@@ -54,7 +58,6 @@ smoother <- function(data, span = 0.05, plot = FALSE) {
     } else { #otherwise fail - this should never happen though
       stop("Data integrity error: no valid trials were found for plotting.")
     }
-    
     raw <- raw[raw$pID == ppt,]
     raw <- raw[raw$trial %in% trials,]
     smooth <- smooth[smooth$pID == ppt,]
@@ -62,8 +65,9 @@ smoother <- function(data, span = 0.05, plot = FALSE) {
 
     ####
     coord <- NULL
-    raw_long <- reshape(raw, direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
-    smooth_long <- reshape(smooth, direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
+    #browser()
+    raw_long <- reshape(as.data.frame(raw), direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
+    smooth_long <- reshape(as.data.frame(smooth), direction = "long", varying = list(c("x", "y")), v.names = "coord", timevar = "axis")
 
     raw_long[raw_long$axis == 1,]$axis <- "x"
     raw_long[raw_long$axis == 2,]$axis <- "y"
