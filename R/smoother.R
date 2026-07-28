@@ -44,8 +44,17 @@ smoother <- function(data, span = 0.05, plot = FALSE) {
     smooth <- out
 
     ppt <- sample(unique(raw$pID), 1) #sample one participant
-    trials <- sample(unique(raw$trial), 2) #sample two trials
 
+    unique_trials <- unique(raw$trial)
+    
+    trials <- if (length(unique_trials) >= 2) { # try and sample two as default
+      sample(unique_trials, 2)
+    } else if (length(unique_trials) == 1) { # otherwise sample one trial
+      sample(unique_trials, 1)
+    } else { #otherwise fail - this should never happen though
+      stop("Data integrity error: no valid trials were found for plotting.")
+    }
+    
     raw <- raw[raw$pID == ppt,]
     raw <- raw[raw$trial %in% trials,]
     smooth <- smooth[smooth$pID == ppt,]
