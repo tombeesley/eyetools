@@ -7,7 +7,7 @@
 saccade_VTI(
   data,
   vel_threshold = 30,
-  min_amplitude = 0.2,
+  min_amplitude = 0.5,
   min_dur = 20,
   AOIs = NULL
 )

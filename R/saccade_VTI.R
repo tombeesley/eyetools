@@ -23,7 +23,7 @@
 #' 
 #' @references Salvucci, D. D., & Goldberg, J. H. (2000). Identifying fixations and saccades in eye-tracking protocols. Proceedings of the Symposium on Eye Tracking Research & Applications - ETRA '00, 71–78.
 
-saccade_VTI <- function(data, vel_threshold = 30, min_amplitude = .2, min_dur = 20, AOIs = NULL){
+saccade_VTI <- function(data, vel_threshold = 30, min_amplitude = .5, min_dur = 20, AOIs = NULL){
 
   data <- .make_NA_consistent(data)
   
