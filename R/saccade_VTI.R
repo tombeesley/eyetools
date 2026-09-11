@@ -140,7 +140,11 @@ saccade_VTI <- function(data, vel_threshold = 30, min_amplitude = .5, min_dur = 
   out <- lapply(data, internal_saccade_VTI, vel_threshold, min_amplitude, min_dur, AOIs)
   out <- do.call("rbind.data.frame", out)
   rownames(out) <- NULL
-
+  
+  # ensure correct data type for columns
+  out[, c(2:8,10:11,13:16)] <- sapply(out[, c(2:8,10:11,13:16)], as.double)
+  out[, c(1,9,12)] <- sapply(out[, c(1,9,12)], as.character)
+  
   return(out)
 
 }

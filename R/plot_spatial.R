@@ -59,9 +59,14 @@ plot_spatial <- function(raw_data = NULL,
   breaks_x <- round(seq(0,res_x,res_x/4),0)
   breaks_y <- round(seq(0,res_y,res_y/4),0)
   
+  print(breaks_x)
+  print(breaks_y)
+  
   final_g <- final_g +
       scale_x_continuous(limits = c(0,res_x),
                          breaks = breaks_x)
+  
+  
   if (flip_y==TRUE) {
     final_g <- 
       final_g +
@@ -73,6 +78,8 @@ plot_spatial <- function(raw_data = NULL,
       scale_y_continuous(limits = c(0,res_y),
                          breaks = breaks_y)
   }
+
+  
 
   # PLOT BACKGROUND IMAGE
   if (is.null(bg_image)==FALSE) final_g <- add_BGimg(bg_image, flip_y, final_g)
@@ -176,7 +183,7 @@ plot_spatial <- function(raw_data = NULL,
                    linejoin = "mitre",
                    size = 1)
   }
-
+  print("yes?")
   final_g <-
     final_g +
     theme_minimal() +

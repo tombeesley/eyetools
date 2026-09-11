@@ -3,6 +3,7 @@
 * added a check to utils for unique NA values in a sample, which is corrected to NA for both x and y. This check is called in interpolate, and all fix/sac algorithms. 
 * saccade_VTI now returns columns for amplitude and direction of saccade
 * changed the parameter "threshold" to "vel_threshold" (velocity) in `fixation_VTI()` and `saccade_VTI()`
+* fixed an issue with data output from `saccade_VTI` having the wrong data type
 
 # eyetools 0.10.0
 * stable version merged from 0.9.3
